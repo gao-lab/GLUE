@@ -1,0 +1,21 @@
+__default__:
+  jobname: "{rule}"
+  output: ".slurm/{rule}.out"
+  error: ".slurm/{rule}.err"
+  account: gaog_g1
+  partition: cn_icg
+  qos: gaogcnicg
+  gres: ""
+  n_node: 1
+  n_task: 1
+  n_cpu: "{threads}"
+
+run_UnionCom:
+  partition: gpu_4l
+  qos: gaogg4c
+  gres: "--gres=gpu:1"
+
+run_GLUE:
+  partition: gpu_4l
+  qos: gaogg4c
+  gres: "--gres=gpu:1"

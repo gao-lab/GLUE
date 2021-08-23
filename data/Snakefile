@@ -1,0 +1,19 @@
+configfile: "config.yaml"
+
+rule all:
+    input:
+        expand("collect/{ds}.html", ds=config["dataset"])
+
+rule collect:
+    input:
+        download="download/{ds}",
+        ipynb="collect/{ds}.ipynb"
+    output:
+        "collect/{ds}.html"
+    log:
+        "collect/{ds}.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {wildcards.ds}.html > {log} 2>&1"

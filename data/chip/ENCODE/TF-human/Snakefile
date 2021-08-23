@@ -1,0 +1,87 @@
+import re
+import numpy as np
+import pandas as pd
+
+configfile: "config.yaml"
+
+config["preferred_assembly"] = next(iter(config["assembly_preference"].keys()))
+
+def prioritize_assembly(df):
+    gb = df.groupby("File assembly")
+    for assembly in config["assembly_preference"]:
+        if assembly in gb.groups:
+            return gb.get_group(assembly)
+
+metadata = pd.read_table(
+    "metadata.tsv", index_col=0,
+    dtype={"Biosample genetic modifications site coordinates": str, "Library lysis method": str}
+)
+if config["metadata_query"]:
+    metadata = metadata.query(config["metadata_query"])
+metadata = metadata.query(
+    "`File format` == 'bed narrowPeak' & "
+    "`Output type` == 'conservative IDR thresholded peaks'"
+).groupby("Experiment target").apply(
+    prioritize_assembly
+).reset_index(level="Experiment target", drop=True)
+metadata["Experiment target"] = metadata["Experiment target"].map(lambda x: re.sub(r"-human$", "", x))
+
+
+rule all:
+    input:
+        f"combined-{config['preferred_assembly']}.bed.gz"
+
+rule combine:
+    input:
+        expand(
+            f"targets-{config['preferred_assembly']}/{{target}}.bed.gz",
+            target=np.unique(metadata["Experiment target"])
+        )
+    output:
+        f"combined-{config['preferred_assembly']}.bed.gz"
+    shell:
+        "zcat {input} | sort -k1,1 -k2,2n | gzip > {output}"
+
+rule merge:
+    input:
+        config="config.yaml",
+        encff=lambda wildcards: expand(
+            f"ENCFF-{config['preferred_assembly']}/{{encff}}.bed.gz",
+            encff=metadata.query(f"`Experiment target` == '{wildcards.target}'").index
+        )
+    output:
+        f"targets-{config['preferred_assembly']}/{{target}}.bed.gz"
+    shell:
+        "zcat {input.encff} | sort -k1,1 -k2,2n | bedtools merge -i stdin | "
+        "awk 'BEGIN{{FS=\"\\t\"; OFS=\"\\t\"}} {{print($1, $2, $3, \"{wildcards.target}\")}}' | gzip > {output}"
+
+rule convert_assembly:
+    input:
+        "ENCFF/{accession}.bed.gz"
+    output:
+        f"ENCFF-{config['preferred_assembly']}/{{accession}}.bed.gz"
+    params:
+        assembly=lambda wildcards: metadata.loc[wildcards.accession, "File assembly"],
+        input_nz=lambda wildcards, input: re.sub(r"\.gz$", "", input[0]),
+        output_nz=lambda wildcards, output: re.sub(r"\.gz$", "", output[0]),
+        liftover_chain=lambda wildcards: config["assembly_preference"][metadata.loc[wildcards.accession, "File assembly"]]
+    shell:
+        "if [ {params.assembly} = {config[preferred_assembly]} ]; then "
+        "    gunzip -c {input} | cut -f1-6 | gzip > {output}; "
+        "else "
+        "    gunzip -c {input} | cut -f1-6 > {params.input_nz} && "
+        "    liftOver {params.input_nz} {params.liftover_chain} {params.output_nz} /dev/null && "
+        "    gzip {params.output_nz} && "
+        "    rm {params.input_nz}; "
+        "fi"
+
+rule download:
+    output:
+        "ENCFF/{accession}.bed.gz"
+    params:
+        url=lambda wildcards: metadata.loc[wildcards.accession, "File download URL"],
+        md5=lambda wildcards: metadata.loc[wildcards.accession, "md5sum"]
+    shell:
+        "cd ENCFF && "
+        "curl -s -O -J -L {params.url} && "
+        "[ $(md5sum {wildcards.accession}.bed.gz | awk '{{print $1}}') = {params.md5} ]"

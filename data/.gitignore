@@ -1,0 +1,12 @@
+*
+!.gitignore
+!*/
+.ipynb_checkpoints/
+!*.fai
+!*.sh
+!*.py
+!*.R
+!*.r
+!*.md
+!Snakefile
+!*.yaml

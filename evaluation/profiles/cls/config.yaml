@@ -1,0 +1,7 @@
+cluster: "sbatch -J {cluster.jobname} -A {cluster.account} -p {cluster.partition} -q {cluster.qos} --no-requeue -N {cluster.n_node} -n {cluster.n_task} -c {cluster.n_cpu} {cluster.gres} -o {cluster.output} -e {cluster.error}"
+cluster-config: profiles/cls/cls.yaml
+keep-going: true
+printshellcmds: true
+reason: true
+resources: gpu=18
+use-conda: true

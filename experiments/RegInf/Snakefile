@@ -1,0 +1,140 @@
+rule all:
+    input:
+        "s03_peak_gene_validation",
+        "s05_evaluate_gene_tf",
+        "s06_genomic_tracks",
+        "s07_violin"
+
+rule s01_preprocessing:
+    input:
+        "../../data/dataset/10x-Multiome-Pbmc10k-RNA.h5ad",
+        "../../data/dataset/10x-Multiome-Pbmc10k-ATAC.h5ad",
+        "../../data/hic/Javierre-2016/Human_hg38/Digest_Human_HindIII.rmap",
+        "../../data/hic/Javierre-2016/Human_hg38/Digest_Human_HindIII_baits_e75_ID.baitmap",
+        "../../data/hic/Javierre-2016/PCHiC_peak_matrix_cutoff5.tsv",
+        "../../data/eqtl/GTEx-v8/bed/Whole_Blood.v8.signif_variant_gene_pairs.bed.gz",
+        "../../data/eqtl/GTEx-v8/GTEx_Analysis_v8_eQTL/Whole_Blood.v8.egenes.txt.gz",
+        ipynb="s01_preprocessing.ipynb"
+    output:
+        directory("s01_preprocessing"),
+        html="s01_preprocessing.html"
+    log:
+        "s01_preprocessing.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s02_glue:
+    input:
+        "s01_preprocessing",
+        ipynb="s02_glue.ipynb"
+    output:
+        directory("s02_glue/prior:{prior}/seed:{seed}"),
+        html="s02_glue_prior:{prior}_seed:{seed}.html"
+    log:
+        "s02_glue_prior:{prior}_seed:{seed}.log"
+    threads: 4
+    resources: gpu=1
+    shell:
+        "PRIOR={wildcards.prior} SEED={wildcards.seed} jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s03_peak_gene_validation:
+    input:
+        "s01_preprocessing",
+        "e01_cicero",
+        expand("s02_glue/prior:d/seed:{i}", i=range(4)),
+        ipynb="s03_peak_gene_validation.ipynb"
+    output:
+        directory("s03_peak_gene_validation"),
+        html="s03_peak_gene_validation.html"
+    log:
+        "s03_peak_gene_validation.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s04_infer_gene_tf:
+    input:
+        "s01_preprocessing",
+        "../../data/chip/ENCODE/TF-human/combined-GRCh38.bed.gz",
+        expand("s02_glue/prior:dcq/seed:{i}", i=range(4)),
+        ipynb="s04_infer_gene_tf.ipynb"
+    output:
+        directory("s04_infer_gene_tf"),
+        html="s04_infer_gene_tf.html"
+    log:
+        "s04_infer_gene_tf.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s05_evaluate_gene_tf:
+    input:
+        "s01_preprocessing",
+        "s04_infer_gene_tf",
+        "../../data/database/TRRUST-v2/trrust_rawdata.human.tsv",
+        ipynb="s05_evaluate_gene_tf.ipynb"
+    output:
+        directory("s05_evaluate_gene_tf"),
+        html="s05_evaluate_gene_tf.html"
+    log:
+        "s05_evaluate_gene_tf.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s06_genomic_tracks:
+    input:
+        "s01_preprocessing",
+        "s04_infer_gene_tf",
+        ipynb="s06_genomic_tracks.ipynb"
+    output:
+        directory("s06_genomic_tracks"),
+        html="s06_genomic_tracks.html"
+    log:
+        "s06_genomic_tracks.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s07_violin:
+    input:
+        "s01_preprocessing",
+        ipynb="s07_violin.ipynb"
+    output:
+        directory("s07_violin"),
+        html="s07_violin.html"
+    log:
+        "s07_violin.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule e01_cicero:
+    input:
+        "s01_preprocessing",
+        ipynb="e01_cicero.ipynb"
+    output:
+        directory("e01_cicero"),
+        html="e01_cicero.html"
+    log:
+        "e01_cicero.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"

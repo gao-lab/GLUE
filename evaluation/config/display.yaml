@@ -1,0 +1,28 @@
+dataset:
+  Chen-2019: SNARE-seq
+  Ma-2020: SHARE-seq
+  10x-Multiome-Pbmc10k: 10x Multiome
+
+method:
+  UnionCom: UnionCom
+  LIGER: LIGER
+  bindSC: bindSC
+  CCA_anchor: Seurat v3
+  GLUE: GLUE
+
+param:
+  dim: Dimensionality
+  alt_dim: Preprocessing dimensionality
+  hidden_depth: Hidden layer depth
+  hidden_dim: Hidden layer dimensionality
+  dropout: Dropout
+  lam_graph: Lambda graph
+  lam_align: Lambda align
+  neg_samples: Negative sampling rate
+
+palette:
+  UnionCom: "#1f77b4"
+  LIGER: "#fe7f0b"
+  bindSC: "#2da02b"
+  Seurat v3: "#d72628"
+  GLUE: "#9566bd"

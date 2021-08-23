@@ -1,0 +1,5 @@
+_build
+api
+!*.ipynb
+!_templates/
+!_templates/**

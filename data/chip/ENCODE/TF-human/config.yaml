@@ -1,0 +1,6 @@
+assembly_preference:
+  # hg19: null
+  GRCh38: null
+  hg19: ../../../genome/hg19ToHg38.over.chain.gz
+  # GRCh38: ../../../genome/hg38ToHg19.over.chain.gz
+metadata_query: null

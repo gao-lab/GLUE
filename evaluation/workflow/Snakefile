@@ -1,0 +1,51 @@
+configfile: "config/config.yaml"
+
+from functools import reduce
+from operator import add
+
+base_config = {"dataset": config["dataset"], "timeout": config["timeout"]}
+
+hyperparam_config = {**base_config, **config["hyperparam"]}
+benchmark_config = {**base_config, **config["benchmark"]}
+prior_config = {**base_config, **config["prior"]}
+subsample_config = {**base_config, **config["subsample"]}
+
+targets = {
+    "hyperparam": ["results/hyperparam.pdf"],
+    "benchmark": ["results/benchmark_foscttm.pdf", "results/benchmark_map_vs_sas.pdf", "results/umap_grid"],
+    "prior": ["results/prior.pdf"],
+    "subsample": ["results/subsample.pdf"]
+}
+
+
+rule all:
+    input:
+        reduce(add, map(lambda x: targets[x], config["use"]))
+
+module hyperparam:
+    snakefile: "hyperparam.smk"
+    config: hyperparam_config
+
+module benchmark:
+    snakefile: "benchmark.smk"
+    config: benchmark_config
+
+module prior:
+    snakefile: "prior.smk"
+    config: prior_config
+
+module subsample:
+    snakefile: "subsample.smk"
+    config: subsample_config
+
+use rule * from hyperparam as hyperparam_*
+
+use rule * from benchmark as benchmark_*
+
+use rule * from prior as prior_*
+
+use rule * from subsample as subsample_*
+
+include: "rules/methods.smk"
+
+include: "rules/utils.smk"

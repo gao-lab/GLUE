@@ -1,0 +1,46 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--rcfile=.vscode/.pylintrc"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests",
+        "--cpu-only"
+    ],
+    "files.watcherExclude": {
+        "**/conda/**": true,
+        "**/packrat/**": true,
+        "**/data/**": true,
+        "**/experiments/**": true,
+        "**/evaluation/results/raw/**": true,
+        "**/docs/_build/**": true,
+        "**/docs/api/**": true,
+        "**/tools/**": true,
+        "**/tmp/**": true,
+        "**/.snakemake/**": true,
+        "**/.slurm/**": true,
+        "**/.ipynb_checkpoints/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.virtual_documents/**": true,
+        "**/__pycache__/**": true,
+        "**/*.deprecated/**": true,
+        "**/*.bak/**": true,
+        "**/*.old/**": true
+    },
+    "files.exclude": {
+        "**/.snakemake/**": true,
+        "**/.slurm/**": true,
+        "**/.ipynb_checkpoints/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.virtual_documents/**": true,
+        "**/__pycache__/**": true,
+        "**/*.deprecated/**": true,
+        "**/*.bak/**": true,
+        "**/*.old/**": true
+    },
+    "jupyter.jupyterServerType": "local",
+    "restructuredtext.linter.disabled": true,
+    "restructuredtext.languageServer.disabled": true,
+    "restructuredtext.confPath": "${workspaceFolder}/docs"
+}

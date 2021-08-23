@@ -1,0 +1,4 @@
+printshellcmds: true
+reason: true
+keep-going: true
+use-conda: true

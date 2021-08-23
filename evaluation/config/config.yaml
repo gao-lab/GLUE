@@ -1,0 +1,189 @@
+#----------------------------------- Global ------------------------------------
+
+use:
+  - hyperparam
+  - benchmark
+  - prior
+  - subsample
+
+dataset:
+  Chen-2019:
+    rna: ../data/dataset/Chen-2019-RNA.h5ad
+    atac: ../data/dataset/Chen-2019-ATAC.h5ad
+  Ma-2020:
+    rna: ../data/dataset/Ma-2020-RNA.h5ad
+    atac: ../data/dataset/Ma-2020-ATAC.h5ad
+  10x-Multiome-Pbmc10k:
+    rna: ../data/dataset/10x-Multiome-Pbmc10k-RNA.h5ad
+    atac: ../data/dataset/10x-Multiome-Pbmc10k-ATAC.h5ad
+
+timeout: 24h
+
+
+#-------------------------- Hyperparameter stability ---------------------------
+
+hyperparam:
+  subsample:
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    GLUE:
+      dim:
+        default: 50
+        choices:
+          - 10
+          - 30
+          - 50
+          - 100
+          - 200
+      alt_dim:
+        default: 100
+        choices:
+          - 30
+          - 50
+          - 100
+          - 200
+          - 400
+      hidden_depth:
+        default: 2
+        choices:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+      hidden_dim:
+        default: 256
+        choices:
+          - 64
+          - 128
+          - 256
+          - 512
+          - 1024
+      dropout:
+        default: 0.2
+        choices:
+          - 0.0
+          - 0.1
+          - 0.2
+          - 0.3
+          - 0.5
+      lam_graph:
+        default: 0.02
+        choices:
+          - 0.001
+          - 0.005
+          - 0.02
+          - 0.1
+          - 0.5
+      lam_align:
+        default: 0.02
+        choices:
+          - 0.001
+          - 0.005
+          - 0.02
+          - 0.1
+          - 0.5
+      neg_samples:
+        default: 10
+        choices:
+          - 2
+          - 5
+          - 10
+          - 20
+          - 50
+  seed: 4
+
+
+#---------------------------------- Benchmark ----------------------------------
+
+benchmark:
+  subsample:
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    UnionCom:
+    LIGER:
+    bindSC:
+    CCA_anchor:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.02
+      neg_samples: 10
+  seed: 8
+
+
+#------------------------------ Prior robustness -------------------------------
+
+prior:
+  subsample:
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate:
+      - 0.1
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.9
+    corrupt_seed: 8
+  method:
+    LIGER:
+    bindSC:
+    CCA_anchor:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.02
+      neg_samples: 10
+  seed: 1
+
+
+#------------------------------- Subsample data --------------------------------
+
+subsample:
+  subsample:
+    subsample_size:
+      - 250
+      - 500
+      - 1000
+      - 2000
+      - 4000
+      - 8000
+    subsample_seed: 8
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    UnionCom:
+    LIGER:
+    bindSC:
+    CCA_anchor:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.02
+      neg_samples: 10
+  seed: 1

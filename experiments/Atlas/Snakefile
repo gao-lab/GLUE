@@ -1,0 +1,354 @@
+import os
+
+configfile: "config.yaml"
+
+rule all:
+    input:
+        "s04_glue_final",
+        "s05_verify",
+        "s06_sankey",
+        "t03_summary/scalability.pdf",
+        # "e03_visualize"
+
+rule s01_preprocessing:
+    input:
+        "../../data/dataset/Cao-2020.h5ad",
+        "../../data/dataset/Domcke-2020.h5ad",
+        ipynb="s01_preprocessing.ipynb"
+    output:
+        directory("s01_preprocessing"),
+        html="s01_preprocessing.html"
+    log:
+        "s01_preprocessing.log"
+    threads: 1
+    resources: gpu=1, mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s02_glue_pretrain:
+    input:
+        "s01_preprocessing",
+        ipynb="s02_glue_pretrain.ipynb"
+    output:
+        directory("s02_glue_pretrain"),
+        html="s02_glue_pretrain.html"
+    log:
+        "s02_glue_pretrain.log"
+    threads: 4
+    resources: gpu=1, mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s03_unsupervised_balancing:
+    input:
+        "s01_preprocessing",
+        "s02_glue_pretrain",
+        ipynb="s03_unsupervised_balancing.ipynb"
+    output:
+        directory("s03_unsupervised_balancing"),
+        html="s03_unsupervised_balancing.html"
+    log:
+        "s03_unsupervised_balancing.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s04_glue_final:
+    input:
+        "s01_preprocessing",
+        "s02_glue_pretrain",
+        "s03_unsupervised_balancing",
+        ipynb="s04_glue_final.ipynb"
+    output:
+        directory("s04_glue_final"),
+        html="s04_glue_final.html"
+    log:
+        "s04_glue_final.log"
+    threads: 4
+    resources: gpu=1, mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s05_verify:
+    input:
+        "../../data/dataset/Cao-2020.h5ad",
+        "../../data/dataset/Domcke-2020.h5ad",
+        "s01_preprocessing",
+        "s04_glue_final",
+        ipynb="s05_verify.ipynb"
+    output:
+        directory("s05_verify"),
+        html="s05_verify.html"
+    log:
+        "s05_verify.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s06_sankey:
+    input:
+        "s04_glue_final",
+        ipynb="s06_sankey.ipynb"
+    output:
+        directory("s06_sankey"),
+        html="s06_sankey.html"
+    log:
+        "s06_sankey.log"
+    threads: 20
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule t01_preprocessing:
+    input:
+        "s01_preprocessing",
+        ipynb="t01_preprocessing.ipynb"
+    output:
+        directory("t01_preprocessing"),
+        html="t01_preprocessing.html"
+    log:
+        "t01_preprocessing.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule t02_subsampling:
+    input:
+        "t01_preprocessing"
+    output:
+        rna="t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/rna.h5ad",
+        atac="t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/atac.h5ad",
+        atac2rna="t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/atac2rna.h5ad"
+    log:
+        "t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/subsampling.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "python -u scripts/subsample_data.py "
+        "-d {input}/rna.h5ad "
+        "-f {wildcards.subsample_frac} --random-seed {wildcards.subsample_seed} "
+        "-o {output.rna} > {log} 2>&1 && "
+        "python -u scripts/subsample_data.py "
+        "-d {input}/atac.h5ad {input}/atac2rna.h5ad "
+        "-f {wildcards.subsample_frac} -p --random-seed {wildcards.subsample_seed} "
+        "-o {output.atac} {output.atac2rna} >> {log} 2>&1"
+
+rule t02_run_LIGER:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac2rna.h5ad"
+    output:
+        rna_latent="{path}/LIGER/rna_latent.csv",
+        atac_latent="{path}/LIGER/atac_latent.csv",
+        run_info="{path}/LIGER/run_info.yaml"
+    log:
+        "{path}/LIGER/run_LIGER.log"
+    params:
+        blacklist="{path}/LIGER/.blacklist"
+    threads: 4
+    resources: mutex=1
+    shell:
+        "timeout {config[timeout]} Rscript scripts/run_LIGER.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s 0 "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule t02_run_bindSC:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad",
+        atac2rna="{path}/atac2rna.h5ad",
+    output:
+        rna_latent="{path}/bindSC/rna_latent.csv",
+        atac_latent="{path}/bindSC/atac_latent.csv",
+        run_info="{path}/bindSC/run_info.yaml"
+    log:
+        "{path}/bindSC/run_bindSC.log"
+    params:
+        blacklist="{path}/bindSC/.blacklist"
+    threads: 4
+    resources: mutex=1
+    shell:
+        "timeout {config[timeout]} Rscript scripts/run_bindSC.R "
+        "--input-rna {input.rna} --input-atac {input.atac} "
+        "--input-atac2rna {input.atac2rna} -s 0 "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule t02_run_CCA_anchor:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad",
+        atac2rna="{path}/atac2rna.h5ad"
+    output:
+        rna_latent="{path}/CCA_anchor/rna_latent.csv",
+        atac_latent="{path}/CCA_anchor/atac_latent.csv",
+        run_info="{path}/CCA_anchor/run_info.yaml"
+    log:
+        "{path}/CCA_anchor/run_CCA_anchor.log"
+    params:
+        blacklist="{path}/CCA_anchor/.blacklist"
+    threads: 4
+    resources: mutex=1
+    shell:
+        "timeout {config[timeout]} Rscript scripts/run_CCA_anchor.R "
+        "--input-rna {input.rna} --input-atac {input.atac} "
+        "--input-atac2rna {input.atac2rna} -s 0 "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule t02_run_GLUE:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad",
+        s01="s01_preprocessing"
+    output:
+        rna_latent="{path}/GLUE/rna_latent.csv",
+        atac_latent="{path}/GLUE/atac_latent.csv",
+        feature_latent="{path}/GLUE/feature_latent.csv",
+        run_info="{path}/GLUE/run_info.yaml"
+    log:
+        "{path}/GLUE/run_GLUE.log"
+    params:
+        train_dir=lambda wildcards, output: os.path.dirname(output.run_info),
+        blacklist="{path}/GLUE/.blacklist"
+    threads: 4
+    resources: gpu=1, mutex=1
+    shell:
+        "timeout {config[timeout]} python -u scripts/run_GLUE.py "
+        "--input-rna {input.rna} --input-atac {input.atac} "
+        "-p {input.s01}/sub.graphml.gz -s 0 "
+        "--train-dir {params.train_dir} --require-converge "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} "
+        "--output-feature {output.feature_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule t02_compute_umap:
+    input:
+        rna="{path}/rna_latent.csv",
+        atac="{path}/atac_latent.csv"
+    output:
+        rna="{path}/rna_umap.csv",
+        atac="{path}/atac_umap.csv"
+    log:
+        "{path}/compute_umap.log"
+    threads: 4
+    resources: mutex=1
+    shell:
+        "python -u scripts/compute_umap.py "
+        "-l {input.rna} {input.atac} "
+        "-o {output.rna} {output.atac} "
+        "> {log} 2>&1 || touch {output.rna} {output.atac}"  # Discard embeddings that cause segfault in UMAP
+
+rule t02_visualize_umap:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad",
+        rna_umap="{path}/{method}/rna_umap.csv",
+        atac_umap="{path}/{method}/atac_umap.csv"
+    output:
+        "{path}/{method}/{label}.pdf"
+    log:
+        "{path}/{method}/visualize_umap_{label}.log"
+    params:
+        title=lambda wildcards: {"cell_type": "'Cell type'", "domain": "'Omics layer'"}[wildcards.label]
+    threads: 1
+    resources: mutex=1
+    shell:
+        "python -u scripts/visualize_umap.py "
+        "-d {input.rna} {input.atac} "
+        "-u {input.rna_umap} {input.atac_umap} "
+        "-l {wildcards.label} -t {params.title} "
+        "-o {output} "
+        "> {log} 2>&1 || touch {output}"  # Discard embeddings that cause segfault in UMAP
+
+rule t03_summary:
+    input:
+        expand("{path}/{file}", path=[
+            item for item in expand(
+                "t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/{method}",
+                subsample_frac=config["subsample_frac"],
+                subsample_seed=range(config["subsample_seed"]),
+                method=config["method"]
+            ) if not os.path.exists(os.path.join(item, ".blacklist"))
+        ], file=["run_info.yaml", "cell_type.pdf", "domain.pdf"])
+    output:
+        "t03_summary/scalability.csv"
+    params:
+        pattern=lambda wildcards: "t02_subsampling/subsample_frac:{subsample_frac}-subsample_seed:{subsample_seed}/{method}/run_info.yaml"
+    threads: 1
+    script:
+        "scripts/summarize.py"
+
+rule t03_plot:
+    input:
+        "t03_summary/scalability.csv"
+    output:
+        "t03_summary/scalability.pdf"
+    threads: 1
+    script:
+        "scalability.R"
+
+# rule e01_preprocessing:
+#     input:
+#         "s01_preprocessing",
+#         ipynb="e01_preprocessing.ipynb"
+#     output:
+#         directory("e01_preprocessing"),
+#         html="e01_preprocessing.html"
+#     log:
+#         "e01_preprocessing.log"
+#     threads: 1
+#     resources: mutex=1
+#     shell:
+#         "jupyter nbconvert --to html "
+#         "--ExecutePreprocessor.timeout=3600000 "
+#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+# rule e02_cca_anchor:
+#     input:
+#         "e01_preprocessing",
+#         ipynb="e02_cca_anchor.ipynb"
+#     output:
+#         directory("e02_cca_anchor"),
+#         html="e02_cca_anchor.html"
+#     log:
+#         "e02_cca_anchor.log"
+#     threads: 4
+#     shell:
+#         "jupyter nbconvert --to html "
+#         "--ExecutePreprocessor.timeout=3600000 "
+#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+# rule e03_visualize:
+#     input:
+#         "e01_preprocessing",
+#         "e02_cca_anchor",
+#         ipynb="e03_visualize.ipynb"
+#     output:
+#         directory("e03_visualize"),
+#         html="e03_visualize.html"
+#     log:
+#         "e03_visualize.log"
+#     threads: 1
+#     shell:
+#         "jupyter nbconvert --to html "
+#         "--ExecutePreprocessor.timeout=3600000 "
+#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"

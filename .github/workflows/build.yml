@@ -1,0 +1,64 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo apt install -y libxml2-utils pandoc
+        sudo wget -O /usr/bin/bedtools https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools.static.binary
+        sudo chmod +x /usr/bin/bedtools
+        pip install --upgrade pip flit
+        flit install -s
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 scglue --count --select=E9,F63,F7,F82 --show-source --statistics
+    - name: Test with pytest
+      run: |
+        pytest --cov="scglue" --cov-report="xml:cov.xml" tests --cpu-only
+        COVERAGE=$(xmllint --xpath "/coverage/@line-rate" cov.xml | awk -F\" '{cov = sprintf("%.0f%%", $2 * 100); print(cov);}')
+        echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
+    - name: Create coverage badge
+      uses: schneegans/dynamic-badges-action@v1.1.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: ${{ secrets.GIST_ID }}
+        filename: coverage.json
+        label: coverage
+        message: ${{ env.COVERAGE }}
+        color: green
+    - name: Build documentation
+      run: |
+        sphinx-build -b html docs docs/_build
+    - name: Get version
+      run: |
+        VERSION=$(python -c "from scglue import __version__; print(__version__)")
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+    - name: Create version badge
+      uses: schneegans/dynamic-badges-action@v1.1.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: ${{ secrets.GIST_ID }}
+        filename: version.json
+        label: version
+        message: ${{ env.VERSION }}
+        color: blue

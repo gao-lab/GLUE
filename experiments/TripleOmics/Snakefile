@@ -1,0 +1,71 @@
+rule all:
+    input:
+        "s03_markers",
+        "s04_reg_contrib"
+
+rule s01_preprocessing:
+    input:
+        "../../data/dataset/Saunders-2018.h5ad",
+        "../../data/dataset/Luo-2017.h5ad",
+        "../../data/dataset/10x-ATAC-Brain5k.h5ad",
+        "manual_colors.yaml",
+        ipynb="s01_preprocessing.ipynb"
+    output:
+        directory("s01_preprocessing"),
+        html="s01_preprocessing.html"
+    log:
+        "s01_preprocessing.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s02_glue:
+    input:
+        "s01_preprocessing",
+        ipynb="s02_glue.ipynb"
+    output:
+        directory("s02_glue"),
+        html="s02_glue.html"
+    log:
+        "s02_glue.log"
+    threads: 4
+    resources: gpu=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s03_markers:
+    input:
+        "s02_glue",
+        "manual_colors.yaml",
+        ipynb="s03_markers.ipynb"
+    output:
+        directory("s03_markers"),
+        html="s03_markers.html"
+    log:
+        "s03_markers.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s04_reg_contrib:
+    input:
+        "s02_glue",
+        "s03_markers",
+        "manual_colors.yaml",
+        ipynb="s04_reg_contrib.ipynb"
+    output:
+        directory("s04_reg_contrib"),
+        html="s04_reg_contrib.html"
+    log:
+        "s04_reg_contrib.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"

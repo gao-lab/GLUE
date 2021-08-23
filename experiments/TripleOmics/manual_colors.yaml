@@ -1,0 +1,44 @@
+Layer2/3: "#d72628"  # RNA
+mL2/3: "#d72628"  # MET
+L2/3 IT: "#d72628"  # ATAC
+
+Layer5a: "#fe7f0b"  # RNA
+mL4: "#ea893e"  # MET
+L4: "#ea893e"  # ATAC
+mL5-1: "#b5723f"  # MET
+L5 IT: "#b5723f"  # ATAC
+mDL-1: "#c59872"  # MET
+mDL-2: "#d5bfa6"  # MET
+L6 IT: "#d5bfa6"  # ATAC
+
+Layer5: "#69433c"  # RNA
+mL5-2: "#69433c"  # MET
+L5 PT: "#69433c"  # ATAC
+
+mIn-1: "#1f1210"  # MET
+
+Layer5b: "#e377c1"  # RNA
+mL6-1: "#e377c1"  # MET
+NP: "#e377c1"  # ATAC
+
+Layer6: "#9566bd"  # RNA
+mL6-2: "#9566bd"  # MET
+L6 CT: "#9566bd"  # ATAC
+
+Claustrum: "#16bfcf"  # RNA
+mDL-3: "#16bfcf"  # MET
+
+CGE: "#1f77b4"  # RNA
+mVip: "#47727c"  # MET
+Vip: "#47727c"  # ATAC
+mNdnf-1: "#0f56c2"  # MET
+mNdnf-2: "#226cdc"  # MET
+mNdnf: "#0f56c2"  # Common
+
+MGE: "#2da02b"  # RNA
+mPv: "#105226"  # MET
+Pvalb: "#105226"  # ATAC
+mSst-1: "#6ac849"  # MET
+mSst-2: "#279820"  # MET
+mSst: "#6ac849"  # Common
+Sst: "#6ac849"  # ATAC
