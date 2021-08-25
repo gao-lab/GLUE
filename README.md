@@ -10,7 +10,7 @@ Graph-linked unified embedding for single-cell multi-omics data integration
 
 ![Model architecture](docs/_static/architecture.svg)
 
-For more details, please checkout our preprint on [bioRxiv (to be updated)](about:blank).
+For more details, please check out our [preprint](https://www.biorxiv.org/content/10.1101/2021.08.22.457275).
 
 ## Directory structure
 
@@ -75,10 +75,10 @@ sphinx-build -a -b html docs docs/_build
 
 ## Reproduce results
 
-1. Checkout the repository to v0.1.0:
+1. Checkout the repository to v0.1.1:
 
    ```sh
-   git checkout tags/v0.1.0
+   git checkout tags/v0.1.1
    ```
 
 2. Create a local conda environment using the `env.yaml` file,

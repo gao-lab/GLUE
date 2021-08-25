@@ -12,7 +12,7 @@ First create a new conda environment (here named "scglue", but you may name it w
 .. code-block:: bash
     :linenos:
 
-    conda create -n scglue python=3.8
+    conda create -n scglue "python>=3.6"
     conda activate scglue
 
 Then install ``scglue`` via:
@@ -31,7 +31,7 @@ In order to use some of the genomics-related functions, it is necessary to have 
 .. code-block:: bash
     :linenos:
 
-    conda install -c bioconda bedtools>=2.29.2
+    conda install -c bioconda "bedtools>=2.29.2"
 
 .. note:: A conda package is also being prepared, which would be more convenient. Stay tuned.
 

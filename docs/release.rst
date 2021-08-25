@@ -1,6 +1,7 @@
 Release notes
 =============
 
-.. rubric:: Upcoming changes
+v0.1.1
+------
 
-- First version v0.1.0 will be released soon.
+First public release
