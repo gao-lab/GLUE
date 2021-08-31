@@ -44,7 +44,8 @@ dependencies = [
     "tensorboardX>=1.4",
     "anndata>=0.7",
     "scanpy>=1.5",
-    "pybedtools>=0.8.1"
+    "pybedtools>=0.8.1",
+    "packaging"
 ]
 
 [project.optional-dependencies]

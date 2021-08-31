@@ -92,30 +92,35 @@ rule build_prior_graph:
 rule subsample_data:
     input:
         rna="{path}/{dataset}/original/rna.h5ad",
-        atac="{path}/{dataset}/original/atac.h5ad"
+        atac="{path}/{dataset}/original/atac.h5ad",
+        frags2rna="{path}/{dataset}/original/frags2rna.h5ad"
     output:
         rna="{path}/{dataset}/subsample_size:{subsample_size}-subsample_seed:{subsample_seed}/rna.h5ad",
-        atac="{path}/{dataset}/subsample_size:{subsample_size}-subsample_seed:{subsample_seed}/atac.h5ad"
+        atac="{path}/{dataset}/subsample_size:{subsample_size}-subsample_seed:{subsample_seed}/atac.h5ad",
+        frags2rna="{path}/{dataset}/subsample_size:{subsample_size}-subsample_seed:{subsample_seed}/frags2rna.h5ad"
     log:
         "{path}/{dataset}/subsample_size:{subsample_size}-subsample_seed:{subsample_seed}/subsample_data.log"
     threads: 1
     shell:
         "python -u workflow/scripts/subsample_data.py "
-        "-d {input.rna} {input.atac} "
+        "-d {input.rna} {input.atac} {input.frags2rna} "
         "-s {wildcards.subsample_size} -p "
         "--random-seed {wildcards.subsample_seed} "
-        "-o {output.rna} {output.atac} > {log} 2>&1"
+        "-o {output.rna} {output.atac} {output.frags2rna} > {log} 2>&1"
 
 rule link_data:
     input:
         rna=lambda wildcards: config["dataset"][wildcards.dataset]["rna"],
-        atac=lambda wildcards: config["dataset"][wildcards.dataset]["atac"]
+        atac=lambda wildcards: config["dataset"][wildcards.dataset]["atac"],
+        frags2rna=lambda wildcards: config["dataset"][wildcards.dataset]["frags2rna"]
     output:
         rna="{path}/{dataset}/original/rna.h5ad",
-        atac="{path}/{dataset}/original/atac.h5ad"
+        atac="{path}/{dataset}/original/atac.h5ad",
+        frags2rna="{path}/{dataset}/original/frags2rna.h5ad"
     log:
         "{path}/{dataset}/original/link_data.log"
     threads: 1
     shell:
         "ln -frs {input.rna} {output.rna} > {log} 2>&1 && "
-        "ln -frs {input.atac} {output.atac} >> {log} 2>&1"
+        "ln -frs {input.atac} {output.atac} >> {log} 2>&1 && "
+        "ln -frs {input.frags2rna} {output.frags2rna} >> {log} 2>&1"

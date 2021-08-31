@@ -63,7 +63,7 @@ def target_directories(config):
 
     def per_method(method):
         prior_conf = config["prior"] or {}
-        prior_conf = {} if method in ("UnionCom", ) else prior_conf  # Methods that do not use prior feature matching
+        prior_conf = {} if method in ("UnionCom", "iNMF_FiG", "LIGER_FiG") else prior_conf  # Methods that do not use prior feature matching
         prior_conf = expand(
             conf_expand_pattern(prior_conf, placeholder="null"),
             **prior_conf

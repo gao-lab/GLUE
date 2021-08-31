@@ -11,5 +11,5 @@
 Go to the subdirectories for each case study, and execute:
 
 ```sh
-snakemake --res mutex=1 -j20 -prk
+snakemake --use-conda --res mutex=1 -j20 -prk
 ```

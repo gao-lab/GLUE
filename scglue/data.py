@@ -4,6 +4,7 @@ that are not covered in :mod:`scanpy`.
 """
 
 import os
+from itertools import chain
 from typing import Callable, List, Mapping, Optional
 
 import anndata
@@ -17,7 +18,7 @@ import sklearn.neighbors
 import sklearn.utils.extmath
 
 from . import genomics, num
-from .utils import logged
+from .utils import logged, smart_tqdm
 
 
 def lsi(
@@ -86,7 +87,7 @@ def get_gene_annotation(
     if gtf is None or gtf_by is None:
         raise ValueError("Arguments `gtf` and `gtf_by` must be specified!")
     var_by = adata.var_names if var_by is None else adata.var[var_by]
-    gtf = genomics.Gtf.read_gtf(gtf).query("feature == 'gene'").split_attribute()
+    gtf = genomics.read_gtf(gtf).query("feature == 'gene'").split_attribute()
     if by_func:
         by_func = np.vectorize(by_func)
         var_by = by_func(var_by)
@@ -282,3 +283,49 @@ def extract_rank_genes_groups(
     ).query(filter_by)
     df = df.reset_index(drop=True)
     return df
+
+
+def bedmap2anndata(
+        bedmap: os.PathLike, var_col: int = 3, obs_col: int = 6
+) -> anndata.AnnData:
+    r"""
+    Convert bedmap result to :class:`anndata.AnnData` object
+
+    Parameters
+    ----------
+    bedmap
+        Path to bedmap result
+    var_col
+        Variable column (0-based)
+    obs_col
+        Observation column (0-based)
+
+    Returns
+    -------
+    adata
+        Converted :class:`anndata.AnnData` object
+
+    Note
+    ----
+    Similar to ``rliger::makeFeatureMatrix``,
+    but more automated and memory efficient.
+    """
+    bedmap = pd.read_table(
+        bedmap, sep="\t", header=None, usecols=[var_col, obs_col]
+    ).dropna()
+    obs_pool = bedmap[obs_col].str.split(";")
+    var_pool = bedmap[var_col]
+    obs_names = pd.Index(set(chain.from_iterable(obs_pool)))
+    var_names = pd.Index(set(var_pool))
+    X = scipy.sparse.lil_matrix((var_names.size, obs_names.size))  # Transposed
+    for obs, var in smart_tqdm(zip(obs_pool, var_pool), total=bedmap.shape[0]):
+        row = obs_names.get_indexer(obs)
+        col = var_names.get_loc(var)
+        X.rows[col] += row.tolist()
+        X.data[col] += [1] * row.size
+    X = X.tocsc().T  # Transpose back
+    X.sum_duplicates()
+    return anndata.AnnData(
+        X=X, obs=pd.DataFrame(index=obs_names),
+        var=pd.DataFrame(index=var_names)
+    )

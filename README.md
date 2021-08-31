@@ -1,7 +1,7 @@
 # GLUE (Graph-Linked Unified Embedding)
 
 [![license-badge](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![version-badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Jeff1995/e704b2f886ff6a37477311b90fdf7efa/raw/version.json)
+[![pypi-badge](https://img.shields.io/pypi/v/scglue)](https://pypi.org/project/scglue)
 [![docs-badge](https://readthedocs.org/projects/scglue/badge/?version=latest)](https://scglue.readthedocs.io/en/latest/?badge=latest)
 [![build-badge](https://github.com/gao-lab/GLUE/actions/workflows/build.yml/badge.svg)](https://github.com/gao-lab/GLUE/actions/workflows/build.yml)
 [![coverage-badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Jeff1995/e704b2f886ff6a37477311b90fdf7efa/raw/coverage.json)](https://github.com/gao-lab/GLUE/actions/workflows/build.yml)
@@ -26,7 +26,6 @@ For more details, please check out our [preprint](https://www.biorxiv.org/conten
 ├── packrat                 # Reproducible R environment via packrat
 ├── env.yaml                # Reproducible Python environment via conda
 ├── setup.py                # Setup script for the Python package
-├── release.sh              # Script for releasing a new version
 ├── LICENSE
 └── README.md
 ```

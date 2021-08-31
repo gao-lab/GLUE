@@ -60,7 +60,7 @@ gp <- ggplot(data = df_summarise, mapping = aes(x = dataset, y = foscttm, fill =
         width = 0.2, position = position_dodge(width = 0.7)
     ) +
     geom_text(
-        mapping = aes(label = annotation), y = 0.03, vjust = 0.7, size = 2.5,
+        mapping = aes(label = annotation), y = 0.03, vjust = 0.5, size = 2.3,
         angle = 90, position = position_dodge2(width = 0.7), fontface = "bold"
     ) +
     geom_point(

@@ -50,3 +50,21 @@ def test_extract_rank_genes_groups(rna_pp):
         scglue.data.extract_rank_genes_groups(rna_pp)
     sc.tl.rank_genes_groups(rna_pp, "ct")
     _ = scglue.data.extract_rank_genes_groups(rna_pp)
+
+
+def test_bedmap2anndata(bedmap_file):
+    adata = scglue.data.bedmap2anndata(bedmap_file)
+    adata = adata[
+        ["cell1", "cell2", "cell3", "cell4", "cell5"],
+        ["a", "b", "c", "d", "e", "f"]
+    ]
+    cmp_arrays(
+        adata.X.toarray(),
+        np.array([
+            [1, 0, 0, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0],
+            [1, 1, 0, 1, 0, 1],
+            [0, 0, 1, 0, 1, 0],
+            [0, 0, 0, 1, 0, 0]
+        ])
+    )

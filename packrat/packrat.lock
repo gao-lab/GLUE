@@ -1238,6 +1238,11 @@ Version: 2.18.1
 Hash: d69b47c75f87ca284e0c722feb587a86
 Requires: gdata
 
+Package: gmp
+Source: CRAN
+Version: 0.6-2
+Hash: 1519a0d4ac9c02f0caabeff01afc1cca
+
 Package: goftest
 Source: CRAN
 Version: 1.2-2
@@ -1955,12 +1960,12 @@ Hash: 765f56f2e0697cfd1ad4c9d34e4efedc
 
 Package: rliger
 Source: Bioconductor
-Version: 0.5.0
-Hash: 690fe8b7e3cebabd3fc05580e14bb157
-Requires: FNN, Hmisc, RANN, Rcpp, RcppArmadillo, RcppEigen,
-    RcppProgress, Rtsne, cowplot, doParallel, dplyr, foreach, ggplot2,
-    ggrepel, hdf5r, ica, irlba, mclust, patchwork, plyr, psych,
-    riverplot, rlang, uwot
+Version: 1.0.0
+Hash: a245d29f9867d243755e83761c81b589
+Requires: FNN, RANN, Rcpp, RcppArmadillo, RcppEigen, RcppProgress,
+    Rtsne, cowplot, doParallel, dplyr, foreach, ggplot2, ggrepel,
+    hdf5r, ica, irlba, mclust, patchwork, plyr, psych, riverplot,
+    rlang, uwot
 
 Package: rmarkdown
 Source: CRAN

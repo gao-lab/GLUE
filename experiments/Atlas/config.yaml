@@ -1,4 +1,5 @@
 method:
+  - iNMF
   - LIGER
   - bindSC
   - CCA_anchor

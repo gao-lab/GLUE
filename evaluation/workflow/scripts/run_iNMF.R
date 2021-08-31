@@ -65,6 +65,7 @@ main <- function(args) {
     rna_cells <- rownames(rna$obs)
     atac_cells <- rownames(atac$obs)
     n_cells <- nrow(rna$obs) + nrow(atac$obs)
+    min_cells <- min(nrow(rna$obs), nrow(atac$obs))
 
     rm(rna, atac)
     gc()  # Reduce memory usage
@@ -76,8 +77,8 @@ main <- function(args) {
     int.liger@var.genes <- hvg
     int.liger <- scaleNotCenter(int.liger)
 
-    cat("[3/4] Running LIGER...\n")
-    int.liger <- optimizeALS(int.liger, k = 20, rand.seed = args$random_seed)
+    cat("[3/4] Running iNMF...\n")
+    int.liger <- online_iNMF(int.liger, k = 20, miniBatch_size = min(5000, min_cells), seed = args$random_seed)
     int.liger <- quantile_norm(int.liger, rand.seed = args$random_seed)
     elapsed_time <- proc.time() - start_time
 

@@ -1,5 +1,5 @@
-source("../../../.Rprofile", chdir = TRUE)
 suppressPackageStartupMessages({
+    source("../../../.Rprofile", chdir = TRUE)
     library(Seurat)
     library(Signac)
     library(EnsDb.Hsapiens.v86)

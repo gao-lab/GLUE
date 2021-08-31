@@ -28,12 +28,12 @@ parse_args <- function() {
         help = "Random seed"
     )
     parser$add_argument(
-        "--output-atac", dest = "output_atac", type = "character", required = TRUE,
-        help = "Path of output ATAC latent file (.csv)"
-    )
-    parser$add_argument(
         "--output-rna", dest = "output_rna", type = "character", required = TRUE,
         help = "Path of output RNA latent file (.csv)"
+    )
+    parser$add_argument(
+        "--output-atac", dest = "output_atac", type = "character", required = TRUE,
+        help = "Path of output ATAC latent file (.csv)"
     )
     parser$add_argument(
         "--run-info", dest = "run_info", type = "character", required = TRUE,

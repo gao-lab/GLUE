@@ -150,6 +150,26 @@ rule t02_subsampling:
         "-f {wildcards.subsample_frac} -p --random-seed {wildcards.subsample_seed} "
         "-o {output.atac} {output.atac2rna} >> {log} 2>&1"
 
+rule t02_run_iNMF:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac2rna.h5ad"
+    output:
+        rna_latent="{path}/iNMF/rna_latent.csv",
+        atac_latent="{path}/iNMF/atac_latent.csv",
+        run_info="{path}/iNMF/run_info.yaml"
+    log:
+        "{path}/iNMF/run_iNMF.log"
+    params:
+        blacklist="{path}/iNMF/.blacklist"
+    threads: 4
+    resources: mutex=1
+    shell:
+        "timeout {config[timeout]} Rscript scripts/run_iNMF.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s 0 "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
 rule t02_run_LIGER:
     input:
         rna="{path}/rna.h5ad",
@@ -306,49 +326,92 @@ rule t03_plot:
     script:
         "scalability.R"
 
-# rule e01_preprocessing:
-#     input:
-#         "s01_preprocessing",
-#         ipynb="e01_preprocessing.ipynb"
-#     output:
-#         directory("e01_preprocessing"),
-#         html="e01_preprocessing.html"
-#     log:
-#         "e01_preprocessing.log"
-#     threads: 1
-#     resources: mutex=1
-#     shell:
-#         "jupyter nbconvert --to html "
-#         "--ExecutePreprocessor.timeout=3600000 "
-#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+rule e01_preprocessing:
+    input:
+        "s01_preprocessing",
+        ipynb="e01_preprocessing.ipynb"
+    output:
+        directory("e01_preprocessing"),
+        html="e01_preprocessing.html"
+    log:
+        "e01_preprocessing.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
 
-# rule e02_cca_anchor:
-#     input:
-#         "e01_preprocessing",
-#         ipynb="e02_cca_anchor.ipynb"
-#     output:
-#         directory("e02_cca_anchor"),
-#         html="e02_cca_anchor.html"
-#     log:
-#         "e02_cca_anchor.log"
-#     threads: 4
-#     shell:
-#         "jupyter nbconvert --to html "
-#         "--ExecutePreprocessor.timeout=3600000 "
-#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+rule e01_export_pkl:
+    input:
+        "e01_preprocessing"
+    output:
+        directory("e01_export_pkl")
+    log:
+        "e01_export_pkl.log"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "python h5ad2pkl.py -i {input}/rna.h5ad -o {output}/rna.pkl > {log} 2>&1 && "
+        "python h5ad2pkl.py -i {input}/atac2rna.h5ad -o {output}/atac2rna.pkl >> {log} 2>&1"
 
-# rule e03_visualize:
-#     input:
-#         "e01_preprocessing",
-#         "e02_cca_anchor",
-#         ipynb="e03_visualize.ipynb"
-#     output:
-#         directory("e03_visualize"),
-#         html="e03_visualize.html"
-#     log:
-#         "e03_visualize.log"
-#     threads: 1
-#     shell:
-#         "jupyter nbconvert --to html "
-#         "--ExecutePreprocessor.timeout=3600000 "
-#         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+rule e01_export_old_h5ad:
+    input:
+        "e01_export_pkl"
+    output:
+        directory("e01_export_old_h5ad")
+    log:
+        "e01_export_old_h5ad.log"
+    conda: "old_anndata.yaml"
+    threads: 1
+    resources: mutex=1
+    shell:
+        "python pkl2h5ad.py -i {input}/rna.pkl -o {output}/rna.h5ad > {log} 2>&1 && "
+        "python pkl2h5ad.py -i {input}/atac2rna.pkl -o {output}/atac2rna.h5ad >> {log} 2>&1"
+
+rule e02_cca_anchor:
+    input:
+        "e01_preprocessing",
+        ipynb="e02_cca_anchor.ipynb"
+    output:
+        directory("e02_cca_anchor"),
+        html="e02_cca_anchor.html"
+    log:
+        "e02_cca_anchor.log"
+    threads: 4
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule e02_inmf:
+    input:
+        "e01_export_old_h5ad",
+        ipynb="e02_inmf.ipynb"
+    output:
+        directory("e02_inmf"),
+        html="e02_inmf.html"
+    log:
+        "e02_inmf.log"
+    threads: 4
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule e03_visualize:
+    input:
+        "e01_preprocessing",
+        "e02_cca_anchor",
+        "e02_inmf",
+        ipynb="e03_visualize.ipynb"
+    output:
+        directory("e03_visualize"),
+        html="e03_visualize.html"
+    log:
+        "e03_visualize.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"

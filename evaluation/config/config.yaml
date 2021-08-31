@@ -10,12 +10,15 @@ dataset:
   Chen-2019:
     rna: ../data/dataset/Chen-2019-RNA.h5ad
     atac: ../data/dataset/Chen-2019-ATAC.h5ad
+    frags2rna: ../data/dataset/Chen-2019-FRAGS2RNA.h5ad  # Sham file
   Ma-2020:
     rna: ../data/dataset/Ma-2020-RNA.h5ad
     atac: ../data/dataset/Ma-2020-ATAC.h5ad
+    frags2rna: ../data/dataset/Ma-2020-FRAGS2RNA.h5ad
   10x-Multiome-Pbmc10k:
     rna: ../data/dataset/10x-Multiome-Pbmc10k-RNA.h5ad
     atac: ../data/dataset/10x-Multiome-Pbmc10k-ATAC.h5ad
+    frags2rna: ../data/dataset/10x-Multiome-Pbmc10k-FRAGS2RNA.h5ad
 
 timeout: 24h
 
@@ -109,7 +112,10 @@ benchmark:
     corrupt_seed: 0
   method:
     UnionCom:
+    iNMF:
+    iNMF_FiG:
     LIGER:
+    LIGER_FiG:
     bindSC:
     CCA_anchor:
     GLUE:
@@ -140,6 +146,7 @@ prior:
       - 0.9
     corrupt_seed: 8
   method:
+    iNMF:
     LIGER:
     bindSC:
     CCA_anchor:
@@ -174,7 +181,10 @@ subsample:
     corrupt_seed: 0
   method:
     UnionCom:
+    iNMF:
+    iNMF_FiG:
     LIGER:
+    LIGER_FiG:
     bindSC:
     CCA_anchor:
     GLUE:

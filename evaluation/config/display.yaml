@@ -5,7 +5,10 @@ dataset:
 
 method:
   UnionCom: UnionCom
+  iNMF: Online iNMF
+  iNMF_FiG: Online iNMF (FiG)
   LIGER: LIGER
+  LIGER_FiG: LIGER (FiG)
   bindSC: bindSC
   CCA_anchor: Seurat v3
   GLUE: GLUE
@@ -22,7 +25,10 @@ param:
 
 palette:
   UnionCom: "#1f77b4"
-  LIGER: "#fe7f0b"
+  Online iNMF: "#8c564b"
+  Online iNMF (FiG): "#c49c94"
+  LIGER: "#ff7f0e"
+  LIGER (FiG): "#ffbb78"
   bindSC: "#2da02b"
   Seurat v3: "#d72628"
   GLUE: "#9566bd"

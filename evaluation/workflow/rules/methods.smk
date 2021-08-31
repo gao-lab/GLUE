@@ -21,6 +21,44 @@ rule run_UnionCom:
         "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
         "> {log} 2>&1 || touch {params.blacklist}"
 
+rule run_iNMF:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/{prior_conf}/atac2rna.h5ad"
+    output:
+        rna_latent="{path}/{prior_conf}/iNMF/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/{prior_conf}/iNMF/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/{prior_conf}/iNMF/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/{prior_conf}/iNMF/default/seed:{seed}/run_iNMF.log"
+    params:
+        blacklist="{path}/{prior_conf}/iNMF/default/seed:{seed}/.blacklist"
+    threads: 4
+    shell:
+        "timeout {config[timeout]} Rscript workflow/scripts/run_iNMF.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule run_iNMF_FiG:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/frags2rna.h5ad"
+    output:
+        rna_latent="{path}/null/iNMF_FiG/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/null/iNMF_FiG/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/null/iNMF_FiG/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/null/iNMF_FiG/default/seed:{seed}/run_iNMF_FiG.log"
+    params:
+        blacklist="{path}/null/iNMF_FiG/default/seed:{seed}/.blacklist"
+    threads: 4
+    shell:
+        "timeout {config[timeout]} Rscript workflow/scripts/run_iNMF.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
 rule run_LIGER:
     input:
         rna="{path}/rna.h5ad",
@@ -33,6 +71,25 @@ rule run_LIGER:
         "{path}/{prior_conf}/LIGER/default/seed:{seed}/run_LIGER.log"
     params:
         blacklist="{path}/{prior_conf}/LIGER/default/seed:{seed}/.blacklist"
+    threads: 4
+    shell:
+        "timeout {config[timeout]} Rscript workflow/scripts/run_LIGER.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule run_LIGER_FiG:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/frags2rna.h5ad"
+    output:
+        rna_latent="{path}/null/LIGER_FiG/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/null/LIGER_FiG/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/null/LIGER_FiG/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/null/LIGER_FiG/default/seed:{seed}/run_LIGER_FiG.log"
+    params:
+        blacklist="{path}/null/LIGER_FiG/default/seed:{seed}/.blacklist"
     threads: 4
     shell:
         "timeout {config[timeout]} Rscript workflow/scripts/run_LIGER.R "

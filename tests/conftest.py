@@ -15,7 +15,6 @@ import scglue
 
 def pytest_addoption(parser):
     parser.addoption("--loader-workers", dest="loader_workers", type=int, default=0)  # Slow if not 0, due to wait for pytorch subprocesses to join
-    parser.addoption("--pin-memory", dest="pin_memory", action="store_true", default=False)
     parser.addoption("--cpu-only", dest="cpu_only", action="store_true", default=False)
 
 
@@ -23,10 +22,7 @@ def pytest_generate_tests(metafunc):
     scglue.log.console_log_level = logging.DEBUG
     scglue.log.file_log_level = logging.DEBUG
     scglue.config.PRINT_LOSS_INTERVAL = 2
-    scglue.config.ARRAY_SHUFFLE_NUM_WORKERS = 0
-    scglue.config.GRAPH_SHUFFLE_NUM_WORKERS = 1
     scglue.config.DATALOADER_NUM_WORKERS = metafunc.config.option.loader_workers
-    scglue.config.DATALOADER_PIN_MEMORY = metafunc.config.option.pin_memory
     scglue.config.CPU_ONLY = metafunc.config.option.cpu_only
     np.random.seed(0)
     torch.manual_seed(0)

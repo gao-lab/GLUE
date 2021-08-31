@@ -1,14 +1,10 @@
 r"""
-Genomic operations
+Genomics operations
 """
 
 import collections
 import os
-import pathlib
 import re
-import shlex
-import subprocess
-import tempfile
 from functools import reduce
 from itertools import chain
 from operator import add
@@ -19,16 +15,13 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import pybedtools
-import scipy.stats
-from networkx.algorithms.bipartite import biadjacency_matrix
 from pybedtools import BedTool
 from pybedtools.cbedtools import Interval
-from statsmodels.stats.multitest import fdrcorrection
 
 from .check import check_deps
 from .graph import compose_multigraph, reachable_vertices
 from .typehint import RandomState
-from .utils import ConstrainedDataFrame, config, logged, smart_tqdm, get_rs
+from .utils import ConstrainedDataFrame, logged, smart_tqdm, get_rs
 
 
 class Bed(ConstrainedDataFrame):

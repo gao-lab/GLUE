@@ -6,7 +6,7 @@ import re
 import types
 from typing import Optional
 
-import packaging.version
+from packaging.version import parse
 
 from .utils import run_command
 
@@ -37,7 +37,7 @@ class Checker:
         self.name = name
         self.cmd = cmd
         self.vregex = vregex
-        self.vmin = packaging.version.parse(vmin) if vmin else vmin
+        self.vmin = parse(vmin) if vmin else vmin
 
         vreq = f" (>= {self.vmin})" if self.vmin else ""
         self.vreq_hint = f"This function relies on {self.name}{vreq}."
@@ -53,7 +53,7 @@ class Checker:
                 127: " ".join([self.vreq_hint, self.install_hint])
             }
         )
-        version = packaging.version.parse(re.search(
+        version = parse(re.search(
             self.vregex, "\n".join(output_lines)
         ).groups()[0])
         if self.vmin and version < self.vmin:
