@@ -5,6 +5,7 @@ Visualize UMAP embeddings in a facet grid
 """
 
 import pathlib
+from math import ceil
 
 import anndata
 import matplotlib.pyplot as plt
@@ -57,11 +58,12 @@ def main(snakemake: Snakemake) -> None:
         df_ = df.query(f"dataset == '{dataset}'")
         methods = list(snakemake.config["method"].keys())[::-1]
         fig, axes = plt.subplots(
-            figsize=(7, 3.5 * len(methods)),
-            nrows=len(methods), ncols=2
+            figsize=(16, 1.75 * len(methods)),
+            nrows=ceil(len(methods) / 2), ncols=4,
+            gridspec_kw=dict(wspace = 0.4, hspace = 0.2)
         )
 
-        for i, (method, (ax1, ax2)) in enumerate(zip(methods, axes)):
+        for i, (method, (ax1, ax2)) in enumerate(zip(methods, axes.reshape((-1, 2)))):
             print(f"\tDealing with {method}...")
             df_row = df_.query(f"method == '{method}'")
             if df_row.shape[0] == 1:
@@ -82,15 +84,16 @@ def main(snakemake: Snakemake) -> None:
                 ax.set_xlabel(None)
                 ax.set_ylabel(None)
             ax1.set_ylabel(display["method"][method], labelpad=10)
-            if i == 0:
+            if i < 2:   # First row
                 ax1.set_title("Cell type", pad=10)
                 ax2.set_title("Omics layer", pad=10)
+            if i == 0:  # First method
                 handles1, labels1 = ax1.get_legend_handles_labels()
                 handles2, labels2 = ax2.get_legend_handles_labels()
                 placeholder = patches.Rectangle((0, 0), 1, 1, visible=False)
                 handles = [placeholder, *handles1, placeholder, placeholder, *handles2]
                 labels = ["Cell type", *labels1, "", "Omics layer", *labels2]
-                fig.legend(handles, labels, loc="center left", bbox_to_anchor=(1.05, 0.5), frameon=False)
+                fig.legend(handles, labels, loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
                 ax1.get_legend().remove()
                 ax2.get_legend().remove()
 
