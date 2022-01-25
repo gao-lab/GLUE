@@ -71,4 +71,4 @@ test = [
 Github = "https://github.com/gao-lab/GLUE"
 
 [tool.flit.sdist]
-exclude = [".*", "c*", "d*", "e*", "p*", "t*", "R*", "T*"]
+exclude = [".*", "c*", "d*", "e*", "pa*", "t*", "T*"]
