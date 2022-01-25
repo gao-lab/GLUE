@@ -14,6 +14,7 @@ import pandas as pd
 import scanpy as sc
 import yaml
 from matplotlib import patches, rcParams
+from sklearn.preprocessing import minmax_scale
 from snakemake.script import Snakemake
 
 import scglue
@@ -38,7 +39,9 @@ def main(snakemake: Snakemake) -> None:
     directory.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(snakemake.input[0], keep_default_na=False)
-    df = df.sort_values("foscttm").groupby(by=["dataset", "method"]).head(n=1)
+    df["score_sum"] = minmax_scale(df["avg_silhouette_width"]) + minmax_scale(df["avg_silhouette_width_batch"])
+    df = df.sort_values("score_sum").groupby(by=["dataset", "method"]).tail(n=1)
+    print(df.loc[:, ["dataset", "method", "seed", "score_sum"]])
     with open("config/display.yaml", "r") as f:
         display = yaml.load(f, Loader=yaml.Loader)
 

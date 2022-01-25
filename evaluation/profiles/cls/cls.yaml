@@ -1,5 +1,5 @@
 __default__:
-  jobname: "{rule}"
+  jobname: "GLUE::{rule}"
   output: ".slurm/{rule}.out"
   error: ".slurm/{rule}.err"
   account: gaog_g1
@@ -11,6 +11,11 @@ __default__:
   n_cpu: "{threads}"
 
 run_UnionCom:
+  partition: gpu_4l
+  qos: gaogg4c
+  gres: "--gres=gpu:1"
+
+run_MMD_MA:
   partition: gpu_4l
   qos: gaogg4c
   gres: "--gres=gpu:1"

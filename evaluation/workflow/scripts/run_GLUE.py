@@ -13,6 +13,7 @@ import time
 
 import anndata
 import networkx as nx
+import numpy as np
 import pandas as pd
 import scanpy as sc
 import yaml
@@ -84,6 +85,18 @@ def parse_args() -> argparse.Namespace:
         help="Number of cells in each data minibatch"
     )
     parser.add_argument(
+        "--balance-res", dest="balance_res", type=float, default=1.0,
+        help="Clustering resolution for estimating balancing weight"
+    )
+    parser.add_argument(
+        "--balance-cutoff", dest="balance_cutoff", type=float, default=0.5,
+        help="Cosine similarity cutoff for estimating balancing weight"
+    )
+    parser.add_argument(
+        "--balance-power", dest="balance_power", type=float, default=4.0,
+        help="Cosine similarity power for estimating balancing weight"
+    )
+    parser.add_argument(
         "-s", "--random-seed", dest="random_seed", type=int, default=0,
         help="Random seed"
     )
@@ -136,15 +149,15 @@ def main(args: argparse.Namespace) -> None:
     atac.var["highly_variable"] = [graph.has_node(item) for item in atac.var_names]
     rna_use_rep, atac_use_rep = None, None
     if args.alt_dim:
-        rna.layers["raw"] = rna.X.copy()
+        rna.layers["counts"] = rna.X.copy()
         sc.pp.normalize_total(rna)
-        rna = rna[:, rna.var["highly_variable"]]
+        rna = rna[:, rna.var["highly_variable"]].copy()
         sc.pp.log1p(rna)
         sc.pp.scale(rna, max_value=10)
         sc.tl.pca(rna, n_comps=args.alt_dim, svd_solver="auto")
         rna_use_rep = "X_pca"
-        rna.X = rna.layers["raw"]
-        del rna.layers["raw"]
+        rna.X = rna.layers["counts"]
+        del rna.layers["counts"]
         scglue.data.lsi(
             atac, n_components=args.alt_dim,
             use_highly_variable=False, n_iter=15
@@ -168,18 +181,55 @@ def main(args: argparse.Namespace) -> None:
         neg_samples=args.neg_samples,
         val_split=args.val_split,
         data_batch_size=args.data_batch_size,
-        directory=args.train_dir
+        align_burnin=np.inf, safe_burnin=False,
+        directory=args.train_dir / "pretrain"
     )
-    rna_latent = glue.encode_data("rna", rna)
-    atac_latent = glue.encode_data("atac", atac)
+    glue.save(args.train_dir / "pretrain" / "final.dill")
+
+    rna.obsm["X_glue"] = glue.encode_data("rna", rna)
+    atac.obsm["X_glue"] = glue.encode_data("atac", atac)
+    scglue.data.estimate_balancing_weight(
+        rna, atac, use_rep="X_glue", resolution=args.balance_res,
+        cutoff=args.balance_cutoff, power=args.balance_power
+    )
+    scglue.models.configure_dataset(
+        rna, "NB", use_highly_variable=True,
+        use_rep=rna_use_rep, use_dsc_weight="balancing_weight"
+    )
+    scglue.models.configure_dataset(
+        atac, "NB", use_highly_variable=True,
+        use_rep=atac_use_rep, use_dsc_weight="balancing_weight"
+    )
+
+    glue = scglue.models.SCGLUEModel(
+        {"rna": rna, "atac": atac}, vertices,
+        latent_dim=args.dim, h_depth=args.hidden_depth, h_dim=args.hidden_dim,
+        dropout=args.dropout, random_seed=args.random_seed
+    )
+    glue.adopt_pretrained_model(scglue.models.load_model(
+        args.train_dir / "pretrain" / "final.dill"
+    ))
+    glue.compile(lam_graph=args.lam_graph, lam_align=args.lam_align, lr=args.lr)
+    glue.fit(
+        {"rna": rna, "atac": atac},
+        graph, edge_weight="weight", edge_sign="sign",
+        neg_samples=args.neg_samples,
+        val_split=args.val_split,
+        data_batch_size=args.data_batch_size,
+        directory=args.train_dir / "fine-tune"
+    )
+    glue.save(args.train_dir / "fine-tune" / "final.dill")
+
+    rna.obsm["X_glue"] = glue.encode_data("rna", rna)
+    atac.obsm["X_glue"] = glue.encode_data("atac", atac)
     elapsed_time = time.time() - start_time
     feature_latent = glue.encode_graph(graph, "weight", "sign")
 
     print("[4/4] Saving results...")
     args.output_rna.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rna_latent, index=rna.obs_names).to_csv(args.output_rna, header=False)
+    pd.DataFrame(rna.obsm["X_glue"], index=rna.obs_names).to_csv(args.output_rna, header=False)
     args.output_atac.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(atac_latent, index=atac.obs_names).to_csv(args.output_atac, header=False)
+    pd.DataFrame(atac.obsm["X_glue"], index=atac.obs_names).to_csv(args.output_atac, header=False)
     args.output_feature.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(feature_latent, index=glue.vertices).to_csv(args.output_feature, header=False)
     args.run_info.parent.mkdir(parents=True, exist_ok=True)

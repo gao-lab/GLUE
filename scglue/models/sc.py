@@ -11,8 +11,12 @@ import torch.distributions as D
 import torch.nn.functional as F
 
 from ..num import EPS
-from . import glue, nn, prob
+from . import glue
+from .nn import GraphConv
+from .prob import ZILN, ZIN, ZINB
 
+
+#-------------------------- Network modules for GLUE ---------------------------
 
 class GraphEncoder(glue.GraphEncoder):
 
@@ -32,7 +36,7 @@ class GraphEncoder(glue.GraphEncoder):
     ) -> None:
         super().__init__()
         self.vrepr = torch.nn.Parameter(torch.zeros(vnum, out_features))
-        self.conv = nn.GraphConv()
+        self.conv = GraphConv()
         self.loc = torch.nn.Linear(out_features, out_features)
         self.std_lin = torch.nn.Linear(out_features, out_features)
 
@@ -241,11 +245,22 @@ class DataDecoder(glue.DataDecoder):
 
     r"""
     Abstract data decoder
+
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
     """
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:  # pylint: disable=unused-argument
+        super().__init__()
 
     @abstractmethod
     def forward(  # pylint: disable=arguments-differ
-            self, u: torch.Tensor, v: torch.Tensor, l: Optional[torch.Tensor]
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> D.Normal:
         r"""
         Decode data from sample and feature latent
@@ -256,6 +271,8 @@ class DataDecoder(glue.DataDecoder):
             Sample latent
         v
             Feature latent
+        b
+            Batch index
         l
             Optional normalizer
 
@@ -276,20 +293,23 @@ class NormalDataDecoder(DataDecoder):
     ----------
     out_features
         Output dimensionality
+    n_batches
+        Number of batches
     """
 
-    def __init__(self, out_features: int) -> None:
-        super().__init__()
-        self.scale_lin = torch.nn.Parameter(torch.zeros(out_features))
-        self.bias = torch.nn.Parameter(torch.zeros(out_features))
-        self.std_lin = torch.nn.Parameter(torch.Tensor(out_features))
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.std_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-            self, u: torch.Tensor, v: torch.Tensor, l: Optional[torch.Tensor]
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> D.Normal:
-        scale = F.softplus(self.scale_lin)
-        loc = scale * (u @ v.t()) + self.bias
-        std = F.softplus(self.std_lin) + EPS
+        scale = F.softplus(self.scale_lin[b])
+        loc = scale * (u @ v.t()) + self.bias[b]
+        std = F.softplus(self.std_lin[b]) + EPS
         return D.Normal(loc, std)
 
 
@@ -302,19 +322,22 @@ class ZINDataDecoder(NormalDataDecoder):
     ----------
     out_features
         Output dimensionality
+    n_batches
+        Number of batches
     """
 
-    def __init__(self, out_features: int) -> None:
-        super().__init__(out_features)
-        self.zi_logits = torch.nn.Parameter(torch.zeros(out_features))
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-            self, u: torch.Tensor, v: torch.Tensor, l: Optional[torch.Tensor]
-    ) -> prob.ZIN:
-        scale = F.softplus(self.scale_lin)
-        loc = scale * (u @ v.t()) + self.bias
-        std = F.softplus(self.std_lin) + EPS
-        return prob.ZIN(self.zi_logits.expand_as(loc), loc, std)
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
+    ) -> ZIN:
+        scale = F.softplus(self.scale_lin[b])
+        loc = scale * (u @ v.t()) + self.bias[b]
+        std = F.softplus(self.std_lin[b]) + EPS
+        return ZIN(self.zi_logits[b].expand_as(loc), loc, std)
 
 
 class ZILNDataDecoder(DataDecoder):
@@ -326,22 +349,25 @@ class ZILNDataDecoder(DataDecoder):
     ----------
     out_features
         Output dimensionality
+    n_batches
+        Number of batches
     """
 
-    def __init__(self, out_features: int) -> None:
-        super().__init__()
-        self.scale_lin = torch.nn.Parameter(torch.zeros(out_features))
-        self.bias = torch.nn.Parameter(torch.zeros(out_features))
-        self.zi_logits = torch.nn.Parameter(torch.zeros(out_features))
-        self.std_lin = torch.nn.Parameter(torch.zeros(out_features))
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.std_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-            self, u: torch.Tensor, v: torch.Tensor, l: Optional[torch.Tensor]
-    ) -> prob.ZILN:
-        scale = F.softplus(self.scale_lin)
-        loc = scale * (u @ v.t()) + self.bias
-        std = F.softplus(self.std_lin) + EPS
-        return prob.ZILN(self.zi_logits.expand_as(loc), loc, std)
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
+    ) -> ZILN:
+        scale = F.softplus(self.scale_lin[b])
+        loc = scale * (u @ v.t()) + self.bias[b]
+        std = F.softplus(self.std_lin[b]) + EPS
+        return ZILN(self.zi_logits[b].expand_as(loc), loc, std)
 
 
 class NBDataDecoder(DataDecoder):
@@ -353,23 +379,27 @@ class NBDataDecoder(DataDecoder):
     ----------
     out_features
         Output dimensionality
+    n_batches
+        Number of batches
     """
 
-    def __init__(self, out_features: int) -> None:
-        super().__init__()
-        self.scale_lin = torch.nn.Parameter(torch.zeros(out_features))
-        self.bias = torch.nn.Parameter(torch.zeros(out_features))
-        self.log_theta = torch.nn.Parameter(torch.zeros(out_features))
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.log_theta = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-            self, u: torch.Tensor, v: torch.Tensor, l: torch.Tensor
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: torch.Tensor
     ) -> D.NegativeBinomial:
-        scale = F.softplus(self.scale_lin)
-        logit_mu = scale * (u @ v.t()) + self.bias
+        scale = F.softplus(self.scale_lin[b])
+        logit_mu = scale * (u @ v.t()) + self.bias[b]
         mu = F.softmax(logit_mu, dim=1) * l
+        log_theta = self.log_theta[b]
         return D.NegativeBinomial(
-            self.log_theta.exp(),
-            logits=(mu + EPS).log() - self.log_theta
+            log_theta.exp(),
+            logits=(mu + EPS).log() - log_theta
         )
 
 
@@ -382,22 +412,26 @@ class ZINBDataDecoder(NBDataDecoder):
     ----------
     out_features
         Output dimensionality
+    n_batches
+        Number of batches
     """
 
-    def __init__(self, out_features: int) -> None:
-        super().__init__(out_features)
-        self.zi_logits = torch.nn.Parameter(torch.zeros(out_features))
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-            self, u: torch.Tensor, v: torch.Tensor, l: Optional[torch.Tensor]
-    ) -> prob.ZINB:
-        scale = F.softplus(self.scale_lin)
-        logit_mu = scale * (u @ v.t()) + self.bias
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
+    ) -> ZINB:
+        scale = F.softplus(self.scale_lin[b])
+        logit_mu = scale * (u @ v.t()) + self.bias[b]
         mu = F.softmax(logit_mu, dim=1) * l
-        return prob.ZINB(
-            self.zi_logits.expand_as(mu),
-            self.log_theta.exp(),
-            logits=(mu + EPS).log() - self.log_theta
+        log_theta = self.log_theta[b]
+        return ZINB(
+            self.zi_logits[b].expand_as(mu),
+            log_theta.exp(),
+            logits=(mu + EPS).log() - log_theta
         )
 
 
@@ -421,12 +455,13 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
     """
 
     def __init__(
-            self, in_features: int, out_features: int,
+            self, in_features: int, out_features: int, n_batches: int = 0,
             h_depth: int = 2, h_dim: Optional[int] = 256,
             dropout: float = 0.2
     ) -> None:
+        self.n_batches = n_batches
         od = collections.OrderedDict()
-        ptr_dim = in_features
+        ptr_dim = in_features + self.n_batches
         for layer in range(h_depth):
             od[f"linear_{layer}"] = torch.nn.Linear(ptr_dim, h_dim)
             od[f"act_{layer}"] = torch.nn.LeakyReLU(negative_slope=0.2)
@@ -434,6 +469,26 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
             ptr_dim = h_dim
         od["pred"] = torch.nn.Linear(ptr_dim, out_features)
         super().__init__(od)
+
+    def forward(self, x: torch.Tensor, b: torch.Tensor) -> torch.Tensor:  # pylint: disable=arguments-differ
+        if self.n_batches:
+            b_one_hot = F.one_hot(b, num_classes=self.n_batches)
+            x = torch.cat([x, b_one_hot], dim=1)
+        return super().forward(x)
+
+
+class Classifier(torch.nn.Linear):
+
+    r"""
+    Linear label classifier
+
+    Parameters
+    ----------
+    in_features
+        Input dimensionality
+    out_features
+        Output dimensionality
+    """
 
 
 class Prior(glue.Prior):
@@ -460,3 +515,80 @@ class Prior(glue.Prior):
 
     def forward(self) -> D.Normal:
         return D.Normal(self.loc, self.std)
+
+
+#-------------------- Network modules for independent GLUE ---------------------
+
+class IndDataDecoder(DataDecoder):
+
+    r"""
+    Data decoder mixin that makes decoding independent of feature latent
+
+    Parameters
+    ----------
+    in_features
+        Input dimensionality
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    def __init__(  # pylint: disable=unused-argument
+            self, in_features: int, out_features: int, n_batches: int = 1
+    ) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.v = torch.nn.Parameter(torch.zeros(out_features, in_features))
+
+    def forward(  # pylint: disable=arguments-differ
+            self, u: torch.Tensor, b: torch.Tensor,
+            l: Optional[torch.Tensor]
+    ) -> D.Distribution:
+        r"""
+        Decode data from sample latent
+
+        Parameters
+        ----------
+        u
+            Sample latent
+        b
+            Batch index
+        l
+            Optional normalizer
+
+        Returns
+        -------
+        recon
+            Data reconstruction distribution
+        """
+        return super().forward(u, self.v, b, l)
+
+
+class IndNormalDataDocoder(IndDataDecoder, NormalDataDecoder):
+    r"""
+    Normal data decoder independent of feature latent
+    """
+
+
+class IndZINDataDecoder(IndDataDecoder, ZINDataDecoder):
+    r"""
+    Zero-inflated normal data decoder independent of feature latent
+    """
+
+
+class IndZILNDataDecoder(IndDataDecoder, ZILNDataDecoder):
+    r"""
+    Zero-inflated log-normal data decoder independent of feature latent
+    """
+
+
+class IndNBDataDecoder(IndDataDecoder, NBDataDecoder):
+    r"""
+    Negative binomial data decoder independent of feature latent
+    """
+
+
+class IndZINBDataDecoder(IndDataDecoder, ZINBDataDecoder):
+    r"""
+    Zero-inflated negative binomial data decoder independent of feature latent
+    """

@@ -13,8 +13,7 @@ import ignite
 import torch
 
 from ..utils import DelayedKeyboardInterrupt, config, logged
-from . import nn
-
+from .nn import autodevice
 
 EPOCH_STARTED = ignite.engine.Events.EPOCH_STARTED
 EPOCH_COMPLETED = ignite.engine.Events.EPOCH_COMPLETED
@@ -202,6 +201,29 @@ class Trainer:
 
         torch.cuda.empty_cache()  # Works even if GPU is unavailable
 
+    def get_losses(self, loader: Iterable) -> Mapping[str, float]:
+        r"""
+        Get loss values for given data
+
+        Parameters
+        ----------
+        loader
+            Data loader
+
+        Returns
+        -------
+        loss_dict
+            Dict containing loss values
+        """
+        engine = ignite.engine.Engine(self.val_step)
+        for item in self.required_losses:
+            ignite.metrics.Average(
+                output_transform=lambda output, item=item: output[item]
+            ).attach(engine, item)
+        engine.run(loader, max_epochs=1)
+        torch.cuda.empty_cache()  # Works even if GPU is unavailable
+        return engine.state.metrics
+
     def state_dict(self) -> Mapping[str, Any]:
         r"""
         State dict
@@ -311,6 +333,24 @@ class Model:
         """
         self.trainer.fit(*args, **kwargs)
 
+    def get_losses(self, *args, **kwargs) -> Mapping[str, float]:
+        r"""
+        Alias of ``.trainer.get_losses``.
+
+        Parameters
+        ----------
+        *args
+            Positional arguments are passed to the ``.trainer.get_losses`` method
+        **kwargs
+            Keyword arguments are passed to the ``.trainer.get_losses`` method
+
+        Returns
+        -------
+        loss_dict
+            Dict containing loss values
+        """
+        return self.trainer.get_losses(*args, **kwargs)
+
     def save(self, fname: os.PathLike) -> None:
         r"""
         Save model to file
@@ -350,7 +390,7 @@ class Model:
         fname = pathlib.Path(fname)
         with fname.open("rb") as f:
             model = dill.load(f)
-        model.net.device = nn.autodevice()
+        model.net.device = autodevice()
         return model
 
 

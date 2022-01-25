@@ -4,13 +4,14 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "scglue"
-version = "0.1.1"
+version = "0.2.0"
 description = "Graph-linked unified embedding for unpaired single-cell multi-omics data integration"
 readme = "README.md"
 requires-python = ">=3.6"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Zhi-Jie Cao", email = "caozj@mail.cbi.pku.edu.cn"}
+    {name = "Zhi-Jie Cao", email = "caozj@mail.cbi.pku.edu.cn"},
+    {name = "Xin-Ming Tu", email = "xinmingtu@pku.edu.cn"}
 ]
 keywords = ["bioinformatics", "deep-learning", "single-cell", "single-cell-multiomics"]
 classifiers = [
@@ -45,6 +46,8 @@ dependencies = [
     "anndata>=0.7",
     "scanpy>=1.5",
     "pybedtools>=0.8.1",
+    "h5py",
+    "sparse",
     "packaging"
 ]
 
@@ -58,7 +61,8 @@ doc = [
     "ipython"
 ]
 test = [
-    "flake8",
+    "leidenalg",
+    "plotly",
     "pytest",
     "pytest-cov"
 ]
@@ -67,8 +71,4 @@ test = [
 Github = "https://github.com/gao-lab/GLUE"
 
 [tool.flit.sdist]
-exclude = [
-    ".*", "conda", "custom", "data", "dist", "docs",
-    "evaluation", "experiments", "packrat", "reports",
-    "tests", "env.yaml", "export_env.sh", "setup.py"
-]
+exclude = [".*", "c*", "d*", "e*", "p*", "t*", "R*", "T*"]

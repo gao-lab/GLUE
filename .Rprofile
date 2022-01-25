@@ -11,6 +11,7 @@ read_h5ad <- function(filename) {
 
     Mapping <- reticulate::import("typing")$Mapping
     DataFrame <- reticulate::import("pandas")$DataFrame
+    issparse <- reticulate::import("scipy.sparse")$issparse
     isinstance <- builtins$isinstance
 
     adata <- anndata$read_h5ad(filename)
@@ -26,7 +27,11 @@ read_h5ad <- function(filename) {
         return(ret)
     }
 
-    X <- .convert(adata$X$tocsc())
+    if (issparse(adata$X)) {
+        X <- .convert(adata$X$tocsc())
+    } else {
+        X <- .convert(adata$X)
+    }
     layers <- .convert(adata$layers)
     obs <- .convert(adata$obs)
     var <- .convert(adata$var)
@@ -52,6 +57,13 @@ safe_sd <- function(x) {
     if (length(x) == 1)
         return(0.0)
     return(sd(x))
+}
+
+
+minmax_scale <- function(x, x.min, x.max) {
+    if (missing(x.min)) x.min <- min(x)
+    if (missing(x.max)) x.max <- max(x)
+    return((x - x.min) / (x.max - x.min))
 }
 
 

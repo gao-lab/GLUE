@@ -2,9 +2,20 @@ from utils import target_directories, target_files
 
 rule plot:
     input:
+        "results/benchmark.csv",
         "results/subsample.csv"
     output:
-        "results/subsample.pdf"
+        foscttm="results/subsample_foscttm.pdf",
+        map="results/subsample_map.pdf",
+        sas="results/subsample_sas.pdf",
+        asw="results/subsample_asw.pdf",
+        aswb="results/subsample_aswb.pdf",
+        nc="results/subsample_nc.pdf",
+        gc="results/subsample_gc.pdf",
+        bio="results/subsample_bio.pdf",
+        int="results/subsample_int.pdf",
+        overall="results/subsample_overall.pdf",
+        fc="results/subsample_fc.pdf"
     threads: 1
     script:
         "scripts/subsample.R"

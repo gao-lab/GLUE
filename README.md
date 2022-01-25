@@ -26,12 +26,12 @@ For more details, please check out our [preprint](https://www.biorxiv.org/conten
 ├── custom                  # Customized third-party packages
 ├── packrat                 # Reproducible R environment via packrat
 ├── env.yaml                # Reproducible Python environment via conda
-├── setup.py                # Setup script for the Python package
+├── pyproject.toml          # Python package metadata
 ├── LICENSE
 └── README.md
 ```
 
-## Package installation
+## Installation
 
 The `scglue` package can be installed either via conda:
 
@@ -49,12 +49,12 @@ pip install scglue
 > [conda environment](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
 > is recommended.
 
-## Package usage
+## Usage
 
 Please checkout the documentations and tutorials at
 [scglue.readthedocs.io](https://scglue.readthedocs.io).
 
-## Package development
+## Development
 
 Install scglue in editable form via flit (first install flit via conda or pip
 if not installed already):
@@ -77,10 +77,10 @@ sphinx-build -a -b html docs docs/_build
 
 ## Reproduce results
 
-1. Checkout the repository to v0.1.1:
+1. Checkout the repository to v0.2.0:
 
    ```sh
-   git checkout tags/v0.1.1
+   git checkout tags/v0.2.0
    ```
 
 2. Create a local conda environment using the `env.yaml` file,

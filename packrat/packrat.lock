@@ -2,7 +2,10 @@ PackratFormat: 1.4
 PackratVersion: 0.5.0
 RVersion: 4.0.2
 Repos: CRAN=https://mirror.lzu.edu.cn/CRAN,
-    BioCsoft=https://bioconductor.org/packages/3.11/bioc
+    BioCsoft=https://bioconductor.org/packages/3.11/bioc,
+    BioCann=https://bioconductor.org/packages/3.11/data/annotation,
+    BioCexp=https://bioconductor.org/packages/3.11/data/experiment,
+    CRANextra=https://www.stats.ox.ac.uk/pub/RWin
 
 Package: AnnotationDbi
 Source: Bioconductor
@@ -514,6 +517,23 @@ Version: 1.12.0
 Hash: 7c0038660c6be37378dd493d6b091969
 Requires: BiocGenerics, S4Vectors, SummarizedExperiment
 
+Package: SnapATAC
+Source: github
+Version: 1.0.0
+Hash: a78dd21c6df6e839c593997e9e49dc09
+Requires: GenomicRanges, IRanges, RANN, RColorBrewer, Rtsne, bigmemory,
+    doParallel, edgeR, foreach, igraph, irlba, plyr, raster, rhdf5,
+    scales, viridis
+GithubRepo: SnapATAC
+GithubUsername: r3fang
+GithubRef: HEAD
+GithubSha1: df69fc5eb9d41b6e2683a6f60d7438ba4c785f36
+RemoteHost: api.github.com
+RemoteRepo: SnapATAC
+RemoteUsername: r3fang
+RemoteRef: HEAD
+RemoteSha: df69fc5eb9d41b6e2683a6f60d7438ba4c785f36
+
 Package: SnowballC
 Source: CRAN
 Version: 0.7.0
@@ -634,6 +654,17 @@ Package: beeswarm
 Source: CRAN
 Version: 0.3.1
 Hash: 37711ae365207498236b6e473c9362cb
+
+Package: bigmemory
+Source: CRAN
+Version: 4.5.36
+Hash: c1748f6dd294b70dc7c7b675d7a5445d
+Requires: BH, Rcpp, bigmemory.sri
+
+Package: bigmemory.sri
+Source: CRAN
+Version: 0.1.3
+Hash: 0054f67755bfacbe8a4b68624f071c3b
 
 Package: bindSC
 Source: github
@@ -971,6 +1002,12 @@ Version: 1.7-6
 Hash: af3a14a1b43af34bedbc4832f56c5661
 Requires: proxy
 
+Package: edgeR
+Source: Bioconductor
+Version: 3.32.1
+Hash: 4731c158e67725af6bb335b4d7b1e455
+Requires: Rcpp, limma, locfit
+
 Package: ellipsis
 Source: CRAN
 Version: 0.3.2
@@ -1281,6 +1318,13 @@ Source: CRAN
 Version: 3.8.2
 Hash: c157b036aad8f9889c810af94f9c7c6a
 
+Package: harmony
+Source: CRAN
+Version: 0.1.0
+Hash: 19f66cab7b6da58d18dd186c98255296
+Requires: Rcpp, RcppArmadillo, RcppProgress, cowplot, dplyr, ggplot2,
+    irlba, rlang, tibble, tidyr
+
 Package: haven
 Source: CRAN
 Version: 2.3.1
@@ -1496,6 +1540,11 @@ Version: 0.9-38
 Hash: 2904cff8701afd0744e64f7677b74db6
 Requires: zoo
 
+Package: locfit
+Source: CRAN
+Version: 1.5-9.4
+Hash: 393b0b7b2b7bd57c047c4fda41e9fe35
+
 Package: loomR
 Source: github
 Version: 0.2.0
@@ -1577,6 +1626,11 @@ Source: CRAN
 Version: 1.2.4
 Hash: 4bd7b6b96e033f7d4e1083cd2410c8a3
 Requires: Rcpp
+
+Package: misc3d
+Source: CRAN
+Version: 0.9-1
+Hash: 84f9895bc3131a40fed4831213f99ca2
 
 Package: mnormt
 Source: CRAN
@@ -1731,6 +1785,12 @@ Package: plogr
 Source: CRAN
 Version: 0.2.0
 Hash: 81a8008a5e7858552503935f1abe48aa
+
+Package: plot3D
+Source: CRAN
+Version: 1.4
+Hash: 1186d63c1bc8869225a4d167efcad672
+Requires: misc3d
 
 Package: plotly
 Source: CRAN
@@ -2250,6 +2310,12 @@ Package: tensor
 Source: CRAN
 Version: 1.5
 Hash: 6a56cfa4bdf989a4b74b7ca542dfaeeb
+
+Package: terra
+Source: CRAN
+Version: 1.4-11
+Hash: d37692cc263a08fc0dbaa9c26d5cac31
+Requires: Rcpp
 
 Package: testthat
 Source: CRAN

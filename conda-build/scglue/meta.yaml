@@ -1,5 +1,5 @@
 {% set name = "scglue" %}
-{% set version = "0.1.1" %}  # Update
+{% set version = "0.2.0" %}  # Update
 
 package:
   name: "{{ name|lower }}"
@@ -19,10 +19,12 @@ requirements:
     - anndata >=0.7
     - dill >=0.2.3
     - flit >=3.2,<4
+    - h5py
     - ignite >=0.4.1
     - matplotlib >=3.1.2
     - networkx >=2
     - numpy >=1.19
+    - packaging
     - pandas >=1.1
     - parse >=1.3.2
     - pip
@@ -34,16 +36,19 @@ requirements:
     - scikit-learn >=0.21.2
     - scipy >=1.3
     - seaborn >=0.9
+    - sparse
     - statsmodels >=0.10
     - tensorboardx >=1.4
     - tqdm >=4.27
   run:  # Might need update
     - anndata >=0.7
     - dill >=0.2.3
+    - h5py
     - ignite >=0.4.1
     - matplotlib >=3.1.2
     - networkx >=2
     - numpy >=1.19
+    - packaging
     - pandas >=1.1
     - parse >=1.3.2
     - pybedtools >=0.8.1
@@ -54,6 +59,7 @@ requirements:
     - scikit-learn >=0.21.2
     - scipy >=1.3
     - seaborn >=0.9
+    - sparse
     - statsmodels >=0.10
     - tensorboardx >=1.4
     - tqdm >=4.27

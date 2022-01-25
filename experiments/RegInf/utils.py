@@ -1,53 +1,40 @@
 import itertools
 
-import anndata
 import faiss
 import numpy as np
 import pandas as pd
-import scanpy as sc
 import scipy.sparse
 import seaborn as sns
 
 import scglue
+from scglue.data import _metacell_corr, _metacell_regr
 
 
-def pseudocell_corr(rna, atac, use_rep, n_pseudocells=200, genes=None, peaks=None, paired=False):
-    print("Clustering pseudocells...")
-    if paired:
-        print("Paired mode engaged, clustering based on RNA dataset...")
-        kmeans = faiss.Kmeans(rna.obsm[use_rep].shape[1], n_pseudocells, gpu=False, seed=0)
-        kmeans.train(rna.obsm[use_rep])
-        _, rna.obs["pseudocell"] = kmeans.index.search(rna.obsm[use_rep], 1)
-        atac.obs["pseudocell"] = rna.obs["pseudocell"].to_numpy()
-    else:
-        print("Unpaired mode engaged, clustering based on combined dataset...")
-        combined = anndata.AnnData(
-            obs=pd.concat([rna.obs, atac.obs], join="inner"),
-            obsm={use_rep: np.concatenate([rna.obsm[use_rep], atac.obsm[use_rep]])}
-        )
-        kmeans = faiss.Kmeans(combined.obsm[use_rep].shape[1], n_pseudocells, gpu=False, seed=0)
-        kmeans.train(combined.obsm[use_rep])
-        _, combined.obs["pseudocell"] = kmeans.index.search(combined.obsm[use_rep], 1)
-        rna.obs["pseudocell"] = combined.obs.loc[rna.obs_names, "pseudocell"]
-        atac.obs["pseudocell"] = combined.obs.loc[atac.obs_names, "pseudocell"]
-    rna_agg = scglue.data.aggregate_obs(rna, "pseudocell")
-    atac_agg = scglue.data.aggregate_obs(atac, "pseudocell")
-    common_pseudocells = np.intersect1d(rna_agg.obs_names, atac_agg.obs_names)
-    print(f"Computing correlation on {common_pseudocells.size} common pseudocells...")
-    rna_agg = rna_agg[common_pseudocells, :].copy()
-    atac_agg = atac_agg[common_pseudocells, :].copy()
-    sc.pp.normalize_total(rna_agg)
-    sc.pp.log1p(rna_agg)
-    sc.pp.normalize_total(atac_agg)
-    sc.pp.log1p(atac_agg)
-    if genes is not None:
-        rna_agg = rna_agg[:, genes]
-    if peaks is not None:
-        atac_agg = atac_agg[:, peaks]
-    return pd.DataFrame(
-        scglue.num.spr_mat(rna_agg.X, atac_agg.X),
-        index=rna_agg.var_names, columns=atac_agg.var_names
-    )
+def get_metacells_paired(rna, atac, use_rep, n_meta=200):
+    kmeans = faiss.Kmeans(rna.obsm[use_rep].shape[1], n_meta, gpu=False, seed=0)
+    kmeans.train(rna.obsm[use_rep])
+    _, rna.obs["metacell"] = kmeans.index.search(rna.obsm[use_rep], 1)
+    atac.obs["metacell"] = rna.obs["metacell"].to_numpy()
+    rna_agg = scglue.data.aggregate_obs(rna, "metacell")
+    atac_agg = scglue.data.aggregate_obs(atac, "metacell")
+    common_metacells = np.intersect1d(rna_agg.obs_names, atac_agg.obs_names)
+    rna_agg = rna_agg[common_metacells, :].copy()
+    atac_agg = atac_agg[common_metacells, :].copy()
+    return rna_agg, atac_agg
+
+
+def metacell_corr(rna, atac, use_rep, n_meta=200, skeleton=None, method="spr"):
+    print("Clustering metacells...")
+    rna_agg, atac_agg = get_metacells_paired(rna, atac, use_rep, n_meta=n_meta)
+    print("Computing correlation...")
+    return _metacell_corr(rna_agg, atac_agg, skeleton=skeleton, method=method)
+
+
+def metacell_regr(rna, atac, use_rep, n_meta=200, skeleton=None, model="Lasso", **kwargs):
+    print("Clustering metacells...")
+    rna_agg, atac_agg = get_metacells_paired(rna, atac, use_rep, n_meta=n_meta)
+    print("Computing regression...")
+    return _metacell_regr(rna_agg, atac_agg, skeleton=skeleton, model=model, **kwargs)
 
 
 def make_dist_bins(dist, bins):

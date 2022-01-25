@@ -34,7 +34,7 @@ def test_aggregate_obs(rna_pp):
         obs_agg={"ct": "majority"},
         obsm_agg={"X_pca": "mean"}
     )
-    assert rna_agg.shape[0] == 2
+    assert rna_agg.shape[0] == 3
 
 
 def test_transfer_labels(rna_pp):
@@ -68,3 +68,60 @@ def test_bedmap2anndata(bedmap_file):
             [0, 0, 0, 1, 0, 0]
         ])
     )
+
+
+def test_estimate_balancing_weight(rna_pp, atac_pp):
+    atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
+    with pytest.raises(ValueError):
+        scglue.data.estimate_balancing_weight(rna_pp, atac_pp)
+    scglue.data.estimate_balancing_weight(
+        rna_pp, atac_pp, use_rep="X_pca"
+    )  # NOTE: Smoke test
+    scglue.data.estimate_balancing_weight(
+        rna_pp, atac_pp, use_rep="X_pca", use_batch="batch"
+    )  # NOTE: Smoke test
+
+
+def test_metacell_corr(rna_pp, atac_pp, prior):
+    atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
+    with pytest.raises(ValueError):
+        scglue.data.metacell_corr(rna_pp, atac_pp, use_rep="X_pca")
+    with pytest.raises(ValueError):
+        scglue.data.metacell_corr(rna_pp, atac_pp, n_meta=5)
+    with pytest.raises(ValueError):
+        scglue.data.metacell_corr(rna_pp, atac_pp, use_rep="X_pca", n_meta=5)
+    with pytest.raises(ValueError):
+        scglue.data.metacell_corr(
+            rna_pp, rna_pp, use_rep="X_pca", n_meta=5,
+            skeleton=prior
+        )
+    scglue.data.metacell_corr(
+        rna_pp, atac_pp,
+        use_rep="X_pca", n_meta=5, skeleton=prior, method="pcc"
+    )  # NOTE: Smoke test
+    scglue.data.metacell_corr(
+        rna_pp, atac_pp,
+        use_rep="X_pca", n_meta=5, skeleton=prior
+    )  # NOTE: Smoke test
+
+
+def test_metacell_regr(rna_pp, atac_pp, prior):
+    atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
+    prior = prior.edge_subgraph(
+        e for e, attr in dict(prior.edges).items()
+        if attr["type"] == "rev"
+    )
+    with pytest.raises(ValueError):
+        scglue.data.metacell_regr(rna_pp, atac_pp, use_rep="X_pca")
+    with pytest.raises(ValueError):
+        scglue.data.metacell_regr(rna_pp, atac_pp, n_meta=5)
+    with pytest.raises(ValueError):
+        scglue.data.metacell_regr(rna_pp, atac_pp, use_rep="X_pca", n_meta=5)
+    scglue.data.metacell_regr(
+        rna_pp, atac_pp,
+        use_rep="X_pca", n_meta=5, skeleton=prior, model="ElasticNet"
+    )  # NOTE: Smoke test
+    scglue.data.metacell_regr(
+        rna_pp, atac_pp,
+        use_rep="X_pca", n_meta=5, skeleton=prior
+    )  # NOTE: Smoke test

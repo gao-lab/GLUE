@@ -26,7 +26,7 @@ jobs:
         sudo apt install -y libxml2-utils pandoc
         sudo wget -O /usr/bin/bedtools https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools.static.binary
         sudo chmod +x /usr/bin/bedtools
-        pip install --upgrade pip flit
+        pip install --upgrade pip flit flake8
         flit install -s
     - name: Lint with flake8
       run: |

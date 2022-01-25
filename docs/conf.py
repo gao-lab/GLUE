@@ -11,7 +11,7 @@ project = scglue.name
 version = scglue.__version__
 release = scglue.__version__
 author = "Zhi-Jie Cao"
-copyright = "Gao Lab, 2021"
+copyright = "Gao Lab, 2022"
 
 extensions = [
     'sphinx.ext.autodoc',

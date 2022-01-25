@@ -24,8 +24,8 @@ def pytest_generate_tests(metafunc):
     scglue.config.PRINT_LOSS_INTERVAL = 2
     scglue.config.DATALOADER_NUM_WORKERS = metafunc.config.option.loader_workers
     scglue.config.CPU_ONLY = metafunc.config.option.cpu_only
-    np.random.seed(0)
-    torch.manual_seed(0)
+    np.random.seed(123)
+    torch.manual_seed(321)
 
 
 def pytest_configure(config):

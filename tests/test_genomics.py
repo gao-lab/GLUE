@@ -90,3 +90,34 @@ def test_rna_anchored_prior_graph(rna, atac, gtf_file):  # NOTE: Smoke test
     )
     with pytest.raises(ValueError):
         scglue.genomics.rna_anchored_prior_graph(rna, atac, gene_region="xxx")
+
+
+def test_regulatory_inference(rna):
+    skeleton = nx.Graph([(i, j) for i in rna.var_names for j in rna.var_names])
+    with pytest.raises(ValueError):
+        _ = scglue.genomics.regulatory_inference(
+            rna.var_names, rna.X.T, skeleton,
+            alternative="xxx", random_state=0
+        )
+    with pytest.raises(ValueError):
+        _ = scglue.genomics.regulatory_inference(
+            rna.var_names, rna.X, skeleton,
+            alternative="two.sided", random_state=0
+        )
+    with pytest.raises(ValueError):
+        _ = scglue.genomics.regulatory_inference(
+            rna.var_names, [rna.X.T, rna.X], skeleton,
+            alternative="two.sided", random_state=0
+        )
+    _ = scglue.genomics.regulatory_inference(
+        rna.var_names, rna.X.T, skeleton,
+        alternative="two.sided", random_state=0
+    )  # NOTE: Smoke test
+    _ = scglue.genomics.regulatory_inference(
+        rna.var_names, [rna.X.T, rna.X.T], skeleton,
+        alternative="greater", random_state=1
+    )  # NOTE: Smoke test
+    _ = scglue.genomics.regulatory_inference(
+        rna.var_names, [rna.X.T], skeleton,
+        alternative="less", random_state=2
+    )  # NOTE: Smoke test

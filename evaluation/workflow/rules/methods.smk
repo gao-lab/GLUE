@@ -21,6 +21,45 @@ rule run_UnionCom:
         "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
         "> {log} 2>&1 || touch {params.blacklist}"
 
+rule run_Pamona:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad"
+    output:
+        rna_latent="{path}/null/Pamona/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/null/Pamona/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/null/Pamona/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/null/Pamona/default/seed:{seed}/run_Pamona.log"
+    params:
+        blacklist="{path}/null/Pamona/default/seed:{seed}/.blacklist"
+    threads: 4
+    shell:
+        "timeout {config[timeout]} python -u workflow/scripts/run_Pamona.py "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule run_MMD_MA:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/atac.h5ad"
+    output:
+        rna_latent="{path}/null/MMD_MA/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/null/MMD_MA/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/null/MMD_MA/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/null/MMD_MA/default/seed:{seed}/run_MMD_MA.log"
+    params:
+        blacklist="{path}/null/MMD_MA/default/seed:{seed}/.blacklist"
+    threads: 4
+    resources: gpu=1
+    shell:
+        "timeout {config[timeout]} python -u workflow/scripts/run_MMD_MA.py "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
 rule run_iNMF:
     input:
         rna="{path}/rna.h5ad",
@@ -93,6 +132,25 @@ rule run_LIGER_FiG:
     threads: 4
     shell:
         "timeout {config[timeout]} Rscript workflow/scripts/run_LIGER.R "
+        "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
+        "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
+        "> {log} 2>&1 || touch {params.blacklist}"
+
+rule run_Harmony:
+    input:
+        rna="{path}/rna.h5ad",
+        atac="{path}/{prior_conf}/atac2rna.h5ad"
+    output:
+        rna_latent="{path}/{prior_conf}/Harmony/default/seed:{seed}/rna_latent.csv",
+        atac_latent="{path}/{prior_conf}/Harmony/default/seed:{seed}/atac_latent.csv",
+        run_info="{path}/{prior_conf}/Harmony/default/seed:{seed}/run_info.yaml"
+    log:
+        "{path}/{prior_conf}/Harmony/default/seed:{seed}/run_Harmony.log"
+    params:
+        blacklist="{path}/{prior_conf}/Harmony/default/seed:{seed}/.blacklist"
+    threads: 4
+    shell:
+        "timeout {config[timeout]} Rscript workflow/scripts/run_Harmony.R "
         "--input-rna {input.rna} --input-atac {input.atac} -s {wildcards.seed} "
         "--output-rna {output.rna_latent} --output-atac {output.atac_latent} --run-info {output.run_info} "
         "> {log} 2>&1 || touch {params.blacklist}"

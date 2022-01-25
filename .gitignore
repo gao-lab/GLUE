@@ -40,6 +40,7 @@ __pycache__
 *.pt
 *.pyc
 *.tbl
+*.gephi
 *.tfevents.*
 *.tsv*
 *@neomake*
@@ -53,6 +54,7 @@ objectdb
 packrat/lib
 packrat/lib*/
 packrat/src/
+Temp
 tmp
 tools
 dist

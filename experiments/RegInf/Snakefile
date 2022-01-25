@@ -3,7 +3,8 @@ rule all:
         "s03_peak_gene_validation",
         "s05_evaluate_gene_tf",
         "s06_genomic_tracks",
-        "s07_violin"
+        "s07_violin",
+        "s09_recovery"
 
 rule s01_preprocessing:
     input:
@@ -14,12 +15,12 @@ rule s01_preprocessing:
         "../../data/hic/Javierre-2016/PCHiC_peak_matrix_cutoff5.tsv",
         "../../data/eqtl/GTEx-v8/bed/Whole_Blood.v8.signif_variant_gene_pairs.bed.gz",
         "../../data/eqtl/GTEx-v8/GTEx_Analysis_v8_eQTL/Whole_Blood.v8.egenes.txt.gz",
-        ipynb="s01_preprocessing.ipynb"
+        ipynb="s01_preprocessing.run.ipynb"
     output:
         directory("s01_preprocessing"),
         html="s01_preprocessing.html"
     log:
-        "s01_preprocessing.log"
+        "s01_preprocessing_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
@@ -29,12 +30,13 @@ rule s01_preprocessing:
 rule s02_glue:
     input:
         "s01_preprocessing",
-        ipynb="s02_glue.ipynb"
+        lambda wildcards: "s08_corrupt" if "corrupted" in wildcards.prior else [],
+        ipynb="s02_glue.run.ipynb"
     output:
         directory("s02_glue/prior:{prior}/seed:{seed}"),
         html="s02_glue_prior:{prior}_seed:{seed}.html"
     log:
-        "s02_glue_prior:{prior}_seed:{seed}.log"
+        "s02_glue_prior:{prior}_seed:{seed}_nbconvert.log"
     threads: 4
     resources: gpu=1
     shell:
@@ -47,12 +49,12 @@ rule s03_peak_gene_validation:
         "s01_preprocessing",
         "e01_cicero",
         expand("s02_glue/prior:d/seed:{i}", i=range(4)),
-        ipynb="s03_peak_gene_validation.ipynb"
+        ipynb="s03_peak_gene_validation.run.ipynb"
     output:
         directory("s03_peak_gene_validation"),
         html="s03_peak_gene_validation.html"
     log:
-        "s03_peak_gene_validation.log"
+        "s03_peak_gene_validation_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
@@ -64,13 +66,13 @@ rule s04_infer_gene_tf:
         "s01_preprocessing",
         "../../data/chip/ENCODE/TF-human/combined-GRCh38.bed.gz",
         expand("s02_glue/prior:dcq/seed:{i}", i=range(4)),
-        ipynb="s04_infer_gene_tf.ipynb"
+        ipynb="s04_infer_gene_tf.run.ipynb"
     output:
         directory("s04_infer_gene_tf"),
         html="s04_infer_gene_tf.html"
     log:
-        "s04_infer_gene_tf.log"
-    threads: 1
+        "s04_infer_gene_tf_nbconvert.log"
+    threads: 20
     shell:
         "jupyter nbconvert --to html "
         "--ExecutePreprocessor.timeout=3600000 "
@@ -81,12 +83,12 @@ rule s05_evaluate_gene_tf:
         "s01_preprocessing",
         "s04_infer_gene_tf",
         "../../data/database/TRRUST-v2/trrust_rawdata.human.tsv",
-        ipynb="s05_evaluate_gene_tf.ipynb"
+        ipynb="s05_evaluate_gene_tf.run.ipynb"
     output:
         directory("s05_evaluate_gene_tf"),
         html="s05_evaluate_gene_tf.html"
     log:
-        "s05_evaluate_gene_tf.log"
+        "s05_evaluate_gene_tf_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
@@ -97,12 +99,12 @@ rule s06_genomic_tracks:
     input:
         "s01_preprocessing",
         "s04_infer_gene_tf",
-        ipynb="s06_genomic_tracks.ipynb"
+        ipynb="s06_genomic_tracks.run.ipynb"
     output:
         directory("s06_genomic_tracks"),
         html="s06_genomic_tracks.html"
     log:
-        "s06_genomic_tracks.log"
+        "s06_genomic_tracks_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
@@ -112,12 +114,45 @@ rule s06_genomic_tracks:
 rule s07_violin:
     input:
         "s01_preprocessing",
-        ipynb="s07_violin.ipynb"
+        ipynb="s07_violin.run.ipynb"
     output:
         directory("s07_violin"),
         html="s07_violin.html"
     log:
-        "s07_violin.log"
+        "s07_violin_nbconvert.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s08_corrupt:
+    input:
+        "s01_preprocessing",
+        ipynb="s08_corrupt.run.ipynb"
+    output:
+        directory("s08_corrupt"),
+        html="s08_corrupt.html"
+    log:
+        "s08_corrupt_nbconvert.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s09_recovery:
+    input:
+        "s08_corrupt",
+        expand("s02_glue/prior:dcq/seed:{i}", i=range(4)),
+        expand("s02_glue/prior:hard_corrupted_dcq/seed:{i}", i=range(4)),
+        expand("s02_glue/prior:soft_corrupted_dcq/seed:{i}", i=range(4)),
+        ipynb="s09_recovery.run.ipynb"
+    output:
+        directory("s09_recovery"),
+        html="s09_recovery.html"
+    log:
+        "s09_recovery_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
@@ -127,14 +162,27 @@ rule s07_violin:
 rule e01_cicero:
     input:
         "s01_preprocessing",
-        ipynb="e01_cicero.ipynb"
+        ipynb="e01_cicero.run.ipynb"
     output:
         directory("e01_cicero"),
         html="e01_cicero.html"
     log:
-        "e01_cicero.log"
+        "e01_cicero_nbconvert.log"
     threads: 1
     shell:
         "jupyter nbconvert --to html "
         "--ExecutePreprocessor.timeout=3600000 "
         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule jupytext:
+    input:
+        lambda wildcards: "{notebook}.R" if wildcards.notebook in (
+            "e01_cicero",
+        ) else "{notebook}.py"
+    output:
+        "{notebook}.run.ipynb"
+    log:
+        "{notebook}_jupytext.log"
+    threads: 1
+    shell:
+        "jupytext --to notebook -o {output} {input} > {log} 2>&1"

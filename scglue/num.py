@@ -2,7 +2,7 @@ r"""
 Numeric operations
 """
 
-from typing import List, Optional
+from typing import Any, Iterable, List, Optional
 
 import numpy as np
 import scipy.sparse
@@ -13,6 +13,34 @@ EPS = 1e-7
 
 
 #------------------------------ Numeric functions ------------------------------
+
+def prod(x: Iterable) -> Any:
+    r"""
+    Product of elements
+
+    Parameters
+    ----------
+    x
+        Input elements
+
+    Returns
+    -------
+    prod
+        Product
+
+    Note
+    ----
+    For compatibility with Python<=3.7
+    """
+    try:
+        from math import prod  # pylint: disable=redefined-outer-name
+        return prod(x)
+    except ImportError:
+        ans = 1
+        for item in x:
+            ans = ans * item
+        return ans
+
 
 def sigmoid(x: np.ndarray) -> np.ndarray:
     r"""
@@ -73,7 +101,7 @@ def col_var(
     -------
     col_var
         Column-wise variance, if only X is given.
-        Column-wise cross-variance, if both X and Y are given.
+        Column-wise covariance, if both X and Y are given.
     """
     Y = X if Y is None else Y
     if X.shape != Y.shape:
@@ -89,6 +117,54 @@ def col_var(
     return (
         (X * Y).mean(axis=0) - X.mean(axis=0) * Y.mean(axis=0)
     ) * bias_scaling
+
+
+def col_pcc(X: Array, Y: Array) -> np.ndarray:
+    r"""
+    Column-wise Pearson's correlation coefficient (sparse friendly)
+
+    Parameters
+    ----------
+    X
+        First design matrix
+    Y
+        Second design matrix
+
+    Returns
+    -------
+    pcc
+        Column-wise Pearson's correlation coefficients
+    """
+    return col_var(X, Y) / np.sqrt(col_var(X) * col_var(Y))
+
+
+def col_spr(X: Array, Y: Array) -> np.ndarray:
+    r"""
+    Column-wise Spearman's rank correlation
+
+    Parameters
+    ----------
+    X
+        First design matrix
+    Y
+        Second design matrix
+
+    Returns
+    -------
+    spr
+        Column-wise Spearman's rank correlations
+    """
+    X = densify(X)
+    X = np.array([
+        scipy.stats.rankdata(X[:, i])
+        for i in range(X.shape[1])
+    ]).T
+    Y = densify(Y)
+    Y = np.array([
+        scipy.stats.rankdata(Y[:, i])
+        for i in range(Y.shape[1])
+    ]).T
+    return col_pcc(X, Y)
 
 
 def cov_mat(
@@ -310,3 +386,24 @@ def normalize_edges(
         out_normalizer[~np.isfinite(out_normalizer)] = 0  # In case there are unconnected vertices
         enorm = enorm * out_normalizer
     return enorm
+
+
+def all_counts(x: Array) -> bool:
+    r"""
+    Check whether an array contains all counts
+
+    Parameters
+    ----------
+    x
+        Array to check
+
+    Returns
+    -------
+    is_counts
+        Whether the array contains all counts
+    """
+    if scipy.sparse.issparse(x):
+        x = x.tocsr().data
+    if x.min() < 0:
+        return False
+    return np.allclose(x, x.astype(int))

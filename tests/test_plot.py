@@ -19,3 +19,7 @@ def test_sankey(rna):
 
 def test_roc(ewt):
     _ = scglue.plot.roc(ewt > 0.5, ewt)
+
+
+def test_prc(ewt):
+    _ = scglue.plot.prc(ewt > 0.5, ewt)

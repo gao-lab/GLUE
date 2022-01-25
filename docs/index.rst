@@ -28,6 +28,7 @@ For more details about the GLUE framework, please check out our `preprint <https
    tutorials
    api
    release
+   dev
    credits
 
 Indices and tables

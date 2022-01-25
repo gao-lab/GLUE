@@ -25,6 +25,20 @@ def test_col_var(mat, spmat):
         _ = scglue.num.col_var(mat, spmat)
 
 
+def test_col_pcc(mat, spmat):
+    pcc = scglue.num.col_pcc(mat, mat)
+    assert np.allclose(pcc, 1)
+    pcc = scglue.num.col_pcc(spmat, spmat)
+    assert np.allclose(pcc, 1)
+
+
+def test_col_spr(mat, spmat):
+    spr = scglue.num.col_spr(mat, mat)
+    assert np.allclose(spr, 1)
+    spr = scglue.num.col_spr(spmat, spmat)
+    assert np.allclose(spr, 1)
+
+
 def test_cov_mat(mat, spmat):
     _ = scglue.num.cov_mat(mat)
     _ = scglue.num.cov_mat(spmat)

@@ -7,20 +7,22 @@ rule all:
         "s04_glue_final",
         "s05_verify",
         "s06_sankey",
+        "s07_metrics",
         "t03_summary/scalability.pdf",
-        # "e03_visualize"
+        "t03_summary/slope.pdf",
+        "e03_visualize"
 
 rule s01_preprocessing:
     input:
         "../../data/dataset/Cao-2020.h5ad",
         "../../data/dataset/Domcke-2020.h5ad",
-        ipynb="s01_preprocessing.ipynb"
+        ipynb="s01_preprocessing.run.ipynb"
     output:
         directory("s01_preprocessing"),
         html="s01_preprocessing.html"
     log:
-        "s01_preprocessing.log"
-    threads: 1
+        "s01_preprocessing_nbconvert.log"
+    threads: 20
     resources: gpu=1, mutex=1
     shell:
         "jupyter nbconvert --to html "
@@ -30,12 +32,12 @@ rule s01_preprocessing:
 rule s02_glue_pretrain:
     input:
         "s01_preprocessing",
-        ipynb="s02_glue_pretrain.ipynb"
+        ipynb="s02_glue_pretrain.run.ipynb"
     output:
         directory("s02_glue_pretrain"),
         html="s02_glue_pretrain.html"
     log:
-        "s02_glue_pretrain.log"
+        "s02_glue_pretrain_nbconvert.log"
     threads: 4
     resources: gpu=1, mutex=1
     shell:
@@ -47,12 +49,12 @@ rule s03_unsupervised_balancing:
     input:
         "s01_preprocessing",
         "s02_glue_pretrain",
-        ipynb="s03_unsupervised_balancing.ipynb"
+        ipynb="s03_unsupervised_balancing.run.ipynb"
     output:
         directory("s03_unsupervised_balancing"),
         html="s03_unsupervised_balancing.html"
     log:
-        "s03_unsupervised_balancing.log"
+        "s03_unsupervised_balancing_nbconvert.log"
     threads: 1
     resources: mutex=1
     shell:
@@ -65,12 +67,12 @@ rule s04_glue_final:
         "s01_preprocessing",
         "s02_glue_pretrain",
         "s03_unsupervised_balancing",
-        ipynb="s04_glue_final.ipynb"
+        ipynb="s04_glue_final.run.ipynb"
     output:
         directory("s04_glue_final"),
         html="s04_glue_final.html"
     log:
-        "s04_glue_final.log"
+        "s04_glue_final_nbconvert.log"
     threads: 4
     resources: gpu=1, mutex=1
     shell:
@@ -84,12 +86,12 @@ rule s05_verify:
         "../../data/dataset/Domcke-2020.h5ad",
         "s01_preprocessing",
         "s04_glue_final",
-        ipynb="s05_verify.ipynb"
+        ipynb="s05_verify.run.ipynb"
     output:
         directory("s05_verify"),
         html="s05_verify.html"
     log:
-        "s05_verify.log"
+        "s05_verify_nbconvert.log"
     threads: 1
     resources: mutex=1
     shell:
@@ -100,12 +102,31 @@ rule s05_verify:
 rule s06_sankey:
     input:
         "s04_glue_final",
-        ipynb="s06_sankey.ipynb"
+        "e02_inmf",
+        ipynb="s06_sankey.run.ipynb"
     output:
         directory("s06_sankey"),
         html="s06_sankey.html"
     log:
-        "s06_sankey.log"
+        "s06_sankey_nbconvert.log"
+    threads: 20
+    resources: mutex=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule s07_metrics:
+    input:
+        "s04_glue_final",
+        "s06_sankey",
+        "e02_inmf",
+        ipynb="s07_metrics.run.ipynb"
+    output:
+        directory("s07_metrics"),
+        html="s07_metrics.html"
+    log:
+        "s07_metrics_nbconvert.log"
     threads: 20
     resources: mutex=1
     shell:
@@ -116,12 +137,12 @@ rule s06_sankey:
 rule t01_preprocessing:
     input:
         "s01_preprocessing",
-        ipynb="t01_preprocessing.ipynb"
+        ipynb="t01_preprocessing.run.ipynb"
     output:
         directory("t01_preprocessing"),
         html="t01_preprocessing.html"
     log:
-        "t01_preprocessing.log"
+        "t01_preprocessing_nbconvert.log"
     threads: 1
     resources: mutex=1
     shell:
@@ -269,7 +290,7 @@ rule t02_compute_umap:
         atac="{path}/atac_umap.csv"
     log:
         "{path}/compute_umap.log"
-    threads: 4
+    threads: 20
     resources: mutex=1
     shell:
         "python -u scripts/compute_umap.py "
@@ -321,7 +342,8 @@ rule t03_plot:
     input:
         "t03_summary/scalability.csv"
     output:
-        "t03_summary/scalability.pdf"
+        "t03_summary/scalability.pdf",
+        "t03_summary/slope.pdf"
     threads: 1
     script:
         "scalability.R"
@@ -329,12 +351,12 @@ rule t03_plot:
 rule e01_preprocessing:
     input:
         "s01_preprocessing",
-        ipynb="e01_preprocessing.ipynb"
+        ipynb="e01_preprocessing.run.ipynb"
     output:
         directory("e01_preprocessing"),
         html="e01_preprocessing.html"
     log:
-        "e01_preprocessing.log"
+        "e01_preprocessing_nbconvert.log"
     threads: 1
     resources: mutex=1
     shell:
@@ -372,12 +394,12 @@ rule e01_export_old_h5ad:
 rule e02_cca_anchor:
     input:
         "e01_preprocessing",
-        ipynb="e02_cca_anchor.ipynb"
+        ipynb="e02_cca_anchor.run.ipynb"
     output:
         directory("e02_cca_anchor"),
         html="e02_cca_anchor.html"
     log:
-        "e02_cca_anchor.log"
+        "e02_cca_anchor_nbconvert.log"
     threads: 4
     shell:
         "jupyter nbconvert --to html "
@@ -387,12 +409,12 @@ rule e02_cca_anchor:
 rule e02_inmf:
     input:
         "e01_export_old_h5ad",
-        ipynb="e02_inmf.ipynb"
+        ipynb="e02_inmf.run.ipynb"
     output:
         directory("e02_inmf"),
         html="e02_inmf.html"
     log:
-        "e02_inmf.log"
+        "e02_inmf_nbconvert.log"
     threads: 4
     shell:
         "jupyter nbconvert --to html "
@@ -404,14 +426,27 @@ rule e03_visualize:
         "e01_preprocessing",
         "e02_cca_anchor",
         "e02_inmf",
-        ipynb="e03_visualize.ipynb"
+        ipynb="e03_visualize.run.ipynb"
     output:
         directory("e03_visualize"),
         html="e03_visualize.html"
     log:
-        "e03_visualize.log"
-    threads: 1
+        "e03_visualize_nbconvert.log"
+    threads: 20
     shell:
         "jupyter nbconvert --to html "
         "--ExecutePreprocessor.timeout=3600000 "
         "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule jupytext:
+    input:
+        lambda wildcards: "{notebook}.R" if wildcards.notebook in (
+            "e02_cca_anchor", "e02_inmf"
+        ) else "{notebook}.py"
+    output:
+        "{notebook}.run.ipynb"
+    log:
+        "{notebook}_jupytext.log"
+    threads: 1
+    shell:
+        "jupytext --to notebook -o {output} {input} > {log} 2>&1"

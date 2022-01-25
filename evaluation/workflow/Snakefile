@@ -6,17 +6,53 @@ from operator import add
 base_config = {"dataset": config["dataset"], "timeout": config["timeout"]}
 
 hyperparam_config = {**base_config, **config["hyperparam"]}
+hvg_config = {**base_config, **config["hvg"]}
 benchmark_config = {**base_config, **config["benchmark"]}
-prior_config = {**base_config, **config["prior"]}
+benchmark_noprep_config = {**base_config, **config["benchmark_noprep"]}
+prior_corrupt_config = {**base_config, **config["prior_corrupt"]}
+prior_alt_config = {**base_config, **config["prior_alt"]}
 subsample_config = {**base_config, **config["subsample"]}
 
+metrics = ["foscttm", "map", "sas", "asw", "aswb", "nc", "gc", "bio", "int", "overall"]
+metric_pairs = ["map_vs_sas", "asw_vs_aswb", "nc_vs_gc", "bio_vs_int"]
 targets = {
-    "hyperparam": ["results/hyperparam.pdf"],
-    "benchmark": ["results/benchmark_foscttm.pdf", "results/benchmark_map_vs_sas.pdf", "results/umap_grid"],
-    "prior": ["results/prior.pdf"],
-    "subsample": ["results/subsample.pdf"]
+    "hyperparam": [
+        expand("results/hyperparam_{metric}.pdf", metric=metrics),
+        "results/hyperparam_fc.pdf"
+    ],
+    "hvg": expand("results/hvg_{metric}.pdf", metric=metrics),
+    "benchmark": [
+        expand("results/benchmark_{metric_pair}.pdf", metric_pair=metric_pairs),
+        expand("results/benchmark_{metric_pair}_hull.pdf", metric_pair=metric_pairs),
+        "results/benchmark_foscttm.pdf",
+        "results/benchmark_legend.pdf",
+        "results/umap_grid"
+    ],
+    "benchmark_noprep": [
+        expand("results/benchmark_noprep_{metric_pair}.pdf", metric_pair=metric_pairs),
+        expand("results/benchmark_noprep_{metric_pair}_hull.pdf", metric_pair=metric_pairs),
+        "results/benchmark_noprep_foscttm.pdf",
+        "results/benchmark_noprep_legend.pdf"
+    ],
+    "prior_corrupt": [
+        expand("results/prior_corrupt_{metric}.pdf", metric=metrics),
+        "results/prior_corrupt_fc.pdf"
+    ],
+    "prior_alt": expand("results/prior_alt_{metric}.pdf", metric=metrics),
+    "subsample": [
+        expand("results/subsample_{metric}.pdf", metric=metrics),
+        "results/subsample_fc.pdf"
+    ]
 }
 
+localrules: all
+localrules: hyperparam_plot, hyperparam_summarize
+localrules: hvg_plot, hvg_summarize
+localrules: benchmark_umap_grid, benchmark_plot, benchmark_summarize
+localrules: benchmark_noprep_plot, benchmark_noprep_summarize
+localrules: prior_corrupt_plot, prior_corrupt_summarize
+localrules: prior_alt_plot, prior_alt_summarize
+localrules: subsample_plot, subsample_summarize
 
 rule all:
     input:
@@ -26,13 +62,25 @@ module hyperparam:
     snakefile: "hyperparam.smk"
     config: hyperparam_config
 
+module hvg:
+    snakefile: "hvg.smk"
+    config: hvg_config
+
 module benchmark:
     snakefile: "benchmark.smk"
     config: benchmark_config
 
-module prior:
-    snakefile: "prior.smk"
-    config: prior_config
+module benchmark_noprep:
+    snakefile: "benchmark_noprep.smk"
+    config: benchmark_noprep_config
+
+module prior_corrupt:
+    snakefile: "prior_corrupt.smk"
+    config: prior_corrupt_config
+
+module prior_alt:
+    snakefile: "prior_alt.smk"
+    config: prior_alt_config
 
 module subsample:
     snakefile: "subsample.smk"
@@ -40,9 +88,15 @@ module subsample:
 
 use rule * from hyperparam as hyperparam_*
 
+use rule * from hvg as hvg_*
+
 use rule * from benchmark as benchmark_*
 
-use rule * from prior as prior_*
+use rule * from benchmark_noprep as benchmark_noprep_*
+
+use rule * from prior_corrupt as prior_corrupt_*
+
+use rule * from prior_alt as prior_alt_*
 
 use rule * from subsample as subsample_*
 

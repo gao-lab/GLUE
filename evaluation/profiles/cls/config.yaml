@@ -3,5 +3,5 @@ cluster-config: profiles/cls/cls.yaml
 keep-going: true
 printshellcmds: true
 reason: true
-resources: gpu=18
+resources: gpu=28
 use-conda: true

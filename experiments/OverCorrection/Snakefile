@@ -1,0 +1,68 @@
+rule all:
+    input:
+        "integration_consistency.pdf"
+
+rule plot:
+    input:
+        "control/10x-Multiome-Pbmc10k+10x-Multiome-Pbmc10k",
+        "control/Chen-2019+Chen-2019",
+        "control/Ma-2020+Ma-2020",
+        "control/Muto-2021+Muto-2021",
+        "control/Yao-2021+Yao-2021",
+        "over_correction/10x-Multiome-Pbmc10k+Muto-2021",
+        "over_correction/Muto-2021+10x-Multiome-Pbmc10k",
+        "over_correction/Chen-2019+Ma-2020",
+        "over_correction/Ma-2020+Chen-2019",
+        "over_correction/Ma-2020+Yao-2021",
+        "over_correction/Yao-2021+Ma-2020",
+        ipynb="plot.run.ipynb"
+    output:
+        "integration_consistency.pdf",
+        html="plot.html"
+    log:
+        "plot.log"
+    threads: 1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule control:
+    input:
+        ipynb="control.run.ipynb"
+    output:
+        directory("control/{dataset}+{dataset}"),
+        html="control:{dataset}+{dataset}.html"
+    log:
+        "control:{dataset}+{dataset}.log"
+    threads: 1
+    shell:
+        "DATASET={wildcards.dataset} jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule over_correction:
+    input:
+        ipynb="over_correction.run.ipynb"
+    output:
+        directory("over_correction/{dataset1}+{dataset2}"),
+        html="over_correction:{dataset1}+{dataset2}.html"
+    log:
+        "over_correction:{dataset1}+{dataset2}.log"
+    threads: 4
+    resources: gpu=1
+    shell:
+        "DATASET1={wildcards.dataset1} DATASET2={wildcards.dataset2} jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule jupytext:
+    input:
+        "{notebook}.py"
+    output:
+        "{notebook}.run.ipynb"
+    log:
+        "{notebook}_jupytext.log"
+    threads: 1
+    shell:
+        "jupytext --to notebook -o {output} {input} > {log} 2>&1"

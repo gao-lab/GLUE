@@ -15,8 +15,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from ..utils import config, logged
 from .base import Trainer, TrainingPlugin
 
-
 EPOCH_COMPLETED = ignite.engine.Events.EPOCH_COMPLETED
+TERMINATE = ignite.engine.Events.TERMINATE
 COMPLETED = ignite.engine.Events.COMPLETED
 
 
@@ -72,13 +72,19 @@ class EarlyStopping(TrainingPlugin):
         Patience to stop early
     burnin
         Burn-in epochs to skip before initializing early stopping
+    wait_n_lrs
+        Wait n learning rate scheduling events before starting early stopping
     """
 
-    def __init__(self, monitor: str, patience: int, burnin: int = 0) -> None:
+    def __init__(
+            self, monitor: str, patience: int,
+            burnin: int = 0, wait_n_lrs: int = 0
+    ) -> None:
         super().__init__()
         self.monitor = monitor
         self.patience = patience
         self.burnin = burnin
+        self.wait_n_lrs = wait_n_lrs
 
     def attach(
             self, net: torch.nn.Module, trainer: Trainer,
@@ -93,7 +99,11 @@ class EarlyStopping(TrainingPlugin):
 
         score_engine = val_engine if val_engine else train_engine
         score_function = lambda engine: -score_engine.state.metrics[self.monitor]
-        event_filter = lambda engine, event: event > self.burnin
+        event_filter = (
+            lambda engine, event: event > self.burnin and engine.state.n_lrs >= self.wait_n_lrs
+        ) if self.wait_n_lrs else (
+            lambda engine, event: event > self.burnin
+        )
         event = EPOCH_COMPLETED(event_filter=event_filter)  # pylint: disable=not-callable
         train_engine.add_event_handler(
             event, ignite.handlers.Checkpoint(
@@ -114,11 +124,11 @@ class EarlyStopping(TrainingPlugin):
             )
         )
 
-        @train_engine.on(COMPLETED)
+        @train_engine.on(COMPLETED | TERMINATE)
         def _(engine):
             nan_flag = any(
                 not bool(torch.isfinite(item).all())
-                for item in engine.state.output.values()
+                for item in (engine.state.output or {}).values()
             )
             ckpts = sorted([
                 parse.parse("checkpoint_{epoch:d}.pt", item.name).named["epoch"]
@@ -131,7 +141,7 @@ class EarlyStopping(TrainingPlugin):
                 )
                 ckpts = ckpts[1:]
             if ckpts:
-                self.logger.info("Retoring checkpoint \"%d\"...", ckpts[0])
+                self.logger.info("Restoring checkpoint \"%d\"...", ckpts[0])
                 loaded = torch.load(directory / f"checkpoint_{ckpts[0]}.pt")
                 net.load_state_dict(loaded["net"])
                 trainer.load_state_dict(loaded["trainer"])
@@ -142,6 +152,7 @@ class EarlyStopping(TrainingPlugin):
                 )
 
 
+@logged
 class LRScheduler(TrainingPlugin):
 
     r"""
@@ -187,8 +198,18 @@ class LRScheduler(TrainingPlugin):
         event_filter = lambda engine, event: event > self.burnin
         for scheduler in self.schedulers:
             scheduler.last_epoch = self.burnin
+        train_engine.state.n_lrs = 0
 
         @train_engine.on(EPOCH_COMPLETED(event_filter=event_filter))  # pylint: disable=not-callable
         def _():
+            update_flags = set()
             for scheduler in self.schedulers:
+                old_lr = scheduler.optimizer.param_groups[0]["lr"]
                 scheduler.step(score_engine.state.metrics[self.monitor])
+                new_lr = scheduler.optimizer.param_groups[0]["lr"]
+                update_flags.add(new_lr != old_lr)
+            if len(update_flags) != 1:
+                raise RuntimeError("Learning rates are out of sync!")
+            if update_flags.pop():
+                train_engine.state.n_lrs += 1
+                self.logger.info("Learning rate reduction: step %d", train_engine.state.n_lrs)

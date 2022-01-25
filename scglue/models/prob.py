@@ -11,6 +11,44 @@ from ..num import EPS
 
 #-------------------------------- Distributions --------------------------------
 
+class MSE(D.Distribution):
+
+    r"""
+    A "sham" distribution that outputs negative MSE on ``log_prob``
+
+    Parameters
+    ----------
+    loc
+        Mean of the distribution
+    """
+
+    def __init__(self, loc: torch.Tensor) -> None:
+        super().__init__(validate_args=False)
+        self.loc = loc
+
+    def log_prob(self, value: torch.Tensor) -> None:
+        return -F.mse_loss(self.loc, value)
+
+    @property
+    def mean(self) -> torch.Tensor:
+        return self.loc
+
+
+class RMSE(MSE):
+
+    r"""
+    A "sham" distribution that outputs negative RMSE on ``log_prob``
+
+    Parameters
+    ----------
+    loc
+        Mean of the distribution
+    """
+
+    def log_prob(self, value: torch.Tensor) -> None:
+        return -F.mse_loss(self.loc, value).sqrt()
+
+
 class ZIN(D.Normal):
 
     r"""

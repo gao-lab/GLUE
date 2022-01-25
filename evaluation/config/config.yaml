@@ -2,23 +2,41 @@
 
 use:
   - hyperparam
+  - hvg
   - benchmark
-  - prior
+  - benchmark_noprep
+  - prior_corrupt
+  - prior_alt
   - subsample
+
 
 dataset:
   Chen-2019:
     rna: ../data/dataset/Chen-2019-RNA.h5ad
     atac: ../data/dataset/Chen-2019-ATAC.h5ad
     frags2rna: ../data/dataset/Chen-2019-FRAGS2RNA.h5ad  # Sham file
+    paired: true
   Ma-2020:
     rna: ../data/dataset/Ma-2020-RNA.h5ad
     atac: ../data/dataset/Ma-2020-ATAC.h5ad
     frags2rna: ../data/dataset/Ma-2020-FRAGS2RNA.h5ad
+    paired: true
   10x-Multiome-Pbmc10k:
     rna: ../data/dataset/10x-Multiome-Pbmc10k-RNA.h5ad
     atac: ../data/dataset/10x-Multiome-Pbmc10k-ATAC.h5ad
     frags2rna: ../data/dataset/10x-Multiome-Pbmc10k-FRAGS2RNA.h5ad
+    paired: true
+  Muto-2021:
+    rna: ../data/dataset/Muto-2021-RNA.h5ad
+    atac: ../data/dataset/Muto-2021-ATAC.h5ad
+    frags2rna: ../data/dataset/Muto-2021-FRAGS2RNA.h5ad
+    paired: false
+  Yao-2021:
+    rna: ../data/dataset/Yao-2021-RNA.h5ad
+    atac: ../data/dataset/Yao-2021-ATAC.h5ad
+    frags2rna: ../data/dataset/Yao-2021-FRAGS2RNA.h5ad
+    paired: false
+
 
 timeout: 24h
 
@@ -26,7 +44,7 @@ timeout: 24h
 #-------------------------- Hyperparameter stability ---------------------------
 
 hyperparam:
-  subsample:
+  data:
   prior:
     gene_region: combined
     extend_range: 0
@@ -83,13 +101,13 @@ hyperparam:
           - 0.1
           - 0.5
       lam_align:
-        default: 0.02
+        default: 0.05
         choices:
-          - 0.001
-          - 0.005
-          - 0.02
-          - 0.1
-          - 0.5
+          - 0.002
+          - 0.01
+          - 0.05
+          - 0.2
+          - 1.0
       neg_samples:
         default: 10
         choices:
@@ -101,10 +119,38 @@ hyperparam:
   seed: 4
 
 
+#----------------------- Highly variable gene stability ------------------------
+
+hvg:
+  data:
+    hvg:
+      - 500
+      - 1000
+      - 2000
+      - 4000
+      - 8000
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.05
+      neg_samples: 10
+  seed: 8
+
+
 #---------------------------------- Benchmark ----------------------------------
 
 benchmark:
-  subsample:
+  data:
   prior:
     gene_region: combined
     extend_range: 0
@@ -112,10 +158,13 @@ benchmark:
     corrupt_seed: 0
   method:
     UnionCom:
+    Pamona:
+    MMD_MA:
     iNMF:
     iNMF_FiG:
     LIGER:
     LIGER_FiG:
+    Harmony:
     bindSC:
     CCA_anchor:
     GLUE:
@@ -125,29 +174,60 @@ benchmark:
       hidden_dim: 256
       dropout: 0.2
       lam_graph: 0.02
-      lam_align: 0.02
+      lam_align: 0.05
+      neg_samples: 10
+  seed: 8
+
+
+benchmark_noprep:
+  data:
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    UnionCom:
+    Pamona:
+    MMD_MA:
+    iNMF:
+    iNMF_FiG:
+    LIGER:
+    LIGER_FiG:
+    Harmony:
+    bindSC:
+    CCA_anchor:
+    GLUE:
+      dim: 50
+      alt_dim: 0
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.05
       neg_samples: 10
   seed: 8
 
 
 #------------------------------ Prior robustness -------------------------------
 
-prior:
-  subsample:
+prior_corrupt:
+  data:
   prior:
     gene_region: combined
     extend_range: 0
     corrupt_rate:
-      - 0.1
       - 0.2
       - 0.4
       - 0.6
       - 0.8
       - 0.9
+      - 1.0
     corrupt_seed: 8
   method:
     iNMF:
     LIGER:
+    Harmony:
     bindSC:
     CCA_anchor:
     GLUE:
@@ -157,15 +237,44 @@ prior:
       hidden_dim: 256
       dropout: 0.2
       lam_graph: 0.02
-      lam_align: 0.02
+      lam_align: 0.05
       neg_samples: 10
   seed: 1
+
+
+prior_alt:
+  data:
+  prior:
+    gene_region:
+      - combined
+      - promoter
+    extend_range:
+      - 0
+      - 150000
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    iNMF:
+    LIGER:
+    Harmony:
+    bindSC:
+    CCA_anchor:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.05
+      neg_samples: 10
+  seed: 8
 
 
 #------------------------------- Subsample data --------------------------------
 
 subsample:
-  subsample:
+  data:
     subsample_size:
       - 250
       - 500
@@ -181,10 +290,13 @@ subsample:
     corrupt_seed: 0
   method:
     UnionCom:
+    Pamona:
+    MMD_MA:
     iNMF:
     iNMF_FiG:
     LIGER:
     LIGER_FiG:
+    Harmony:
     bindSC:
     CCA_anchor:
     GLUE:
@@ -194,6 +306,28 @@ subsample:
       hidden_dim: 256
       dropout: 0.2
       lam_graph: 0.02
-      lam_align: 0.02
+      lam_align: 0.05
       neg_samples: 10
   seed: 1
+
+
+#----------------------------- Feature consistency -----------------------------
+
+feature:
+  data:
+  prior:
+    gene_region: combined
+    extend_range: 0
+    corrupt_rate: 0.0
+    corrupt_seed: 0
+  method:
+    GLUE:
+      dim: 50
+      alt_dim: 100
+      hidden_depth: 2
+      hidden_dim: 256
+      dropout: 0.2
+      lam_graph: 0.02
+      lam_align: 0.05
+      neg_samples: 10
+  seed: 8

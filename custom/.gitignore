@@ -1,0 +1,7 @@
+*
+!*.md
+!*.tar.gz
+!pamona/
+!pamona/*.py
+!2020_mmdma_pytorch/
+!2020_mmdma_pytorch/*.py

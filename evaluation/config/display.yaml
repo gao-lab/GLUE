@@ -2,13 +2,18 @@ dataset:
   Chen-2019: SNARE-seq
   Ma-2020: SHARE-seq
   10x-Multiome-Pbmc10k: 10x Multiome
+  Muto-2021: Nephron
+  Yao-2021: MOp
 
 method:
   UnionCom: UnionCom
+  Pamona: Pamona
+  MMD_MA: MMD-MA
   iNMF: Online iNMF
   iNMF_FiG: Online iNMF (FiG)
   LIGER: LIGER
   LIGER_FiG: LIGER (FiG)
+  Harmony: Harmony
   bindSC: bindSC
   CCA_anchor: Seurat v3
   GLUE: GLUE
@@ -25,10 +30,26 @@ param:
 
 palette:
   UnionCom: "#1f77b4"
+  Pamona: "#aec7e8"
+  MMD-MA: "#17becf"
   Online iNMF: "#8c564b"
   Online iNMF (FiG): "#c49c94"
   LIGER: "#ff7f0e"
   LIGER (FiG): "#ffbb78"
+  Harmony: "#bcbd22"
   bindSC: "#2da02b"
   Seurat v3: "#d72628"
   GLUE: "#9566bd"
+
+  SNARE-seq: "#ed553b"
+  SHARE-seq: "#f6d55c"
+  10x Multiome: "#3caea3"
+  Nephron: "#20639b"
+  MOp: "#173f5f"
+
+shape:
+  SNARE-seq: 21
+  SHARE-seq: 22
+  10x Multiome: 23
+  Nephron: 24
+  MOp: 25

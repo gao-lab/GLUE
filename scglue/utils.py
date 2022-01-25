@@ -9,7 +9,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from multiprocessing import Process
-from typing import List, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 
 import numpy as np
 import pandas as pd
@@ -187,10 +187,9 @@ class ConfigManager(metaclass=SingletonMeta):
         self.ARRAY_SHUFFLE_NUM_WORKERS = 0
         self.GRAPH_SHUFFLE_NUM_WORKERS = 1
         self.FORCE_TERMINATE_WORKER_PATIENCE = 60
-        self.DATALOADER_NUM_WORKERS = 2
-        self.DATALOADER_FETCHES_PER_WORKER = 2
+        self.DATALOADER_NUM_WORKERS = 0
+        self.DATALOADER_FETCHES_PER_WORKER = 4
         self.DATALOADER_PIN_MEMORY = True
-        self.DATALOADER_PERSISTENT_WORKERS = True
         self.CHECKPOINT_SAVE_INTERVAL = 10
         self.CHECKPOINT_SAVE_NUMBERS = 3
         self.PRINT_LOSS_INTERVAL = 10
@@ -232,11 +231,11 @@ class ConfigManager(metaclass=SingletonMeta):
     @CPU_ONLY.setter
     def CPU_ONLY(self, cpu_only: bool) -> None:
         self._CPU_ONLY = cpu_only
-        if self._CPU_ONLY and self._DATALOADER_NUM_WORKERS and not self._DATALOADER_PERSISTENT_WORKERS:
+        if self._CPU_ONLY and self._DATALOADER_NUM_WORKERS:
             self.logger.warning(
-                "It is recommended to enable `DATALOADER_PERSISTENT_WORKERS` "
-                "or set `DATALOADER_NUM_WORKERS` to 0 when using CPU_ONLY mode. "
-                "Otherwise, deadlocks may happen occationally."
+                "It is recommended to set `DATALOADER_NUM_WORKERS` to 0 "
+                "when using CPU_ONLY mode. Otherwise, deadlocks may happen "
+                "occationally."
             )
 
     @property
@@ -299,7 +298,7 @@ class ConfigManager(metaclass=SingletonMeta):
     def GRAPH_SHUFFLE_NUM_WORKERS(self) -> int:
         r"""
         Number of background workers for graph data shuffling.
-        Default value is ``2``.
+        Default value is ``1``.
         """
         return self._GRAPH_SHUFFLE_NUM_WORKERS
 
@@ -323,7 +322,7 @@ class ConfigManager(metaclass=SingletonMeta):
     def DATALOADER_NUM_WORKERS(self) -> int:
         r"""
         Number of worker processes to use in data loader.
-        Default value is ``2``.
+        Default value is ``0``.
         """
         return self._DATALOADER_NUM_WORKERS
 
@@ -340,7 +339,7 @@ class ConfigManager(metaclass=SingletonMeta):
     def DATALOADER_FETCHES_PER_WORKER(self) -> int:
         r"""
         Number of fetches per worker per batch to use in data loader.
-        Default value is ``2``.
+        Default value is ``4``.
         """
         return self._DATALOADER_FETCHES_PER_WORKER
 
@@ -366,18 +365,6 @@ class ConfigManager(metaclass=SingletonMeta):
     @DATALOADER_PIN_MEMORY.setter
     def DATALOADER_PIN_MEMORY(self, dataloader_pin_memory: bool):
         self._DATALOADER_PIN_MEMORY = dataloader_pin_memory
-
-    @property
-    def DATALOADER_PERSISTENT_WORKERS(self) -> bool:
-        r"""
-        Whether to enable persistent workers in data loader.
-        Default value is ``True``.
-        """
-        return self._DATALOADER_PERSISTENT_WORKERS
-
-    @DATALOADER_PERSISTENT_WORKERS.setter
-    def DATALOADER_PERSISTENT_WORKERS(self, dataloader_persistent_workers: bool) -> None:
-        self._DATALOADER_PERSISTENT_WORKERS = dataloader_persistent_workers
 
     @property
     def CHECKPOINT_SAVE_INTERVAL(self) -> int:
@@ -548,6 +535,29 @@ class ConstrainedDataFrame(pd.DataFrame):
 
 
 #--------------------------- Other utility functions ---------------------------
+
+def get_chained_attr(x: Any, attr: str) -> Any:
+    r"""
+    Get attribute from an object, with support for chained attribute names.
+
+    Parameters
+    ----------
+    x
+        Object to get attribute from
+    attr
+        Attribute name
+
+    Returns
+    -------
+    attr_value
+        Attribute value
+    """
+    for k in attr.split("."):
+        if not hasattr(x, k):
+            raise AttributeError(f"{attr} not found!")
+        x = getattr(x, k)
+    return x
+
 
 def in_ipynb() -> bool:  # pragma: no cover
     r"""

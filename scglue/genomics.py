@@ -10,13 +10,14 @@ from itertools import chain
 from operator import add
 from typing import Any, Callable, List, Mapping, Optional, Union
 
-import anndata
 import networkx as nx
 import numpy as np
 import pandas as pd
 import pybedtools
+from anndata import AnnData
 from pybedtools import BedTool
 from pybedtools.cbedtools import Interval
+from statsmodels.stats.multitest import fdrcorrection
 
 from .check import check_deps
 from .graph import compose_multigraph, reachable_vertices
@@ -465,7 +466,7 @@ def dist_power_decay(x: int) -> float:
 
 @logged
 def rna_anchored_prior_graph(
-    rna: anndata.AnnData, *others: anndata.AnnData,
+    rna: AnnData, *others: AnnData,
     gene_region: str = "combined", promoter_len: int = 2000,
     extend_range: int = 0, extend_fn: Callable[[int], float] = dist_power_decay,
     signs: Optional[List[int]] = None, propagate_highly_variable: bool = True,
@@ -566,13 +567,82 @@ def rna_anchored_prior_graph(
                 item in hvg_reachable for item in other.var_names
             ]
 
-    graph = compose_multigraph(graph, graph.reverse())
+    rgraph = graph.reverse()
+    nx.set_edge_attributes(graph, "fwd", name="type")
+    nx.set_edge_attributes(rgraph, "rev", name="type")
+    graph = compose_multigraph(graph, rgraph)
     all_features = set(chain.from_iterable(
         map(lambda x: x.var_names, [rna, *others])
     ))
     for item in all_features:
-        graph.add_edge(item, item, weight=1.0, sign=1)
+        graph.add_edge(item, item, weight=1.0, sign=1, type="loop")
     return graph
+
+
+def regulatory_inference(
+        features: pd.Index, feature_embeddings: Union[np.ndarray, List[np.ndarray]],
+        skeleton: nx.Graph, alternative: str = "two.sided",
+        random_state: RandomState = None
+) -> nx.Graph:
+    r"""
+    Regulatory inference based on feature embeddings
+
+    Parameters
+    ----------
+    features
+        Feature names
+    feature_embeddings
+        List of feature embeddings from 1 or more models
+    skeleton
+        Skeleton graph
+    alternative
+        Alternative hypothesis, must be one of {"two.sided", "less", "greater"}
+    random_state
+        Random state
+
+    Returns
+    -------
+    regulatory_graph
+        Regulatory graph containing regulatory score ("score"),
+        *P*-value ("pval"), *Q*-value ("pval") as edge attributes
+        for feature pairs in the skeleton graph
+    """
+    if isinstance(feature_embeddings, np.ndarray):
+        feature_embeddings = [feature_embeddings]
+    n_features = set(item.shape[0] for item in feature_embeddings)
+    if len(n_features) != 1:
+        raise ValueError("All feature embeddings must have the same number of rows!")
+    if n_features.pop() != features.shape[0]:
+        raise ValueError("Feature embeddings do not match the number of feature names!")
+
+    rs = get_rs(random_state)
+    vperm = np.stack([rs.permutation(item) for item in feature_embeddings], axis=1)
+    vperm = vperm / np.linalg.norm(vperm, axis=-1, keepdims=True)
+    v = np.stack(feature_embeddings, axis=1)
+    v = v / np.linalg.norm(v, axis=-1, keepdims=True)
+
+    edgelist = nx.to_pandas_edgelist(skeleton)
+    source = features.get_indexer(edgelist["source"])
+    target = features.get_indexer(edgelist["target"])
+    fg, bg = [], []
+
+    for s, t in smart_tqdm(zip(source, target), total=skeleton.number_of_edges()):
+        fg.append((v[s] * v[t]).sum(axis=1).mean())
+        bg.append((vperm[s] * vperm[t]).sum(axis=1))
+    edgelist["score"] = fg
+
+    bg = np.sort(np.concatenate(bg))
+    quantile = np.searchsorted(bg, fg) / bg.size
+    if alternative == "two.sided":
+        edgelist["pval"] = 2 * np.minimum(quantile, 1 - quantile)
+    elif alternative == "greater":
+        edgelist["pval"] = 1 - quantile
+    elif alternative == "less":
+        edgelist["pval"] = quantile
+    else:
+        raise ValueError("Unrecognized `alternative`!")
+    edgelist["qval"] = fdrcorrection(edgelist["pval"])[1]
+    return nx.from_pandas_edgelist(edgelist, edge_attr=True, create_using=type(skeleton))
 
 
 def get_chr_len_from_fai(fai: os.PathLike) -> Mapping[str, int]:

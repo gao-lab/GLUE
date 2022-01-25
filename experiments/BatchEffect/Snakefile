@@ -1,0 +1,34 @@
+rule all:
+    input:
+        "results/Ma-2020",
+        "results/Muto-2021",
+        "results/Yao-2021"
+
+rule nbconvert:
+    input:
+        "../../evaluation/results/raw/{dataset}/original/rna.h5ad",
+        "../../evaluation/results/raw/{dataset}/original/atac.h5ad",
+        "../../evaluation/results/raw/{dataset}/original/gene_region:combined-extend_range:0-corrupt_rate:0.0-corrupt_seed:0/sub.graphml.gz",
+        ipynb="{dataset}.run.ipynb"
+    output:
+        directory("results/{dataset}"),
+        html="{dataset}.html"
+    log:
+        "{dataset}_nbconvert.log"
+    threads: 4
+    resources: gpu=1
+    shell:
+        "jupyter nbconvert --to html "
+        "--ExecutePreprocessor.timeout=3600000 "
+        "--execute {input.ipynb} --output {output.html} > {log} 2>&1"
+
+rule jupytext:
+    input:
+        "{dataset}.py"
+    output:
+        "{dataset}.run.ipynb"
+    log:
+        "{dataset}_jupytext.log"
+    threads: 1
+    shell:
+        "jupytext --to notebook -o {output} {input} > {log} 2>&1"

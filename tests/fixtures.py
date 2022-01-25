@@ -136,23 +136,33 @@ def spmat():
 def rna(mat):
     X = mat
     obs = pd.DataFrame({
-        "ct": pd.Categorical(np.random.choice(["ct1", "ct2"], X.shape[0], replace=True))
+        "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct3"], X.shape[0], replace=True)),
+        "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
+        "uid": [f"SHARED-{i}" for i in range(15)] + [f"RNA-{i}" for i in range(15)],
+        "dsc_weight": np.random.rand(X.shape[0])
     }, index=pd.RangeIndex(X.shape[0]).astype(str))
     var = pd.DataFrame(index=["A", "B", "C"])
-    return anndata.AnnData(X=X, obs=obs, var=var)
+    arange = np.expand_dims(np.arange(mat.shape[0]), 1).repeat(mat.shape[1], axis=1)
+    obs.index.name, var.index.name = "cells", "genes"
+    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange})
 
 
 @pytest.fixture
 def atac(spmat, bed_file):
     X = spmat
     obs = pd.DataFrame({
-        "ct": pd.Categorical(np.random.choice(["ct1", "ct2"], X.shape[0], replace=True))
+        "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct4"], X.shape[0], replace=True)),
+        "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
+        "uid": [f"SHARED-{i}" for i in range(15)] + [f"ATAC-{i}" for i in range(5)],
+        "dsc_weight": np.random.rand(X.shape[0])
     }, index=pd.RangeIndex(X.shape[0]).astype(str))
     var = pd.read_csv(
         bed_file, sep="\t", header=None, comment="#",
         names=["chrom", "chromStart", "chromEnd", "name", "score", "strand"]
     ).set_index("name", drop=False)
-    return anndata.AnnData(X=X, obs=obs, var=var)
+    arange = np.expand_dims(np.arange(spmat.shape[0]), 1).repeat(spmat.shape[1], axis=1)
+    obs.index.name, var.index.name = "cells", "peaks"
+    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange})
 
 
 @pytest.fixture
@@ -161,7 +171,7 @@ def rna_pp(rna, gtf_file):
         rna, gtf=gtf_file, gtf_by="gene_id",
         by_func=scglue.genomics.ens_trim_version
     )
-    rna.var["highly_variable"] = True
+    rna.var["highly_variable"] = [True, False, True]
     rna.raw = rna
     sc.pp.normalize_total(rna)
     sc.pp.log1p(rna)
