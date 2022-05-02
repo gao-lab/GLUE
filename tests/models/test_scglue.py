@@ -114,7 +114,7 @@ def test_save_load(rna_pp, atac_pp, prior, tmp_path, rna_prob, atac_prob, model,
         glue.fit({"rna": rna_pp, "atac": atac_pp}, prior, max_epochs=None)
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp}, prior,
-        data_batch_size=8, graph_batch_size=128,
+        data_batch_size=32, graph_batch_size=128,
         align_burnin=2, max_epochs=100, patience=2,
         reduce_lr_patience=1,
         wait_n_lrs=3, directory=tmp_path
@@ -185,7 +185,7 @@ def test_adopt_freeze(rna_pp, atac_pp, prior, tmp_path, rna_prob, atac_prob, mod
     glue.compile()
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp}, prior,
-        data_batch_size=8, graph_batch_size=128,
+        data_batch_size=32, graph_batch_size=128,
         align_burnin=2, max_epochs=5, patience=3,
         directory=tmp_path
     )
@@ -202,7 +202,7 @@ def test_adopt_freeze(rna_pp, atac_pp, prior, tmp_path, rna_prob, atac_prob, mod
     glue_freeze.freeze_cells()
     glue_freeze.fit(
         {"rna": rna_pp, "atac": atac_pp}, prior,
-        data_batch_size=8, graph_batch_size=128,
+        data_batch_size=32, graph_batch_size=128,
         align_burnin=2, max_epochs=5, patience=3,
         directory=tmp_path
     )
@@ -254,7 +254,7 @@ def test_repeatability(rna_pp, atac_pp, prior, tmp_path, rna_prob, atac_prob, mo
             glue.compile()
         glue.fit(
             {"rna": rna_pp, "atac": atac_pp}, prior,
-            data_batch_size=8, graph_batch_size=128,
+            data_batch_size=32, graph_batch_size=128,
             align_burnin=2, max_epochs=5, patience=3,
             directory=tmp_path
         )

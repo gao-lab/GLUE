@@ -18,7 +18,7 @@ In the context of single-cell multi-omics, the data modalities correspond to omi
 
 To get started with ``scglue``, check out the `installation guide <install.rst>`_ and `tutorials <tutorials.rst>`_.
 
-For more details about the GLUE framework, please check out our `preprint <https://www.biorxiv.org/content/10.1101/2021.08.22.457275>`_.
+For more details about the GLUE framework, please check out our `publication <https://doi.org/10.1038/s41587-022-01284-4>`_.
 
 .. toctree::
    :maxdepth: 2

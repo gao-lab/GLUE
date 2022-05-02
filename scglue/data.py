@@ -27,7 +27,6 @@ from sklearn.preprocessing import normalize
 from sparse import COO
 
 from . import genomics, num
-from .check import check_deps
 from .typehint import Kws
 from .utils import logged, smart_tqdm
 
@@ -402,7 +401,6 @@ def estimate_balancing_weight(
             adata.obs[key_added] = collate.loc[adata.obs_names]
         return
 
-    check_deps("leidenalg")
     if use_rep is None:
         raise ValueError("Missing required argument `use_rep`!")
     adatas_ = [

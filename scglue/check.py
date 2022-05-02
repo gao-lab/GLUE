@@ -131,20 +131,10 @@ class CmdChecker(Checker):
 
 
 INSTALL_HINTS = types.SimpleNamespace(
-    meme=
-        "You may install meme suite following the guide from "
-        "http://meme-suite.org/doc/install.html, "
-        "or use `conda install -c bioconda meme` "
-        "if a conda environment is being used.",
     bedtools=
         "You may install bedtools following the guide from "
         "https://bedtools.readthedocs.io/en/latest/content/installation.html, "
         "or use `conda install -c bioconda bedtools` "
-        "if a conda environment is being used.",
-    leidenalg=
-        "You may install leidenalg following the guide from "
-        "https://leidenalg.readthedocs.io/en/stable/install.html, "
-        "or use `conda install -c conda-forge leidenalg` "
         "if a conda environment is being used.",
     plotly=
         "You may install plotly following the guide from "
@@ -158,14 +148,6 @@ CHECKERS = dict(
     bedtools=CmdChecker(
         "bedtools", "bedtools --version", r"v([0-9\.]+)",
         vmin="2.29.2", install_hint=INSTALL_HINTS.bedtools
-    ),
-    fimo=CmdChecker(
-        "fimo", "fimo --version", r"([0-9\.]+)",
-        vmin=None, install_hint=INSTALL_HINTS.meme
-    ),
-    leidenalg=ModuleChecker(
-        "leidenalg",
-        vmin=None, install_hint=INSTALL_HINTS.leidenalg
     ),
     plotly=ModuleChecker(
         "plotly",

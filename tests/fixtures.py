@@ -124,12 +124,12 @@ def composed_graph(graph_data):
 
 @pytest.fixture
 def mat():
-    return np.random.randint(0, 50, size=(30, 3))
+    return np.random.randint(0, 50, size=(150, 3))
 
 
 @pytest.fixture
 def spmat():
-    return scipy.sparse.csr_matrix(np.random.randint(0, 20, size=(20, 6)))
+    return scipy.sparse.csr_matrix(np.random.randint(0, 20, size=(120, 6)))
 
 
 @pytest.fixture
@@ -138,7 +138,7 @@ def rna(mat):
     obs = pd.DataFrame({
         "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct3"], X.shape[0], replace=True)),
         "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
-        "uid": [f"SHARED-{i}" for i in range(15)] + [f"RNA-{i}" for i in range(15)],
+        "uid": [f"SHARED-{i}" for i in range(100)] + [f"RNA-{i}" for i in range(50)],
         "dsc_weight": np.random.rand(X.shape[0])
     }, index=pd.RangeIndex(X.shape[0]).astype(str))
     var = pd.DataFrame(index=["A", "B", "C"])
@@ -153,7 +153,7 @@ def atac(spmat, bed_file):
     obs = pd.DataFrame({
         "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct4"], X.shape[0], replace=True)),
         "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
-        "uid": [f"SHARED-{i}" for i in range(15)] + [f"ATAC-{i}" for i in range(5)],
+        "uid": [f"SHARED-{i}" for i in range(100)] + [f"ATAC-{i}" for i in range(20)],
         "dsc_weight": np.random.rand(X.shape[0])
     }, index=pd.RangeIndex(X.shape[0]).astype(str))
     var = pd.read_csv(

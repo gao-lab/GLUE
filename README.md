@@ -11,7 +11,7 @@ Graph-linked unified embedding for single-cell multi-omics data integration
 
 ![Model architecture](docs/_static/architecture.svg)
 
-For more details, please check out our [preprint](https://www.biorxiv.org/content/10.1101/2021.08.22.457275).
+For more details, please check out our [publication](https://doi.org/10.1038/s41587-022-01284-4).
 
 ## Directory structure
 

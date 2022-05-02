@@ -13,7 +13,6 @@ import sklearn.neighbors
 from anndata import AnnData
 from scipy.sparse.csgraph import connected_components
 
-from .check import check_deps
 from .typehint import RandomState
 from .utils import get_rs
 
@@ -81,7 +80,6 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Follows the definition in `OpenProblems NeurIPS 2021 competition
     <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`_
     """
-    check_deps("leidenalg")
     x = AnnData(X=x)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X")
     nmi_list = []

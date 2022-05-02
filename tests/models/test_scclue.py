@@ -42,7 +42,7 @@ def test_save_load(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob, backed):
         glue.fit({"rna": rna_pp, "atac": atac_pp}, max_epochs=None)
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp},
-        batch_size=8,
+        batch_size=32,
         align_burnin=2, max_epochs=5, patience=3,
         directory=tmp_path
     )
@@ -81,7 +81,7 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
     glue.compile()
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp},
-        batch_size=8,
+        batch_size=32,
         align_burnin=2, max_epochs=5, patience=3,
         directory=tmp_path
     )
@@ -129,7 +129,7 @@ def test_repeatability(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
         glue.compile()
         glue.fit(
             {"rna": rna_pp, "atac": atac_pp},
-            batch_size=10,
+            batch_size=40,
             align_burnin=2, max_epochs=5, patience=3,
             directory=tmp_path
         )

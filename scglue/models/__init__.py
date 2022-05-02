@@ -34,7 +34,8 @@ def load_model(fname: os.PathLike) -> Model:
 @logged
 def fit_SCGLUE(
         adatas: Mapping[str, AnnData], graph: nx.Graph, model: type = SCGLUEModel,
-        init_kws: Kws = None, compile_kws: Kws = None, fit_kws: Kws = None
+        init_kws: Kws = None, compile_kws: Kws = None, fit_kws: Kws = None,
+        balance_kws: Kws = None
 ) -> SCGLUEModel:
     r"""
     Fit GLUE model to integrate single-cell multi-omics data
@@ -62,6 +63,9 @@ def fit_SCGLUE(
     fit_kws
         Model fitting keyword arguments
         (see :meth:`scglue.models.scglue.SCGLUEModel.fit`)
+    balance_kws
+        Balancing weight estimation keyword arguments
+        (see :func:`scglue.data.estimate_balancing_weight`)
 
     Returns
     -------
@@ -71,6 +75,7 @@ def fit_SCGLUE(
     init_kws = init_kws or {}
     compile_kws = compile_kws or {}
     fit_kws = fit_kws or {}
+    balance_kws = balance_kws or {}
 
     fit_SCGLUE.logger.info("Pretraining SCGLUE model...")
     pretrain_init_kws = init_kws.copy()
@@ -100,7 +105,7 @@ def fit_SCGLUE(
         use_batch = None
     estimate_balancing_weight(
         *adatas.values(), use_rep=f"X_{config.TMP_PREFIX}", use_batch=use_batch,
-        key_added="balancing_weight"
+        key_added="balancing_weight", **balance_kws
     )
     for adata in adatas.values():
         adata.uns[config.ANNDATA_KEY]["use_dsc_weight"] = "balancing_weight"

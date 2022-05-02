@@ -3,7 +3,7 @@ Developer guide
 
 .. note::
     To better understand the following guide, you may check out our
-    `preprint <https://www.biorxiv.org/content/10.1101/2021.08.22.457275>`_
+    `publication <https://doi.org/10.1038/s41587-022-01284-4>`_
     first to learn about the general idea.
 
 The GLUE framework is designed to be modular, and can be extended in the many ways.

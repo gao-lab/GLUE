@@ -43,7 +43,6 @@
         "**/*.old/**": true
     },
     "jupyter.jupyterServerType": "remote",
-    "restructuredtext.linter.disabled": true,
-    "restructuredtext.languageServer.disabled": true,
-    "restructuredtext.confPath": "${workspaceFolder}/docs"
+    "esbonio.server.enabled": false,
+    "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
 }
