@@ -33,13 +33,14 @@ For more details, please check out our [publication](https://doi.org/10.1038/s41
 
 ## Installation
 
-The `scglue` package can be installed either via conda:
+The `scglue` package can be installed via conda using one of the following commands:
 
 ```sh
-conda install -c defaults -c pytorch -c bioconda -c conda-forge -c scglue scglue
+conda install -c conda-forge -c bioconda scglue  # CPU only
+conda install -c conda-forge -c bioconda scglue pytorch-gpu  # With GPU support
 ```
 
-Or via pip:
+Or, it can also be installed via pip:
 
 ```sh
 pip install scglue

@@ -5,14 +5,15 @@ Installation guide
 Main package
 ************
 
-The ``scglue`` package can be installed either via conda:
+The ``scglue`` package can be installed via conda using one of the following commands:
 
 .. code-block:: bash
     :linenos:
 
-    conda install -c defaults -c pytorch -c bioconda -c conda-forge -c scglue scglue
+    conda install -c conda-forge -c bioconda scglue  # CPU only
+    conda install -c conda-forge -c bioconda scglue pytorch-gpu  # With GPU support
 
-Or via pip:
+Or, it can also be installed via pip:
 
 .. code-block:: bash
     :linenos:
