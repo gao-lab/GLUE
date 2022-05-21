@@ -290,7 +290,7 @@ def test_abnormal(rna_pp, atac_pp, prior, tmp_path, model):
         )
     scglue.models.configure_dataset(rna_pp, "NB", use_highly_variable=False, use_rep="X_pca", use_layer="arange", use_dsc_weight="dsc_weight")
     scglue.models.configure_dataset(atac_pp, "zzz", use_highly_variable=False, use_rep="X_lsi")
-    with pytest.raises(ValueError):
+    with pytest.raises(KeyError):
         glue = ActiveModel(
             {"rna": rna_pp, "atac": atac_pp}, vertices,
             latent_dim=2, random_seed=0

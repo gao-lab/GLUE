@@ -1,6 +1,20 @@
 Release notes
 =============
 
+v0.2.2
+------
+
+Minor improvements and bug fixes
+
+Bug fixes:
+
+- Device detection is now more reliable (Resolves `#17 <https://github.com/gao-lab/GLUE/issues/17>`_).
+
+Enhancements:
+
+- Custom encoders and decoders can now be registered without changing package code (Resolves `#14 <https://github.com/gao-lab/GLUE/issues/14>`_).
+
+
 v0.2.1
 ------
 

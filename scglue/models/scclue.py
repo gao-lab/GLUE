@@ -36,60 +36,6 @@ from .scglue import AnnDataset
 AUTO = -1  # Flag for using automatically determined hyperparameters
 
 
-#---------------------------------- Utilities ----------------------------------
-
-def select_encoder(prob_model: str) -> type:
-    r"""
-    Select encoder architecture
-
-    Parameters
-    ----------
-    prob_model
-        Data probabilistic model
-
-    Return
-    ------
-    encoder
-        Encoder type
-    """
-    if prob_model in ("MSE", "RMSE", "Normal", "ZIN", "ZILN", "Bernoulli"):
-        return VanillaCompositeDataEncoder
-    if prob_model in ("NB", ):
-        return NBCompositeDataEncoder
-    raise ValueError("Invalid `prob_model`!")
-
-
-def select_decoder(prob_model: str) -> type:
-    r"""
-    Select decoder architecture
-
-    Parameters
-    ----------
-    prob_model
-        Data probabilistic model
-
-    Return
-    ------
-    decoder
-        Decoder type
-    """
-    if prob_model == "MSE":
-        return MSEDataDecoder
-    if prob_model == "RMSE":
-        return RMSEDataDecoder
-    if prob_model == "Normal":
-        return NormalDataDecoder
-    if prob_model == "ZIN":
-        return ZINDataDecoder
-    if prob_model == "ZILN":
-        return ZILNDataDecoder
-    if prob_model == "Bernoulli":
-        return BernoulliDataDecoder
-    if prob_model == "NB":
-        return NBDataDecoder
-    raise ValueError("Invalid `prob_model`!")
-
-
 #----------------------------- Network components ------------------------------
 
 @logged
@@ -514,6 +460,38 @@ class Classifier(torch.nn.Linear, Transferrable):
     out_features
         Output dimensionality
     """
+
+
+#---------------------------------- Utilities ----------------------------------
+
+_ENCODER_MAP: Mapping[str, type] = {}
+_DECODER_MAP: Mapping[str, type] = {}
+
+
+def register_prob_model(prob_model: str, encoder: type, decoder: type) -> None:
+    r"""
+    Register probabilistic model
+
+    Parameters
+    ----------
+    prob_model
+        Data probabilistic model
+    encoder
+        Encoder type of the probabilistic model
+    decoder
+        Decoder type of the probabilistic model
+    """
+    _ENCODER_MAP[prob_model] = encoder
+    _DECODER_MAP[prob_model] = decoder
+
+
+register_prob_model("MSE", VanillaCompositeDataEncoder, MSEDataDecoder)
+register_prob_model("RMSE", VanillaCompositeDataEncoder, RMSEDataDecoder)
+register_prob_model("Normal", VanillaCompositeDataEncoder, NormalDataDecoder)
+register_prob_model("ZIN", VanillaCompositeDataEncoder, ZINDataDecoder)
+register_prob_model("ZILN", VanillaCompositeDataEncoder, ZILNDataDecoder)
+register_prob_model("Bernoulli", VanillaCompositeDataEncoder, BernoulliDataDecoder)
+register_prob_model("NB", NBCompositeDataEncoder, NBDataDecoder)
 
 
 #----------------------------- Network definition ------------------------------
@@ -955,14 +933,14 @@ class SCCLUEModel(Model):
                     "It is recommended that `use_rep` dimensionality "
                     "be equal or larger than `latent_dim`."
                 )
-            x2u[k] = select_encoder(data_config["prob_model"])(
+            x2u[k] = _ENCODER_MAP[data_config["prob_model"]](
                 data_config["rep_dim"] or len(data_config["features"]),
                 len(data_config["features"]), latent_dim, len(adatas),
                 h_depth=x2u_h_depth, h_dim=x2u_h_dim, dropout=dropout
             )
             data_config["batches"] = pd.Index([]) if data_config["batches"] is None \
                 else pd.Index(data_config["batches"])
-            u2x[k] = select_decoder(data_config["prob_model"])(
+            u2x[k] = _DECODER_MAP[data_config["prob_model"]](
                 latent_dim, len(data_config["features"]),
                 batches=data_config["batches"].to_list(),
                 h_depth=u2x_h_depth, h_dim=u2x_h_dim, dropout=dropout

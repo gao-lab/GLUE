@@ -25,7 +25,7 @@ A GLUE model is primarily composed of four main components (all PyTorch `Modules
 - A `graph decoder <api/scglue.models.sc.GraphDecoder.rst>`_
   - A graph decoder receives feature embedding input :math:`v`, as well as a subset of query edges in the form of edge index and edge sign, and returns a distribution corresponding to the likelihood of these query edges, which is used as an estimate of the graph likelihood :math:`p(\mathcal{G}|v)`
 
-Current implementations for these components are all located in `scglue.models.sc <api/scglue.models.sc.rst>`_. New extensions should be added to this module as well.
+Current implementations for these components are all located in `scglue.models.sc <api/scglue.models.sc.rst>`_. New extensions can be added to this module as well.
 
 Actual module inferfaces differ slightly from those summarized above, e.g., with additional considerations for library size normalization and batch effect. See below for details.
 
@@ -120,7 +120,7 @@ Non-standard distributions can also be defined in `scglue.models.prob <api/scglu
 Register custom encoder and decoder
 -----------------------------------
 
-Finally, to register the the custom encoder and decoders, you may add them to the `select_encoder <api/scglue.models.scglue.select_encoder.rst>`_ and `select_decoder <api/scglue.models.scglue.select_decoder.rst>`_ functions, so they can be activated using the ``prob_model`` setting in `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`_.
+Finally, use the `scglue.models.scglue.register_prob_model <api/scglue.models.scglue.register_prob_model.rst>`_ function to register the the custom encoder and decoder under a new "prob_model", so they can be activated with a matching ``prob_model`` setting in `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`_.
 
 **************************
 Other types of extensions?

@@ -23,6 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sudo apt update
         sudo apt install -y libxml2-utils pandoc
         sudo wget -O /usr/bin/bedtools https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools.static.binary
         sudo chmod +x /usr/bin/bedtools

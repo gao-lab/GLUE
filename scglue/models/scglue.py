@@ -37,52 +37,32 @@ DATA_CONFIG = Mapping[str, Any]
 
 #---------------------------------- Utilities ----------------------------------
 
-def select_encoder(prob_model: str) -> type:
+_ENCODER_MAP: Mapping[str, type] = {}
+_DECODER_MAP: Mapping[str, type] = {}
+
+
+def register_prob_model(prob_model: str, encoder: type, decoder: type) -> None:
     r"""
-    Select encoder architecture
+    Register probabilistic model
 
     Parameters
     ----------
     prob_model
         Data probabilistic model
-
-    Return
-    ------
     encoder
-        Encoder type
-    """
-    if prob_model in ("Normal", "ZIN", "ZILN"):
-        return sc.VanillaDataEncoder
-    if prob_model in ("NB", "ZINB"):
-        return sc.NBDataEncoder
-    raise ValueError("Invalid `prob_model`!")
-
-
-def select_decoder(prob_model: str) -> type:
-    r"""
-    Select decoder architecture
-
-    Parameters
-    ----------
-    prob_model
-        Data probabilistic model
-
-    Return
-    ------
+        Encoder type of the probabilistic model
     decoder
-        Decoder type
+        Decoder type of the probabilistic model
     """
-    if prob_model == "Normal":
-        return sc.NormalDataDecoder
-    if prob_model == "ZIN":
-        return sc.ZINDataDecoder
-    if prob_model == "ZILN":
-        return sc.ZILNDataDecoder
-    if prob_model == "NB":
-        return sc.NBDataDecoder
-    if prob_model == "ZINB":
-        return sc.ZINBDataDecoder
-    raise ValueError("Invalid `prob_model`!")
+    _ENCODER_MAP[prob_model] = encoder
+    _DECODER_MAP[prob_model] = decoder
+
+
+register_prob_model("Normal", sc.VanillaDataEncoder, sc.NormalDataDecoder)
+register_prob_model("ZIN", sc.VanillaDataEncoder, sc.ZINDataDecoder)
+register_prob_model("ZILN", sc.VanillaDataEncoder, sc.ZILNDataDecoder)
+register_prob_model("NB", sc.NBDataEncoder, sc.NBDataDecoder)
+register_prob_model("ZINB", sc.NBDataEncoder, sc.ZINBDataDecoder)
 
 
 @logged
@@ -1286,13 +1266,13 @@ class SCGLUEModel(Model):
             if idx[k].min() < 0:
                 raise ValueError("Not all domain features exist in the graph!")
             idx[k] = torch.as_tensor(idx[k])
-            x2u[k] = select_encoder(data_config["prob_model"])(
+            x2u[k] = _ENCODER_MAP[data_config["prob_model"]](
                 data_config["rep_dim"] or len(data_config["features"]), latent_dim,
                 h_depth=h_depth, h_dim=h_dim, dropout=dropout
             )
             data_config["batches"] = pd.Index([]) if data_config["batches"] is None \
                 else pd.Index(data_config["batches"])
-            u2x[k] = select_decoder(data_config["prob_model"])(
+            u2x[k] = _DECODER_MAP[data_config["prob_model"]](
                 len(data_config["features"]),
                 n_batches=max(data_config["batches"].size, 1)
             )

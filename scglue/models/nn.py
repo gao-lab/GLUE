@@ -173,12 +173,13 @@ def autodevice() -> torch.device:
                     pynvml.nvmlDeviceGetHandleByIndex(i)
                 ).free for i in range(pynvml.nvmlDeviceGetCount())
             ])
-            for item in config.MASKED_GPUS:
-                free_mems[item] = -1
-            best_devices = np.where(free_mems == free_mems.max())[0]
-            used_device = np.random.choice(best_devices, 1)[0]
-            if free_mems[used_device] < 0:
-                used_device = -1
+            if free_mems.size:
+                for item in config.MASKED_GPUS:
+                    free_mems[item] = -1
+                best_devices = np.where(free_mems == free_mems.max())[0]
+                used_device = np.random.choice(best_devices, 1)[0]
+                if free_mems[used_device] < 0:
+                    used_device = -1
         except pynvml.NVMLError:
             pass
     if used_device == -1:
