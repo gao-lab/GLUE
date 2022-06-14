@@ -26,6 +26,7 @@ For more details about the GLUE framework, please check out our `publication <ht
 
    install
    tutorials
+   data
    api
    release
    dev

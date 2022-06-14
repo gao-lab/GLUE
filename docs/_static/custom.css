@@ -1,0 +1,13 @@
+.rst-content table.docutils th {
+    padding: 8px 4px;
+}
+.rst-content table.docutils td {
+    font-size: 80%;
+    padding: 4px 4px;
+}
+.wy-table-responsive table td {
+    white-space: normal !important;
+}
+.wy-table-responsive {
+    overflow: visible !important;
+}

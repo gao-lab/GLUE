@@ -41,3 +41,8 @@ snakemake -j4 -prk
 ```
 
 This produces a `dataset` directory containing `*.h5ad` files.
+
+# Direct download
+
+The preprocessed `*.h5ad` files can also be downloaded directly
+from [here](https://scglue.readthedocs.io/en/latest/data.html).
