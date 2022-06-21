@@ -20,6 +20,7 @@ import sklearn.decomposition
 import sklearn.feature_extraction.text
 import sklearn.linear_model
 import sklearn.neighbors
+import sklearn.preprocessing
 import sklearn.utils.extmath
 from anndata import AnnData
 from networkx.algorithms.bipartite import biadjacency_matrix
@@ -199,7 +200,7 @@ def aggregate_obs(
 
 def transfer_labels(
         ref: AnnData, query: AnnData, field: str,
-        n_neighbors: int = 5, use_rep: Optional[str] = None,
+        n_neighbors: int = 30, use_rep: Optional[str] = None,
         key_added: Optional[str] = None, **kwargs
 ) -> None:
     r"""
@@ -224,20 +225,46 @@ def transfer_labels(
     **kwargs
         Additional keyword arguments are passed to
         :class:`sklearn.neighbors.NearestNeighbors`
+
+    Note
+    ----
+    First, nearest neighbors between reference and query cells are searched and
+    weighted by Jaccard index of SNN (shared nearest neighbors). The Jaccard
+    indices are then normalized per query cell to form a mapping matrix. To
+    obtain predictions for query cells, we multiply the above mapping matrix to
+    the one-hot matrix of reference labels. The category with the highest score
+    is taken as the final prediction, while its score is interpreted as
+    transfer confidence (stored as "{key_added}_confidence" in ``query.obs``).
     """
-    ref_mat = ref.obsm[use_rep] if use_rep else ref.X
-    query_mat = query.obsm[use_rep] if use_rep else query.X
-    nn = sklearn.neighbors.NearestNeighbors(
+    xrep = ref.obsm[use_rep] if use_rep else ref.X
+    yrep = query.obsm[use_rep] if use_rep else query.X
+    xnn = sklearn.neighbors.NearestNeighbors(
         n_neighbors=n_neighbors, **kwargs
-    ).fit(ref_mat)
-    nni = nn.kneighbors(query_mat, return_distance=False)
-    hits = ref.obs[field].to_numpy()[nni]
-    pred = pd.crosstab(
-        np.repeat(query.obs_names, n_neighbors), hits.ravel()
-    ).idxmax(axis=1).loc[query.obs_names]
-    if pd.api.types.is_categorical_dtype(ref.obs[field]):
-        pred = pd.Categorical(pred, categories=ref.obs[field].cat.categories)
-    query.obs[key_added or field] = pred
+    ).fit(xrep)
+    ynn = sklearn.neighbors.NearestNeighbors(
+        n_neighbors=n_neighbors, **kwargs
+    ).fit(yrep)
+    xx = xnn.kneighbors_graph(xrep)
+    xy = ynn.kneighbors_graph(xrep)
+    yx = xnn.kneighbors_graph(yrep)
+    yy = ynn.kneighbors_graph(yrep)
+    jaccard = (xx @ yx.T) + (xy @ yy.T)
+    jaccard.data /= 4 * n_neighbors - jaccard.data
+    normalized_jaccard = jaccard.multiply(1 / jaccard.sum(axis=0))
+    onehot = sklearn.preprocessing.OneHotEncoder()
+    xtab = onehot.fit_transform(ref.obs[[field]])
+    ytab = normalized_jaccard.T @ xtab
+    pred = pd.Series(
+        onehot.categories_[0][ytab.argmax(axis=1).A1],
+        index=query.obs_names, dtype=ref.obs[field].dtype
+    )
+    conf = pd.Series(
+        ytab.max(axis=1).toarray().ravel(),
+        index=query.obs_names
+    )
+    key_added = key_added or field
+    query.obs[key_added] = pred
+    query.obs[key_added + "_confidence"] = conf
 
 
 def extract_rank_genes_groups(

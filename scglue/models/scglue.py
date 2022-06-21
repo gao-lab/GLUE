@@ -284,7 +284,7 @@ class AnnDataset(Dataset):
                     f"Configured data representation '{use_rep}' "
                     f"cannot be found in input data!"
                 )
-            xalt = adata.obsm[use_rep].astype(default_dtype)
+            xalt = np.asarray(adata.obsm[use_rep]).astype(default_dtype)
             if xalt.shape[1] != rep_dim:
                 raise ValueError(
                     f"Input representation dimensionality {xalt.shape[1]} "

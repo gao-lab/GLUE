@@ -14,6 +14,7 @@ from typing import Any, List, Mapping, Optional
 import numpy as np
 import pandas as pd
 import torch
+from pybedtools.helpers import set_bedtools_path
 
 from .typehint import RandomState, T
 
@@ -195,6 +196,7 @@ class ConfigManager(metaclass=SingletonMeta):
         self.PRINT_LOSS_INTERVAL = 10
         self.TENSORBOARD_FLUSH_SECS = 5
         self.ALLOW_TRAINING_INTERRUPTION = True
+        self.BEDTOOLS_PATH = ""
 
     @property
     def TMP_PREFIX(self) -> str:
@@ -425,6 +427,19 @@ class ConfigManager(metaclass=SingletonMeta):
     @ALLOW_TRAINING_INTERRUPTION.setter
     def ALLOW_TRAINING_INTERRUPTION(self, allow_training_interruption: bool) -> None:
         self._ALLOW_TRAINING_INTERRUPTION = allow_training_interruption
+
+    @property
+    def BEDTOOLS_PATH(self) -> str:
+        r"""
+        Path to bedtools executable.
+        Default value is ``bedtools``.
+        """
+        return self._BEDTOOLS_PATH
+
+    @BEDTOOLS_PATH.setter
+    def BEDTOOLS_PATH(self, bedtools_path: str) -> None:
+        self._BEDTOOLS_PATH = bedtools_path
+        set_bedtools_path(bedtools_path)
 
 
 config = ConfigManager()

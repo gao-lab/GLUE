@@ -1,6 +1,20 @@
 Release notes
 =============
 
+v0.2.3
+------
+
+Minor improvements and bug fixes
+
+Bug fixes:
+
+- Data frame in ``obsm`` no longer triggers an error during model training (Resolves `#32 <https://github.com/gao-lab/GLUE/issues/32>`_).
+
+Enhancements:
+
+- `scglue.data.transfer_labels <api/scglue.data.transfer_labels.rst>`_ uses a new strategy with SNN-based estimation of transfer confidence (Resolves `#23 <https://github.com/gao-lab/GLUE/issues/23>`_).
+- Allow setting custom bedtools path via `scglue.config.BEDTOOLS_PATH <api/scglue.utils.ConfigManager.rst>`_ (Resolves `#22 <https://github.com/gao-lab/GLUE/issues/22>`_).
+
 v0.2.2
 ------
 
@@ -42,7 +56,7 @@ Bug fixes:
 Experimental features:
 
 - A `partially paired GLUE model <api/scglue.models.scglue.PairedSCGLUEModel.rst>`_ for utilizing paired cells whenever available
-- The `CLUE model <api/scglue.models.scclue.SCCLUEModel.rst>`_ that won the `NeurIPS 2020 competition in multimodal integration <https://openproblems.bio/neurips_2021/>`_ is here!
+- The `CLUE model <api/scglue.models.scclue.SCCLUEModel.rst>`_ that won the `NeurIPS 2021 competition in multimodal integration <https://openproblems.bio/neurips_2021/>`_ is here!
 
 
 v0.1.1

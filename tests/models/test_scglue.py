@@ -360,3 +360,15 @@ def test_fit_SCGLUE(rna_pp, atac_pp, prior):
         compile_kws={"lr": 1e-5},
         fit_kws={"max_epochs": 5}
     )  # NOTE: Smoke test
+
+
+def test_fit_SCGLUE_with_df_obsm(rna_pp, atac_pp, prior):
+    rna_pp.obsm["X_pca"] = pd.DataFrame(rna_pp.obsm["X_pca"], index=rna_pp.obs_names)
+    scglue.models.configure_dataset(rna_pp, "NB", use_highly_variable=True, use_rep="X_pca", use_batch="batch", use_uid="uid")
+    scglue.models.configure_dataset(atac_pp, "NB", use_highly_variable=True, use_cell_type="ct", use_batch="batch", use_uid="uid")
+    scglue.models.fit_SCGLUE(
+        {"rna": rna_pp, "atac": atac_pp}, prior,
+        init_kws={"latent_dim": 2, "shared_batches": True},
+        compile_kws={"lr": 1e-5},
+        fit_kws={"max_epochs": 5}
+    )  # NOTE: Smoke test

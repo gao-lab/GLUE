@@ -11,7 +11,7 @@ from typing import Optional
 from packaging.version import parse
 
 from . import version
-from .utils import run_command
+from .utils import config, run_command
 
 
 class Checker:
@@ -146,7 +146,7 @@ INSTALL_HINTS = types.SimpleNamespace(
 
 CHECKERS = dict(
     bedtools=CmdChecker(
-        "bedtools", "bedtools --version", r"v([0-9\.]+)",
+        "bedtools", f"{config.BEDTOOLS_PATH or 'bedtools'} --version", r"v([0-9\.]+)",
         vmin="2.29.2", install_hint=INSTALL_HINTS.bedtools
     ),
     plotly=ModuleChecker(
