@@ -44,5 +44,14 @@ This produces a `dataset` directory containing `*.h5ad` files.
 
 # Direct download
 
-The preprocessed `*.h5ad` files can also be downloaded directly
+The preprocessed `*.h5ad` data files can also be downloaded directly
 from [here](https://scglue.readthedocs.io/en/latest/data.html).
+
+Additionally, for the "FRAGS2RNA" files used in the evaluation pipeline,
+please use the following links:
+
+* http://download.gao-lab.org/GLUE/dataset/Chen-2019-FRAGS2RNA.h5ad
+* http://download.gao-lab.org/GLUE/dataset/Ma-2020-FRAGS2RNA.h5ad
+* http://download.gao-lab.org/GLUE/dataset/10x-Multiome-Pbmc10k-FRAGS2RNA.h5ad
+* http://download.gao-lab.org/GLUE/dataset/Muto-2021-FRAGS2RNA.h5ad
+* http://download.gao-lab.org/GLUE/dataset/Yao-2021-FRAGS2RNA.h5ad
