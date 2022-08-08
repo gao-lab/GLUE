@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.plot.sankey.rst:2 5f2263fc6add4fde81d6e90515d68892
+msgid "scglue.plot.sankey"
+msgstr ""
+
+#: b3a251242f52478e8492b4561e0c7c8c of scglue.plot.sankey:1
+msgid "Make a sankey diagram"
+msgstr ""
+
+#: e96551bd721d47368bfd2a2a04fe4b14 of scglue.plot.sankey
+msgid "Parameters"
+msgstr ""
+
+#: 9e970d28fb45472686549ff78b5f75b8 of scglue.plot.sankey:4
+msgid "Mapping source"
+msgstr ""
+
+#: b989c60f8f4c43898bb1d561866fb90d of scglue.plot.sankey:6
+msgid "Mapping target"
+msgstr ""
+
+#: 2ba4aca5cb994d75ae5b400f073172c3 of scglue.plot.sankey:8
+msgid "Diagram title"
+msgstr ""
+
+#: 3fdbed90f1d84e8dadb5fceacc348079 of scglue.plot.sankey:10
+msgid ""
+"Color of left nodes, either a single color or a mapping function that "
+"returns a color given the node name."
+msgstr ""
+
+#: 8d668bf6ef014f4faeb96e66d2c4e2de of scglue.plot.sankey:13
+msgid ""
+"Color of right nodes, either a single color or a mapping function that "
+"returns a color given the node name."
+msgstr ""
+
+#: cb5d6589413f4d0ebc557a7f8619a2a6 of scglue.plot.sankey:16
+msgid ""
+"Color of links, either a single color or a mapping function that returns "
+"a color given the link info."
+msgstr ""
+
+#: 01d86ced94064fafb4f07f7a1989f0d1 of scglue.plot.sankey:19
+msgid "Font family used for the plot"
+msgstr ""
+
+#: e90f38f01dbc4d11b813f1b6cbc3c2ff of scglue.plot.sankey:21
+msgid "Font size for the plot"
+msgstr ""
+
+#: e61344bf04a448feae6fd67007c81d19 of scglue.plot.sankey:23
+msgid "Graph width"
+msgstr ""
+
+#: 2f6e28d2c1c54b2da0015229fe8aa136 of scglue.plot.sankey:25
+msgid "Graph height"
+msgstr ""
+
+#: ba838182917844e5afdcfa45450f6338 of scglue.plot.sankey:27
+msgid "Whether to show interactive figure or only return the figure dict"
+msgstr ""
+
+#: 1627220a262d40979e675012f3d83511 of scglue.plot.sankey:29
+msgid "Whether to embed plotly.js library (only relevant when ``show=True``)"
+msgstr ""
+
+#: d4e06aa086b741a7a6c2beb3045a813e of scglue.plot.sankey
+msgid "Return type"
+msgstr ""
+
+#: 6f08098205a149638a0f3b5dc939dc22 of scglue.plot.sankey:31
+msgid ":py:class:`dict`"
+msgstr ""
+
+#: 7cf4bc4c1f6a4b9b9153f8fb20dadcbf of scglue.plot.sankey
+msgid "Returns"
+msgstr ""
+
+#: 01166c36bcdc465d91a98e3c155f0924 of scglue.plot.sankey:32
+msgid ""
+"*fig* -- Figure dict that can be fed to :func:`plotly.offline.iplot` to "
+"show an interactive figure, or to :func:`plotly.io.write_image` to "
+"produce a static image file."
+msgstr ""
+
+#: caade091ebe1441390780e48d0e928f4 of scglue.plot.sankey:38
+msgid ""
+"If a mapping function is specified for ``link_color``, it should expect a"
+" :class:`pd.Series` object as the only argument, which contains the "
+"following fields:"
+msgstr ""
+
+#: 357996f59aa14f5ea92bb0eeb85fc1f2 of scglue.plot.sankey:42
+msgid "left: the left node"
+msgstr ""
+
+#: c4d4ad11f1e44b9caf027257b55f416b of scglue.plot.sankey:43
+msgid "right: the right node"
+msgstr ""
+
+#: 0bbea6fd04a14c559fd99ba5260c6946 of scglue.plot.sankey:44
+msgid "value: population size connecting the two nodes"
+msgstr ""
+

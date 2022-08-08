@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.get_losses.rst:2
+#: 2b38f8df13554c19afd048a939ee99b9
+msgid "scglue.models.scglue.SCGLUEModel.get\\_losses"
+msgstr ""
+
+#: ed625dff6158429ebcb8a22fdb186bdf of
+#: scglue.models.scglue.SCGLUEModel.get_losses:1
+msgid "Compute loss function values"
+msgstr ""
+
+#: 42be5a816119448dacf22d2987cb66bf of
+#: scglue.models.scglue.SCGLUEModel.get_losses
+msgid "Parameters"
+msgstr ""
+
+#: 50be8dcf85024eef8147e1b06571bd23 of
+#: scglue.models.scglue.SCGLUEModel.get_losses:4
+msgid "Datasets (indexed by domain name)"
+msgstr ""
+
+#: e953d4ab7b1f49bb8de090315055e1c0 of
+#: scglue.models.scglue.SCGLUEModel.get_losses:6
+msgid "Prior graph"
+msgstr ""
+
+#: aaf59fc726d2418fa4f628102a78f00e of
+#: scglue.models.scglue.SCGLUEModel.get_losses:8
+msgid "Key of edge attribute for edge weight"
+msgstr ""
+
+#: 7f8f4509a265421ca9d318bf0385ff02 of
+#: scglue.models.scglue.SCGLUEModel.get_losses:10
+msgid "Key of edge attribute for edge sign"
+msgstr ""
+
+#: 8ed702f0cd0246b0963df6eddcf8d2e0 of
+#: scglue.models.scglue.SCGLUEModel.get_losses:12
+msgid "Number of negative samples for each edge"
+msgstr ""
+
+#: 6596a7b6de224971a800f99207d56419 of
+#: scglue.models.scglue.SCGLUEModel.get_losses:14
+msgid "Number of cells in each data minibatch"
+msgstr ""
+
+#: 19cf573514fa4e33b73617b4413d8bef of
+#: scglue.models.scglue.SCGLUEModel.get_losses:16
+msgid "Number of edges in each graph minibatch"
+msgstr ""
+
+#: 1e355f993d4e41e4b581144ee1402423 of
+#: scglue.models.scglue.SCGLUEModel.get_losses
+msgid "Return type"
+msgstr ""
+
+#: e0f60d7c3f864dacbc1bb598b5553a5f of
+#: scglue.models.scglue.SCGLUEModel.get_losses:18
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`numpy.ndarray`]"
+msgstr ""
+
+#: bd01237f33be4fb7bba1a4045eb285e6 of
+#: scglue.models.scglue.SCGLUEModel.get_losses
+msgid "Returns"
+msgstr ""
+
+#: f458f07f638c4b489d11c13744def5ae of
+#: scglue.models.scglue.SCGLUEModel.get_losses:19
+msgid "*losses* -- Loss function values"
+msgstr ""
+

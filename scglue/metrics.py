@@ -78,7 +78,7 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Note
     ----
     Follows the definition in `OpenProblems NeurIPS 2021 competition
-    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`_
+    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
     x = AnnData(X=x)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X")
@@ -114,7 +114,7 @@ def avg_silhouette_width(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Note
     ----
     Follows the definition in `OpenProblems NeurIPS 2021 competition
-    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`_
+    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
     return (sklearn.metrics.silhouette_score(x, y, **kwargs).item() + 1) / 2
 
@@ -232,7 +232,7 @@ def avg_silhouette_width_batch(
     Note
     ----
     Follows the definition in `OpenProblems NeurIPS 2021 competition
-    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`_
+    <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
     s_per_ct = []
     for t in np.unique(ct):

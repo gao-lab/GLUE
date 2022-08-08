@@ -1,0 +1,159 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.rst:2 233ff4b933e945d3b00767c5f863fb12
+msgid "scglue.models"
+msgstr ""
+
+#: dd4b44967e3245b384aa089588588ed0 of scglue.models:1
+msgid "Integration models"
+msgstr ""
+
+#: ../../api/scglue.models.rst:13 c009456b1a334b8084ce947f0d86ea23
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.models.rst:19:<autosummary>:1
+#: b69fa783d8d442f3940421d0dd64ec50
+msgid ":py:obj:`fit_SCGLUE <scglue.models.fit_SCGLUE>`"
+msgstr ""
+
+#: ../../api/scglue.models.rst:19:<autosummary>:1
+#: 681878d954b945119ba1145c3ca54fff
+msgid "Fit GLUE model to integrate single-cell multi-omics data"
+msgstr ""
+
+#: ../../api/scglue.models.rst:19:<autosummary>:1
+#: 1714b25770d14a5c9d74c590ac0340c3
+msgid ":py:obj:`load_model <scglue.models.load_model>`"
+msgstr ""
+
+#: ../../api/scglue.models.rst:19:<autosummary>:1
+#: 5912eccd32ff4a0a84aa8965ebdbb028
+msgid "Load model from file"
+msgstr ""
+
+#: ../../api/scglue.models.rst:34 91ada48a78524d6f95c85d7cdcc38a97
+msgid "Submodules"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 5b24c00e6a604595b5def412faa4d5f5
+msgid ":py:obj:`scglue.models.base <scglue.models.base>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: e0ea13edf8294f92bfb33ae7c83159eb
+msgid "Base classes for model definition and training"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: c8b3e36b47a349f692aabdd571f4d211
+msgid ":py:obj:`scglue.models.data <scglue.models.data>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: d828159b982d4fd8b90dece0284f1e5b
+msgid "Data handling utilities"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: f8bcb737eb384625b249bddd0f933563
+msgid ":py:obj:`scglue.models.dx <scglue.models.dx>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 709b60aa6f0741f5b4f43857736fd154
+msgid "Model diagnostics"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: decb1b64e5fb4b4e8e6727eda4ad8ad7
+msgid ":py:obj:`scglue.models.glue <scglue.models.glue>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 7981ba10aee543a8ab7b20ffebb383d5
+msgid "Generic framework of graph-linked unified embedding (GLUE)"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 6d721eee9c22486588d07f8a032a2ab1
+msgid ":py:obj:`scglue.models.nn <scglue.models.nn>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 7d7006a8f9e044b79d6d1b9c16cb725a
+msgid "Neural network modules, datasets & data loaders, and other utilities"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: c3c02b4c67e94e84b434f8b2b21f5e86
+msgid ":py:obj:`scglue.models.plugins <scglue.models.plugins>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: e25f03a755a74ab992b5530778c95e61
+msgid "Training plugins"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: cb73640322d740f39a72a76297303c0f
+msgid ":py:obj:`scglue.models.prob <scglue.models.prob>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 2d099b4b5cc949f2aa6cd6a53c60d593
+msgid "Probability distributions"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 9f0be40bf68f4a82b9e019e0460cd05b
+msgid ":py:obj:`scglue.models.sc <scglue.models.sc>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: d4715b38e7874d48af3f2047b519faf9
+msgid "GLUE component modules for single-cell omics data"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: d6ea364e8e2b4e65a3c73977208ec055
+msgid ":py:obj:`scglue.models.scclue <scglue.models.scclue>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: 072605e3d9104411a9491606d3d67bc7
+msgid ""
+"Concat/cross-linked unified embedding (CLUE) for single-cell multi-omics "
+"data integration"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: bf21897f21b34c869fa5a514071ac722
+msgid ":py:obj:`scglue.models.scglue <scglue.models.scglue>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.rst:50:<autosummary>:1
+#: bc4afd4228604ac396dba88ce887a5c4
+msgid ""
+"Graph-linked unified embedding (GLUE) for single-cell multi-omics data "
+"integration"
+msgstr ""
+

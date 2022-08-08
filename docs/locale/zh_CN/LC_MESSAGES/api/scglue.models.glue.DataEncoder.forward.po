@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.DataEncoder.forward.rst:2
+#: fa6dc71706214cef8e6f281d33046243
+msgid "scglue.models.glue.DataEncoder.forward"
+msgstr ""
+
+#: a6b587ca0cbf4f05965d1cc4d586893b of scglue.models.glue.DataEncoder.forward:1
+msgid "Encode data to sample latent distribution"
+msgstr ""
+
+#: d68f2a33ed40415c8da58f6103823f2a of scglue.models.glue.DataEncoder.forward
+msgid "Parameters"
+msgstr ""
+
+#: dd741f36b2584e0f8884476f8992db99 of scglue.models.glue.DataEncoder.forward:4
+msgid "Input data"
+msgstr ""
+
+#: 3e2927826d4c4481b575a02f087b39c1 of scglue.models.glue.DataEncoder.forward
+msgid "Return type"
+msgstr ""
+
+#: cb525c0acb6146adb14a81b0d7734ff5 of scglue.models.glue.DataEncoder.forward:6
+msgid ":py:class:`torch.distributions.distribution.Distribution`"
+msgstr ""
+
+#: edad07ec23e4418d8dfaa1d6fb0d1d24 of scglue.models.glue.DataEncoder.forward
+msgid "Returns"
+msgstr ""
+
+#: 5a9ec4b10db7408f92ee8f850474398e of scglue.models.glue.DataEncoder.forward:7
+msgid "*u* -- Sample latent distribution"
+msgstr ""
+

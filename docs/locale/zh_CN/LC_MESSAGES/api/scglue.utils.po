@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:35+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.rst:2 5e59f6d3096e4d0ebf20f1cb75260a9d
+msgid "scglue.utils"
+msgstr ""
+
+#: 8a91b915c3fd48e6b2e0fe74cb753c72 of scglue.utils:1
+msgid "Miscellaneous utilities"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:13 3cd1d1edf30d4d2ca4c7f1dacab111a9
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 61267a168a484f37b3975bbce428eff8
+msgid ":py:obj:`get_chained_attr <scglue.utils.get_chained_attr>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 2ff6aa4b95394f2192f87f67a983e39d
+msgid "Get attribute from an object, with support for chained attribute names."
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 9b03f9a018074578ba0a2748009bca5f
+msgid ":py:obj:`get_rs <scglue.utils.get_rs>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 50b6dacbf1ff447794c41f9904caceb3
+msgid "Get random state object"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 9c9be63210ac4910900b58c643174533
+msgid ":py:obj:`in_ipynb <scglue.utils.in_ipynb>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 9d0640e3da8747378d20a2d66e6e0c6c
+msgid "Determine whether running in an ipynb environment."
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: dae6754fcf8b4f43a61544c5089e8cd9
+msgid ":py:obj:`logged <scglue.utils.logged>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 27fae0b95c8f48fab12da179d709ff43
+msgid "Add logger as an attribute"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 1e7466218e87425199a474dc812ecb19
+msgid ":py:obj:`run_command <scglue.utils.run_command>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: b33a4c00a30b4df29e7af3e342298fe3
+msgid "Run an external command and get realtime output"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 9b3188c1c6bd49608331ffff15df2fab
+msgid ":py:obj:`smart_tqdm <scglue.utils.smart_tqdm>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:28:<autosummary>:1
+#: 43e13dece9fc42b1ab2de0b000b2806c
+msgid ""
+"Use ``tqdm.tqdm`` or ``tqdm.tqdm_notebook`` adaptively based on return "
+"value of :func:`in_ipynb`."
+msgstr ""
+
+#: ../../api/scglue.utils.rst:30 67aae5b387724726bcef5ebb0b5a836b
+msgid "Classes"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: aefef665887b45df9367a4d9a63c5299
+msgid ":py:obj:`ConfigManager <scglue.utils.ConfigManager>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: f389932e760547a09d540c3128921589
+msgid "Global configurations"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 24598a38c16c4f16bbb1762a345622a3
+msgid ":py:obj:`ConstrainedDataFrame <scglue.utils.ConstrainedDataFrame>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 9aa5577215cf4e008801e693368ad586
+msgid "Data frame with certain format constraints"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 398c21f5c07747a9a22eb9a2746f15da
+msgid ":py:obj:`DelayedKeyboardInterrupt <scglue.utils.DelayedKeyboardInterrupt>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: ab103905ee8d4b13b13d7866365c5b3f
+msgid ""
+"Shield a code block from keyboard interruptions, delaying handling till "
+"the block is finished (adapted from `https://stackoverflow.com/a/21919644"
+" <https://stackoverflow.com/a/21919644>`__)."
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 05c5ce8835e045f0bc30c575f0ec3fc5
+msgid ":py:obj:`LogManager <scglue.utils.LogManager>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 0e258b3d4b404380b11d404cf2c99105
+msgid "Manage loggers used in the package"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: 8fad33d7bf1c47a89e1c7fc03de4b156
+msgid ":py:obj:`SingletonMeta <scglue.utils.SingletonMeta>`"
+msgstr ""
+
+#: ../../api/scglue.utils.rst:40:<autosummary>:1
+#: ab168b74ce1347fdbe450d992acdbb15
+msgid "Ensure singletons via a meta class"
+msgstr ""
+
+#~ msgid ""
+#~ "Shield a code block from keyboard "
+#~ "interruptions, delaying handling till the "
+#~ "block is finished (adapted from "
+#~ "`https://stackoverflow.com/a/21919644 "
+#~ "<https://stackoverflow.com/a/21919644>`_)."
+#~ msgstr ""
+

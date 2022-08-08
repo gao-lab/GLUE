@@ -16,9 +16,9 @@ In the context of single-cell multi-omics, the data modalities correspond to omi
    :width: 600
    :alt: Model architecture
 
-To get started with ``scglue``, check out the `installation guide <install.rst>`_ and `tutorials <tutorials.rst>`_.
+To get started with ``scglue``, check out the `installation guide <install.rst>`__ and `tutorials <tutorials.rst>`__.
 
-For more details about the GLUE framework, please check out our `publication <https://doi.org/10.1038/s41587-022-01284-4>`_.
+For more details about the GLUE framework, please check out our `publication <https://doi.org/10.1038/s41587-022-01284-4>`__.
 
 .. toctree::
    :maxdepth: 2

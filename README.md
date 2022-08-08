@@ -73,7 +73,10 @@ pytest --cov="scglue" --cov-report="term-missing" tests [--cpu-only]
 Build documentation:
 
 ```sh
-sphinx-build -a -b html docs docs/_build
+sphinx-build -b gettext docs docs/_build/gettext
+sphinx-intl update -p docs/_build/gettext -l zh_CN -d docs/locale
+sphinx-build -a -b html -D language=en docs docs/_build  # English version
+sphinx-build -a -b html -D language=zh_CN docs docs/_build  # Chinese version
 ```
 
 ## Reproduce results

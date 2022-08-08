@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.PairedSCGLUEModel.compile.rst:2
+#: 1eb95decde2d415e80e12c65fd2f3a57
+msgid "scglue.models.scglue.PairedSCGLUEModel.compile"
+msgstr ""
+
+#: 86acca498b9f430588e066db6d10d5c7 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:1
+msgid "Prepare model for training"
+msgstr ""
+
+#: 817ed03b847144b8bb8b3f78c1c29707 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile
+msgid "Parameters"
+msgstr ""
+
+#: 633dbe932530499c85f8569d3f41dc6b of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:4
+msgid "Data weight"
+msgstr ""
+
+#: 184e8c647f97473bba62219e751804bd of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:6
+msgid "KL weight"
+msgstr ""
+
+#: a1df191cd87f48ccb31c4149c1bea0b3 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:8
+msgid "Graph weight"
+msgstr ""
+
+#: 9b189c827e8c42fb93e856972fdbec9a of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:10
+msgid "Adversarial alignment weight"
+msgstr ""
+
+#: d407a78856e9433facc37ccbf3ad9225 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:12
+msgid "Cell type supervision weight"
+msgstr ""
+
+#: 00d614cd09a549688ea9290f4a2c9f9b of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:14
+msgid "Joint cross-prediction weight"
+msgstr ""
+
+#: fea00e2aadb14042b3842dfb2a8a8b65 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:16
+msgid "Real cross-prediction weight"
+msgstr ""
+
+#: 9c657d4a84e74a19b69cbd1eec8d1745 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:18
+msgid "Cosine similarity weight"
+msgstr ""
+
+#: fede51b792834c70bc676f4fe836c8a2 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:20
+msgid "Whether to L2 normalize cell embeddings before decoder"
+msgstr ""
+
+#: 562ad9127f2e4298a3da15a08837bee0 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:22
+msgid "Relative domain weight (indexed by domain name)"
+msgstr ""
+
+#: 02c967540aa0426794ef12ac4174c7e6 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:24
+msgid "Learning rate"
+msgstr ""
+
+#: 4c05f23d675c4409a99ae3493d3b322d of
+#: scglue.models.scglue.PairedSCGLUEModel.compile
+msgid "Return type"
+msgstr ""
+
+#: fa2bd81a63fc4676b06b062e1ddb5355 of
+#: scglue.models.scglue.PairedSCGLUEModel.compile:27
+msgid ":py:obj:`None`"
+msgstr ""
+

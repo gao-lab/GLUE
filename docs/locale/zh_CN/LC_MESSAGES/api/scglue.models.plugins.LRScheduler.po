@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:2
+#: 4e9cd0dc46804bdbb9b765b9192dea73
+msgid "scglue.models.plugins.LRScheduler"
+msgstr ""
+
+#: 9ae20593084343ed9e9d1d889512a72b of scglue.models.plugins.LRScheduler:1
+msgid "Bases: :py:class:`~scglue.models.base.TrainingPlugin`"
+msgstr ""
+
+#: 91c5d8552e3d4ac680adf2534f75356c of scglue.models.plugins.LRScheduler:1
+msgid "Reduce learning rate on loss plateau"
+msgstr ""
+
+#: 80d161b74d474139ab3d240d29d57789 of scglue.models.plugins.LRScheduler
+msgid "Parameters"
+msgstr ""
+
+#: fb7d69a27fe642368cc6eb85e1b6ed2a of scglue.models.plugins.LRScheduler:3
+msgid "Optimizers"
+msgstr ""
+
+#: b82e61078a8b445d8ca01c797ee6e7fa of scglue.models.plugins.LRScheduler:5
+msgid "Loss to monitor"
+msgstr ""
+
+#: 64dc95b2d1e244ab9fce14e5cd641413 of scglue.models.plugins.LRScheduler:7
+msgid "Patience to reduce learning rate"
+msgstr ""
+
+#: 5cc5640ef3fa4b558d9a053155108cf1 of scglue.models.plugins.LRScheduler:9
+msgid "Burn-in epochs to skip before initializing learning rate scheduling"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:12
+#: 12b4ca2018954d9d88a88cd43b44eb0f
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:22:<autosummary>:1
+#: c2cd686770804b5099f69d2ca6dd6f3d
+msgid ":py:obj:`attach <scglue.models.plugins.LRScheduler.attach>`"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:22:<autosummary>:1
+#: 99cbed5ac4cf4e04b43e4aceec43b0d9
+msgid "Attach custom handlers to training or validation engine"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:24
+#: ba8ce696830247799e6f53d6b372f655
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.LRScheduler.rst:27:<autosummary>:1
+#: 76f54d67de024831b00ae56603623b16
+msgid ":py:obj:`logger <scglue.models.plugins.LRScheduler.logger>`\\"
+msgstr ""
+

@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.IndZILNDataDecoder.rst:2
+#: 169276cf55da4b21b07898e569088975
+msgid "scglue.models.sc.IndZILNDataDecoder"
+msgstr ""
+
+#: 3b7a58fdf26f47bdab569c401743b29e of scglue.models.sc.IndZILNDataDecoder:1
+msgid ""
+"Bases: :py:class:`~scglue.models.sc.IndDataDecoder`, "
+":py:class:`~scglue.models.sc.ZILNDataDecoder`"
+msgstr ""
+
+#: af7a784df18040e887e8d0aaa540cc8c of scglue.models.sc.IndZILNDataDecoder:1
+msgid "Zero-inflated log-normal data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.IndZILNDataDecoder.rst:12
+#: d1b7e63cc0b7413894717da55a1d28d0
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.IndZILNDataDecoder.rst:23
+#: 9d3f75881b654cc0b525797ab248e993
+msgid "Attributes"
+msgstr ""
+

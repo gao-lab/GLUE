@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.prob.MSE.rst:2 7ec2dab063a241a0b4ea05e44e521c78
+msgid "scglue.models.prob.MSE"
+msgstr ""
+
+#: ec1778dbbbd3438ab03edc6771765a1f of scglue.models.prob.MSE:1
+msgid "Bases: :py:class:`~torch.distributions.distribution.Distribution`"
+msgstr ""
+
+#: 3d9ae536cc7b4b379e9ffd6b85c8e81a of scglue.models.prob.MSE:1
+msgid "A \"sham\" distribution that outputs negative MSE on ``log_prob``"
+msgstr ""
+
+#: a8a80ea408844a029556dd7d537b2fa7 of scglue.models.prob.MSE
+msgid "Parameters"
+msgstr ""
+
+#: 5cd4c4689d574331a835c616e2c2afa9 of scglue.models.prob.MSE:4
+msgid "Mean of the distribution"
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:12 1898674e27e743ffb86c6fd33642c267
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:22:<autosummary>:1
+#: f5fb9d65fea449a79cdbbc45c09264c6
+msgid ":py:obj:`log_prob <scglue.models.prob.MSE.log_prob>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:22:<autosummary>:1
+#: b59252c8bf1640fc8de6bf32470eca9b
+msgid ""
+"Returns the log of the probability density/mass function evaluated at "
+"`value`."
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:24 ed0bc64d3f9c42fbab4b103c2ce40c73
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:27:<autosummary>:1
+#: be2b5ef22ff743a2ae3f04b1e0b7a5f3
+msgid ":py:obj:`mean <scglue.models.prob.MSE.mean>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.prob.MSE.rst:27:<autosummary>:1
+#: ed327cba1574434abbecef6a2e954c1a
+msgid "Returns the mean of the distribution."
+msgstr ""
+

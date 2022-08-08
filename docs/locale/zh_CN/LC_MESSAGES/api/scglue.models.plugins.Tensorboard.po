@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.plugins.Tensorboard.rst:2
+#: 544175a483d44bb9bae6ddb63fafb377
+msgid "scglue.models.plugins.Tensorboard"
+msgstr ""
+
+#: 96dfc131ce6147d5a71438246642baa6 of scglue.models.plugins.Tensorboard:1
+msgid "Bases: :py:class:`~scglue.models.base.TrainingPlugin`"
+msgstr ""
+
+#: b3ce092e13454026ad287d9bf91e1c7e of scglue.models.plugins.Tensorboard:1
+msgid "Training logging via tensorboard"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.Tensorboard.rst:12
+#: 8770364631824c389d19473eecdae275
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.Tensorboard.rst:22:<autosummary>:1
+#: 933c2b4070594e25a84d15ec2b85f824
+msgid ":py:obj:`attach <scglue.models.plugins.Tensorboard.attach>`"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.Tensorboard.rst:22:<autosummary>:1
+#: ed0632ad19a340c399a316e55af44850
+msgid "Attach custom handlers to training or validation engine"
+msgstr ""
+
+#: ../../api/scglue.models.plugins.Tensorboard.rst:24
+#: 6bc7345f319e4bdab3c36b161888ba8a
+msgid "Attributes"
+msgstr ""
+

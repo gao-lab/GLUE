@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.train_step.rst:2
+#: 9455eccbdffb4bf9b19beed419ec7660
+msgid "scglue.models.scclue.SCCLUETrainer.train\\_step"
+msgstr ""
+
+#: fe68d5ac976f487f990a32f3ead32b9e of
+#: scglue.models.scclue.SCCLUETrainer.train_step:1
+msgid "A single training step"
+msgstr ""
+
+#: 46f10186ed9a47d298e38de6f8ec98ed of
+#: scglue.models.scclue.SCCLUETrainer.train_step
+msgid "Parameters"
+msgstr ""
+
+#: c47077f1856549bda77fdb2ea3bd9f99 of
+#: scglue.models.scclue.SCCLUETrainer.train_step:4
+msgid "Training engine"
+msgstr ""
+
+#: be8caa3d426141f0a514a0c0a6560475 of
+#: scglue.models.scclue.SCCLUETrainer.train_step:6
+msgid "Data of the training step"
+msgstr ""
+
+#: 8856113dd9e2467f9d79a0891418750f of
+#: scglue.models.scclue.SCCLUETrainer.train_step
+msgid "Return type"
+msgstr ""
+
+#: d95da4b4d7f04ef791876415e15601f0 of
+#: scglue.models.scclue.SCCLUETrainer.train_step:8
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`torch.Tensor`]"
+msgstr ""
+
+#: fd185f664fc14a8885b323a6d3aaab5c of
+#: scglue.models.scclue.SCCLUETrainer.train_step
+msgid "Returns"
+msgstr ""
+
+#: 46284640a90e4f28b6dc8c3a841aae7c of
+#: scglue.models.scclue.SCCLUETrainer.train_step:9
+msgid "*loss_dict* -- Dict containing training loss values"
+msgstr ""
+

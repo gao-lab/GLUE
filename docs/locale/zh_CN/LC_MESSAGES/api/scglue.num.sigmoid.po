@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.sigmoid.rst:2 84634f43d3bf419e93ca87bddc9121cc
+msgid "scglue.num.sigmoid"
+msgstr ""
+
+#: da08915566b2482983149f592afd0650 of scglue.num.sigmoid:1
+msgid "The sigmoid function in numpy"
+msgstr ""
+
+#: e8eeacd735294ace98984409c9950a2d of scglue.num.sigmoid
+msgid "Parameters"
+msgstr ""
+
+#: fa66664569c248c08744b7453ae230df of scglue.num.sigmoid:4
+msgid "Input"
+msgstr ""
+
+#: 77b139390389428a8caec71219da74e2 of scglue.num.sigmoid
+msgid "Return type"
+msgstr ""
+
+#: 7833ccef5eff4f93b5fd47b26fa073e1 of scglue.num.sigmoid:6
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: 1bb5a1113d754fe6af3739b34c192739 of scglue.num.sigmoid
+msgid "Returns"
+msgstr ""
+
+#: 77f101c4ee4340ee91d0e81dc455f555 of scglue.num.sigmoid:7
+msgid "*s* -- Sigmoid(x)"
+msgstr ""
+

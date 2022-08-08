@@ -1,0 +1,35 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.SingletonMeta.rst:2 bf9a1272166f4c7f95b6d3d977027998
+msgid "scglue.utils.SingletonMeta"
+msgstr ""
+
+#: b8c3fa94d48447eb8fd0896f8336659c of scglue.utils.SingletonMeta:1
+msgid "Bases: :py:class:`type`"
+msgstr ""
+
+#: ce8471bb4f4847219bae5cd1ceaeb999 of scglue.utils.SingletonMeta:1
+msgid "Ensure singletons via a meta class"
+msgstr ""
+
+#: ../../api/scglue.utils.SingletonMeta.rst:12 4ce7e43bdd3140549d5eb83374eba11a
+msgid "Methods"
+msgstr ""
+

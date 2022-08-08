@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:35+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.metrics.normalized_mutual_info.rst:2
+#: b8018e38055a4378a2d15cdbdfe655a8
+msgid "scglue.metrics.normalized\\_mutual\\_info"
+msgstr ""
+
+#: d1cd4c48e4e24c48aef0c788b51d567c of scglue.metrics.normalized_mutual_info:1
+msgid "Normalized mutual information with true clustering"
+msgstr ""
+
+#: fcd025f37ff6483e93baf077f60ca5d5 of scglue.metrics.normalized_mutual_info
+msgid "Parameters"
+msgstr ""
+
+#: 3b86f63ce9584eeda3e47ffb9a0738f9 of scglue.metrics.normalized_mutual_info:4
+msgid "Coordinates"
+msgstr ""
+
+#: 17b25f5a51f749e7b4119835deeff388 of scglue.metrics.normalized_mutual_info:6
+msgid "Cell type labels"
+msgstr ""
+
+#: b3b8636f754b40e0884346a544b578f2 of scglue.metrics.normalized_mutual_info:7
+msgid ""
+"Additional keyword arguments are passed to "
+":func:`sklearn.metrics.normalized_mutual_info_score`"
+msgstr ""
+
+#: 258db284f49a4e789b86b04fb0bc43ab of scglue.metrics.normalized_mutual_info
+msgid "Return type"
+msgstr ""
+
+#: c900231225a2401fbb24d12abfda8870 of scglue.metrics.normalized_mutual_info:10
+msgid ":py:class:`float`"
+msgstr ""
+
+#: 05a7f71a44204561ab109f852c8b6f8e of scglue.metrics.normalized_mutual_info
+msgid "Returns"
+msgstr ""
+
+#: bd1a06bf3d7b406192b978796d52917f of scglue.metrics.normalized_mutual_info:11
+msgid "*nmi* -- Normalized mutual information"
+msgstr ""
+
+#: 9047278af19c4baa9cce66832eda050e of scglue.metrics.normalized_mutual_info:15
+msgid ""
+"Follows the definition in `OpenProblems NeurIPS 2021 competition "
+"<https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__"
+msgstr ""
+
+#~ msgid ""
+#~ "Follows the definition in `OpenProblems "
+#~ "NeurIPS 2021 competition "
+#~ "<https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`_"
+#~ msgstr ""
+

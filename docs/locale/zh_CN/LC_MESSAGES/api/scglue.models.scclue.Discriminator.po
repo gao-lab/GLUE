@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:2
+#: 0d3bf70bde9540d4a72a31ac350cece6
+msgid "scglue.models.scclue.Discriminator"
+msgstr ""
+
+#: a42ebc680ce14c2294e892e079b4c9d7 of scglue.models.scclue.Discriminator:1
+msgid ""
+"Bases: :py:class:`~torch.nn.modules.container.Sequential`, "
+":py:class:`~scglue.models.scclue.BatchedTransferrable`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:12
+#: 752bfe444fcc4c4f873e84523b1ed181
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:22:<autosummary>:1
+#: 236c896002cf44c1b9f55b5c65bb792b
+msgid ":py:obj:`forward <scglue.models.scclue.Discriminator.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:22:<autosummary>:1
+#: 5c3f4ac5e1ee4f20830b45bc067df9df
+msgid "Defines the computation performed at every call."
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:24
+#: a1781d2a694d40c3b440b3d504e47611
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:27:<autosummary>:1
+#: 46627ffba87a44288e8c01f294ef39da
+msgid ""
+":py:obj:`batched_weights "
+"<scglue.models.scclue.Discriminator.batched_weights>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.Discriminator.rst:27:<autosummary>:1
+#: 2163258dd7054286b65e7c3ea710ef30
+msgid "List of batch-specific weights"
+msgstr ""
+

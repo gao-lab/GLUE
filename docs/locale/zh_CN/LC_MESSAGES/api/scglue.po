@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.rst:2 c416221268794ed6b40c5dc819fcade6
+msgid "scglue"
+msgstr ""
+
+#: a94b4f11c8a744199e41a9866f8cf8da of scglue:1
+msgid "GLUE (Graph-Linked Unified Embedding)"
+msgstr ""
+
+#: ../../api/scglue.rst:25 7128be68efe64fdd995385e429c86989
+msgid "Submodules"
+msgstr "子模块"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 9e950df8c2c64b599d159e9c22d7e942
+msgid ":py:obj:`scglue.check <scglue.check>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 b2e780631d6a4419865c235a6dd3954b
+msgid "Dependency checking"
+msgstr "依赖检查"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 4182ae7e97b54f3caf60c99909d9ba63
+msgid ":py:obj:`scglue.data <scglue.data>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 cd1481ffdc3546eeb98f6d633868ef05
+msgid ""
+"Auxiliary functions for :class:`anndata.AnnData` objects that are not "
+"covered in :mod:`scanpy`."
+msgstr "没有包含在 :mod:`scanpy` 和 :class:`anndata.AnnData` 类中的辅助函数"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 364405d778604735a56e4f26a53df1b9
+msgid ":py:obj:`scglue.genomics <scglue.genomics>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 396ef2399321460ea3305b4fb1ec829d
+msgid "Genomics operations"
+msgstr "基因组学相关的操作"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 19e97d1fad1a4087b95f5ca1fb678adc
+msgid ":py:obj:`scglue.graph <scglue.graph>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 ec4f739682cd47eea32b31969481864b
+msgid "Graph-related functions"
+msgstr "图相关的函数"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 068b744b314e45d29c43e2c73c884ca4
+msgid ":py:obj:`scglue.metrics <scglue.metrics>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 01865d89f1f04a55bf093e4c56b7776c
+msgid "Performance evaluation metrics"
+msgstr "性能评估指标"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 97f6046cdce84784bb53c872659c7af3
+msgid ":py:obj:`scglue.models <scglue.models>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 906a39e8f3d4424cabe1187a8b147c5c
+msgid "Integration models"
+msgstr "整合模型"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 660aa37ab1db43649f9d445fb7e7e977
+msgid ":py:obj:`scglue.num <scglue.num>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 0742e11baf0544738ec87e36c1aaac20
+msgid "Numeric operations"
+msgstr "数值运算"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 a1ea6a100aff4176a003d59c604ddf0d
+msgid ":py:obj:`scglue.plot <scglue.plot>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 d58fcc32dfbd43adaf9037cfe58f4253
+msgid "Plotting functions"
+msgstr "画图函数"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 d5d0321fda7041f98768427ace4930f5
+msgid ":py:obj:`scglue.typehint <scglue.typehint>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 ff5ef69b961142e9a353c01406d9e39f
+msgid "Type hint definitions"
+msgstr "定义类型提示"
+
+#: ../../api/scglue.rst:41:<autosummary>:1 3d7a91ef43ad42759e775fa55ab8612e
+msgid ":py:obj:`scglue.utils <scglue.utils>`\\"
+msgstr ""
+
+#: ../../api/scglue.rst:41:<autosummary>:1 5be3b655a26248ce802acc942d57b3dd
+msgid "Miscellaneous utilities"
+msgstr "其他实用功能"

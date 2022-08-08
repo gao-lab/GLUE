@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.plot.rst:2 8f80e47ef9b9401c984fa75cb55114e5
+msgid "scglue.plot"
+msgstr ""
+
+#: ebc2eaa869e34afe8c23a20e99e86e6a of scglue.plot:1
+msgid "Plotting functions"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:13 ddec096405374418bf9997e7d4d6efea
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 1916a32d6ac1454abaf77615915ee258
+msgid ":py:obj:`prc <scglue.plot.prc>`"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 3c7ea95dbf2d41589daf442d4f16095b
+msgid "Plot a precision-recall curve"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 614f79f2296c470bb4bda3223c0827a5
+msgid ":py:obj:`roc <scglue.plot.roc>`"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 9b3f937530ff4095bba0087bfa485d19
+msgid "Plot an ROC curve"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: a6f8bb67ffe949389452562e3ccc7fcc
+msgid ":py:obj:`sankey <scglue.plot.sankey>`"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: b91833cb37b64232b63ba8015acc8bc6
+msgid "Make a sankey diagram"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 3fa8ffa33f7c46b1bb43499e04ed76b4
+msgid ":py:obj:`set_publication_params <scglue.plot.set_publication_params>`"
+msgstr ""
+
+#: ../../api/scglue.plot.rst:21:<autosummary>:1
+#: 2c8a36f0db3041049f811654a14453f5
+msgid "Set publication-level figure parameters"
+msgstr ""
+

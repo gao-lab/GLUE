@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.TrainingPlugin.attach.rst:2
+#: beda355e61484502bd3ee6bd656999f7
+msgid "scglue.models.base.TrainingPlugin.attach"
+msgstr ""
+
+#: 9143a7737a26477786415daf6b19f718 of
+#: scglue.models.base.TrainingPlugin.attach:1
+msgid "Attach custom handlers to training or validation engine"
+msgstr ""
+
+#: 330864b29bfa4b28ad7b2d7f54a2c32e of scglue.models.base.TrainingPlugin.attach
+msgid "Parameters"
+msgstr ""
+
+#: 62b47fcddcd04a7081b9b17504f04f9c of
+#: scglue.models.base.TrainingPlugin.attach:4
+msgid "Network module"
+msgstr ""
+
+#: bfdf5152444645a68c3b97212480f2b5 of
+#: scglue.models.base.TrainingPlugin.attach:6
+msgid "Trainer object"
+msgstr ""
+
+#: ebc4c238445448cd9b6fb5971d3dfafb of
+#: scglue.models.base.TrainingPlugin.attach:8
+msgid "Training engine"
+msgstr ""
+
+#: 7f49a69fbe0342f79491b6dcf60b097e of
+#: scglue.models.base.TrainingPlugin.attach:10
+msgid "Validation engine"
+msgstr ""
+
+#: 0b06c7000d7344ffb1ed840449e99b38 of
+#: scglue.models.base.TrainingPlugin.attach:12
+msgid "Training data loader"
+msgstr ""
+
+#: 0ae6aceee5d64ed4991aea4850ac6a8f of
+#: scglue.models.base.TrainingPlugin.attach:14
+msgid "Validation data loader"
+msgstr ""
+
+#: aeeb9b923503409b9bd1ebcf606294ba of
+#: scglue.models.base.TrainingPlugin.attach:16
+msgid "Training directory"
+msgstr ""
+
+#: a882fe697d904e808440881410672cd1 of scglue.models.base.TrainingPlugin.attach
+msgid "Return type"
+msgstr ""
+
+#: f9d55cb02362409e82db0005e7b5ced9 of
+#: scglue.models.base.TrainingPlugin.attach:19
+msgid ":py:obj:`None`"
+msgstr ""
+

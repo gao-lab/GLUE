@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.VanillaDataEncoder.normalize.rst:2
+#: e2051ebd99794dfd8420cd0a22cd34d2
+msgid "scglue.models.sc.VanillaDataEncoder.normalize"
+msgstr ""
+
+#: 8fd1e03c67454a09a4c0a89cbe6025ba of
+#: scglue.models.sc.VanillaDataEncoder.normalize:1
+msgid "Normalize data"
+msgstr ""
+
+#: 4f1df34941fe4852a5d13aeb283e6de1 of
+#: scglue.models.sc.VanillaDataEncoder.normalize
+msgid "Parameters"
+msgstr ""
+
+#: bd2b8f25132a4dd69d92cb8d37d8b0fc of
+#: scglue.models.sc.VanillaDataEncoder.normalize:4
+msgid "Input data"
+msgstr ""
+
+#: 3a785845863a4640a23d33a13eb08b9d of
+#: scglue.models.sc.VanillaDataEncoder.normalize:6
+msgid "Normalizer"
+msgstr ""
+
+#: 49e674fe2e474e4a96e1c87776e3c8a0 of
+#: scglue.models.sc.VanillaDataEncoder.normalize
+msgid "Return type"
+msgstr ""
+
+#: ddf4b07d1bf34a52a9c92000e37c54e7 of
+#: scglue.models.sc.VanillaDataEncoder.normalize:8
+msgid ":py:class:`torch.Tensor`"
+msgstr ""
+
+#: 1571dcc9518e4bb7910765806dd300e4 of
+#: scglue.models.sc.VanillaDataEncoder.normalize
+msgid "Returns"
+msgstr ""
+
+#: 8b59a8f899554aed8f2df816dd4487fe of
+#: scglue.models.sc.VanillaDataEncoder.normalize:9
+msgid "*xnorm* -- Normalized data"
+msgstr ""
+

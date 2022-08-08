@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.ZILNDataDecoder.rst:2
+#: 2858db587f9a4b499a7f88df199012a0
+msgid "scglue.models.sc.ZILNDataDecoder"
+msgstr ""
+
+#: e7d9ab8b92734f44b6cd85dd78fdfbf2 of scglue.models.sc.ZILNDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.sc.DataDecoder`"
+msgstr ""
+
+#: 2dd17bf84d194ecc8701718ef9e733ca of scglue.models.sc.ZILNDataDecoder:1
+msgid "Zero-inflated log-normal data decoder"
+msgstr ""
+
+#: 5fe51a9e2be94b269f5635377aca64ab of scglue.models.sc.ZILNDataDecoder
+msgid "Parameters"
+msgstr ""
+
+#: eb206a6f22d44541ada9e0f46ae0b51f of scglue.models.sc.ZILNDataDecoder:4
+msgid "Output dimensionality"
+msgstr ""
+
+#: d39f93fe0a6f4bb191adfc539096f96f of scglue.models.sc.ZILNDataDecoder:6
+msgid "Number of batches"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZILNDataDecoder.rst:12
+#: c97d163643e34f00936c54e90c195af5
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZILNDataDecoder.rst:22:<autosummary>:1
+#: caf3f77e94734f139e4c53c462d6bac2
+msgid ":py:obj:`forward <scglue.models.sc.ZILNDataDecoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZILNDataDecoder.rst:22:<autosummary>:1
+#: 626d48db45294554917f514c7c640786
+msgid "Decode data from sample and feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZILNDataDecoder.rst:24
+#: c78f397ad942400dbaa177de173b6f1b
+msgid "Attributes"
+msgstr ""
+

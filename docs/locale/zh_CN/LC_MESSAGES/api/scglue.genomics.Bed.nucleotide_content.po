@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.nucleotide_content.rst:2
+#: 91288c65abca4062b1d8bb1071124770
+msgid "scglue.genomics.Bed.nucleotide\\_content"
+msgstr ""
+
+#: 158ec48441c24c3da1668843318fcc55 of scglue.genomics.Bed.nucleotide_content:1
+msgid "Compute nucleotide content in the BED regions"
+msgstr ""
+
+#: aac310aa2b9f4662af907e83a3d477c6 of scglue.genomics.Bed.nucleotide_content
+msgid "Parameters"
+msgstr ""
+
+#: 7f4b9b15f3b341db95c3a2073ddbbfa2 of scglue.genomics.Bed.nucleotide_content:4
+msgid "Genomic sequence file in FASTA format"
+msgstr ""
+
+#: 0032df4f77bc4b68bf2b3b3a081c6f4f of scglue.genomics.Bed.nucleotide_content
+msgid "Return type"
+msgstr ""
+
+#: 31c8ec0dcded4a27a85872733e7d32c6 of scglue.genomics.Bed.nucleotide_content:6
+msgid ":py:class:`~pandas.DataFrame`"
+msgstr ""
+
+#: 89c2a23a447f4a82a5c73d56e4d7bd9e of scglue.genomics.Bed.nucleotide_content
+msgid "Returns"
+msgstr ""
+
+#: ff01489d6a444e65b83a09cc17644eaf of scglue.genomics.Bed.nucleotide_content:7
+msgid ""
+"*nucleotide_stat* -- Data frame containing nucleotide content statistics "
+"for each region"
+msgstr ""
+

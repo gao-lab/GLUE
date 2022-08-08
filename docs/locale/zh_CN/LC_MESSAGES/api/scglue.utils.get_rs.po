@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.get_rs.rst:2 15732c53002940c3a2591d93efe653a5
+msgid "scglue.utils.get\\_rs"
+msgstr ""
+
+#: 72cf6672c72b4059ab8fdcbb3217417a of scglue.utils.get_rs:1
+msgid "Get random state object"
+msgstr ""
+
+#: f9aa661879dc435ca82f7bce9a2b5b85 of scglue.utils.get_rs
+msgid "Parameters"
+msgstr ""
+
+#: e7ae70b0ce7043508cf9351ad2e7dc05 of scglue.utils.get_rs:4
+msgid "Object that can be converted to a random state object"
+msgstr ""
+
+#: c00df36a381043dba5c2463ac6b4b6cf of scglue.utils.get_rs
+msgid "Return type"
+msgstr ""
+
+#: 57c920e07732497fb6382b4d7da5896b of scglue.utils.get_rs:6
+msgid ":py:class:`~numpy.random.RandomState`"
+msgstr ""
+
+#: 3ac65005c6f24d96ba4a2081e170a16b of scglue.utils.get_rs
+msgid "Returns"
+msgstr ""
+
+#: 46590c13f6444df3bda8de755d1ef803 of scglue.utils.get_rs:7
+msgid "*rs* -- Random state object"
+msgstr ""
+

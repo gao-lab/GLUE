@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.Discriminator.rst:2
+#: 34fad4bfbc9741c784687da0cf9b0e17
+msgid "scglue.models.sc.Discriminator"
+msgstr ""
+
+#: 41ad6614a0d44c209594cdd75b80d8d6 of scglue.models.sc.Discriminator:1
+msgid ""
+"Bases: :py:class:`~torch.nn.modules.container.Sequential`, "
+":py:class:`~scglue.models.glue.Discriminator`"
+msgstr ""
+
+#: 41dc3165408547d8acf9c26db3cf2435 of scglue.models.sc.Discriminator:1
+msgid "Domain discriminator"
+msgstr ""
+
+#: 39c5eca9f2c242b588c4235078f09ab8 of scglue.models.sc.Discriminator
+msgid "Parameters"
+msgstr ""
+
+#: 0b0f628c4d3245c1aacd082fbfb5380d of scglue.models.sc.Discriminator:4
+msgid "Input dimensionality"
+msgstr ""
+
+#: d49c72631669454db76e26a2bd880261 of scglue.models.sc.Discriminator:6
+msgid "Output dimensionality"
+msgstr ""
+
+#: 996724802bb5415897ffb8e314b5dd55 of scglue.models.sc.Discriminator:8
+msgid "Hidden layer depth"
+msgstr ""
+
+#: a2a4956978fd4b239c7c8351d8a949d5 of scglue.models.sc.Discriminator:10
+msgid "Hidden layer dimensionality"
+msgstr ""
+
+#: c89447d4efa04d3891e323c9eb4322ea of scglue.models.sc.Discriminator:12
+msgid "Dropout rate"
+msgstr ""
+
+#: ../../api/scglue.models.sc.Discriminator.rst:12
+#: 6afcf41fa47d406bafab970b3170965e
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.Discriminator.rst:22:<autosummary>:1
+#: cde759cf9f5241c983346f55f271bd34
+msgid ":py:obj:`forward <scglue.models.sc.Discriminator.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.Discriminator.rst:22:<autosummary>:1
+#: 8b0ee370ca3043839a61e4d2ba3f5bdb
+msgid "Discriminate among domains"
+msgstr ""
+
+#: ../../api/scglue.models.sc.Discriminator.rst:24
+#: 7fa9e070c8f04320ad649b811f623fc3
+msgid "Attributes"
+msgstr ""
+

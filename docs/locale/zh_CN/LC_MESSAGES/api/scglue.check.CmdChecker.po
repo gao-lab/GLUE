@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.check.CmdChecker.rst:2 9af006ffa03a41d08cb285ba0a843c8b
+msgid "scglue.check.CmdChecker"
+msgstr ""
+
+#: c571b3d7506d45a094c3b2f873c79f1b of scglue.check.CmdChecker:1
+msgid "Bases: :py:class:`~scglue.check.Checker`"
+msgstr ""
+
+#: e96a5cb1e77f46a789b5f000d0f5e5ae of scglue.check.CmdChecker:1
+msgid "Checks availability and version of a command line dependency"
+msgstr ""
+
+#: 2adbda2df0fe41a1ba82370642700475 of scglue.check.CmdChecker
+msgid "Parameters"
+msgstr ""
+
+#: e6ac3da8dfe24bfca706e7628b7f02e5 of scglue.check.CmdChecker:4
+msgid "Name of the dependency"
+msgstr ""
+
+#: da86eeb46db04d489e5ea0f1213848e9 of scglue.check.CmdChecker:6
+msgid "Command used to check version"
+msgstr ""
+
+#: a2f89846416a42e3ac38a8e4ea049aa3 of scglue.check.CmdChecker:8
+msgid "Regular expression used to extract version from command output"
+msgstr ""
+
+#: 02c3f7171c00453ea6c3a273aa43e2b3 of scglue.check.CmdChecker:10
+msgid "Minimal required version"
+msgstr ""
+
+#: e5b8a01a722540b0abb481812a4ce000 of scglue.check.CmdChecker:12
+msgid "Install hint message to be printed if dependency is unavailable"
+msgstr ""
+
+#: ../../api/scglue.check.CmdChecker.rst:12 4aad93757a424263b7badcbb12ec0d19
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.check.CmdChecker.rst:17:<autosummary>:1
+#: ca8fe37385c14a6d977fc991b00ce9e2
+msgid ":py:obj:`check <scglue.check.CmdChecker.check>`"
+msgstr ""
+
+#: ../../api/scglue.check.CmdChecker.rst:17:<autosummary>:1
+#: b54a0f3ef3534502aa866199314810b6
+msgid "Check availability and version"
+msgstr ""
+

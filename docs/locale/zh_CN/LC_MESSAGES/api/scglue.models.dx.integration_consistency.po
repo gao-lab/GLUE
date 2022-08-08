@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.dx.integration_consistency.rst:2
+#: 386631a5ad7041799f91f5b87ba7e311
+msgid "scglue.models.dx.integration\\_consistency"
+msgstr ""
+
+#: a4021b6f245d4eada00307b96fddc3e5 of
+#: scglue.models.dx.integration_consistency:1
+msgid ""
+"Integration consistency score, defined as the consistency between "
+"aligned-space meta-cell correlation and the prior graph"
+msgstr ""
+
+#: 717c778b9c2542a48eac3b7ba84d5ab9 of scglue.models.dx.integration_consistency
+msgid "Parameters"
+msgstr ""
+
+#: 725dcf082a38444bbe88a6cee931e8d5 of
+#: scglue.models.dx.integration_consistency:5
+msgid "Integration model to be evaluated"
+msgstr ""
+
+#: 3fee3dbde1424f56afffc974182258e7 of
+#: scglue.models.dx.integration_consistency:7
+msgid "Datasets (indexed by domain name)"
+msgstr ""
+
+#: c8ab8b36857144e7bd35c0447d00cba5 of
+#: scglue.models.dx.integration_consistency:9
+msgid "Prior graph"
+msgstr ""
+
+#: 773ba1fcfeab4415a952bfd8c5c76e66 of
+#: scglue.models.dx.integration_consistency:11
+msgid "Key of edge attribute for edge weight"
+msgstr ""
+
+#: 5edc0653411545219eafce1b72ba3d90 of
+#: scglue.models.dx.integration_consistency:13
+msgid "Key of edge attribute for edge sign"
+msgstr ""
+
+#: ff30ec04842946a3980bdf75e5b88842 of
+#: scglue.models.dx.integration_consistency:15
+msgid ""
+"Dataset layers that contain raw counts (indexed by domain name). If not "
+"provided, it is assumed that ``.X`` is the raw counts."
+msgstr ""
+
+#: ade985dad2b645da94cfc3141d317ead of scglue.models.dx.integration_consistency
+msgid "Return type"
+msgstr ""
+
+#: 0174993ccbbb4a61a3e8f08998587e61 of
+#: scglue.models.dx.integration_consistency:18
+msgid ":py:class:`~pandas.DataFrame`"
+msgstr ""
+
+#: 31bbd65466b44ff1825c74cb2dbb5455 of scglue.models.dx.integration_consistency
+msgid "Returns"
+msgstr ""
+
+#: e7d9b49fafac4a35916df0b083fbdf3a of
+#: scglue.models.dx.integration_consistency:19
+msgid "*consistency_df* -- Consistency score at different numbers of meta cells"
+msgstr ""
+

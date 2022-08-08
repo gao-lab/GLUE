@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:35+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.DelayedKeyboardInterrupt.rst:2
+#: 019e7f2143cc42389629aba592d79dde
+msgid "scglue.utils.DelayedKeyboardInterrupt"
+msgstr ""
+
+#: 7d9c44778fc24b3a83668463fd204ae4 of scglue.utils.DelayedKeyboardInterrupt:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 931caaa90c4d4078906e891fc4a73350 of scglue.utils.DelayedKeyboardInterrupt:1
+msgid ""
+"Shield a code block from keyboard interruptions, delaying handling till "
+"the block is finished (adapted from `https://stackoverflow.com/a/21919644"
+" <https://stackoverflow.com/a/21919644>`__)."
+msgstr ""
+
+#: ../../api/scglue.utils.DelayedKeyboardInterrupt.rst:12
+#: d0f20a5fccfd4359a4a6e7b7d817fcc4
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.utils.DelayedKeyboardInterrupt.rst:23
+#: 0925b0e47deb498cada9bf9152ecaa4e
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.utils.DelayedKeyboardInterrupt.rst:26:<autosummary>:1
+#: f6fb1f1ebffb4f0e96b8581b32f7189a
+msgid ":py:obj:`logger <scglue.utils.DelayedKeyboardInterrupt.logger>`\\"
+msgstr ""
+
+#~ msgid ""
+#~ "Shield a code block from keyboard "
+#~ "interruptions, delaying handling till the "
+#~ "block is finished (adapted from "
+#~ "`https://stackoverflow.com/a/21919644 "
+#~ "<https://stackoverflow.com/a/21919644>`_)."
+#~ msgstr ""
+

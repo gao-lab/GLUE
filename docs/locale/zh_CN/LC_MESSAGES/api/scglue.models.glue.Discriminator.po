@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.Discriminator.rst:2
+#: b56e6f771d1c4555a9c5fe262364f278
+msgid "scglue.models.glue.Discriminator"
+msgstr ""
+
+#: e4c18a70851c46609f0ee869c7ba4b28 of scglue.models.glue.Discriminator:1
+msgid "Bases: :py:class:`~torch.nn.modules.module.Module`"
+msgstr ""
+
+#: 2bb4459c5b6849b980744c396ca80b07 of scglue.models.glue.Discriminator:1
+msgid "Abstract domain discriminator"
+msgstr ""
+
+#: ../../api/scglue.models.glue.Discriminator.rst:12
+#: 7a05771c496c4aeb948f752428a08b5b
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.glue.Discriminator.rst:22:<autosummary>:1
+#: 15ea2393e8b64f70a0bdcb2077cde6ae
+msgid ":py:obj:`forward <scglue.models.glue.Discriminator.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.glue.Discriminator.rst:22:<autosummary>:1
+#: 12370dea8d3448ca9e7d2f217659a142
+msgid "Discriminate among domains"
+msgstr ""
+
+#: ../../api/scglue.models.glue.Discriminator.rst:24
+#: 2597e04e8c2846b6b26f8415680b9224
+msgid "Attributes"
+msgstr ""
+

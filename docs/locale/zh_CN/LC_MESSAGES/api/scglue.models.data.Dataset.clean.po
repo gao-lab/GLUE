@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.data.Dataset.clean.rst:2
+#: b243c8726de94fb3b994fa3091eec420
+msgid "scglue.models.data.Dataset.clean"
+msgstr ""
+
+#: 711ccb005d8248f5a9e6079f1fa5ad6e of scglue.models.data.Dataset.clean:1
+msgid "Clean up multi-process resources used in custom shuffling"
+msgstr ""
+
+#: 94ae0c838919405d8ae0af9506641373 of scglue.models.data.Dataset.clean
+msgid "Return type"
+msgstr ""
+
+#: bf1981713a98431e82071ae565bb2e30 of scglue.models.data.Dataset.clean:4
+msgid ":py:obj:`None`"
+msgstr ""
+

@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.expand.rst:2 5efaa499f31b463cb98c1d752717cefd
+msgid "scglue.genomics.Bed.expand"
+msgstr ""
+
+#: 28b47a5f4361411080004d77345d69cc of scglue.genomics.Bed.expand:1
+msgid "Expand genomic features towards upstream and downstream"
+msgstr ""
+
+#: dc48c9fa616e49669d685a7f5eab442e of scglue.genomics.Bed.expand
+msgid "Parameters"
+msgstr ""
+
+#: 60962842a44043448d814e626e10f3f0 of scglue.genomics.Bed.expand:4
+msgid "Number of bps to expand in the upstream direction"
+msgstr ""
+
+#: 7f76af445ff34956bcc8dc8abebb5da3 of scglue.genomics.Bed.expand:6
+msgid "Number of bps to expand in the downstream direction"
+msgstr ""
+
+#: c7355c68e3fd4f3583ad63c43e15fda1 of scglue.genomics.Bed.expand:8
+msgid "Length of each chromosome"
+msgstr ""
+
+#: 411e369e2863441bb6027fe69403d7fe of scglue.genomics.Bed.expand
+msgid "Return type"
+msgstr ""
+
+#: 2958a53fd86449dd889f3c938652177d of scglue.genomics.Bed.expand:10
+msgid ":py:class:`scglue.genomics.Bed`"
+msgstr ""
+
+#: 7b6ec357354549199dac59e5636a3324 of scglue.genomics.Bed.expand
+msgid "Returns"
+msgstr ""
+
+#: b8e26e4f44474dd188e1c5fc5fc84950 of scglue.genomics.Bed.expand:11
+msgid ""
+"*expanded_bed* -- A new :class:`Bed` object, containing expanded features"
+" of the current :class:`Bed` object"
+msgstr ""
+
+#: 657d07a989264b3eb45e70ff70fec6ea of scglue.genomics.Bed.expand:16
+msgid ""
+"Starting position < 0 after expansion is always trimmed. Ending position "
+"exceeding chromosome length is trimed only if ``chr_len`` is specified."
+msgstr ""
+

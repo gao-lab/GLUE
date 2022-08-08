@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.BatchedTransferrable.transfer_weights_from.rst:2
+#: 25c017eeac8c46e8bd8b77737650d22a
+msgid "scglue.models.scclue.BatchedTransferrable.transfer\\_weights\\_from"
+msgstr ""
+
+#: ca62431e02e14aa4b2d0373ec799c5bd of
+#: scglue.models.scclue.BatchedTransferrable.transfer_weights_from:1
+msgid "Transfer weights from another module"
+msgstr ""
+
+#: 9e22a6cc066b4e3788f4fb12a8acd677 of
+#: scglue.models.scclue.BatchedTransferrable.transfer_weights_from
+msgid "Parameters"
+msgstr ""
+
+#: 12327313ccc04513b7eec799e1c51b29 of
+#: scglue.models.scclue.BatchedTransferrable.transfer_weights_from:4
+msgid "Module to transfer weight from"
+msgstr ""
+
+#: fa187f2e0f13414ea5f402c0f53bac9f of
+#: scglue.models.scclue.BatchedTransferrable.transfer_weights_from
+msgid "Return type"
+msgstr ""
+
+#: 9df594f10bd74f1d84f2bf59f591a28f of
+#: scglue.models.scclue.BatchedTransferrable.transfer_weights_from:7
+msgid ":py:obj:`None`"
+msgstr ""
+

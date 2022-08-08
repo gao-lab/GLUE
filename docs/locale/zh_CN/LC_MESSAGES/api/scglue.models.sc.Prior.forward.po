@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.Prior.forward.rst:2
+#: fd1c01f50a52425b9683c53662328f21
+msgid "scglue.models.sc.Prior.forward"
+msgstr ""
+
+#: 8965c4b19cfc4d7a8cf585b4498518c4 of scglue.models.sc.Prior.forward:1
+msgid "Get prior distribution"
+msgstr ""
+
+#: 64a80af42c064830a1dc935697e64ee1 of scglue.models.sc.Prior.forward
+msgid "Return type"
+msgstr ""
+
+#: 3c817ad90c2f4f88b95784f7c17d8431 of scglue.models.sc.Prior.forward:3
+msgid ":py:class:`torch.distributions.normal.Normal`"
+msgstr ""
+
+#: ec6ee08944644558a99f0e18555c84e8 of scglue.models.sc.Prior.forward
+msgid "Returns"
+msgstr ""
+
+#: dce83449d2824cb2ab2500310b680a86 of scglue.models.sc.Prior.forward:4
+msgid "*prior* -- Prior distribution"
+msgstr ""
+

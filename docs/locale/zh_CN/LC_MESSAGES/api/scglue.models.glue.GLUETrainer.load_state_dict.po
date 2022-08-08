@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.GLUETrainer.load_state_dict.rst:2
+#: e40c0282a71c4105b8b49ebed05dd1c5
+msgid "scglue.models.glue.GLUETrainer.load\\_state\\_dict"
+msgstr ""
+
+#: 50b84a80474846a489287f605caaf58b of
+#: scglue.models.glue.GLUETrainer.load_state_dict:1
+msgid "Load state from a state dict"
+msgstr ""
+
+#: 5572a50c6ce24d9280d1d50ba788cc9c of
+#: scglue.models.glue.GLUETrainer.load_state_dict
+msgid "Parameters"
+msgstr ""
+
+#: 7659500a01424a0e84a5e27b3c03350e of
+#: scglue.models.glue.GLUETrainer.load_state_dict:4
+msgid "State dict"
+msgstr ""
+
+#: c0adee078ef34c169d70395aaf1a0c53 of
+#: scglue.models.glue.GLUETrainer.load_state_dict
+msgid "Return type"
+msgstr ""
+
+#: af87c80941014be1beeeb968964398c2 of
+#: scglue.models.glue.GLUETrainer.load_state_dict:7
+msgid ":py:obj:`None`"
+msgstr ""
+

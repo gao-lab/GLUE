@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.graph.compose_multigraph.rst:2
+#: b8a20c091a7646a6969b626d61b3ab3a
+msgid "scglue.graph.compose\\_multigraph"
+msgstr ""
+
+#: 96671c241a5044e992048769177e47a0 of scglue.graph.compose_multigraph:1
+msgid "Compose multi-graph from multiple graphs with no edge collision"
+msgstr ""
+
+#: f35c23210ae34310bfe12e77c1a335cf of scglue.graph.compose_multigraph
+msgid "Parameters"
+msgstr ""
+
+#: 8b8dd221d7c84edab0fa8e8fd5d58739 of scglue.graph.compose_multigraph:4
+msgid "An arbitrary number of graphs to be composed from"
+msgstr ""
+
+#: 9c3c10ed08974a07afbe59d7854d8cc3 of scglue.graph.compose_multigraph
+msgid "Return type"
+msgstr ""
+
+#: dbbcdb1a9d8a46019b03f26da848645f of scglue.graph.compose_multigraph:6
+msgid ":py:class:`~networkx.MultiGraph`"
+msgstr ""
+
+#: ef85b1ef92254019a19979e1130b08ce of scglue.graph.compose_multigraph
+msgid "Returns"
+msgstr ""
+
+#: b096389693b141729c63c82f74a52fa9 of scglue.graph.compose_multigraph:7
+msgid "*composed* -- Composed multi-graph"
+msgstr ""
+
+#: d8f1b0fea01c4b43b0e9a9e600af8be8 of scglue.graph.compose_multigraph:11
+msgid ""
+"The resulting multi-graph would be directed if any of the input graphs is"
+" directed."
+msgstr ""
+

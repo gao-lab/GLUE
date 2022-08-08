@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.nn.freeze_running_stats.rst:2
+#: 250be30a234e41e7bfafb828d5942183
+msgid "scglue.models.nn.freeze\\_running\\_stats"
+msgstr ""
+
+#: 3d281d4fb6bd4f00826b683cd7dc345f of scglue.models.nn.freeze_running_stats:1
+msgid "Selectively stops normalization layers from updating running stats"
+msgstr ""
+
+#: 0111de1c61964fab9270736c680a81ed of scglue.models.nn.freeze_running_stats
+msgid "Parameters"
+msgstr ""
+
+#: 0b3ccbe9b2f648d8bcdd15f378fb874a of scglue.models.nn.freeze_running_stats:4
+msgid "Network module"
+msgstr ""
+
+#: 0cf5ddd66cba4ec3a313489ad3995258 of scglue.models.nn.freeze_running_stats
+msgid "Return type"
+msgstr ""
+
+#: 3244e9e65c324eed9eb6fd5b52364311 of scglue.models.nn.freeze_running_stats:7
+msgid ":py:obj:`None`"
+msgstr ""
+

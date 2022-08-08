@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.col_var.rst:2 a45c70de84894e4ea0fc541409514b12
+msgid "scglue.num.col\\_var"
+msgstr ""
+
+#: 5a0af17385dd47b69044c6eb81d9454b of scglue.num.col_var:1
+msgid "Column-wise variance (sparse friendly)"
+msgstr ""
+
+#: 0c4b1493ca23487eaa04c07ae3a7ec6d of scglue.num.col_var
+msgid "Parameters"
+msgstr ""
+
+#: ebf0365913bf4f77a4becdd4378fb02e of scglue.num.col_var:4
+msgid "First design matrix"
+msgstr ""
+
+#: d5824823ebeb44b3961e50d93222dc5e of scglue.num.col_var:6
+msgid "Second design matrix (optional)"
+msgstr ""
+
+#: 780cc2c985f84118bd3580efe8d9730f of scglue.num.col_var:8
+msgid "Whether to return unbiased or biased covariance estimation"
+msgstr ""
+
+#: dbd6746d334944068d30a05477e1fc2f of scglue.num.col_var
+msgid "Return type"
+msgstr ""
+
+#: 1f09eaf4ce714fadb7db49ca11a4e4ba of scglue.num.col_var:10
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: a2d0b37b460849bd9b589b3454cfa75a of scglue.num.col_var
+msgid "Returns"
+msgstr ""
+
+#: 6091115801f94a5688c52c7b78f13b22 of scglue.num.col_var:11
+msgid ""
+"*col_var* -- Column-wise variance, if only X is given. Column-wise "
+"covariance, if both X and Y are given."
+msgstr ""
+

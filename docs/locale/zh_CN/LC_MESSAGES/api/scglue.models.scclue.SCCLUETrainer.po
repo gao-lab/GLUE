@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:2
+#: 1acca1e40480432fa964a638e4711d5e
+msgid "scglue.models.scclue.SCCLUETrainer"
+msgstr ""
+
+#: 0b6322db999f4d8bb69928ec3a862b8b of scglue.models.scclue.SCCLUETrainer:1
+msgid "Bases: :py:class:`~scglue.models.base.Trainer`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:12
+#: f37bf9d768b3426da0b0ac2b8d819818
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 585569308541445f876fac63bd9b7c5f
+msgid ""
+":py:obj:`compute_losses "
+"<scglue.models.scclue.SCCLUETrainer.compute_losses>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>
+#: 195f7e0c21ec43f7bf2aadbd0bfbfd08 252be1b119284557839ca31d1fe37e15
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: ddde0175f796446381b91212bf02dd91
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`torch.Tensor`]"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 760d9d94afad45f283e11f7f0a1f60a7
+msgid ":py:obj:`fit <scglue.models.scclue.SCCLUETrainer.fit>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 72a0fea53a624ddc827e36d4300b9a3b
+msgid "Fit network"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: d57fd6a54f4f4838832cb4d637e405fb
+msgid ":py:obj:`format_data <scglue.models.scclue.SCCLUETrainer.format_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 3ef7a61acc17485a8757f24bb2a11330
+msgid ""
+":py:data:`typing.Tuple`\\[:py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`torch.Tensor`]"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: e26e8ac9e1e14ceb94a8e9740e8a5aa0
+msgid ""
+":py:obj:`load_state_dict "
+"<scglue.models.scclue.SCCLUETrainer.load_state_dict>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: a17edff3e22a4ff6a7f93d5f1b49497e
+msgid "Load state from a state dict"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: fb9c7b290e75446eaefe97216a4d4082
+msgid ":py:obj:`state_dict <scglue.models.scclue.SCCLUETrainer.state_dict>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 11f6c0b8fc4c44c4887720c64c36d8b1
+msgid "State dict"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 48fa806f0b81446388b8d7fff2ba7d3b
+msgid ":py:obj:`train_step <scglue.models.scclue.SCCLUETrainer.train_step>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 80b572ad3f674a08a5ddcc94e053e420
+msgid "A single training step"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 48e303ccb1b24b32a6313f4224d27792
+msgid ":py:obj:`val_step <scglue.models.scclue.SCCLUETrainer.val_step>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:28:<autosummary>:1
+#: 3b16be6d741f48a0a5ab3a3aff36d570
+msgid "A single validation step"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:30
+#: df0c4a28c4704c73a27c6c036aaffff9
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.rst:33:<autosummary>:1
+#: 4f682d443ae6444ba2db7485cbd05287
+msgid ":py:obj:`logger <scglue.models.scclue.SCCLUETrainer.logger>`\\"
+msgstr ""
+

@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.verify.rst:2 646981b1d05d4639b5ecedafb2c3659b
+msgid "scglue.genomics.Bed.verify"
+msgstr ""
+
+#: 596f6e52298d4ef4a6a099e5e382fefc of scglue.genomics.Bed.verify:1
+msgid "Verify data frame for format integrity"
+msgstr ""
+
+#: c664992ee8444b068c546d74d53ab2f9 of scglue.genomics.Bed.verify
+msgid "Parameters"
+msgstr ""
+
+#: 7966a83221fb4ffcad0b141aff21fd60 of scglue.genomics.Bed.verify:4
+msgid "Data frame to be verified"
+msgstr ""
+
+#: ea21445447aa4d4dbaadb835ae309af4 of scglue.genomics.Bed.verify
+msgid "Return type"
+msgstr ""
+
+#: 80cb0fbc338241198d70e5e2cb1d0c02 of scglue.genomics.Bed.verify:7
+msgid ":py:obj:`None`"
+msgstr ""
+

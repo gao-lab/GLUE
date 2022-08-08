@@ -1,0 +1,85 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.transfer_labels.rst:2 fb174720b3b34f7c8c238511adc18a58
+msgid "scglue.data.transfer\\_labels"
+msgstr ""
+
+#: 6e34b8d9289441c0bd8762fda74cdce7 of scglue.data.transfer_labels:1
+msgid "Transfer discrete labels from reference dataset to query dataset"
+msgstr ""
+
+#: 254fc3f627be4699962ed3d7dc253abd of scglue.data.transfer_labels
+msgid "Parameters"
+msgstr ""
+
+#: cbfa7b2a74e84d74808f03a71fdc8a37 of scglue.data.transfer_labels:4
+msgid "Reference dataset"
+msgstr ""
+
+#: 69242f45d785490a9c9ed178fd3b44af of scglue.data.transfer_labels:6
+msgid "Query dataset"
+msgstr ""
+
+#: bd59ba6f8cf149ed8b351d0c67f24083 of scglue.data.transfer_labels:8
+msgid "Field to be transferred in ``ref.obs`` (must be discrete)"
+msgstr ""
+
+#: 1b22f79436864b6f93f61e8b6987b15e of scglue.data.transfer_labels:10
+msgid "Number of nearest neighbors used for label transfer"
+msgstr ""
+
+#: 7cddb058d25d420d8624b18d261d8402 of scglue.data.transfer_labels:12
+msgid ""
+"Data representation based on which to find nearest neighbors, by default "
+"uses ``{ref, query}.X``."
+msgstr ""
+
+#: 3ae6afdbac4244fca73706d421e7f3b4 of scglue.data.transfer_labels:15
+msgid ""
+"New ``query.obs`` key added for the transfered labels, by default the "
+"same as ``field``."
+msgstr ""
+
+#: 3a054e0dd70b4f5d86327711b04f089d of scglue.data.transfer_labels:17
+msgid ""
+"Additional keyword arguments are passed to "
+":class:`sklearn.neighbors.NearestNeighbors`"
+msgstr ""
+
+#: bc0551a9fe7b401f86930c4fee33ac19 of scglue.data.transfer_labels:22
+msgid ""
+"First, nearest neighbors between reference and query cells are searched "
+"and weighted by Jaccard index of SNN (shared nearest neighbors). The "
+"Jaccard indices are then normalized per query cell to form a mapping "
+"matrix. To obtain predictions for query cells, we multiply the above "
+"mapping matrix to the one-hot matrix of reference labels. The category "
+"with the highest score is taken as the final prediction, while its score "
+"is interpreted as transfer confidence (stored as "
+"\"{key_added}_confidence\" in ``query.obs``)."
+msgstr ""
+
+#: 876fee28cf4f40a983cd17c8a477bf42 of scglue.data.transfer_labels
+msgid "Return type"
+msgstr ""
+
+#: c4a517d8c68245c78407df5a0aabf17b of scglue.data.transfer_labels:31
+msgid ":py:obj:`None`"
+msgstr ""
+

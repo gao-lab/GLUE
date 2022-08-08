@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.aggregate_obs.rst:2 c3f072b1a91c4cb188ace152ab3acf24
+msgid "scglue.data.aggregate\\_obs"
+msgstr ""
+
+#: 3d2f18c414ca4e7f86453846399117af of scglue.data.aggregate_obs:1
+msgid "Aggregate obs in a given dataset by certain categories"
+msgstr ""
+
+#: ccb93eecc04b46cd94f1e8efc8ea8c65 of scglue.data.aggregate_obs
+msgid "Parameters"
+msgstr ""
+
+#: 7ae3d2cbba8345a392afafda1bdca6c7 of scglue.data.aggregate_obs:4
+msgid "Dataset to be aggregated"
+msgstr ""
+
+#: 831bd0c7456649209c6097beaa51fef6 of scglue.data.aggregate_obs:6
+msgid "Specify a column in ``adata.obs`` used for aggregation, must be discrete."
+msgstr ""
+
+#: dbf494aee6284bf195fd0d30b47a4887 of scglue.data.aggregate_obs:9
+msgid ""
+"Aggregation function for ``adata.X``, must be one of ``{\"sum\", "
+"\"mean\", ``None``}``. Setting to ``None`` discards the ``adata.X`` "
+"matrix."
+msgstr ""
+
+#: c4762fe92d4f47e08df79a9e5d8f599b of scglue.data.aggregate_obs:13
+msgid ""
+"Aggregation methods for ``adata.obs``, indexed by obs columns, must be "
+"one of ``{\"sum\", \"mean\", \"majority\"}``, where ``\"sum\"`` and "
+"``\"mean\"`` are for continuous data, and ``\"majority\"`` is for "
+"discrete data. Fields not specified will be discarded."
+msgstr ""
+
+#: 979706ac8e3b402395bfed5dbf89d80e of scglue.data.aggregate_obs:18
+msgid ""
+"Aggregation methods for ``adata.obsm``, indexed by obsm keys, must be one"
+" of ``{\"sum\", \"mean\"}``. Fields not specified will be discarded."
+msgstr ""
+
+#: 7ddec6ee672044ea964894ce392766c1 of scglue.data.aggregate_obs:22
+msgid ""
+"Aggregation methods for ``adata.layers``, indexed by layer keys, must be "
+"one of ``{\"sum\", \"mean\"}``. Fields not specified will be discarded."
+msgstr ""
+
+#: c955e047aea34895ada2304a8ea5532f of scglue.data.aggregate_obs
+msgid "Return type"
+msgstr ""
+
+#: b9a4f31a60b0439da9d88311db20f08b of scglue.data.aggregate_obs:26
+msgid ":py:class:`~anndata.AnnData`"
+msgstr ""
+
+#: 5b6042441585400280851d176fd84ab4 of scglue.data.aggregate_obs
+msgid "Returns"
+msgstr ""
+
+#: 797e38caf1974375abf4d6963393a05d of scglue.data.aggregate_obs:27
+msgid "*aggregated* -- Aggregated dataset"
+msgstr ""
+

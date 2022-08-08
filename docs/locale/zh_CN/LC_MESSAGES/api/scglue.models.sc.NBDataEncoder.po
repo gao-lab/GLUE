@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:2
+#: 301405c2df014392b96fc70e962a0294
+msgid "scglue.models.sc.NBDataEncoder"
+msgstr ""
+
+#: 139ea5d7335a41c09cddc2801fcc4192 of scglue.models.sc.NBDataEncoder:1
+msgid "Bases: :py:class:`~scglue.models.sc.DataEncoder`"
+msgstr ""
+
+#: 0542ea45ca7d46b29e528071406bb16c of scglue.models.sc.NBDataEncoder:1
+msgid "Data encoder for negative binomial data"
+msgstr ""
+
+#: 9b706acc1b6a42e19d21711e93e1c4b3 of scglue.models.sc.NBDataEncoder
+msgid "Parameters"
+msgstr ""
+
+#: 808a384d188d426aad6f59c1d174bc1c of scglue.models.sc.NBDataEncoder:4
+msgid "Input dimensionality"
+msgstr ""
+
+#: 18c9cb60ff064159abbf6ac053375e3d of scglue.models.sc.NBDataEncoder:6
+msgid "Output dimensionality"
+msgstr ""
+
+#: b457e63ed775423985b1f2052a93f756 of scglue.models.sc.NBDataEncoder:8
+msgid "Hidden layer depth"
+msgstr ""
+
+#: f92f6818d7fe47ec992892770e15cc8e of scglue.models.sc.NBDataEncoder:10
+msgid "Hidden layer dimensionality"
+msgstr ""
+
+#: 1e2ed60270c9427a874fb251bbe33528 of scglue.models.sc.NBDataEncoder:12
+msgid "Dropout rate"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:12
+#: 61d02597063c41a1a2ec4b88509eebeb
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:23:<autosummary>:1
+#: 20189185443e47bab1ea4a651422a89d
+msgid ":py:obj:`compute_l <scglue.models.sc.NBDataEncoder.compute_l>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:23:<autosummary>:1
+#: b7d7ee6a416d4a568aab6d0e85a78e56
+msgid "Compute normalizer"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:23:<autosummary>:1
+#: 3df7df6aa7b44b25989380d019570bb8
+msgid ":py:obj:`normalize <scglue.models.sc.NBDataEncoder.normalize>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:23:<autosummary>:1
+#: 8212b2258e554b0abcffc4f199fd01a9
+msgid "Normalize data"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:25
+#: 7b0862b2aef1458fb7b252bea617bffc
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.sc.NBDataEncoder.rst:28:<autosummary>:1
+#: 8a07f300b0024d14928a2bc686a29e09
+msgid ":py:obj:`TOTAL_COUNT <scglue.models.sc.NBDataEncoder.TOTAL_COUNT>`\\"
+msgstr ""
+

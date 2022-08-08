@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.Model.compile.rst:2
+#: 94343e92a5ce4070bb63843fe9906362
+msgid "scglue.models.base.Model.compile"
+msgstr ""
+
+#: e29ce393cb384ec6afc0450a833b6075 of scglue.models.base.Model.compile:1
+msgid "Prepare model for training"
+msgstr ""
+
+#: c8544d0daa6f4b409608e986da115fc8 of scglue.models.base.Model.compile
+msgid "Parameters"
+msgstr ""
+
+#: 06b1fd9e0de14565aa1ff5d68eaba71c of scglue.models.base.Model.compile:3
+msgid "Trainer type"
+msgstr ""
+
+#: 01ef139eea6348c2b65c1c3e7c8241bc of scglue.models.base.Model.compile:4
+msgid "Positional arguments are passed to the trainer constructor"
+msgstr ""
+
+#: e790e4cc078b4025be87eaf4d9936b99 of scglue.models.base.Model.compile:5
+msgid "Keyword arguments are passed to the trainer constructor"
+msgstr ""
+
+#: 233dd345880f4d2bb202185c9480595e of scglue.models.base.Model.compile:7
+msgid "Subclasses may override arguments for API definition."
+msgstr ""
+
+#: 1315dd3f799e4921b042995bffcc4acc of scglue.models.base.Model.compile
+msgid "Return type"
+msgstr ""
+
+#: bcd0de9793b24f10a7e473c60a52d9cc of scglue.models.base.Model.compile:10
+msgid ":py:obj:`None`"
+msgstr ""
+

@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.strand_specific_end_site.rst:2
+#: e8a158534e8d441db26a88e31cbaea1a
+msgid "scglue.genomics.Bed.strand\\_specific\\_end\\_site"
+msgstr ""
+
+#: 2a1e2655d241419b8de75f3f7ae57a7c of
+#: scglue.genomics.Bed.strand_specific_end_site:1
+msgid "Convert to strand-specific end sites of genomic features"
+msgstr ""
+
+#: 2ac31bcab8034b038122429add2bc744 of
+#: scglue.genomics.Bed.strand_specific_end_site
+msgid "Return type"
+msgstr ""
+
+#: bc3c873b5c584a1b997c8cc5e5c273d1 of
+#: scglue.genomics.Bed.strand_specific_end_site:3
+msgid ":py:class:`scglue.genomics.Bed`"
+msgstr ""
+
+#: 46a515af8040471b9d0e322017fa2478 of
+#: scglue.genomics.Bed.strand_specific_end_site
+msgid "Returns"
+msgstr ""
+
+#: 126b21040ad346b29fc9a0dce0aa7f4d of
+#: scglue.genomics.Bed.strand_specific_end_site:4
+msgid ""
+"*end_site_bed* -- A new :class:`Bed` object, containing strand-specific "
+"end sites of the current :class:`Bed` object"
+msgstr ""
+

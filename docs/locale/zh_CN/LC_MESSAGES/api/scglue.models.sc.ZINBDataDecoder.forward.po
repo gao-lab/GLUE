@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.ZINBDataDecoder.forward.rst:2
+#: d2b91aa14a0b4d7b87446839a660a097
+msgid "scglue.models.sc.ZINBDataDecoder.forward"
+msgstr ""
+
+#: d0ffb721c21f49d4906a0f5db14368e9 of
+#: scglue.models.sc.ZINBDataDecoder.forward:1
+msgid "Decode data from sample and feature latent"
+msgstr ""
+
+#: 2f375ea40b5b46569a7edc14ce41a9ee of scglue.models.sc.ZINBDataDecoder.forward
+msgid "Parameters"
+msgstr ""
+
+#: ab53a82ca6354aa5b5be076d16366784 of
+#: scglue.models.sc.ZINBDataDecoder.forward:4
+msgid "Sample latent"
+msgstr ""
+
+#: bd5456821cb34094a2ee325ed40abe50 of
+#: scglue.models.sc.ZINBDataDecoder.forward:6
+msgid "Feature latent"
+msgstr ""
+
+#: 4d8f64b28cec4f9f901f6fe975e9eacd of
+#: scglue.models.sc.ZINBDataDecoder.forward:8
+msgid "Batch index"
+msgstr ""
+
+#: 37f96b57969343098e6cc3d808744f6b of
+#: scglue.models.sc.ZINBDataDecoder.forward:10
+msgid "Optional normalizer"
+msgstr ""
+
+#: cc7de4bc38d6479bb3dfdf68590de8f1 of scglue.models.sc.ZINBDataDecoder.forward
+msgid "Return type"
+msgstr ""
+
+#: c07c72f331b442e2a7fca0826b12b4c2 of
+#: scglue.models.sc.ZINBDataDecoder.forward:12
+msgid ":py:class:`scglue.models.prob.ZINB`"
+msgstr ""
+
+#: 7707ee172c92438e8f61bda7e76a8bb1 of scglue.models.sc.ZINBDataDecoder.forward
+msgid "Returns"
+msgstr ""
+
+#: f1e9ddc664fb4ddba587ef591b7ca4cd of
+#: scglue.models.sc.ZINBDataDecoder.forward:13
+msgid "*recon* -- Data reconstruction distribution"
+msgstr ""
+

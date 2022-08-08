@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.plugins.Tensorboard.attach.rst:2
+#: ee416d61a8f648afbd53f2f1a1b16d91
+msgid "scglue.models.plugins.Tensorboard.attach"
+msgstr ""
+
+#: d6930b36b6d14646bcdc93fce185b37a of
+#: scglue.models.plugins.Tensorboard.attach:1
+msgid "Attach custom handlers to training or validation engine"
+msgstr ""
+
+#: d1ac1f3d022f4fa9bbf98ce41e401063 of scglue.models.plugins.Tensorboard.attach
+msgid "Parameters"
+msgstr ""
+
+#: 0f7d4487344e46d7ad657392a4e5d20c of
+#: scglue.models.plugins.Tensorboard.attach:4
+msgid "Network module"
+msgstr ""
+
+#: 29db042c1e5a4be4be0211ea5148acdc of
+#: scglue.models.plugins.Tensorboard.attach:6
+msgid "Trainer object"
+msgstr ""
+
+#: ec2aa6f4df3340e9825dbf443e4089b0 of
+#: scglue.models.plugins.Tensorboard.attach:8
+msgid "Training engine"
+msgstr ""
+
+#: dd6dccc876484dee88f649d306262005 of
+#: scglue.models.plugins.Tensorboard.attach:10
+msgid "Validation engine"
+msgstr ""
+
+#: bfae229943ed43cb886d599b0e455ac1 of
+#: scglue.models.plugins.Tensorboard.attach:12
+msgid "Training data loader"
+msgstr ""
+
+#: 9ce0f79c540843bbbab61e7549941323 of
+#: scglue.models.plugins.Tensorboard.attach:14
+msgid "Validation data loader"
+msgstr ""
+
+#: 2d9dd90852a948c1af5fc9c3b464c516 of
+#: scglue.models.plugins.Tensorboard.attach:16
+msgid "Training directory"
+msgstr ""
+
+#: a63c01189b51437db1458b6f0b2e85b3 of scglue.models.plugins.Tensorboard.attach
+msgid "Return type"
+msgstr ""
+
+#: ffdaa899638e453e87bf3fc5fb15bc1c of
+#: scglue.models.plugins.Tensorboard.attach:19
+msgid ":py:obj:`None`"
+msgstr ""
+

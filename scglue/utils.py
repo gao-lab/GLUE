@@ -454,7 +454,7 @@ class DelayedKeyboardInterrupt:  # pragma: no cover
     Shield a code block from keyboard interruptions, delaying handling
     till the block is finished (adapted from
     `https://stackoverflow.com/a/21919644
-    <https://stackoverflow.com/a/21919644>`_).
+    <https://stackoverflow.com/a/21919644>`__).
     """
 
     def __init__(self):

@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.metrics.rst:2 e11108901ca14725b54ad4635e03f5b8
+msgid "scglue.metrics"
+msgstr ""
+
+#: 402ce36efae04f0d93fa1d5abbb66e31 of scglue.metrics:1
+msgid "Performance evaluation metrics"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:13 a215cbc8564245caa0fde217761ae2f3
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: ca70d6f0d9b84582881f50add5742765
+msgid ":py:obj:`avg_silhouette_width <scglue.metrics.avg_silhouette_width>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: e559678ba37e443eb4237fe9f5d919a9
+msgid "Cell type average silhouette width"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: fcc8df159a7844ce991271f8245e14a4
+msgid ""
+":py:obj:`avg_silhouette_width_batch "
+"<scglue.metrics.avg_silhouette_width_batch>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 5b582090f3b8413a809fc023dd146c5a
+msgid "Batch average silhouette width"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 98d33d17ffaa4f32a5fb775a9970d4c8
+msgid ":py:obj:`foscttm <scglue.metrics.foscttm>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: d4ddb3f257aa4c24b4969e1564b27b92
+msgid "Fraction of samples closer than true match (smaller is better)"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 3bd289be32fb4aee8772292d8aa7b983
+msgid ":py:obj:`graph_connectivity <scglue.metrics.graph_connectivity>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 91d267f9b1cd47fb8dda607173de5bf3
+msgid "Graph connectivity"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 6eef171998904356bd29b760a6a518c2
+msgid ":py:obj:`mean_average_precision <scglue.metrics.mean_average_precision>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 53a1d59e38494e63b1c64e85f3a05def
+msgid "Mean average precision"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 4d86b507e7a04dd29eaeb42c755f492a
+msgid ":py:obj:`neighbor_conservation <scglue.metrics.neighbor_conservation>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: f9bc9015d7144e03b2950015b1370235
+msgid "Neighbor conservation score"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 3ac345e183ee42a6b8289d9ab0a0645e
+msgid ":py:obj:`normalized_mutual_info <scglue.metrics.normalized_mutual_info>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: 4f09bbc9e0374a9a93e0701e3576d58f
+msgid "Normalized mutual information with true clustering"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: deb0e8cbeaf541a985df4d7bbd43241d
+msgid ":py:obj:`seurat_alignment_score <scglue.metrics.seurat_alignment_score>`"
+msgstr ""
+
+#: ../../api/scglue.metrics.rst:25:<autosummary>:1
+#: e44985205c6d4aedbfba10c5987ce574
+msgid "Seurat alignment score"
+msgstr ""
+

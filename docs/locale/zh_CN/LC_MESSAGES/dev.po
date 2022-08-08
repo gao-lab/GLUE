@@ -1,0 +1,294 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:19+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../dev.rst:2 fd785a269c4046c592b33b18dc150117
+msgid "Developer guide"
+msgstr "开发者指南"
+
+#: ../../dev.rst:5 2531d3b04da44401ae24093f82fd1b49
+msgid ""
+"To better understand the following guide, you may check out our "
+"`publication <https://doi.org/10.1038/s41587-022-01284-4>`__ first to "
+"learn about the general idea."
+msgstr ""
+"为了更好地理解以下指南，您可以先查看我们的 `论文 <https://doi.org/10.1038/s41587-022-01284-4>`__ "
+"来了解整体思路。"
+
+#: ../../dev.rst:9 f819c63d89964b5fabe2ed933a4c8ae6
+msgid ""
+"The GLUE framework is designed to be modular, and can be extended in the "
+"many ways."
+msgstr "GLUE是模块化的框架，并且能以多种方式进行扩展。"
+
+#: ../../dev.rst:11 0856982f9aee4bd89985f935028bd039
+msgid ""
+"Below we describe main components of the framework, and how to extend the"
+" existing implementations."
+msgstr "下面我们将介绍该框架的主要组件，以及如何扩展现有框架。"
+
+#: ../../dev.rst:15 da84d83ce32a4d0da2f58d1cec40bdf5
+msgid "Main components"
+msgstr "主要组件"
+
+#: ../../dev.rst:17 995011ba0a5340498f4f487dd560f3b1
+msgid ""
+"A GLUE model is primarily composed of four main components (all PyTorch "
+"`Modules "
+"<https://pytorch.org/docs/stable/generated/torch.nn.Module.html>`__):"
+msgstr ""
+"GLUE模型由四个主要组件组成（全为PyTorch `模块 "
+"<https://pytorch.org/docs/stable/generated/torch.nn.Module.html>`__）: "
+
+#: ../../dev.rst:19 0ed39e9bc87c4dd9ab2b7e82fe98cb63
+msgid ""
+"`Data encoders <api/scglue.models.sc.DataEncoder.rst>`__ (one for each "
+"domain) - A data encoder receives data input :math:`x`, and returns a "
+"distribution corresponding to the data posterior (cell embeddings) "
+":math:`q(u|x)`"
+msgstr ""
+"每个域有一个 `数据编码器 <api/scglue.models.sc.DataEncoder.rst>`__ —— 输入数据 :math:`x` "
+"，返回该数据的后验分布（细胞嵌入） :math:`q(u|x)`"
+
+#: ../../dev.rst:21 fac1d65bb0804d578fe098af3f7da0e9
+msgid ""
+"`Data decoders <api/scglue.models.sc.DataDecoder.rst>`__ (one for each "
+"domain) - A data decoder receives cell embedding input :math:`u` and "
+"feature embedding input :math:`v`, and returns a distribution "
+"corresponding to the data likelihood :math:`p(x|u, v)`"
+msgstr ""
+"每个域有一个 `数据解码器 <api/scglue.models.sc.DataDecoder.rst>`__ —— 输入细胞嵌入 :math:`u` "
+"和特征嵌入 :math:`v` ，返回该数据的似然分布"
+
+#: ../../dev.rst:23 bcce6dfd0fa84ff5993a9fe223b09e06
+msgid ""
+"A `graph encoder <api/scglue.models.sc.GraphEncoder.rst>`__ - A graph "
+"encoder receives graph input :math:`\\mathcal{G}` in the form of edge "
+"index, edge weight, and edge sign, and returns a distribution "
+"corresponding to the graph posterior (feature embeddings) "
+":math:`q(v|\\mathcal{G})`"
+msgstr ""
+"一个 `图编码器 <api/scglue.models.sc.GraphEncoder.rst>`__ —— 输入图 "
+":math:`\\mathcal{G}` （包括边索引、边权重和边符号），返回该图的后验分布（特征嵌入） "
+":math:`q(v|\\mathcal{G})`"
+
+#: ../../dev.rst:25 640ccb8631de4609a15d4af558ea9542
+msgid ""
+"A `graph decoder <api/scglue.models.sc.GraphDecoder.rst>`__ - A graph "
+"decoder receives feature embedding input :math:`v`, as well as a subset "
+"of query edges in the form of edge index and edge sign, and returns a "
+"distribution corresponding to the likelihood of these query edges, which "
+"is used as an estimate of the graph likelihood :math:`p(\\mathcal{G}|v)`"
+msgstr ""
+"一个 `图解码器 <api/scglue.models.sc.GraphDecoder.rst>`__ —— 输入特征嵌入 :math:`v` "
+"和包括边索引和边符号的边子集，返回该边子集的似然分布，该分布被用作图的似然估计 :math:`p(\\mathcal{G}|v)`"
+
+#: ../../dev.rst:28 19bb135c4b5d4ac3bae04c66dce6f924
+msgid ""
+"Current implementations for these components are all located in "
+"`scglue.models.sc <api/scglue.models.sc.rst>`__. New extensions can be "
+"added to this module as well."
+msgstr ""
+"目前，这些组件的实现都位于 `scglue.models.sc <api/scglue.models.sc.rst>`__ "
+"中，也可以在这个模块中添加新的扩展。"
+
+#: ../../dev.rst:30 54b6eda8e4b4478baf48f1952df2cc2a
+msgid ""
+"Actual module inferfaces differ slightly from those summarized above, "
+"e.g., with additional considerations for library size normalization and "
+"batch effect. See below for details."
+msgstr "实际的模块接口可能与上面总结略有不同，如库大小的归一化和批量效应会有额外的考虑。详情可见下文。"
+
+#: ../../dev.rst:34 93dbca67220a445c9ba4db4a3fa4ed88
+msgid "Support new data modalities"
+msgstr "支持新的数据模式"
+
+#: ../../dev.rst:36 dbc0855b695144d7a6efc574af8d6c23
+msgid ""
+"A straighforward extension is to add new data encoders and decoders to "
+"support additional data modalities."
+msgstr "一个简单的扩展是添加新的数据编码器和解码器以支持更多的数据模式。"
+
+#: ../../dev.rst:39 3eeca1a18d7645d09f6fbd3548e094da
+msgid "Define encoder"
+msgstr "定义编码器"
+
+#: ../../dev.rst:41 92602e19dfed4ec4af513b6576295d7e
+msgid ""
+"Data encoders should inherit from the `DataEncoder "
+"<api/scglue.models.sc.DataEncoder.rst>`__ class. The main part of the "
+"encoder is an MLP (Multi-Layer Perceptron) already implemented in "
+"`DataEncoder <api/scglue.models.sc.DataEncoder.rst>`__. It leaves two "
+"customizable abstract methods:"
+msgstr ""
+"数据编码器继承自 `DataEncoder <api/scglue.models.sc.DataEncoder.rst>`__ "
+"类。编码器的主要部分是MLP（多层感知器），已经在 `DataEncoder "
+"<api/scglue.models.sc.DataEncoder.rst>`__ 中实现，并且保留了两个可自定义的抽象方法："
+
+#: ../../dev.rst:44 3d7ec838689646519c2fe5b2f6a5053a
+msgid ""
+"The ``compute_l`` method is supposed to compute a library size from the "
+"input data"
+msgstr "``compute_l`` 方法能根据输入数据计算出库的大小。"
+
+#: ../../dev.rst:45 71bbb7670ca940a6964b81b75cd72f14
+msgid ""
+"The ``normalize`` method is supposed to normalize the input data "
+"(potentially with the computed library size), before feeding to the MLP."
+msgstr "在输入MLP之前， ``normalize`` 方法能对输入数据(可能连同计算得到的库大小)进行规范化处理。"
+
+#: ../../dev.rst:47 e1265daf36fc4b949967f1d36ff9f0be
+msgid ""
+"Below is an example of a negative binomial data encoder, which accepts "
+"raw counts as input. The library size is computed simply by summing "
+"counts in each cell, while data normlization is performed by row "
+"normalizing to a constant size of 10000 and then log-transformed."
+msgstr "下面是一个负二项式数据编码器的例子。输入原始计数，通过计算每个单元格的计数之和来计算库大小，然后行规范化到10000，最后对规范化后的数据进行对数转换。"
+
+#: ../../dev.rst:63 1e3df9073cee4908bbd0dd28131c90b6
+msgid ""
+"You may define your own encoder class by implementing these two methods "
+"as appropriate for the data modality."
+msgstr "为适应新的数据模式，您可以通过实现这两个方法来定义新的编码器类。"
+
+#: ../../dev.rst:66 50a1b10d2e43487eab39132933134998
+msgid "Define decoder"
+msgstr "定义解码器"
+
+#: ../../dev.rst:68 6e768c2546cc41a79229e6ce80d104bd
+msgid ""
+"Data decoders should inherit from the `DataDecoder "
+"<api/scglue.models.sc.DataDecoder.rst>`__ class. It defines the interface"
+" of the constructor as well as the abstract ``forward`` method."
+msgstr "数据解码器继承自 `DataDecoder <api/scglue.models.sc.DataDecoder.rst>`__ 类，它定义了构造器的接口和抽象方法 ``forward``。 "
+
+#: ../../dev.rst:70 61829c753ea64800b60825505df02807
+msgid ""
+"The constructor can accept an output dimensionality ``out_features`` and "
+"the number of batches ``n_batches`` (batch as in batch effect). The "
+"``forward`` method accepts four inputs:"
+msgstr "构造器接受两个输入：输出维度 ``out_features`` 和批次数量 ``n_batches`` (这里的批次是相对于批次效应而言)。 ``forward`` 方法接受四个输入："
+
+#: ../../dev.rst:73 2efa96e7338d453797d1e43328acd90d
+msgid "``u`` is the cell embeddings"
+msgstr "``u`` 表示细胞嵌入"
+
+#: ../../dev.rst:74 50f8167145a64c0595be73afdc81a3fb
+msgid "``v`` is the feature embedddings"
+msgstr "``v`` 表示特征嵌入"
+
+#: ../../dev.rst:75 60172157038546d8b0232d641b389c84
+msgid "``b`` is a batch index"
+msgstr "``b`` 表示批次索引"
+
+#: ../../dev.rst:76 0035551d59dd470cbf7d7620de92050c
+msgid "``l`` is the library size computed by the encoder"
+msgstr "``l`` 表示编码器计算得到的库大小"
+
+#: ../../dev.rst:78 590a14e61b1a455f876a55edc4740695
+msgid "and returns the data likelihood distribution."
+msgstr "返回该数据的似然分布。"
+
+#: ../../dev.rst:80 524926878f6b4a4f82d7ca6c77df8ad1
+msgid ""
+"Below is an example of a negative binomial data decoder. It includes "
+"three trainable parameters ``scale_lin``, ``bias``, and ``log_theta`` "
+"(you may define your own parameters as necessary):"
+msgstr "下面是一个负二项式数据解码器的例子。它包括三个可训练的参数 ``scale_lin``, ``bias`` 和 ``log_theta`` (你也可以根据需要定义自己的参数)："
+
+#: ../../dev.rst:83 3108a71203174712a3a995e405ec6434
+msgid ""
+"``scale_lin`` gives the scale parameter :math:`\\alpha` after soft-plus "
+"transformation to ensure positivity"
+msgstr "``scale_lin`` 给出了soft-plus转换后的比例参数 :math:`\alpha` ，保证正向性"
+
+#: ../../dev.rst:84 9adc8c57e337446b9e86bb0f190d8ea8
+msgid "``bias`` is the bias parameter :math:`\\beta`"
+msgstr "``bias`` 表示偏置参数 :math:`\beta`"
+
+#: ../../dev.rst:85 891f42d19d0d442682061471132faca8
+msgid ""
+"``log_theta`` is log of the inverse dispersion parameter :math:`\\theta` "
+"of negative binomial"
+msgstr "``log_theta`` 表示负二项式的反离散参数 :math:`\theta` 的对数"
+
+#: ../../dev.rst:87 0eb812592dc3473d92957ee2df286b78
+msgid ""
+"All the three parameters are defined as batch-specific (each batch "
+"parameterized by a different row)."
+msgstr "这三个参数都被定义为批次特定的参数(每个批次的参数由不同的行定义)。"
+
+#: ../../dev.rst:89 5ec0f569fdf14dbe822efc99b51552bb
+msgid ""
+"The mean of negative binomial (``mu``) is computed via scaling and "
+"shifting the inner product of cell and feature embeddings, followed by "
+"softmax and library size multiplication. The return value is a negative "
+"binomial distribution."
+msgstr "通过缩放、移动细胞嵌入和特征嵌入的内积得到logit_mu，logit_mu经过softmax函数并与库大小相乘得到负二项式的平均数 ``mu``，返回一个负二项分布。"
+
+#: ../../dev.rst:114 016d1832b71544ab8f9ebc6620233c77
+msgid ""
+"Note how the batch index ``b`` is used as a row indexer into "
+"``scale_lin``, ``bias`` and ``log_theta``."
+msgstr "注意批次索引 ``b`` 作为行索引进入 ``scale_lin``, ``bias`` 和 ``log_theta``。"
+
+#: ../../dev.rst:116 f397109191584ba6a77ec87248f85038
+msgid ""
+"You may define your own decoder class by implementing the ``forward`` "
+"method to produce likelihood distributions appropriate for the data "
+"modality."
+msgstr "为生成适应新数据模式的似然分布，您可以通过实现 ``forward`` 方法来定义新的解码器类。"
+
+#: ../../dev.rst:118 385df308e2554c6ca1a39dcebd8dd6c3
+msgid ""
+"Non-standard distributions can also be defined in `scglue.models.prob "
+"<api/scglue.models.prob.rst>`__."
+msgstr "非标准分布可以在 `scglue.models.prob <api/scglue.models.prob.rst>`__ 中定义。"
+
+#: ../../dev.rst:121 948dbb4726e84c5e8dd67ccc3ef034de
+msgid "Register custom encoder and decoder"
+msgstr "注册自定义的编码器和解码器"
+
+#: ../../dev.rst:123 9c090b75d22a46d9b0682404641bf235
+msgid ""
+"Finally, use the `scglue.models.scglue.register_prob_model "
+"<api/scglue.models.scglue.register_prob_model.rst>`__ function to "
+"register the the custom encoder and decoder under a new \"prob_model\", "
+"so they can be activated with a matching ``prob_model`` setting in "
+"`configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`__."
+msgstr "最后，通过 `scglue.models.scglue.register_prob_model <api/scglue.models.scglue.register_prob_model.rst>`__ 函数在一个新的 \"prob_model\" 下注册自定义的编码器和解码器，并在 `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`__ 中用匹配的 ``prob_model`` 激活。"
+
+#: ../../dev.rst:127 f518380c56b543f48e7ca05f0fdf614c
+msgid "Other types of extensions?"
+msgstr "其他类型的扩展？"
+
+#: ../../dev.rst:129 0b151871d5b74d44abab165e46d3ef05
+msgid ""
+"If you are interested in extending the model in other ways, please open "
+"an issue on `Github <https://github.com/gao-lab/GLUE>`__."
+msgstr "如果您对以其他方式扩展模型感兴趣，请在 `Github <https://github.com/gao-lab/GLUE>`__ 上开启一个问题。"
+
+#: ../../dev.rst:133 2e3d93e8155e410ea0dcfab376d14dde
+msgid "Contributions are welcome!"
+msgstr "欢迎投稿！"
+
+#: ../../dev.rst:135 f40c597f27eb4e4bad66373e97e24f30
+msgid ""
+"Be sure to submit a pull request on `Github <https://github.com/gao-"
+"lab/GLUE>`__ if you want your extension to be included in the framework!"
+msgstr "如果您希望您的扩展被包含在框架中，请务必在 `Github <https://github.com/gao-lab/GLUE>`__ 上提交 \"pull\" 请求。"

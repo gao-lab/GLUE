@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.nn.rst:2 251f0b7752b34400afcd99daba7d5d56
+msgid "scglue.models.nn"
+msgstr ""
+
+#: 9bf0f9e4a3b9478b92b5fd5845776e34 of scglue.models.nn:1
+msgid "Neural network modules, datasets & data loaders, and other utilities"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:13 b125a09144074dbd811a71537592d362
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: 11121af83a7d4a2785eeae9010df3bfc
+msgid ":py:obj:`autodevice <scglue.models.nn.autodevice>`"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: f672bb050bde47a7974f4beb3a72b1f6
+msgid ""
+"Get torch computation device automatically based on GPU availability and "
+"memory usage"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: 637de9139620460bb2212bdac2559fc5
+msgid ":py:obj:`freeze_running_stats <scglue.models.nn.freeze_running_stats>`"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: df0221f274294a16b0caf47165705d19
+msgid "Selectively stops normalization layers from updating running stats"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: 44403b3c15174c7bb531db084c9b46eb
+msgid ""
+":py:obj:`get_default_numpy_dtype "
+"<scglue.models.nn.get_default_numpy_dtype>`"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:25:<autosummary>:1
+#: 213873abc54d4fd1bf9c76cd06fecd1c
+msgid "Get numpy dtype matching that of the pytorch default dtype"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:27 40bb24c1b42f43eea5821cb87fabd827
+msgid "Classes"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:34:<autosummary>:1
+#: be7a587da9e54e3595bda6c0c355d715
+msgid ":py:obj:`GraphAttent <scglue.models.nn.GraphAttent>`"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:34:<autosummary>:1
+#: 9a1242a4054443059ee913a548d91f04
+msgid "Graph attention"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:34:<autosummary>:1
+#: 867262ea34dc41d4b0fc524cecbf4fd7
+msgid ":py:obj:`GraphConv <scglue.models.nn.GraphConv>`"
+msgstr ""
+
+#: ../../api/scglue.models.nn.rst:34:<autosummary>:1
+#: 49f5f21f3fb242a2bde96151ac7859a5
+msgid "Graph convolution (propagation only)"
+msgstr ""
+

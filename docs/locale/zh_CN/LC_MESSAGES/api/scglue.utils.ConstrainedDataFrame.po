@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:2
+#: f9e96670a4704208ad91e5239e9bb410
+msgid "scglue.utils.ConstrainedDataFrame"
+msgstr ""
+
+#: 95f48985f0094846ba18a0ff11ce46ab of scglue.utils.ConstrainedDataFrame:1
+msgid "Bases: :py:class:`~pandas.core.frame.DataFrame`"
+msgstr ""
+
+#: fa8a4b669c614373b1e838bd80f706d8 of scglue.utils.ConstrainedDataFrame:1
+msgid "Data frame with certain format constraints"
+msgstr ""
+
+#: d007fa3c8095477ca33a0717fa26192f of scglue.utils.ConstrainedDataFrame:3
+msgid "Format constraints are checked and maintained automatically."
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:12
+#: 100919c2c97f4b8294e186f580971e5e
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:23:<autosummary>:1
+#: b8688492cd964d59b865038e194fe7fe
+msgid ":py:obj:`rectify <scglue.utils.ConstrainedDataFrame.rectify>`"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:23:<autosummary>:1
+#: bc7dd55016fd40218811b77d8413768d
+msgid "Rectify data frame for format integrity"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:23:<autosummary>:1
+#: eabad9e8d3c24636b4ba862cec04eea3
+msgid ":py:obj:`verify <scglue.utils.ConstrainedDataFrame.verify>`"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:23:<autosummary>:1
+#: 833fdaddf8e84c688b5dcc7eef543db4
+msgid "Verify data frame for format integrity"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:25
+#: 0367b65339924a3fadcea44546933673
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:29:<autosummary>:1
+#: cea696c7906840b49d16d0b90e8ed097
+msgid ":py:obj:`df <scglue.utils.ConstrainedDataFrame.df>`\\"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:29:<autosummary>:1
+#: 89e60d58fc9f4896a275ad000b25ba03
+msgid "Convert to regular data frame"
+msgstr ""
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.rst:29:<autosummary>:1
+#: de8eb49169cb477b973563022ee9ac89
+msgid ":py:obj:`logger <scglue.utils.ConstrainedDataFrame.logger>`\\"
+msgstr ""
+

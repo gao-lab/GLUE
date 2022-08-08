@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.ZINDataDecoder.rst:2
+#: 9e07d03abeb4444c8f4a3bb04cb41eb3
+msgid "scglue.models.sc.ZINDataDecoder"
+msgstr ""
+
+#: 20a516d163bc4761ad5077c36d771542 of scglue.models.sc.ZINDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.sc.NormalDataDecoder`"
+msgstr ""
+
+#: ce204f7dba7e4137b334c6d3327d19ff of scglue.models.sc.ZINDataDecoder:1
+msgid "Zero-inflated normal data decoder"
+msgstr ""
+
+#: 7125d089efe44858b9934ea68c164e54 of scglue.models.sc.ZINDataDecoder
+msgid "Parameters"
+msgstr ""
+
+#: 4c5a3eef310f4a67beb93a25ad2bb843 of scglue.models.sc.ZINDataDecoder:4
+msgid "Output dimensionality"
+msgstr ""
+
+#: 055afbd4cc024b7da09cf59897472368 of scglue.models.sc.ZINDataDecoder:6
+msgid "Number of batches"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZINDataDecoder.rst:12
+#: bd9618fda4d94156a8918bf9acbed4d2
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZINDataDecoder.rst:22:<autosummary>:1
+#: e62b34b9f29b4897a95a45399a381149
+msgid ":py:obj:`forward <scglue.models.sc.ZINDataDecoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZINDataDecoder.rst:22:<autosummary>:1
+#: 342b5ec9a6174fa38b30add94040911c
+msgid "Decode data from sample and feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.ZINDataDecoder.rst:24
+#: e5bddad1cf0d45169e6b1cdb8b8a75af
+msgid "Attributes"
+msgstr ""
+

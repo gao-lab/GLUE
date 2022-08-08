@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.data.DataLoader.rst:2
+#: 68a2d0935cbb49c189258d80c0905ec5
+msgid "scglue.models.data.DataLoader"
+msgstr ""
+
+#: d0fbb9d1cba34d998fc802b245365864 of scglue.models.data.DataLoader:1
+msgid "Bases: :py:class:`~torch.utils.data.dataloader.DataLoader`"
+msgstr ""
+
+#: 862450c0a90e4d51b58cdb4612b73851 of scglue.models.data.DataLoader:1
+msgid ""
+"Custom data loader that manually shuffles the internal dataset before "
+"each round of iteration (see :class:`torch.utils.data.DataLoader` for "
+"usage)"
+msgstr ""
+
+#: ../../api/scglue.models.data.DataLoader.rst:12
+#: 6ed264ae6a6047a589f9a4b0ff64dcdf
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.data.DataLoader.rst:23
+#: 523ce6906e8d4bb39f3c147c39d32f5d
+msgid "Attributes"
+msgstr ""
+

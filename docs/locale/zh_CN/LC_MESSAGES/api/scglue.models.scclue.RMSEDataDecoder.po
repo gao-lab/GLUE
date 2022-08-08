@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:2
+#: f5cb657df34448c8bd9486706fcf2ab2
+msgid "scglue.models.scclue.RMSEDataDecoder"
+msgstr ""
+
+#: 4b8e5887eebc431aab6bdb393b24c9c7 of scglue.models.scclue.RMSEDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.DataDecoder`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:12
+#: 0f642ee0202646b2bfa4a7668271e36d
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:22:<autosummary>:1
+#: bd634b24778d473ea4e73d7137918bfd
+msgid ":py:obj:`compute_dist <scglue.models.scclue.RMSEDataDecoder.compute_dist>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:22:<autosummary>
+#: 1f01df7de823448b8648016c2ccffb13
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:22:<autosummary>:1
+#: 60a91f0c319e4383991e8e2cef336fe9
+msgid ":py:class:`scglue.models.prob.RMSE`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.RMSEDataDecoder.rst:24
+#: dbee4457790e4bfdaf1603c952349a13
+msgid "Attributes"
+msgstr ""
+

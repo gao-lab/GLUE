@@ -1,0 +1,54 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.dist_power_decay.rst:2
+#: 3fa2d536b4994cde8920e5e5fe18edb8
+msgid "scglue.genomics.dist\\_power\\_decay"
+msgstr ""
+
+#: 80c664bc3eda4dc8b664001ca86cdb10 of scglue.genomics.dist_power_decay:1
+msgid ""
+"Distance-based power decay weight, computed as :math:`w = {\\left( \\frac"
+" {d + 1000} {1000} \\right)} ^ {-0.75}`"
+msgstr ""
+
+#: 7dcced18280d4265a61a495b821d016f of scglue.genomics.dist_power_decay
+msgid "Parameters"
+msgstr ""
+
+#: 09f28d575ffb410085f1fac3b85ed1f1 of scglue.genomics.dist_power_decay:5
+msgid "Distance (in bp)"
+msgstr ""
+
+#: 01ebf3b4550b48b2a8bd0a0668fb0f66 of scglue.genomics.dist_power_decay
+msgid "Return type"
+msgstr ""
+
+#: 98ae0c058dc043988f2a4c4dacfd51f4 of scglue.genomics.dist_power_decay:7
+msgid ":py:class:`float`"
+msgstr ""
+
+#: e3666169f1874cfebb2804ac452370e9 of scglue.genomics.dist_power_decay
+msgid "Returns"
+msgstr ""
+
+#: e71bdc673fa443ca80a3b54b93b4e0d7 of scglue.genomics.dist_power_decay:8
+msgid "*weight* -- Decaying weight"
+msgstr ""
+

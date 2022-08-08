@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.dx.rst:2 152507818aa34a68aa47cf3fcf46d021
+msgid "scglue.models.dx"
+msgstr ""
+
+#: 6b96104cc57e4998a585b01026d07c50 of scglue.models.dx:1
+msgid "Model diagnostics"
+msgstr ""
+
+#: ../../api/scglue.models.dx.rst:13 84e2cfcc7c044ee59bf799826735316e
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.models.dx.rst:18:<autosummary>:1
+#: 44fbf24692204fb78a1302c5fae5f699
+msgid ""
+":py:obj:`integration_consistency "
+"<scglue.models.dx.integration_consistency>`"
+msgstr ""
+
+#: ../../api/scglue.models.dx.rst:18:<autosummary>:1
+#: 1b5e8d5f7edd43ec907c84e22120dc81
+msgid ""
+"Integration consistency score, defined as the consistency between "
+"aligned-space meta-cell correlation and the prior graph"
+msgstr ""
+

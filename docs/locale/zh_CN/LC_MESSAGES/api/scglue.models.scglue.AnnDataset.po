@@ -1,0 +1,121 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:2
+#: 1a218b9195814f93b61659ebdfc0bb0f
+msgid "scglue.models.scglue.AnnDataset"
+msgstr ""
+
+#: 4d573a0068924d6bb5c6381d4a74b0e6 of scglue.models.scglue.AnnDataset:1
+msgid "Bases: :py:class:`~scglue.models.data.Dataset`"
+msgstr ""
+
+#: 822d6850a238425baa62cac99d477b79 of scglue.models.scglue.AnnDataset:1
+msgid "Dataset for :class:`anndata.AnnData` objects with partial pairing support."
+msgstr ""
+
+#: 308724cb9e7e418d8a3ba8f6f1022f26 of scglue.models.scglue.AnnDataset
+msgid "Parameters"
+msgstr ""
+
+#: f46bc5cc246a449fa943776d0ee992b6 of scglue.models.scglue.AnnDataset:3
+msgid "An arbitrary number of configured :class:`anndata.AnnData` objects"
+msgstr ""
+
+#: 4f135303a4bf47bd946db0e592519f5b of scglue.models.scglue.AnnDataset:5
+msgid "Data configurations, one per dataset"
+msgstr ""
+
+#: fcd074b2185649f1abfad288a2f19147 of scglue.models.scglue.AnnDataset:7
+msgid "Data mode, must be one of ``{\"train\", \"eval\"}``"
+msgstr ""
+
+#: 85c45da6558f4f659db9152c195c5187 of scglue.models.scglue.AnnDataset:9
+msgid "Unitary fetch size for each __getitem__ call"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:12
+#: f52b44d4487342859c4b2d62c55a4c95
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: a5f7d058c90d43a2977a2d14d09ee111
+msgid ":py:obj:`accept_shuffle <scglue.models.scglue.AnnDataset.accept_shuffle>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: 1bdb5fb6799245559c3e0676b113bdd7
+msgid "Accept shuffling result"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: 22bf2506ed92459985cbe0f799d43528
+msgid ""
+":py:obj:`propose_shuffle "
+"<scglue.models.scglue.AnnDataset.propose_shuffle>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: f6530c6480e9473c9e46e34ed6f5c44f
+msgid "Propose shuffling using a given random seed"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: 3e523722c2b0487abcd306165156f7df
+msgid ":py:obj:`random_split <scglue.models.scglue.AnnDataset.random_split>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:24:<autosummary>:1
+#: 62fb9818e1f44bdbbf7dbd430d17196a
+msgid ""
+"Randomly split the dataset into multiple subdatasets according to given "
+"fractions."
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:26
+#: 38ee4715acd2467aac87b2ffc20a7414
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:31:<autosummary>:1
+#: 762b0cfe04c54c2eb4f90901af96b1d6
+msgid ":py:obj:`adatas <scglue.models.scglue.AnnDataset.adatas>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:31:<autosummary>:1
+#: 4de80da62ae94558a2c6b126b264e9dc
+msgid "Internal :class:`AnnData` objects"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:31:<autosummary>:1
+#: ff6e18a1c5ba4efda385487f10bc68da
+msgid ":py:obj:`data_configs <scglue.models.scglue.AnnDataset.data_configs>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:31:<autosummary>:1
+#: e7e550acd61444bcbbed7905020b0fea
+msgid "Data configuration for each dataset"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.AnnDataset.rst:31:<autosummary>:1
+#: b84fdb5ab075483e9a05fd14e2b3a9cb
+msgid ":py:obj:`logger <scglue.models.scglue.AnnDataset.logger>`\\"
+msgstr ""
+

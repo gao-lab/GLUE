@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.normalize_edges.rst:2 4db676f3c1aa45238652b0c1fd7f6f89
+msgid "scglue.num.normalize\\_edges"
+msgstr ""
+
+#: 52e927480f4f4d038023e619508b2c42 of scglue.num.normalize_edges:1
+msgid "Normalize graph edge weights"
+msgstr ""
+
+#: 3f82387c567b4e62b47e067d645f03a7 of scglue.num.normalize_edges
+msgid "Parameters"
+msgstr ""
+
+#: 1372353ca02d41669d35e6f4c118d5dc of scglue.num.normalize_edges:4
+msgid "Vertex indices of edges (:math:`2 \\times n_{edges}`)"
+msgstr ""
+
+#: 0905681953254e69ba8f315c5214624c of scglue.num.normalize_edges:6
+msgid "Weight of edges (:math:`n_{edges}`)"
+msgstr ""
+
+#: f98b14f28d6f49549405a81d4d3528f6 of scglue.num.normalize_edges:8
+msgid ""
+"Normalization method, should be one of {\"in\", \"out\", \"sym\", "
+"\"keepvar\"}"
+msgstr ""
+
+#: e0e2f85056874509a304bc4869e4ae1c of scglue.num.normalize_edges
+msgid "Return type"
+msgstr ""
+
+#: 00e34d4ce6a04d509c1863f134719d3f of scglue.num.normalize_edges:10
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: ae4fa227cf45432c900d602e9f271392 of scglue.num.normalize_edges
+msgid "Returns"
+msgstr ""
+
+#: 029c5847369f44af8713f39457972d5e of scglue.num.normalize_edges:11
+msgid "*enorm* -- Normalized weight of edges (:math:`n_{edges}`)"
+msgstr ""
+

@@ -54,13 +54,13 @@ dependencies = [
 
 [project.optional-dependencies]
 doc = [
-    "sphinx<4",
-    "sphinx-autodoc-typehints<1.12",
+    "sphinx",
+    "sphinx-autodoc-typehints",
     "sphinx-copybutton",
     "nbsphinx",
     "sphinx-rtd-theme",
     "ipython",
-    "jinja2<3.1"
+    "jinja2"
 ]
 test = [
     "plotly",

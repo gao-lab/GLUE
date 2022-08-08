@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.IndSCGLUEModel.rst:2
+#: 3212d75180cc4d1bbe2cd8e2bac90a8d
+msgid "scglue.models.scglue.IndSCGLUEModel"
+msgstr ""
+
+#: a2ce810b587d45aba0bd3a179311cba0 of scglue.models.scglue.IndSCGLUEModel:1
+msgid "Bases: :py:class:`~scglue.models.scglue.SCGLUEModel`"
+msgstr ""
+
+#: 0f9a9f76f18840928b5b5628f34b7261 of scglue.models.scglue.IndSCGLUEModel:1
+msgid ""
+"Independent GLUE model as a negative control where data reconstruction is"
+" independent from feature embeddings"
+msgstr ""
+
+#: 0872be23406143a2ae07ec3cd657ff03 of scglue.models.scglue.IndSCGLUEModel
+msgid "Parameters"
+msgstr ""
+
+#: 3c58030f9f6f4cda81300aea7f667d6c of scglue.models.scglue.IndSCGLUEModel:5
+msgid "Datasets (indexed by domain name)"
+msgstr ""
+
+#: 0dddc254bf8740109db8e11e4a4600a6 of scglue.models.scglue.IndSCGLUEModel:7
+msgid "Prior graph vertices (must cover feature names in all domains)"
+msgstr ""
+
+#: f280f2deae744d989a8cd841e788dd8a of scglue.models.scglue.IndSCGLUEModel:9
+msgid "Latent dimensionality"
+msgstr ""
+
+#: 049e1c2966914acab3b27da13fbf7d26 of scglue.models.scglue.IndSCGLUEModel:11
+msgid "Hidden layer depth for encoder and discriminator"
+msgstr ""
+
+#: 7b39044a43a74e908000fa22e9e0d96a of scglue.models.scglue.IndSCGLUEModel:13
+msgid "Hidden layer dimensionality for encoder and discriminator"
+msgstr ""
+
+#: 51d6ffdb20d445aea73cb141c47d17e2 of scglue.models.scglue.IndSCGLUEModel:15
+msgid "Dropout rate"
+msgstr ""
+
+#: b0a711d0879044c4848bdcd4df1eef00 of scglue.models.scglue.IndSCGLUEModel:17
+msgid "Whether the same batches are shared across domains"
+msgstr ""
+
+#: 2bcd33364fe643fb9962c1ddef53b8aa of scglue.models.scglue.IndSCGLUEModel:19
+msgid "Random seed"
+msgstr ""
+
+#: c87cabd7e8ef4199aaf22683efac6779 of scglue.models.scglue.IndSCGLUEModel:21
+msgid "Do **NOT** use!"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.IndSCGLUEModel.rst:12
+#: ef42c65dff35475183c17b0b7dc441c1
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.IndSCGLUEModel.rst:23
+#: 8ca013ee4f6942d4941bec618d635f2a
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.IndSCGLUEModel.rst:26:<autosummary>:1
+#: 109bebed7adf4383b9428fba4606b064
+msgid ":py:obj:`logger <scglue.models.scglue.IndSCGLUEModel.logger>`\\"
+msgstr ""
+

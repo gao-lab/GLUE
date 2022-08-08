@@ -13,6 +13,10 @@ release = scglue.__version__
 author = "Zhi-Jie Cao"
 copyright = "Gao Lab, 2022"
 
+gettext_uuid = True
+gettext_compact = False
+locale_dirs = ["locale"]
+
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
@@ -79,7 +83,7 @@ qualname_overrides = {
 }
 
 fa_orig = sphinx_autodoc_typehints.format_annotation
-def format_annotation(annotation, fully_qualified=True):  # pylint: disable=unused-argument
+def format_annotation(annotation, config, fully_qualified=True):  # pylint: disable=unused-argument
     r"""
     Adapted from https://github.com/agronholm/sphinx-autodoc-typehints/issues/38#issuecomment-448517805
     """
@@ -88,5 +92,5 @@ def format_annotation(annotation, fully_qualified=True):  # pylint: disable=unus
         override = qualname_overrides.get(full_name)
         if override is not None:
             return f':py:class:`~{override}`'
-    return fa_orig(annotation)
+    return fa_orig(annotation, config)
 sphinx_autodoc_typehints.format_annotation = format_annotation

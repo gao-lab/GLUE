@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.nn.get_default_numpy_dtype.rst:2
+#: ce9b31a4f85d49718fb66559d2052d8a
+msgid "scglue.models.nn.get\\_default\\_numpy\\_dtype"
+msgstr ""
+
+#: fbab37c286394e478832deeeb4f220b6 of
+#: scglue.models.nn.get_default_numpy_dtype:1
+msgid "Get numpy dtype matching that of the pytorch default dtype"
+msgstr ""
+
+#: 4ddcff8c1b214855a72fd6f32238001e of scglue.models.nn.get_default_numpy_dtype
+msgid "Return type"
+msgstr ""
+
+#: 9f1da7197032408a8a7d374fc694482b of
+#: scglue.models.nn.get_default_numpy_dtype:3
+msgid ":py:class:`type`"
+msgstr ""
+
+#: b0e8ed56365b481689a4a7f2aaefc6c4 of scglue.models.nn.get_default_numpy_dtype
+msgid "Returns"
+msgstr ""
+
+#: 5d3f8848f88e4e088a9e9f4c0cd1ab59 of
+#: scglue.models.nn.get_default_numpy_dtype:4
+msgid "*dtype* -- Default numpy dtype"
+msgstr ""
+

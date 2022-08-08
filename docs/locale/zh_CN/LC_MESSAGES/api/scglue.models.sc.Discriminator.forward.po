@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.Discriminator.forward.rst:2
+#: ee25d4782bfe48ec968eb7630d14378b
+msgid "scglue.models.sc.Discriminator.forward"
+msgstr ""
+
+#: 74a571a3011a48e4ba74140f2857a370 of scglue.models.sc.Discriminator.forward:1
+msgid "Discriminate among domains"
+msgstr ""
+
+#: eba17b3a484d4a8b93ac004a6e3f11e7 of scglue.models.sc.Discriminator.forward
+msgid "Parameters"
+msgstr ""
+
+#: bebdc069188641218af040b77aec9118 of scglue.models.sc.Discriminator.forward:3
+msgid "Sample latent"
+msgstr ""
+
+#: 72b5a37a9adf47a1a2f7ffa0ff8ac3a6 of scglue.models.sc.Discriminator.forward
+msgid "Return type"
+msgstr ""
+
+#: a3506ae85be44bd4832aa1fe8bf63a55 of scglue.models.sc.Discriminator.forward:5
+msgid ":py:class:`torch.Tensor`"
+msgstr ""
+
+#: 3134cb98a0114248856bbd4b96f20ae8 of scglue.models.sc.Discriminator.forward
+msgid "Returns"
+msgstr ""
+
+#: 9b66f685d95e458098be5ed6e5b8e445 of scglue.models.sc.Discriminator.forward:6
+msgid "*logits* -- Domain logits"
+msgstr ""
+

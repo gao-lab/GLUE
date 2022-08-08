@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.DataEncoder.forward.rst:2
+#: 675937c28e39430088b5c4e75973ac79
+msgid "scglue.models.sc.DataEncoder.forward"
+msgstr ""
+
+#: 6a000836d1d34506a173b72f254bd9b6 of scglue.models.sc.DataEncoder.forward:1
+msgid "Encode data to sample latent distribution"
+msgstr ""
+
+#: 99bd6667a9bf4e8aa0fc09e15cf32657 of scglue.models.sc.DataEncoder.forward
+msgid "Parameters"
+msgstr ""
+
+#: 5daa1a57417a46a8ac9cc22d312b6ff4 of scglue.models.sc.DataEncoder.forward:4
+msgid "Input data"
+msgstr ""
+
+#: ab098d082b9d4badbdd39a7fa60d7fcb of scglue.models.sc.DataEncoder.forward:6
+msgid "Alternative input data"
+msgstr ""
+
+#: 9f9cf95da64b4b03ba105087ff137ecc of scglue.models.sc.DataEncoder.forward:8
+msgid ""
+"Whether to skip computing `x` normalizer (just return None) if `xalt` is "
+"non-empty"
+msgstr ""
+
+#: 1e638ee1fb5947fc97afd2981127396d of scglue.models.sc.DataEncoder.forward
+msgid "Return type"
+msgstr ""
+
+#: 9de000d40a584275badb3c4aea61c6a0 of scglue.models.sc.DataEncoder.forward:11
+msgid ""
+":py:data:`typing.Tuple`\\[:py:class:`torch.distributions.normal.Normal`, "
+":py:data:`typing.Optional`\\[:py:class:`torch.Tensor`]]"
+msgstr ""
+
+#: fcf0ecd1f41f447580af76e2fa4c6b4e of scglue.models.sc.DataEncoder.forward
+msgid "Returns"
+msgstr ""
+
+#: 7b8120057ae34a1dabb2f8ff4b326d15 of scglue.models.sc.DataEncoder.forward:12
+msgid "* *u* -- Sample latent distribution * *normalizer* -- Data normalizer"
+msgstr ""
+
+#: b82f77cac9ed404584a78c18486602c3 of scglue.models.sc.DataEncoder.forward:12
+msgid "*u* -- Sample latent distribution"
+msgstr ""
+
+#: 84ff9297690d460fb19556a97d714737 of scglue.models.sc.DataEncoder.forward:13
+msgid "*normalizer* -- Data normalizer"
+msgstr ""
+
+#: 9b1f44b2a1654211b1f069488881c939 of scglue.models.sc.DataEncoder.forward:17
+msgid ""
+"Normalization is always computed on `x`. If xalt is empty, the normalized"
+" `x` will be used as input to the encoder neural network, otherwise xalt "
+"is used instead."
+msgstr ""
+

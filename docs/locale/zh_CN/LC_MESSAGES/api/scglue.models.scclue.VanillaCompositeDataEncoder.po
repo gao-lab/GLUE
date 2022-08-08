@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:2
+#: 1fdda8ecf67744579e41c2eec96418ed
+msgid "scglue.models.scclue.VanillaCompositeDataEncoder"
+msgstr ""
+
+#: bfa98761369b4cb2ad3e7203135cf960 of
+#: scglue.models.scclue.VanillaCompositeDataEncoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.CompositeDataEncoder`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:12
+#: d9f497db7fdb4cbfbe4897d10f30a07c
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:23:<autosummary>:1
+#: 379b055bd10949b1bde42e20e5613109
+msgid ""
+":py:obj:`compute_l "
+"<scglue.models.scclue.VanillaCompositeDataEncoder.compute_l>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:23:<autosummary>
+#: 4cfb4f4cff5344f7b7b444ba2c3232f6 525095da27d642e3bf0935c3065520d7
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:23:<autosummary>:1
+#: 70d9da1a42bd423eadea13898f560676
+msgid ":py:data:`typing.Optional`\\[:py:class:`torch.Tensor`]"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:23:<autosummary>:1
+#: b7cffe00773f488a9b6fcdbb1047a3b8
+msgid ""
+":py:obj:`normalize "
+"<scglue.models.scclue.VanillaCompositeDataEncoder.normalize>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:23:<autosummary>:1
+#: 45e2a8f49f1f43f39eac1f81aac0fcdb
+msgid ":py:class:`torch.Tensor`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.VanillaCompositeDataEncoder.rst:25
+#: c424950cfbb346d1a568810c4f138c4b
+msgid "Attributes"
+msgstr ""
+

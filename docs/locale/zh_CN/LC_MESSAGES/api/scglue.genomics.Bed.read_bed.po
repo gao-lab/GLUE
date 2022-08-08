@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.read_bed.rst:2
+#: 56128b9ebda54fdf98362ba0ae335c9d
+msgid "scglue.genomics.Bed.read\\_bed"
+msgstr ""
+
+#: d414a2df83e64300b1aad96a564c7681 of scglue.genomics.Bed.read_bed:1
+msgid "Read BED file"
+msgstr ""
+
+#: 3024f5fb6a764396af07ef2d89e311d3 of scglue.genomics.Bed.read_bed
+msgid "Parameters"
+msgstr ""
+
+#: ce8230c5da444439ae4794bf7aa82ef8 of scglue.genomics.Bed.read_bed:4
+msgid "BED file"
+msgstr ""
+
+#: 1125dfa7584b4127835219785eaebb69 of scglue.genomics.Bed.read_bed
+msgid "Return type"
+msgstr ""
+
+#: 53a09e5313e740afb1cfdcea04fdd3bd of scglue.genomics.Bed.read_bed:6
+msgid ":py:class:`scglue.genomics.Bed`"
+msgstr ""
+
+#: 636a493390634b8fb30f18e680ba8a35 of scglue.genomics.Bed.read_bed
+msgid "Returns"
+msgstr ""
+
+#: aeef4ea68be644a0a5be102862988132 of scglue.genomics.Bed.read_bed:7
+msgid "*bed* -- Loaded :class:`Bed` object"
+msgstr ""
+

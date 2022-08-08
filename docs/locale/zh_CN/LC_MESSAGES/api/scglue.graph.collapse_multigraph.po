@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.graph.collapse_multigraph.rst:2
+#: dd51acc6e31f49b79d62db45370e5059
+msgid "scglue.graph.collapse\\_multigraph"
+msgstr ""
+
+#: 461fbac5888b4ab5ac4e57bbafd13132 of scglue.graph.collapse_multigraph:1
+msgid "Collapse multi-edges into simple-edges"
+msgstr ""
+
+#: ad46c5a3e844408f9b6bd1c20184e62b of scglue.graph.collapse_multigraph
+msgid "Parameters"
+msgstr ""
+
+#: 535bb5ae5ed64f42af941e7ec1ec639a of scglue.graph.collapse_multigraph:4
+msgid "Input multi-graph"
+msgstr ""
+
+#: de8dcd0260034584a7a18a6ecd21b1f6 of scglue.graph.collapse_multigraph:6
+msgid ""
+"Attribute-specific merge functions, indexed by attribute name. Each merge"
+" function should accept a list of values and return a single value."
+msgstr ""
+
+#: cc960aef21fe4655b293c3f5f83ce590 of scglue.graph.collapse_multigraph
+msgid "Return type"
+msgstr ""
+
+#: 5bee026ec2a14130a72dd9dc42f9f0fb of scglue.graph.collapse_multigraph:10
+msgid ":py:class:`~networkx.Graph`"
+msgstr ""
+
+#: 3d50d1cd6f564269ba8ed76d8416c205 of scglue.graph.collapse_multigraph
+msgid "Returns"
+msgstr ""
+
+#: 5010de988c6347d0a509e6a7508e5405 of scglue.graph.collapse_multigraph:11
+msgid "*collapsed* -- Collapsed graph"
+msgstr ""
+
+#: 1024f872bb0e4d12a7e9892f4572d4b9 of scglue.graph.collapse_multigraph:15
+msgid ""
+"The collapsed graph would be directed if the input graph is directed. "
+"Edges causing ValueError in ``merge_fns`` will be discarded."
+msgstr ""
+

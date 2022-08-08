@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.DataEncoder.compute_l.rst:2
+#: 7bf5c50aa0074d4da149c6f08b02ef40
+msgid "scglue.models.sc.DataEncoder.compute\\_l"
+msgstr ""
+
+#: c746f3c2b6b547739b23d11837e21644 of scglue.models.sc.DataEncoder.compute_l:1
+msgid "Compute normalizer"
+msgstr ""
+
+#: da325c3752f64d4b9198156cdf78ea95 of scglue.models.sc.DataEncoder.compute_l
+msgid "Parameters"
+msgstr ""
+
+#: d6b18561d1764de39bbddd6f7309d5e2 of scglue.models.sc.DataEncoder.compute_l:4
+msgid "Input data"
+msgstr ""
+
+#: 13cab9d949d141f188cfbd82aacfeeb6 of scglue.models.sc.DataEncoder.compute_l
+msgid "Return type"
+msgstr ""
+
+#: 678fc1e2e8e0467b8fc5fd80e49d5f05 of scglue.models.sc.DataEncoder.compute_l:6
+msgid ":py:data:`typing.Optional`\\[:py:class:`torch.Tensor`]"
+msgstr ""
+
+#: f7c5aabdc32d4e0f9959c864c717f424 of scglue.models.sc.DataEncoder.compute_l
+msgid "Returns"
+msgstr ""
+
+#: cb1c33c0d22d4c0c8714c1d19222c518 of scglue.models.sc.DataEncoder.compute_l:7
+msgid "*l* -- Normalizer"
+msgstr ""
+

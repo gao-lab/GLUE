@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api.rst:2 7b7e738a7753401d9a11cbccaf4f36e0
+msgid "API documentation"
+msgstr "API文档"
+
+#: ../../api.rst:4 81fc526d917341c9ad52a887100e240f
+msgid ""
+"This section provides detailed API documentation for all public functions"
+" and classes in ``scglue``."
+msgstr "本节提供所有公共函数和 ``scglue`` 中的类的详细API文档。"
+
+#: ../../api.rst:12:<autosummary>:1 c230dc14f6a740a58535b4ba3d80c39a
+msgid ":py:obj:`scglue <scglue>`\\"
+msgstr ""
+
+#: ../../api.rst:12:<autosummary>:1 49759dfd0c8749359b506520e8ea2ea6
+msgid "GLUE (Graph-Linked Unified Embedding)"
+msgstr ""

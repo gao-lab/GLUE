@@ -1,5 +1,5 @@
 _build
-api
+*.mo
 !*.ipynb
 !_templates/
 !_templates/**

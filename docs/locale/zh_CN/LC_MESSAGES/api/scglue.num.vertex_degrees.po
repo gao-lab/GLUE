@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.vertex_degrees.rst:2 ea23e72a7c1146079e186cb80f547165
+msgid "scglue.num.vertex\\_degrees"
+msgstr ""
+
+#: b682d7fd48734f7da3256c573730d1f4 of scglue.num.vertex_degrees:1
+msgid "Compute vertex degrees"
+msgstr ""
+
+#: 3bc0eca88b5c46bdbc2e46f5e91ed96d of scglue.num.vertex_degrees
+msgid "Parameters"
+msgstr ""
+
+#: bfbf31aa495d4269a37efa94824d6d82 of scglue.num.vertex_degrees:4
+msgid "Vertex indices of edges (:math:`2 \\times n_{edges}`)"
+msgstr ""
+
+#: 4bab81968475456eaea0b176dee5f113 of scglue.num.vertex_degrees:6
+msgid "Weight of edges (:math:`n_{edges}`)"
+msgstr ""
+
+#: 06bde878d50f42fe8606bb4e42915be5 of scglue.num.vertex_degrees:8
+msgid "Total number of vertices (determined by max edge index if not specified)"
+msgstr ""
+
+#: eb29567fc15e40e39a66277d8f4864fc of scglue.num.vertex_degrees:10
+msgid "Direction of vertex degree, should be one of {\"in\", \"out\", \"both\"}"
+msgstr ""
+
+#: 8b1b9e1f0f644d1486d75725864326ab of scglue.num.vertex_degrees
+msgid "Return type"
+msgstr ""
+
+#: cb2e591a594f46fd8c87c8690fddcfe9 of scglue.num.vertex_degrees:12
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: 3aa1e0538e9345d5b4d12bd005eab0a5 of scglue.num.vertex_degrees
+msgid "Returns"
+msgstr ""
+
+#: 47f70e83b88243bc9f9d31820f7ed859 of scglue.num.vertex_degrees:13
+msgid "*degrees* -- Vertex degrees"
+msgstr ""
+

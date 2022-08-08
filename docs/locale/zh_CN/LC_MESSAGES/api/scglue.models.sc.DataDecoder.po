@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.DataDecoder.rst:2
+#: b94bfd69e5604f5fa118f90bf3ab089e
+msgid "scglue.models.sc.DataDecoder"
+msgstr ""
+
+#: f96d1c50209a4013832457e2435882de of scglue.models.sc.DataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.glue.DataDecoder`"
+msgstr ""
+
+#: df3fbd4b1d3c4759b8a0a05eb2d45f12 of scglue.models.sc.DataDecoder:1
+msgid "Abstract data decoder"
+msgstr ""
+
+#: 3549eccd909a4a7994a527010ed9c55d of scglue.models.sc.DataDecoder
+msgid "Parameters"
+msgstr ""
+
+#: c6a3af2ca8774c08851f6b6b3d89fe07 of scglue.models.sc.DataDecoder:4
+msgid "Output dimensionality"
+msgstr ""
+
+#: b63387ca5b30487ba53858a7ddcaef4b of scglue.models.sc.DataDecoder:6
+msgid "Number of batches"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataDecoder.rst:12
+#: 10626d8da2a64f86ba30579f9b6819ba
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataDecoder.rst:22:<autosummary>:1
+#: f61b1b13b04d4d0e86f0694190bd34dc
+msgid ":py:obj:`forward <scglue.models.sc.DataDecoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataDecoder.rst:22:<autosummary>:1
+#: 53f82a70aa7048aba972fd1e4532755c
+msgid "Decode data from sample and feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataDecoder.rst:24
+#: 74b91975ee894fe3aac12564f601c8b7
+msgid "Attributes"
+msgstr ""
+

@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:2
+#: d86990fdd0284d8a8b5ec1adba3c8a6d
+msgid "scglue.models.scglue.SCGLUEModel"
+msgstr ""
+
+#: ff6a74119c814a3a8e303a854cc884c6 of scglue.models.scglue.SCGLUEModel:1
+msgid "Bases: :py:class:`~scglue.models.base.Model`"
+msgstr ""
+
+#: d0c25b1c74184875b8958de8f297b820 of scglue.models.scglue.SCGLUEModel:1
+msgid "GLUE model for single-cell multi-omics data integration"
+msgstr ""
+
+#: 5b95455bb7a547c6bc20948d7e4691f5 of scglue.models.scglue.SCGLUEModel
+msgid "Parameters"
+msgstr ""
+
+#: 1461ce2b9df140f1a6e2eb4e41fae19d of scglue.models.scglue.SCGLUEModel:4
+msgid "Datasets (indexed by domain name)"
+msgstr ""
+
+#: 6c1db957073841b1b48dffd782188371 of scglue.models.scglue.SCGLUEModel:6
+msgid "Prior graph vertices (must cover feature names in all domains)"
+msgstr ""
+
+#: f2457e3f055e4403945fff5d55e5b330 of scglue.models.scglue.SCGLUEModel:8
+msgid "Latent dimensionality"
+msgstr ""
+
+#: ca2aef60abbc4c739c4a96f3f2fb8a54 of scglue.models.scglue.SCGLUEModel:10
+msgid "Hidden layer depth for encoder and discriminator"
+msgstr ""
+
+#: 5fce8bcb26434f49971cf54a9a5a3e5e of scglue.models.scglue.SCGLUEModel:12
+msgid "Hidden layer dimensionality for encoder and discriminator"
+msgstr ""
+
+#: ebafed501ad040fe979b58760b165c10 of scglue.models.scglue.SCGLUEModel:14
+msgid "Dropout rate"
+msgstr ""
+
+#: 2dc33b677424403b8e59b2d464ca12a2 of scglue.models.scglue.SCGLUEModel:16
+msgid "Whether the same batches are shared across domains"
+msgstr ""
+
+#: 8c19e611c24f460db304bee57dac08a8 of scglue.models.scglue.SCGLUEModel:18
+msgid "Random seed"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:12
+#: 59cccd45b64b493eaabb5bbd71948c41
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 846d8d7675de4a8ea42ea418ffceba4e
+msgid ""
+":py:obj:`adopt_pretrained_model "
+"<scglue.models.scglue.SCGLUEModel.adopt_pretrained_model>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 22a37efe24034c6fb5b6a2028094440d
+msgid "Adopt buffers and parameters from a pretrained model"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 9b5acb2c93a24f9e941d2da48ae81ddb
+msgid ":py:obj:`compile <scglue.models.scglue.SCGLUEModel.compile>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: a34e02bbcad54eb8a3fb50d237c0915e
+msgid "Prepare model for training"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 85c33cfee0ef4c77b80c4f740f41a807
+msgid ":py:obj:`decode_data <scglue.models.scglue.SCGLUEModel.decode_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 1ecc7d8de0904580b12bc09609d83d16
+msgid "Decode data"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: cbd82e79ac2e43be9adef2a8d80c3066
+msgid ":py:obj:`encode_data <scglue.models.scglue.SCGLUEModel.encode_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 8590b615971f4a9f8868df0b238811b1
+msgid "Compute data (cell) embedding"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 429fb8eaad084528b0bb41bba8d43af0
+msgid ":py:obj:`encode_graph <scglue.models.scglue.SCGLUEModel.encode_graph>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: f93ebe90262042ce9bc021f1ada688e0
+msgid "Compute graph (feature) embedding"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 654f4c9d73984a4382cca587c7ececfb
+msgid ":py:obj:`fit <scglue.models.scglue.SCGLUEModel.fit>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 9eb1997a5a3346599090f352e1b62aea
+msgid "Fit model on given datasets"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: ae03dea83e034c92b8b9b860f46f89d5
+msgid ":py:obj:`freeze_cells <scglue.models.scglue.SCGLUEModel.freeze_cells>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 4862270ddcc641f2a98e0f84f310e84c
+msgid "Freeze cell embeddings"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: e4df0b064e81433da7ad7c99bca349b5
+msgid ":py:obj:`get_losses <scglue.models.scglue.SCGLUEModel.get_losses>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 5af3bc7619e54daaaf7253a7fade68f6
+msgid "Compute loss function values"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 8c5efcb28478459aa80ce1860c656861
+msgid ":py:obj:`unfreeze_cells <scglue.models.scglue.SCGLUEModel.unfreeze_cells>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:30:<autosummary>:1
+#: 76d901ddacae4907988007542ce1387d
+msgid "Unfreeze cell embeddings"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32
+#: b1dae85900704caaac8fb9a89ab1269d
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 8b4fcdace3784cd5b44cd502d92f70a6
+msgid ""
+":py:obj:`ALIGN_BURNIN_PRG "
+"<scglue.models.scglue.SCGLUEModel.ALIGN_BURNIN_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 159d130049764f3da4c172f8c7383a9c
+msgid ":py:obj:`GRAPH_BATCHES <scglue.models.scglue.SCGLUEModel.GRAPH_BATCHES>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 6acd85f20c5d4af887736b2cd54e62f0
+msgid ""
+":py:obj:`MAX_EPOCHS_PRG "
+"<scglue.models.scglue.SCGLUEModel.MAX_EPOCHS_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 0bb5cf931c8c48faa75b286c3b86b9e6
+msgid ":py:obj:`PATIENCE_PRG <scglue.models.scglue.SCGLUEModel.PATIENCE_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 075eb802639841e2aec472aaed7d3dbe
+msgid ""
+":py:obj:`REDUCE_LR_PATIENCE_PRG "
+"<scglue.models.scglue.SCGLUEModel.REDUCE_LR_PATIENCE_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:40:<autosummary>:1
+#: 7f0f81c9a8c24608b4e45a8891557a01
+msgid ":py:obj:`logger <scglue.models.scglue.SCGLUEModel.logger>`\\"
+msgstr ""
+

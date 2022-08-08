@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.DataEncoder.rst:2
+#: 99fff947d0224cb99620768720026379
+msgid "scglue.models.glue.DataEncoder"
+msgstr ""
+
+#: 2cebf8ff68904da2b38ce322f436f672 of scglue.models.glue.DataEncoder:1
+msgid "Bases: :py:class:`~torch.nn.modules.module.Module`"
+msgstr ""
+
+#: f4b4c7baaaf542f587257ad3bb5eb0ac of scglue.models.glue.DataEncoder:1
+msgid "Abstract data encoder"
+msgstr ""
+
+#: ../../api/scglue.models.glue.DataEncoder.rst:12
+#: 59b2993f4fa94bb1917ff2af0cb44f8b
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.glue.DataEncoder.rst:22:<autosummary>:1
+#: 6fd3dd47a13547cb9bf567728e986a01
+msgid ":py:obj:`forward <scglue.models.glue.DataEncoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.glue.DataEncoder.rst:22:<autosummary>:1
+#: d87370ef21a444c7bbd0c9de1ec8d275
+msgid "Encode data to sample latent distribution"
+msgstr ""
+
+#: ../../api/scglue.models.glue.DataEncoder.rst:24
+#: 8672ff4b1a32437791e4f235bfb9ae45
+msgid "Attributes"
+msgstr ""
+

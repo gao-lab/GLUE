@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.configure_dataset.rst:2
+#: 42f685d5ca0e4995870b021d33b748ef
+msgid "scglue.models.scglue.configure\\_dataset"
+msgstr ""
+
+#: 6ebce2d4c0f0479e9de133f70d40d9df of scglue.models.scglue.configure_dataset:1
+msgid "Configure dataset for model training"
+msgstr ""
+
+#: fb9c9c9f132647e39fd36e9af3b72d5c of scglue.models.scglue.configure_dataset
+msgid "Parameters"
+msgstr ""
+
+#: 75589ef14e494267b4f6be9981f69572 of scglue.models.scglue.configure_dataset:4
+msgid "Dataset to be configured"
+msgstr ""
+
+#: 6b41f8e6b2f644ac85818792cffc5121 of scglue.models.scglue.configure_dataset:6
+msgid ""
+"Probabilistic generative model used by the decoder, must be one of "
+"``{\"Normal\", \"ZIN\", \"ZILN\", \"NB\", \"ZINB\"}``."
+msgstr ""
+
+#: 41a47c5a588c4656abfef7f3686243e3 of scglue.models.scglue.configure_dataset:9
+msgid "Whether to use highly variable features"
+msgstr ""
+
+#: e92d3238171d4f19bef012087b20d8f7 of
+#: scglue.models.scglue.configure_dataset:11
+msgid "Data layer to use (key in ``adata.layers``)"
+msgstr ""
+
+#: ad49e9ed9ab9427f8b1ed44749514a53 of
+#: scglue.models.scglue.configure_dataset:13
+msgid ""
+"Data representation to use as the first encoder transformation (key in "
+"``adata.obsm``)"
+msgstr ""
+
+#: f3305c5a2fc2419d8b82535675f329f7 of
+#: scglue.models.scglue.configure_dataset:16
+msgid "Data batch to use (key in ``adata.obs``)"
+msgstr ""
+
+#: 96383fb1c2ae4a1aa7ae61d833372c0b of
+#: scglue.models.scglue.configure_dataset:18
+msgid "Data cell type to use (key in ``adata.obs``)"
+msgstr ""
+
+#: 60b10c1036594e62bdf01d40a44a8bfe of
+#: scglue.models.scglue.configure_dataset:20
+msgid "Discriminator sample weight to use (key in ``adata.obs``)"
+msgstr ""
+
+#: 046a9c9947254105a5a3a4e734fd0d2b of
+#: scglue.models.scglue.configure_dataset:22
+msgid ""
+"Unique cell ID used to mark paired cells across multiple datasets (key in"
+" ``adata.obsm``)"
+msgstr ""
+
+#: 9d1d126fbaeb425e909f96374243ea8d of
+#: scglue.models.scglue.configure_dataset:27
+msgid ""
+"The ``use_rep`` option applies to encoder inputs, but not the decoders, "
+"which are always fitted on data in the original space."
+msgstr ""
+
+#: 5664092362394200a26807606b4073af of scglue.models.scglue.configure_dataset
+msgid "Return type"
+msgstr ""
+
+#: 8f6864f3413e41d8b1b9f18e04b6050b of
+#: scglue.models.scglue.configure_dataset:31
+msgid ":py:obj:`None`"
+msgstr ""
+

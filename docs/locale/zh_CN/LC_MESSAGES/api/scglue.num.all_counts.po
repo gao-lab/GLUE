@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.all_counts.rst:2 e85ac5d731324a51a0d3719a31672896
+msgid "scglue.num.all\\_counts"
+msgstr ""
+
+#: 6682f70181344366b9edba83545878be of scglue.num.all_counts:1
+msgid "Check whether an array contains all counts"
+msgstr ""
+
+#: 16ba5e2a45be4d8b91c3db015140bb81 of scglue.num.all_counts
+msgid "Parameters"
+msgstr ""
+
+#: ee244bb41d00459c9b210492792c8a8b of scglue.num.all_counts:4
+msgid "Array to check"
+msgstr ""
+
+#: d5fb570ba539471ba6d8c68ce3d3a37b of scglue.num.all_counts
+msgid "Return type"
+msgstr ""
+
+#: 92518dcb34244fcbb954b9c5a7004e72 of scglue.num.all_counts:6
+msgid ":py:class:`bool`"
+msgstr ""
+
+#: fe6fe3151f3e4e1f9bcb7942a8e718c1 of scglue.num.all_counts
+msgid "Returns"
+msgstr ""
+
+#: 91624126595140bfa1936c0d1bf36a47 of scglue.num.all_counts:7
+msgid "*is_counts* -- Whether the array contains all counts"
+msgstr ""
+

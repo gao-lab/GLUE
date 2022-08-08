@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.GLUE.rst:2 a0b11b4f0fba4e3e880a8434b6cfb155
+msgid "scglue.models.glue.GLUE"
+msgstr ""
+
+#: cda0e0e45045441385c64944bd10d522 of scglue.models.glue.GLUE:1
+msgid "Bases: :py:class:`~torch.nn.modules.module.Module`"
+msgstr ""
+
+#: 78f125f5d57343ba8b4ed361056eb77e of scglue.models.glue.GLUE:1
+msgid "Base class for GLUE (Graph-Linked Unified Embedding) network"
+msgstr ""
+
+#: 6221dc3b6d5d4e8ebe77b5c6a5f09028 of scglue.models.glue.GLUE
+msgid "Parameters"
+msgstr ""
+
+#: f1c6728fe8f74bdd8780b8abbc54b21d of scglue.models.glue.GLUE:4
+msgid "Graph encoder"
+msgstr ""
+
+#: 6c53744550324cc8ad120a32c81af660 of scglue.models.glue.GLUE:6
+msgid "Graph decoder"
+msgstr ""
+
+#: 874e5532a3ed4184b4f33a502c1c1927 of scglue.models.glue.GLUE:8
+msgid "Data encoders (indexed by domain name)"
+msgstr ""
+
+#: e9ccea5c1ab34826be82e825d77c6c73 of scglue.models.glue.GLUE:10
+msgid "Data decoders (indexed by domain name)"
+msgstr ""
+
+#: fb63128b173f476e95bfb4f2a5a34631 of scglue.models.glue.GLUE:12
+msgid "Feature indices among graph vertices (indexed by domain name)"
+msgstr ""
+
+#: af90c7ea123445c48c28292f70b0b96f of scglue.models.glue.GLUE:14
+msgid "Domain discriminator"
+msgstr ""
+
+#: 4d15095b5d884a0d9fd5b381410a7efd of scglue.models.glue.GLUE:16
+msgid "Latent prior"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:12 2182179fa1ba431eb022fa983c1b1206
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:22:<autosummary>:1
+#: 646eab1e9b9c46339f8800b98a29b2a8
+msgid ":py:obj:`forward <scglue.models.glue.GLUE.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:22:<autosummary>:1
+#: 96d97ed0fa3d427e90ff35ef7607a882
+msgid "Invalidated forward operation"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:24 0f7b9b4bee7644aeaf1ccbc5ffb453f6
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:27:<autosummary>:1
+#: 6a4cef6195d3406f9bc46ab57063043d
+msgid ":py:obj:`device <scglue.models.glue.GLUE.device>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GLUE.rst:27:<autosummary>:1
+#: 0d89bfa9ac214d568a389f4f560c3a41
+msgid "Device of the module"
+msgstr ""
+

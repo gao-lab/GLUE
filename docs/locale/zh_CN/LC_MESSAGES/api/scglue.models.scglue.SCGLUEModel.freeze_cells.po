@@ -1,0 +1,39 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.freeze_cells.rst:2
+#: 50d4edfbd4294e28baa1a7bb183a99e3
+msgid "scglue.models.scglue.SCGLUEModel.freeze\\_cells"
+msgstr ""
+
+#: c3e86789c413404689e9f3acd3dcae13 of
+#: scglue.models.scglue.SCGLUEModel.freeze_cells:1
+msgid "Freeze cell embeddings"
+msgstr ""
+
+#: fd4178affc374ae28a1956064ea49a9e of
+#: scglue.models.scglue.SCGLUEModel.freeze_cells
+msgid "Return type"
+msgstr ""
+
+#: 66adfae568174d258166087ea9013376 of
+#: scglue.models.scglue.SCGLUEModel.freeze_cells:4
+msgid ":py:obj:`None`"
+msgstr ""
+

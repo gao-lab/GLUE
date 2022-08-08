@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:2
+#: edf2faf329344e34bc90ab7267492ea4
+msgid "scglue.models.scclue.DataDecoder"
+msgstr ""
+
+#: 1943e62625be419fbb52c58e2f795c1b of scglue.models.scclue.DataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.BatchedTransferrable`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:12
+#: 372550714753469d8bdce6af19243514
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:23:<autosummary>:1
+#: 968fca7a8a55494488bb8feb1fa181f3
+msgid ":py:obj:`compute_dist <scglue.models.scclue.DataDecoder.compute_dist>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:23:<autosummary>
+#: 8c7f93f48d474d1ab33414a784872816
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:23:<autosummary>:1
+#: 1c74eed8b980476cba9fd85d0bab7de4
+msgid ":py:class:`torch.distributions.distribution.Distribution`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:23:<autosummary>:1
+#: 18490997f0344b25bbd707020e121ed0
+msgid ":py:obj:`forward <scglue.models.scclue.DataDecoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:23:<autosummary>:1
+#: d7c313e3311d4640b9efe439d776b1ca
+msgid "Defines the computation performed at every call."
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:25
+#: 0fff70b29ccf468b998ff659f51f3d45
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:28:<autosummary>:1
+#: cc402e197a20432386bc1825b8086aad
+msgid ""
+":py:obj:`batched_weights "
+"<scglue.models.scclue.DataDecoder.batched_weights>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.DataDecoder.rst:28:<autosummary>:1
+#: 6383461bdc364aaa8401bde369340c8a
+msgid "List of batch-specific weights"
+msgstr ""
+

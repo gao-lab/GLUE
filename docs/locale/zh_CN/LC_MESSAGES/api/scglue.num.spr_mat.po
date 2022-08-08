@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.spr_mat.rst:2 c0307239b8294c398df634c23dc598b3
+msgid "scglue.num.spr\\_mat"
+msgstr ""
+
+#: d1d7b22c1bca450983ef63bc3efa4156 of scglue.num.spr_mat:1
+msgid "Spearman's rank correlation"
+msgstr ""
+
+#: 989e9145de05445e9f75e00df26b30f6 of scglue.num.spr_mat
+msgid "Parameters"
+msgstr ""
+
+#: 998ed893382649198587e2b7f5fd328d of scglue.num.spr_mat:4
+msgid "First design matrix"
+msgstr ""
+
+#: 09d71d6b6ed340a797d1699fc48e696d of scglue.num.spr_mat:6
+msgid "Second design matrix (optional)"
+msgstr ""
+
+#: 61edfa7a98ff4126a709d099a8b4a0d0 of scglue.num.spr_mat
+msgid "Return type"
+msgstr ""
+
+#: c335b7582a5347b4a65358e283327da4 of scglue.num.spr_mat:8
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: 36bae18b0896423a91e4e31fb9ba4fca of scglue.num.spr_mat
+msgid "Returns"
+msgstr ""
+
+#: 9d7fdd20f2d04f38bc99b84c4e5c1221 of scglue.num.spr_mat:9
+msgid ""
+"*spr* -- Spearman's correlation matrix among columns of X, if only X is "
+"given. Spearman's correlation matrix between columns of X and columns of "
+"Y, if both X and Y are given."
+msgstr ""
+

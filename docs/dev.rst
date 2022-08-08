@@ -3,7 +3,7 @@ Developer guide
 
 .. note::
     To better understand the following guide, you may check out our
-    `publication <https://doi.org/10.1038/s41587-022-01284-4>`_
+    `publication <https://doi.org/10.1038/s41587-022-01284-4>`__
     first to learn about the general idea.
 
 The GLUE framework is designed to be modular, and can be extended in the many ways.
@@ -14,18 +14,18 @@ Below we describe main components of the framework, and how to extend the existi
 Main components
 ***************
 
-A GLUE model is primarily composed of four main components (all PyTorch `Modules <https://pytorch.org/docs/stable/generated/torch.nn.Module.html>`_):
+A GLUE model is primarily composed of four main components (all PyTorch `Modules <https://pytorch.org/docs/stable/generated/torch.nn.Module.html>`__):
 
-- `Data encoders <api/scglue.models.sc.DataEncoder.rst>`_ (one for each domain)
+- `Data encoders <api/scglue.models.sc.DataEncoder.rst>`__ (one for each domain)
   - A data encoder receives data input :math:`x`, and returns a distribution corresponding to the data posterior (cell embeddings) :math:`q(u|x)`
-- `Data decoders <api/scglue.models.sc.DataDecoder.rst>`_ (one for each domain)
+- `Data decoders <api/scglue.models.sc.DataDecoder.rst>`__ (one for each domain)
   - A data decoder receives cell embedding input :math:`u` and feature embedding input :math:`v`, and returns a distribution corresponding to the data likelihood :math:`p(x|u, v)`
-- A `graph encoder <api/scglue.models.sc.GraphEncoder.rst>`_
+- A `graph encoder <api/scglue.models.sc.GraphEncoder.rst>`__
   - A graph encoder receives graph input :math:`\mathcal{G}` in the form of edge index, edge weight, and edge sign, and returns a distribution corresponding to the graph posterior (feature embeddings) :math:`q(v|\mathcal{G})`
-- A `graph decoder <api/scglue.models.sc.GraphDecoder.rst>`_
+- A `graph decoder <api/scglue.models.sc.GraphDecoder.rst>`__
   - A graph decoder receives feature embedding input :math:`v`, as well as a subset of query edges in the form of edge index and edge sign, and returns a distribution corresponding to the likelihood of these query edges, which is used as an estimate of the graph likelihood :math:`p(\mathcal{G}|v)`
 
-Current implementations for these components are all located in `scglue.models.sc <api/scglue.models.sc.rst>`_. New extensions can be added to this module as well.
+Current implementations for these components are all located in `scglue.models.sc <api/scglue.models.sc.rst>`__. New extensions can be added to this module as well.
 
 Actual module inferfaces differ slightly from those summarized above, e.g., with additional considerations for library size normalization and batch effect. See below for details.
 
@@ -38,8 +38,8 @@ A straighforward extension is to add new data encoders and decoders to support a
 Define encoder
 --------------
 
-Data encoders should inherit from the `DataEncoder <api/scglue.models.sc.DataEncoder.rst>`_ class.
-The main part of the encoder is an MLP (Multi-Layer Perceptron) already implemented in `DataEncoder <api/scglue.models.sc.DataEncoder.rst>`_. It leaves two customizable abstract methods:
+Data encoders should inherit from the `DataEncoder <api/scglue.models.sc.DataEncoder.rst>`__ class.
+The main part of the encoder is an MLP (Multi-Layer Perceptron) already implemented in `DataEncoder <api/scglue.models.sc.DataEncoder.rst>`__. It leaves two customizable abstract methods:
 
 - The ``compute_l`` method is supposed to compute a library size from the input data
 - The ``normalize`` method is supposed to normalize the input data (potentially with the computed library size), before feeding to the MLP.
@@ -65,7 +65,7 @@ You may define your own encoder class by implementing these two methods as appro
 Define decoder
 --------------
 
-Data decoders should inherit from the `DataDecoder <api/scglue.models.sc.DataDecoder.rst>`_ class. It defines the interface of the constructor as well as the abstract ``forward`` method.
+Data decoders should inherit from the `DataDecoder <api/scglue.models.sc.DataDecoder.rst>`__ class. It defines the interface of the constructor as well as the abstract ``forward`` method.
 
 The constructor can accept an output dimensionality ``out_features`` and the number of batches ``n_batches`` (batch as in batch effect).
 The ``forward`` method accepts four inputs:
@@ -115,22 +115,22 @@ Note how the batch index ``b`` is used as a row indexer into ``scale_lin``, ``bi
 
 You may define your own decoder class by implementing the ``forward`` method to produce likelihood distributions appropriate for the data modality.
 
-Non-standard distributions can also be defined in `scglue.models.prob <api/scglue.models.prob.rst>`_.
+Non-standard distributions can also be defined in `scglue.models.prob <api/scglue.models.prob.rst>`__.
 
 Register custom encoder and decoder
 -----------------------------------
 
-Finally, use the `scglue.models.scglue.register_prob_model <api/scglue.models.scglue.register_prob_model.rst>`_ function to register the the custom encoder and decoder under a new "prob_model", so they can be activated with a matching ``prob_model`` setting in `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`_.
+Finally, use the `scglue.models.scglue.register_prob_model <api/scglue.models.scglue.register_prob_model.rst>`__ function to register the the custom encoder and decoder under a new "prob_model", so they can be activated with a matching ``prob_model`` setting in `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`__.
 
 **************************
 Other types of extensions?
 **************************
 
-If you are interested in extending the model in other ways, please open an issue on `Github <https://github.com/gao-lab/GLUE>`_.
+If you are interested in extending the model in other ways, please open an issue on `Github <https://github.com/gao-lab/GLUE>`__.
 
 **************************
 Contributions are welcome!
 **************************
 
-Be sure to submit a pull request on `Github <https://github.com/gao-lab/GLUE>`_
+Be sure to submit a pull request on `Github <https://github.com/gao-lab/GLUE>`__
 if you want your extension to be included in the framework!

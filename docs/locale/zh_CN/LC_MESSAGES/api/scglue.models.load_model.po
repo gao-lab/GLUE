@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.load_model.rst:2 3efc849d371642cf857712efb17322c2
+msgid "scglue.models.load\\_model"
+msgstr ""
+
+#: ce3e6d1c70a2420b8ac62437daecdb30 of scglue.models.load_model:1
+msgid "Load model from file"
+msgstr ""
+
+#: 5be870d7895b4fee8af0ac36c63d75ef of scglue.models.load_model
+msgid "Parameters"
+msgstr ""
+
+#: 2f0a8e95638141c5b5e0b9807b2ea327 of scglue.models.load_model:4
+msgid "Specifies path to the file"
+msgstr ""
+
+#: b58ae6dad29a40db816d31b992a46689 of scglue.models.load_model
+msgid "Return type"
+msgstr ""
+
+#: 3cc9a0e1de3041cab59b9f7be0c91461 of scglue.models.load_model:7
+msgid ":py:class:`scglue.models.base.Model`"
+msgstr ""
+

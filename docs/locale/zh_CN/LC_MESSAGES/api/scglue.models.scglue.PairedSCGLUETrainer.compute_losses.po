@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.compute_losses.rst:2
+#: c139bfe64865454583a09a8c94bae28f
+msgid "scglue.models.scglue.PairedSCGLUETrainer.compute\\_losses"
+msgstr ""
+
+#: c4d35d7fe7534e1991187381f58b10c3 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:1
+msgid "Compute loss functions"
+msgstr ""
+
+#: e7adb9faf76f42b9823e4189a38bb1d6 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
+msgid "Parameters"
+msgstr ""
+
+#: 4527411a0d55413ab0c4cb01fd0194fa of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:4
+msgid "Data tensors"
+msgstr ""
+
+#: f625b83e97104ba1a4820d1767b8275f of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:6
+msgid "Current epoch number"
+msgstr ""
+
+#: 599a6a50914d4d5c977899cc7faad048 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:8
+msgid "Whether to compute the discriminator loss only"
+msgstr ""
+
+#: 354f32c637174a4e8991d3822df61249 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
+msgid "Return type"
+msgstr ""
+
+#: 2fa997b71f554a03b1d05833b96fd0c5 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:10
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`torch.Tensor`]"
+msgstr ""
+
+#: 4756e8eb59c6417b97ef5c2010e0ae36 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
+msgid "Returns"
+msgstr ""
+
+#: 6308659e68914ccbbb2b42cd10e630d0 of
+#: scglue.models.scglue.PairedSCGLUETrainer.compute_losses:11
+msgid "*loss_dict* -- Dict containing loss values"
+msgstr ""
+

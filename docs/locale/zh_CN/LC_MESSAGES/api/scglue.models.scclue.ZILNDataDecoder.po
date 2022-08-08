@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:2
+#: 126e9ce1a46e42abacb9a2ba9d6f90e3
+msgid "scglue.models.scclue.ZILNDataDecoder"
+msgstr ""
+
+#: 2d0afd59a477440f84d92a05bf8c5dfd of scglue.models.scclue.ZILNDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.DataDecoder`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:12
+#: bfee50acb9a14a35ba43d8ade4fb30b8
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:22:<autosummary>:1
+#: 3c3ac44a105c46e681333ce1daca98cf
+msgid ":py:obj:`compute_dist <scglue.models.scclue.ZILNDataDecoder.compute_dist>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:22:<autosummary>
+#: 7ed9fc2e33a34bdda2b9409a2f15876e
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:22:<autosummary>:1
+#: 81ffaf6af13a476faa05f58ddefe50a2
+msgid ":py:class:`scglue.models.prob.ZILN`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:24
+#: 49063424d94d4536aad005ba00cde998
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:27:<autosummary>:1
+#: 6c3f0dd4a4b9494b84fb123209c478c7
+msgid ""
+":py:obj:`batched_weights "
+"<scglue.models.scclue.ZILNDataDecoder.batched_weights>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZILNDataDecoder.rst:27:<autosummary>:1
+#: cc60cad8926c4ba6b105cbc33e102107
+msgid "List of batch-specific weights"
+msgstr ""
+

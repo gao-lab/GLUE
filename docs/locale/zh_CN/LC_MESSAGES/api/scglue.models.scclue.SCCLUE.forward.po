@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUE.forward.rst:2
+#: 62829cf1b09c44bda6b9b6810afc0278
+msgid "scglue.models.scclue.SCCLUE.forward"
+msgstr ""
+
+#: 79dbed4b1505406d8d135a6a94944e1e of scglue.models.scclue.SCCLUE.forward:1
+msgid "Defines the computation performed at every call."
+msgstr ""
+
+#: da05d7c50a4149378c40dffd920597a8 of scglue.models.scclue.SCCLUE.forward:3
+msgid "Should be overridden by all subclasses."
+msgstr ""
+
+#: 67bbfb59e96b47a0991386a076dafae1 of scglue.models.scclue.SCCLUE.forward:6
+msgid ""
+"Although the recipe for forward pass needs to be defined within this "
+"function, one should call the :class:`Module` instance afterwards instead"
+" of this since the former takes care of running the registered hooks "
+"while the latter silently ignores them."
+msgstr ""
+
+#: 0ee9621b48af41c5960ab543635d27df of scglue.models.scclue.SCCLUE.forward
+msgid "Return type"
+msgstr ""
+
+#: f71aa31632b84c8aa32db3b983804587 of scglue.models.scclue.SCCLUE.forward:12
+msgid ":py:data:`typing.NoReturn`"
+msgstr ""
+

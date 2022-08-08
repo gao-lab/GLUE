@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.col_pcc.rst:2 ad237d0ca8054042a55686945af8e50f
+msgid "scglue.num.col\\_pcc"
+msgstr ""
+
+#: b5480d56b0524f4183ce177df2d9a1e6 of scglue.num.col_pcc:1
+msgid "Column-wise Pearson's correlation coefficient (sparse friendly)"
+msgstr ""
+
+#: e62b531cf5cd40b7b83ebd250c34fe26 of scglue.num.col_pcc
+msgid "Parameters"
+msgstr ""
+
+#: a7c3bced034744ac92dd0183f484661c of scglue.num.col_pcc:4
+msgid "First design matrix"
+msgstr ""
+
+#: 101a2573b2184ea0ae98ee73e2550c67 of scglue.num.col_pcc:6
+msgid "Second design matrix"
+msgstr ""
+
+#: 941716d7bbcb49e08b738d9fdf97462c of scglue.num.col_pcc
+msgid "Return type"
+msgstr ""
+
+#: d42a8600a3b9402ab4cd50fe1d569856 of scglue.num.col_pcc:8
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: 0637b7ce65634991b9fee789a8b1dc3a of scglue.num.col_pcc
+msgid "Returns"
+msgstr ""
+
+#: 054a111f6d514e1c9d9d45a93c564394 of scglue.num.col_pcc:9
+msgid "*pcc* -- Column-wise Pearson's correlation coefficients"
+msgstr ""
+

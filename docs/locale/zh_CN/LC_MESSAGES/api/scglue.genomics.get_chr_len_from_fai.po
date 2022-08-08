@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.get_chr_len_from_fai.rst:2
+#: 6429ab58e79445bbb1aca0a3bfe703d9
+msgid "scglue.genomics.get\\_chr\\_len\\_from\\_fai"
+msgstr ""
+
+#: e7f06ea5f8df422a95f4166d906dd773 of scglue.genomics.get_chr_len_from_fai:1
+msgid "Get chromosome length information from fasta index file"
+msgstr ""
+
+#: 32b7572f24fb4df2bc9589b38c0123e2 of scglue.genomics.get_chr_len_from_fai
+msgid "Parameters"
+msgstr ""
+
+#: 455b8e784509476caf40ff18a71c979a of scglue.genomics.get_chr_len_from_fai:4
+msgid "Fasta index file"
+msgstr ""
+
+#: 81f48ad3befd47e98896eb46c3e1d863 of scglue.genomics.get_chr_len_from_fai
+msgid "Return type"
+msgstr ""
+
+#: 104eb84b4683496ea472f6449da68711 of scglue.genomics.get_chr_len_from_fai:6
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`int`]"
+msgstr ""
+
+#: 45d952dabaf0478082c0a70476c13a54 of scglue.genomics.get_chr_len_from_fai
+msgid "Returns"
+msgstr ""
+
+#: 30f039ae85284a0fbb5af9a5a9c2a095 of scglue.genomics.get_chr_len_from_fai:7
+msgid "*chr_len* -- Length of each chromosome"
+msgstr ""
+

@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.fit_SCGLUE.rst:2 0caa394edea94cc0b4f05a9890623953
+msgid "scglue.models.fit\\_SCGLUE"
+msgstr ""
+
+#: 340cf7c70a764ddd9e9d596f75c2a2c6 of scglue.models.fit_SCGLUE:1
+msgid "Fit GLUE model to integrate single-cell multi-omics data"
+msgstr ""
+
+#: a14746fc04234734a8b548a0ee34068a of scglue.models.fit_SCGLUE
+msgid "Parameters"
+msgstr ""
+
+#: be92de87e4a14279b08728515d812743 of scglue.models.fit_SCGLUE:4
+msgid "Single-cell datasets (indexed by domain name)"
+msgstr ""
+
+#: 48ded7abd21940f5831c1f96a14bd936 of scglue.models.fit_SCGLUE:6
+msgid "Prior graph"
+msgstr ""
+
+#: 321b614c91144c1a95c523c162fc927a of scglue.models.fit_SCGLUE:8
+msgid ""
+"Model class, must be one of {:class:`scglue.models.scglue.SCGLUEModel`, "
+":class:`scglue.models.scglue.PairedSCGLUEModel`}"
+msgstr ""
+
+#: 0ddd84ed91d843118bfa27d9fa0ae561 of scglue.models.fit_SCGLUE:12
+msgid ""
+"Model initialization keyword arguments (see the constructor of the "
+"``model`` class, either :class:`scglue.models.scglue.SCGLUEModel` or "
+":class:`scglue.models.scglue.PairedSCGLUEModel`)"
+msgstr ""
+
+#: dc98dfd404954e659f5e57401db4e9a7 of scglue.models.fit_SCGLUE:17
+msgid ""
+"Model compile keyword arguments (see the ``compile`` method of the "
+"``model`` class, either :meth:`scglue.models.scglue.SCGLUEModel.compile` "
+"or :meth:`scglue.models.scglue.PairedSCGLUEModel.compile`)"
+msgstr ""
+
+#: d0bde1d8f2ca4bce81c87d5f8afe8d2c of scglue.models.fit_SCGLUE:22
+msgid ""
+"Model fitting keyword arguments (see "
+":meth:`scglue.models.scglue.SCGLUEModel.fit`)"
+msgstr ""
+
+#: ee65b1bd996847918e83bc9128f4aa07 of scglue.models.fit_SCGLUE:25
+msgid ""
+"Balancing weight estimation keyword arguments (see "
+":func:`scglue.data.estimate_balancing_weight`)"
+msgstr ""
+
+#: 4bfa0acf40b645569ad3520280a4bc4b of scglue.models.fit_SCGLUE
+msgid "Return type"
+msgstr ""
+
+#: d691bca5872b442ca24a65a8bb9fe534 of scglue.models.fit_SCGLUE:28
+msgid ":py:class:`scglue.models.scglue.SCGLUEModel`"
+msgstr ""
+
+#: 86fd85480b9c4cafb881a2c6809ad49e of scglue.models.fit_SCGLUE
+msgid "Returns"
+msgstr ""
+
+#: be638e9833c94f94b5e669170056dc76 of scglue.models.fit_SCGLUE:29
+msgid "*model* -- Fitted model object"
+msgstr ""
+

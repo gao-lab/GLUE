@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.utils.ConstrainedDataFrame.verify.rst:2
+#: ca92bfc111224e3f98dca31ace7b95f5
+msgid "scglue.utils.ConstrainedDataFrame.verify"
+msgstr ""
+
+#: f18f45cd975c4ab2bb43d63fb4d76a5d of
+#: scglue.utils.ConstrainedDataFrame.verify:1
+msgid "Verify data frame for format integrity"
+msgstr ""
+
+#: b812051e57f6493f846e86934f066530 of scglue.utils.ConstrainedDataFrame.verify
+msgid "Parameters"
+msgstr ""
+
+#: eaf3c09437a24ffe952006706ee4f1e6 of
+#: scglue.utils.ConstrainedDataFrame.verify:4
+msgid "Data frame to be verified"
+msgstr ""
+
+#: a0c42bb9e3314f33990f94729a80ddc6 of scglue.utils.ConstrainedDataFrame.verify
+msgid "Return type"
+msgstr ""
+
+#: e7379885e014438d819a556e5fb40d05 of
+#: scglue.utils.ConstrainedDataFrame.verify:7
+msgid ":py:obj:`None`"
+msgstr ""
+

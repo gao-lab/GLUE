@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.GraphEncoder.forward.rst:2
+#: 7f04602cb5a742c29f8b40e477ba5727
+msgid "scglue.models.glue.GraphEncoder.forward"
+msgstr ""
+
+#: 22482cb8dd244dbba648acd0c11ad8af of
+#: scglue.models.glue.GraphEncoder.forward:1
+msgid "Encode graph to vertex latent distribution"
+msgstr ""
+
+#: f0ad1bdc11eb468ab5a37b864cd3dafb of scglue.models.glue.GraphEncoder.forward
+msgid "Parameters"
+msgstr ""
+
+#: 8a7f644b26d643379a53e6e05c1a3b4a of
+#: scglue.models.glue.GraphEncoder.forward:4
+msgid "Vertex indices of edges (:math:`2 \\times n_{edges}`)"
+msgstr ""
+
+#: 9f02347059474a8ebfaa1e34883fde08 of
+#: scglue.models.glue.GraphEncoder.forward:6
+msgid "Normalized weight of edges (:math:`n_{edges}`)"
+msgstr ""
+
+#: c938a626eada4deb85915449806efb0b of
+#: scglue.models.glue.GraphEncoder.forward:8
+msgid "Sign of edges (:math:`n_{edges}`)"
+msgstr ""
+
+#: 65ca5fa9193845a8af6cf09ef564b204 of scglue.models.glue.GraphEncoder.forward
+msgid "Return type"
+msgstr ""
+
+#: 0ca1d850827d4776bfe37efe42816a4b of
+#: scglue.models.glue.GraphEncoder.forward:10
+msgid ":py:class:`torch.distributions.distribution.Distribution`"
+msgstr ""
+
+#: b9aa441c0c464ebea46485a616b88130 of scglue.models.glue.GraphEncoder.forward
+msgid "Returns"
+msgstr ""
+
+#: b75ceb6fa3754d6b921732df0ac73f6b of
+#: scglue.models.glue.GraphEncoder.forward:11
+msgid ""
+"*v* -- Vertex latent distribution (:math:`n_{vertices} \\times "
+"n_{features}`)"
+msgstr ""
+

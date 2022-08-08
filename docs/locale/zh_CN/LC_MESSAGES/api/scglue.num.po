@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.rst:2 57b100ed9a6246feb2322475eeb9a478
+msgid "scglue.num"
+msgstr ""
+
+#: 06fbbbd654ed4105968749c94296e38f of scglue.num:1
+msgid "Numeric operations"
+msgstr ""
+
+#: ../../api/scglue.num.rst:13 d8ed7583952e47dd8f8a140ffe161d3d
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 7e9741fc39a7436e8fd0a88405c4c6ae
+msgid ":py:obj:`all_counts <scglue.num.all_counts>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 d534068820774de58089d764991ed2cc
+msgid "Check whether an array contains all counts"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 684e00288d92431a9d401a0fdc218873
+msgid ":py:obj:`col_pcc <scglue.num.col_pcc>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 7ce4ea57d0684819b1ffc0bcab0860b9
+msgid "Column-wise Pearson's correlation coefficient (sparse friendly)"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 e93045fd9657451aa892441a4e2e0457
+msgid ":py:obj:`col_spr <scglue.num.col_spr>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 5a2db289a2b64ff5b9ded3eabb470466
+msgid "Column-wise Spearman's rank correlation"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 70c4cb2de1bc412e8847b063176e637e
+msgid ":py:obj:`col_var <scglue.num.col_var>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 2cccb23e64854dde86c034d613803c97
+msgid "Column-wise variance (sparse friendly)"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 c9c08e9e36f2494c9ec60493b92e75cd
+msgid ":py:obj:`cov_mat <scglue.num.cov_mat>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 284dc0d9d48d4fdc8740dbcbfb056af9
+msgid "Covariance matrix (sparse friendly)"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 14d76dc0ccf448d4ba0831d609265cf9
+msgid ":py:obj:`densify <scglue.num.densify>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 46748a144b16414e992c835fa1b71175
+msgid "Convert a matrix to dense regardless of original type."
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 fe2cc667c5c44ea4a48c570579d33dea
+msgid ":py:obj:`normalize_edges <scglue.num.normalize_edges>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 9327881502cb442cac6bae473953f2d9
+msgid "Normalize graph edge weights"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 492020c9a74c450e94208aa47f6603ba
+msgid ":py:obj:`pcc_mat <scglue.num.pcc_mat>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 b8a0059e973944d8a126b0abcbf8419c
+msgid "Pearson's correlation coefficient (sparse friendly)"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 dea786d6a6044fa594185da3809b871e
+msgid ":py:obj:`prob_or <scglue.num.prob_or>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 04119255aeb3458d891f9aa638df1c01
+msgid "Combined multiple probabilities in a logical OR manner."
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 cb99230ac35f454d8879670fdb04640f
+msgid ":py:obj:`prod <scglue.num.prod>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 866767e7344d496699948044a1e4ac6d
+msgid "Product of elements"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 42f81706d3fd416681ec915ca68f3d99
+msgid ":py:obj:`sigmoid <scglue.num.sigmoid>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 bfe5b687957548b5965498b15b9b4c1e
+msgid "The sigmoid function in numpy"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 b33065491fe043a5a8620c287516462f
+msgid ":py:obj:`spr_mat <scglue.num.spr_mat>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 18d76d8a4adb4608bc1f0955e800e446
+msgid "Spearman's rank correlation"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 c24a497dea1344adadae1ec49d626322
+msgid ":py:obj:`tfidf <scglue.num.tfidf>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 dee73646f67c42c198fb85d3320cfb6c
+msgid "TF-IDF normalization (following the Seurat v3 approach)"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 0d9d90bf36ee4b6dbd0c9e73697d4659
+msgid ":py:obj:`vertex_degrees <scglue.num.vertex_degrees>`"
+msgstr ""
+
+#: ../../api/scglue.num.rst:31:<autosummary>:1 5c643f04a75242c2873f1225b2b301f8
+msgid "Compute vertex degrees"
+msgstr ""
+

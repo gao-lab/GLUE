@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:2
+#: 8d9193c9ab744a838019294b268883b3
+msgid "scglue.models.data.ArrayDataset"
+msgstr ""
+
+#: 686e3c2a8e864b69b74ae7663819f33f of scglue.models.data.ArrayDataset:1
+msgid "Bases: :py:class:`~scglue.models.data.Dataset`"
+msgstr ""
+
+#: eac573f3788943c8b17e0138974c38e6 of scglue.models.data.ArrayDataset:1
+msgid ""
+"Array dataset for :class:`numpy.ndarray` and "
+":class:`scipy.sparse.spmatrix` objects. Different arrays are considered "
+"as unpaired, and thus do not need to have identical sizes in the first "
+"dimension. Smaller arrays are recycled. Also, data fetched from this "
+"dataset are automatically densified."
+msgstr ""
+
+#: 9374344efdd447e8869beff93c83b22c of scglue.models.data.ArrayDataset
+msgid "Parameters"
+msgstr ""
+
+#: 702f44133d7141a686710263c35fec20 of scglue.models.data.ArrayDataset:6
+msgid "An arbitrary number of data arrays"
+msgstr ""
+
+#: c69000401f374f1ea5c5873498fd0c7e of scglue.models.data.ArrayDataset:10
+msgid ""
+"We keep using arrays because sparse tensors do not support slicing. "
+"Arrays are only converted to tensors after minibatch slicing."
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:12
+#: 91892262a77f41598932692f0635e1c3
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: 070e446dfb1a4e3cac32cd0104c3525c
+msgid ":py:obj:`accept_shuffle <scglue.models.data.ArrayDataset.accept_shuffle>`"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: 10d7f7bc137043ff872494f49a86ab11
+msgid "Accept shuffling result"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: b1a2ea2e25fd4db68fc90e42e4c44969
+msgid ""
+":py:obj:`propose_shuffle "
+"<scglue.models.data.ArrayDataset.propose_shuffle>`"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: 38c3af98ce8c4e29a7fa34ea9fdd8d9a
+msgid "Propose shuffling using a given random seed"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: c99e1964d17845438154a4b7d952c876
+msgid ":py:obj:`random_split <scglue.models.data.ArrayDataset.random_split>`"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:24:<autosummary>:1
+#: 7987ec6537684efd8f1836e708e4a69a
+msgid ""
+"Randomly split the dataset into multiple subdatasets according to given "
+"fractions."
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:26
+#: e3805acbca7548158bf2968d22fb926c
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:30:<autosummary>:1
+#: cd6d9ba1213140c7b3470e56254a4a4d
+msgid ":py:obj:`arrays <scglue.models.data.ArrayDataset.arrays>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:30:<autosummary>:1
+#: 422ab59755db45688007674537a152cd
+msgid "Internal array objects"
+msgstr ""
+
+#: ../../api/scglue.models.data.ArrayDataset.rst:30:<autosummary>:1
+#: 874e657d65b6469c9de7b88919d415c9
+msgid ":py:obj:`logger <scglue.models.data.ArrayDataset.logger>`\\"
+msgstr ""
+

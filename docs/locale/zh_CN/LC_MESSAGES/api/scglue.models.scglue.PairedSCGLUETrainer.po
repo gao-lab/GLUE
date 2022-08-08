@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:2
+#: 0b35cefe5cc3420896d5ac26638012b8
+msgid "scglue.models.scglue.PairedSCGLUETrainer"
+msgstr ""
+
+#: 53219c7c58424782b53d74651443ba63 of
+#: scglue.models.scglue.PairedSCGLUETrainer:1
+msgid "Bases: :py:class:`~scglue.models.scglue.SCGLUETrainer`"
+msgstr ""
+
+#: 596d734f01494655b9bdd821ea511f88 of
+#: scglue.models.scglue.PairedSCGLUETrainer:1
+msgid "Paired trainer for :class:`SCGLUE`"
+msgstr ""
+
+#: 0facbb14956044ef8f6c6be5f10434c7 of scglue.models.scglue.PairedSCGLUETrainer
+msgid "Parameters"
+msgstr ""
+
+#: be77a7ea4dde4ac180757bcf79057870 of
+#: scglue.models.scglue.PairedSCGLUETrainer:4
+msgid ":class:`SCGLUE` network to be trained"
+msgstr ""
+
+#: af7386f483e14795897aa997d5f50762 of
+#: scglue.models.scglue.PairedSCGLUETrainer:6
+msgid "Data weight"
+msgstr ""
+
+#: d3360b33da7d4184a7dd6b9c08596311 of
+#: scglue.models.scglue.PairedSCGLUETrainer:8
+msgid "KL weight"
+msgstr ""
+
+#: 2ab6385ddec34ecf957a481924420fae of
+#: scglue.models.scglue.PairedSCGLUETrainer:10
+msgid "Graph weight"
+msgstr ""
+
+#: e27c5c66defd4012854e6b3fe5c5b090 of
+#: scglue.models.scglue.PairedSCGLUETrainer:12
+msgid "Adversarial alignment weight"
+msgstr ""
+
+#: 845202b683cc41bd9b028c4bc00cf83e of
+#: scglue.models.scglue.PairedSCGLUETrainer:14
+msgid "Cell type supervision weight"
+msgstr ""
+
+#: 785d90cfc8174683850a84bd2aceb0cc of
+#: scglue.models.scglue.PairedSCGLUETrainer:16
+msgid "Joint cross-prediction weight"
+msgstr ""
+
+#: 9940fb32bb934fe9a4a40a9bcaaf3942 of
+#: scglue.models.scglue.PairedSCGLUETrainer:18
+msgid "Real cross-prediction weight"
+msgstr ""
+
+#: b12640e2d23446bd95a79dfa9b924600 of
+#: scglue.models.scglue.PairedSCGLUETrainer:20
+msgid "Cosine similarity weight"
+msgstr ""
+
+#: 579253326bce40c289e6e774b496caf8 of
+#: scglue.models.scglue.PairedSCGLUETrainer:22
+msgid "Whether to L2 normalize cell embeddings before decoder"
+msgstr ""
+
+#: a5f49d29378a4cffa239ca8f71253f9e of
+#: scglue.models.scglue.PairedSCGLUETrainer:24
+msgid "Relative domain weight (indexed by domain name)"
+msgstr ""
+
+#: deeadab2e21349eebb1c3b9d11670f6a of
+#: scglue.models.scglue.PairedSCGLUETrainer:26
+msgid "Optimizer"
+msgstr ""
+
+#: c994cd3241124a2096f51addffa68fbb of
+#: scglue.models.scglue.PairedSCGLUETrainer:28
+msgid "Learning rate"
+msgstr ""
+
+#: 86d2574108a14ff290b09970bf0bd144 of
+#: scglue.models.scglue.PairedSCGLUETrainer:29
+msgid "Additional keyword arguments are passed to the optimizer constructor"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:12
+#: bb61958966c44016ba986d75b4123fd8
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:23:<autosummary>:1
+#: 7dffc78fc44048239cc64449b65c21de
+msgid ""
+":py:obj:`compute_losses "
+"<scglue.models.scglue.PairedSCGLUETrainer.compute_losses>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:23:<autosummary>:1
+#: b06b05f1ed43404193b98450503657a1
+msgid "Compute loss functions"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:23:<autosummary>:1
+#: 6d0828f0f2794e258241e82c0f7e20f8
+msgid ""
+":py:obj:`format_data "
+"<scglue.models.scglue.PairedSCGLUETrainer.format_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:23:<autosummary>:1
+#: 0a916a4defaa4c75a5ce9b903be330a2
+msgid "Format data tensors"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:25
+#: a38a562d698d4b37ad44515674c7c8a8
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:28:<autosummary>:1
+#: 48140601e6754502aa2862ffab481e66
+msgid ":py:obj:`logger <scglue.models.scglue.PairedSCGLUETrainer.logger>`\\"
+msgstr ""
+

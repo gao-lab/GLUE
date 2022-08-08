@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.prod.rst:2 78a5e40020e3466ca53871e19b21bbfe
+msgid "scglue.num.prod"
+msgstr ""
+
+#: 17b7c930573448099181f4948ff9902d of scglue.num.prod:1
+msgid "Product of elements"
+msgstr ""
+
+#: a9cef64fbd164600b580eb164dac7347 of scglue.num.prod
+msgid "Parameters"
+msgstr ""
+
+#: 889a3c2851ab4bbb8ddba77e42ac5e6e of scglue.num.prod:4
+msgid "Input elements"
+msgstr ""
+
+#: ae35a4e611124380babbf47a9e3101d0 of scglue.num.prod
+msgid "Return type"
+msgstr ""
+
+#: 1bfb6424839945e0bb969406ee2ef10c of scglue.num.prod:6
+msgid ":py:data:`typing.Any`"
+msgstr ""
+
+#: 0901322963fd47a781f428bafe374e26 of scglue.num.prod
+msgid "Returns"
+msgstr ""
+
+#: 90f6b6dbfe914ecf8d9d569e6e4fc92a of scglue.num.prod:7
+msgid "*prod* -- Product"
+msgstr ""
+
+#: e763c512a1a3401f9ba187b59c74d605 of scglue.num.prod:9
+msgid "For compatibility with Python<=3.7"
+msgstr ""
+

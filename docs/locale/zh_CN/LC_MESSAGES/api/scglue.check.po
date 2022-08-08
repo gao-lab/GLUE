@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.check.rst:2 779c404b10ca4064b12b2bad769e45fc
+msgid "scglue.check"
+msgstr ""
+
+#: cc6e0ee611bc4947b09be727bbf2a844 of scglue.check:1
+msgid "Dependency checking"
+msgstr "依赖检查"
+
+#: ../../api/scglue.check.rst:13 5ccc66a54b6942b3b77d12f6194d9231
+msgid "Functions"
+msgstr "函数"
+
+#: ../../api/scglue.check.rst:23:<autosummary>:1
+#: 68aef9622bb547ac890d16ba28c52b19
+msgid ":py:obj:`check_deps <scglue.check.check_deps>`"
+msgstr ""
+
+#: ../../api/scglue.check.rst:23:<autosummary>:1
+#: e2ff0e14973d4a14885283859888c526
+msgid "Check whether certain dependencies are installed"
+msgstr "检查某些依赖是否已安装"
+
+#: ../../api/scglue.check.rst:25 f893a58370c94020bcdbf3fb6e58f058
+msgid "Classes"
+msgstr "类"
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: a99c0737da5c4e4ebe885a828b2bee31
+msgid ":py:obj:`Checker <scglue.check.Checker>`"
+msgstr ""
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: 712fd58421d544fe9ea0762d4ba9e637
+msgid "Checks availability and version of a dependency"
+msgstr "检查特定依赖的可用性和版本"
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: 57702c273ea0497dbd2141c388bb929a
+msgid ":py:obj:`CmdChecker <scglue.check.CmdChecker>`"
+msgstr ""
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: f375f10a57f44ab8baeaaeb4e10ae57d
+msgid "Checks availability and version of a command line dependency"
+msgstr "检查特定命令行程序依赖的可用性和版本"
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: 5c60502c39e745f8aa5cba81b80c0c2a
+msgid ":py:obj:`ModuleChecker <scglue.check.ModuleChecker>`"
+msgstr ""
+
+#: ../../api/scglue.check.rst:33:<autosummary>:1
+#: 235f1dfd01224ce0912563f32af17331
+msgid "Checks availability and version of a Python module dependency"
+msgstr "检查特定Python模块依赖的可用性和版本"

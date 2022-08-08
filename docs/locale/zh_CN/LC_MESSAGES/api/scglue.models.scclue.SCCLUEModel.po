@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:2
+#: edf4227be1364a7e912dfdbf3b6e450b
+msgid "scglue.models.scclue.SCCLUEModel"
+msgstr ""
+
+#: 2b2904ec318e4ebd82be1acca41003e7 of scglue.models.scclue.SCCLUEModel:1
+msgid "Bases: :py:class:`~scglue.models.base.Model`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:12
+#: 9128b1e2caa84af88757ec20cc8b1cfa
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 31d6732358ed48e7b19da0ba1eb9c25c
+msgid ""
+":py:obj:`adopt_pretrained_model "
+"<scglue.models.scclue.SCCLUEModel.adopt_pretrained_model>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>
+#: 46b3174f15904d8391f1a43771329e1c 7129f69c2f3b4be1abbc16dd7c7f1038
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 0b5c5ae172d248a08c651338c70d1b7f
+msgid ":py:obj:`None`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 1ceff56e1ff74b20a1461e3aea54d8d8
+msgid ":py:obj:`compile <scglue.models.scclue.SCCLUEModel.compile>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 6e935f189b1d4df49a9cd23b4b40e535
+msgid "Prepare model for training"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: df7682734f324cd79ca981cd00e961f6
+msgid ":py:obj:`cross_predict <scglue.models.scclue.SCCLUEModel.cross_predict>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 5e78a8d7d5f0425fb7067ad1b419323d
+msgid ":py:class:`~anndata.AnnData`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: eeb791394ef247dab8ad24840bc9e7cc
+msgid ":py:obj:`encode_data <scglue.models.scclue.SCCLUEModel.encode_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 0d5f8a86680f48c1b502a6cce0de0c98
+msgid "Compute data sample (cell) embedding"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: 3319877131ee44e78eaee5c99cf6203c
+msgid ":py:obj:`fit <scglue.models.scclue.SCCLUEModel.fit>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
+#: eb3d51d1594a47afa8c5e80537fea8fc
+msgid "Alias of ``.trainer.fit``."
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:28
+#: f898459728a34271aa810b825979f268
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:35:<autosummary>:1
+#: 56fd57372b37447d8cd7191411f0a2a3
+msgid ""
+":py:obj:`ALIGN_BURNIN_PRG "
+"<scglue.models.scclue.SCCLUEModel.ALIGN_BURNIN_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:35:<autosummary>:1
+#: b74631c4f7364a928dcaff74fc35d3f5
+msgid ":py:obj:`MAX_EPOCH_PRG <scglue.models.scclue.SCCLUEModel.MAX_EPOCH_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:35:<autosummary>:1
+#: 5b02f3d806174fc3a8cd2e28084d0972
+msgid ":py:obj:`PATIENCE_PRG <scglue.models.scclue.SCCLUEModel.PATIENCE_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:35:<autosummary>:1
+#: 510e668ab1c240e19debb6cfffe76724
+msgid ""
+":py:obj:`REDUCE_LR_PATIENCE_PRG "
+"<scglue.models.scclue.SCCLUEModel.REDUCE_LR_PATIENCE_PRG>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.rst:35:<autosummary>:1
+#: a761c70c1f86435fb44cd57c24dbb6cc
+msgid ":py:obj:`logger <scglue.models.scclue.SCCLUEModel.logger>`\\"
+msgstr ""
+

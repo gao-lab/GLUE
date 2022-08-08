@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.fit.rst:2
+#: 3a9706fd529e45cca2471cb5c62c071c
+msgid "scglue.models.scclue.SCCLUEModel.fit"
+msgstr ""
+
+#: 1369167af3c541a987a7493be05856d8 of scglue.models.scclue.SCCLUEModel.fit:1
+msgid "Alias of ``.trainer.fit``."
+msgstr ""
+
+#: 19f015b2c8324423b984ec6c08173ee7 of scglue.models.scclue.SCCLUEModel.fit
+msgid "Parameters"
+msgstr ""
+
+#: 6f4044bea5ae4725b212036b0b55b49a of scglue.models.scclue.SCCLUEModel.fit:3
+msgid "Positional arguments are passed to the ``.trainer.fit`` method"
+msgstr ""
+
+#: eb8d0e34c7984fc09f187053319d3e8c of scglue.models.scclue.SCCLUEModel.fit:4
+msgid "Keyword arguments are passed to the ``.trainer.fit`` method"
+msgstr ""
+
+#: f1cb3c6da2664d9d941f9638305e741c of scglue.models.scclue.SCCLUEModel.fit:6
+msgid "Subclasses may override arguments for API definition."
+msgstr ""
+
+#: 1e3dcfec4aea4318ac89403b0e35eb55 of scglue.models.scclue.SCCLUEModel.fit
+msgid "Return type"
+msgstr ""
+
+#: dd580de9a8664598b3039b3077e5df77 of scglue.models.scclue.SCCLUEModel.fit:9
+msgid ":py:obj:`None`"
+msgstr ""
+

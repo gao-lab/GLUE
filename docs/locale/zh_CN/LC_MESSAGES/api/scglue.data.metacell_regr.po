@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.metacell_regr.rst:2 e9a87fbb1281413288f6450c837766f8
+msgid "scglue.data.metacell\\_regr"
+msgstr ""
+
+#: 73447beb895449ba815022c60227d347 of scglue.data.metacell_regr:1
+msgid "Metacell-based regression"
+msgstr ""
+
+#: f95fa05af731452cb7b9ae97c5c62bc7 of scglue.data.metacell_regr
+msgid "Parameters"
+msgstr ""
+
+#: d214bb3b611c4773bc2e34a91a17355e of scglue.data.metacell_regr:3
+msgid ""
+"Datasets to be correlated, where ``.X`` are raw counts (indexed by domain"
+" name)"
+msgstr ""
+
+#: 1c542d171c4942228247dbc82efd7b04 of scglue.data.metacell_regr:6
+msgid "Data representation based on which to cluster meta-cells"
+msgstr ""
+
+#: 7843480ae2254160a9b2127a17f7bc5c of scglue.data.metacell_regr:8
+msgid "Number of metacells to use"
+msgstr ""
+
+#: 0708a627a6ef49d5ae1b8685677e5799 of scglue.data.metacell_regr:10
+msgid "Skeleton graph determining which pair of features to correlate"
+msgstr ""
+
+#: 3d97c8eb05db4cb58d9bb68a339d544f of scglue.data.metacell_regr:12
+msgid ""
+"Regression model (should be a class name under "
+":mod:`sklearn.linear_model`)"
+msgstr ""
+
+#: 90bfc9bedd1549f0999f65abfe441a88 of scglue.data.metacell_regr:14
+msgid "Additional keyword arguments are passed to the regression model"
+msgstr ""
+
+#: 32a67668e5a5473983eaf6b21fbe1719 of scglue.data.metacell_regr
+msgid "Return type"
+msgstr ""
+
+#: df8ae9dabea94bdc887fa683ec498b23 of scglue.data.metacell_regr:16
+msgid ":py:class:`~networkx.DiGraph`"
+msgstr ""
+
+#: 1f315de8dfff4dccbac18a2f775b06e7 of scglue.data.metacell_regr
+msgid "Returns"
+msgstr ""
+
+#: 7f80b0a74a694585bfac0419f9d78b74 of scglue.data.metacell_regr:17
+msgid ""
+"*regr* -- A skeleton-based graph containing regression weights as edge "
+"attribute \"regr\""
+msgstr ""
+

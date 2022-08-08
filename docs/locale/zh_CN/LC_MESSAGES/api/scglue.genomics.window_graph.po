@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.window_graph.rst:2
+#: 432ea579d8fd4e348fd965038d778ec1
+msgid "scglue.genomics.window\\_graph"
+msgstr ""
+
+#: 1c99e943e8954a43b1d24fa19be02020 of scglue.genomics.window_graph:1
+msgid ""
+"Construct a window graph between two sets of genomic features, where "
+"features pairs within a window size are connected."
+msgstr ""
+
+#: a167ce47ff864140bc11308a5b8df6e7 of scglue.genomics.window_graph
+msgid "Parameters"
+msgstr ""
+
+#: 76a6da682d0e4b43a2dc97b83ac0e9b8 of scglue.genomics.window_graph:5
+msgid "First feature set, either a :class:`Bed` object or path to a bed file"
+msgstr ""
+
+#: 2507f842a95d4d38bf19301b34099998 of scglue.genomics.window_graph:7
+msgid "Second feature set, either a :class:`Bed` object or path to a bed file"
+msgstr ""
+
+#: 19afea8e7df146d58ef624d8638caf1c of scglue.genomics.window_graph:9
+msgid "Window size (in bp)"
+msgstr ""
+
+#: a9e0fbda47de4d9c83ac8ddad1f4610c of scglue.genomics.window_graph:11
+msgid "Whether ``left`` is already sorted"
+msgstr ""
+
+#: 1c3c0fc5205e40c3ba30fd7fde8084e5 of scglue.genomics.window_graph:13
+msgid "Whether ``right`` is already sorted"
+msgstr ""
+
+#: c1dc3297b52b4768b8d039c1c34582b4 of scglue.genomics.window_graph:15
+msgid ""
+"Function to compute edge attributes for connected features, should accept"
+" the following three positional arguments:  - l: left interval - r: right"
+" interval - d: signed distance between the intervals  By default no edge "
+"attribute is created."
+msgstr ""
+
+#: 251def5a776849cb800fbb13e6308ef8 of scglue.genomics.window_graph:15
+msgid ""
+"Function to compute edge attributes for connected features, should accept"
+" the following three positional arguments:"
+msgstr ""
+
+#: c9f7ce68ab0643409b6348603639edbb of scglue.genomics.window_graph:18
+msgid "l: left interval"
+msgstr ""
+
+#: c75f6018b99d40c793e034612dabf718 of scglue.genomics.window_graph:19
+msgid "r: right interval"
+msgstr ""
+
+#: 5862989777e94012a36134c81c44e604 of scglue.genomics.window_graph:20
+msgid "d: signed distance between the intervals"
+msgstr ""
+
+#: ef1beaab565f4adea9670f784e71ee77 of scglue.genomics.window_graph:22
+msgid "By default no edge attribute is created."
+msgstr ""
+
+#: 5bb4686a3dee461f9e7d5f8b0e3a4afe of scglue.genomics.window_graph
+msgid "Return type"
+msgstr ""
+
+#: 33735d8c1412401085b6459dd9ce761d of scglue.genomics.window_graph:24
+msgid ":py:class:`~networkx.MultiDiGraph`"
+msgstr ""
+
+#: 16122c10cd33405ea2f3944c5e3a3ef8 of scglue.genomics.window_graph
+msgid "Returns"
+msgstr ""
+
+#: 82125032200c462c9f74b24b1f322067 of scglue.genomics.window_graph:25
+msgid "*graph* -- Window graph"
+msgstr ""
+

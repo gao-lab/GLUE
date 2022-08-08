@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.Discriminator.forward.rst:2
+#: bb924b91682c46d4918466958d615eec
+msgid "scglue.models.scclue.Discriminator.forward"
+msgstr ""
+
+#: 6fb6c063e8ec4841986562bf37105b3d of
+#: scglue.models.scclue.Discriminator.forward:1
+msgid "Defines the computation performed at every call."
+msgstr ""
+
+#: 8c0d270151ce4da59b7a0850614aad6b of
+#: scglue.models.scclue.Discriminator.forward:3
+msgid "Should be overridden by all subclasses."
+msgstr ""
+
+#: 8f95becc863b416bae68e4642cfbca70 of
+#: scglue.models.scclue.Discriminator.forward:6
+msgid ""
+"Although the recipe for forward pass needs to be defined within this "
+"function, one should call the :class:`Module` instance afterwards instead"
+" of this since the former takes care of running the registered hooks "
+"while the latter silently ignores them."
+msgstr ""
+
+#: ee4c37ac808f40969aaea4089e043251 of
+#: scglue.models.scclue.Discriminator.forward
+msgid "Return type"
+msgstr ""
+
+#: 1c0da4a886b54b55b0b0ce260afa366d of
+#: scglue.models.scclue.Discriminator.forward:12
+msgid ":py:class:`torch.Tensor`"
+msgstr ""
+

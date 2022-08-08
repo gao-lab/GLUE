@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.prob_or.rst:2 d78d36b6928e4618b7c134717bc987f4
+msgid "scglue.num.prob\\_or"
+msgstr ""
+
+#: dcb0a143a7d54d6e972ef5279fcefe9e of scglue.num.prob_or:1
+msgid "Combined multiple probabilities in a logical OR manner."
+msgstr ""
+
+#: 1920157fe597422d84011292a3facdc7 of scglue.num.prob_or
+msgid "Parameters"
+msgstr ""
+
+#: be0b8ababf1549298a4dc2106814392f of scglue.num.prob_or:4
+msgid "Array of probabilities"
+msgstr ""
+
+#: 104fa7263720486681c3d40bfe0056b9 of scglue.num.prob_or
+msgid "Return type"
+msgstr ""
+
+#: 4d7072e769934e888a7a1dbd493ce784 of scglue.num.prob_or:6
+msgid ":py:class:`float`"
+msgstr ""
+
+#: e370e2f089174835828b237d1ebac291 of scglue.num.prob_or
+msgid "Returns"
+msgstr ""
+
+#: 9ac4965458924271baec3e1bd02c6ef8 of scglue.num.prob_or:7
+msgid "*prob* -- Combined probability"
+msgstr ""
+

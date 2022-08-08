@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.Trainer.rst:2 7d762e9072dc4476bd7cb099139fef68
+msgid "scglue.models.base.Trainer"
+msgstr ""
+
+#: 490933bbc1394a869102cb1fcb63a92f of scglue.models.base.Trainer:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: 024b64e0081c47b7bee7b40b9ff62b7c of scglue.models.base.Trainer:1
+msgid "Abstract trainer class"
+msgstr ""
+
+#: 9c3662fc6e824ce0ad83aeccd81d3c13 of scglue.models.base.Trainer
+msgid "Parameters"
+msgstr ""
+
+#: d6a59c67c7144c36a72220b6c0372573 of scglue.models.base.Trainer:4
+msgid "Network module to be trained"
+msgstr ""
+
+#: ca6dc2e8acfd49af936fa6e168019f5d of scglue.models.base.Trainer:8
+msgid ""
+"Subclasses should populate ``required_losses``, and additionally define "
+"optimizers here."
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:12 21bcb1203da34938aa8ce1fe2fc52c1c
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: a28a190a55374037b581dd6b5137d83b
+msgid ":py:obj:`fit <scglue.models.base.Trainer.fit>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 7f4ff1b02c6e4f1faa7862b04d4cf534
+msgid "Fit network"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: e97ff3336b5c46938c64290e3df16133
+msgid ":py:obj:`get_losses <scglue.models.base.Trainer.get_losses>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 00b37257e3484808b9d4fb86fffce999
+msgid "Get loss values for given data"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 764d40d285324aff954f4823e52b7f5e
+msgid ":py:obj:`load_state_dict <scglue.models.base.Trainer.load_state_dict>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: fef1246f841d41dbab7909e4a76d7107
+msgid "Load state from a state dict"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: f29a9d17aca44e559f81137e48c97bc5
+msgid ":py:obj:`report_metrics <scglue.models.base.Trainer.report_metrics>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: da6d1ecc0425407ab443b2ab38a65068
+msgid "Report loss values during training"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 0830b58f1a38456fa5bea702d3aeb1d9
+msgid ":py:obj:`state_dict <scglue.models.base.Trainer.state_dict>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 7404fde62b04482296d484c552264720
+msgid "State dict"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: a1252d2f872f4243b60a9cb3cddc14bc
+msgid ":py:obj:`train_step <scglue.models.base.Trainer.train_step>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: a1880855909b4526a5ac7b3ef6aefa6d
+msgid "A single training step"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 796b2797fe6544d1aa5cad6ddc291963
+msgid ":py:obj:`val_step <scglue.models.base.Trainer.val_step>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:28:<autosummary>:1
+#: 80f14c2c03c94f0982e2f161d0b5521d
+msgid "A single validation step"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:30 4b86b3ec44ea437da4bbaacc688cccb0
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.base.Trainer.rst:33:<autosummary>:1
+#: d7634f6db58d47689881c06f4dbd08df
+msgid ":py:obj:`logger <scglue.models.base.Trainer.logger>`\\"
+msgstr ""
+

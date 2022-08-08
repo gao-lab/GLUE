@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:35+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../install.rst:2 658cd5e4655c413ba524ba28f85b17b9
+msgid "Installation guide"
+msgstr "安装指南"
+
+#: ../../install.rst:6 1ff577b1b9ed49d5a4234285bc2a21bd
+msgid "Main package"
+msgstr "主包"
+
+#: ../../install.rst:8 30209f371f14402daa31cc93992921c4
+msgid ""
+"The ``scglue`` package can be installed via conda using one of the "
+"following commands:"
+msgstr "可以使用以下任意一条conda命令来安装 ``scglue`` 包："
+
+#: ../../install.rst:16 017e050357cd4a308edd8a353b289824
+msgid "Or, it can also be installed via pip:"
+msgstr "或者，也可以使用pip命令："
+
+#: ../../install.rst:24 ab227a3d8417491fbd587c764b50d4fe
+msgid ""
+"To avoid potential dependency conflicts, installing within a `conda "
+"environment <https://conda.io/projects/conda/en/latest/user-guide/tasks"
+"/manage-environments.html>`__ is recommended."
+msgstr "为了避免可能出现的依赖冲突，建议在 `conda 环境 <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__ 中安装。"
+
+#: ../../install.rst:31 e267f43164354e09a28a3c06bccd44e7
+msgid "Optional dependencies"
+msgstr "可选依赖项"
+
+#: ../../install.rst:33 18ae8dae2cab4d02982a55449a41204e
+msgid ""
+"Some functions in the ``scglue`` package use metacell aggregation via "
+"k-Means clustering, which can receive significant speed up with the "
+"`faiss <https://github.com/facebookresearch/faiss>`__ package."
+msgstr "``scglue`` 包中的一些函数通过k-Means聚类进行 \"metacell\" 聚合，安装 `faiss <https://github.com/facebookresearch/faiss>`__ 包可以显著提高运行速度。"
+
+#: ../../install.rst:36 12995b0533d04cb294b9faf67ff6c4dc
+msgid ""
+"You may install ``faiss`` following the official `guide "
+"<https://github.com/facebookresearch/faiss/blob/main/INSTALL.md>`__."
+msgstr "您可以通过 `官方指南 <https://github.com/facebookresearch/faiss/blob/main/INSTALL.md>`__ 安装 ``faiss``。"
+
+#: ../../install.rst:38 bd64e312c6054173a372ca592391a12d
+msgid ""
+"Now you are all set. Proceed to `tutorials <tutorials.rst>`__ for how to "
+"use the ``scglue`` package."
+msgstr "好了，您已经准备好了！请进入 `教程 <tutorials.rst>`__ 了解如何使用 ``scglue`` 包。"

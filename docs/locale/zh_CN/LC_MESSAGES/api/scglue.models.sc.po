@@ -1,0 +1,231 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.rst:2 656444dd43854fae87bf84c1bed53be3
+msgid "scglue.models.sc"
+msgstr ""
+
+#: ec5937869ce34b20940d2fa41b86a661 of scglue.models.sc:1
+msgid "GLUE component modules for single-cell omics data"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:17 6b7d5f80af274ac09f93fcdfe8c6fbed
+msgid "Classes"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 9e7b71150b3740adbf5b7959affa3a90
+msgid ":py:obj:`Classifier <scglue.models.sc.Classifier>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 46f3b296d5244cdf8c3e25f3d8ffab6d
+msgid "Linear label classifier"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 67a3f58164e84fa89ea7e1f9b2704405
+msgid ":py:obj:`DataDecoder <scglue.models.sc.DataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 3c47618a3fc049c9a85e105372ab7e83
+msgid "Abstract data decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 8005d37d736145af8420fe47ad770e19
+msgid ":py:obj:`DataEncoder <scglue.models.sc.DataEncoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 256855f062b84d9fbe963dd645cfd784
+msgid "Abstract data encoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 7c46e836ed5c48cba0f38782519e2a87
+msgid ":py:obj:`Discriminator <scglue.models.sc.Discriminator>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 8e8aa90072ee4f2bb4a93feacf35284c
+msgid "Domain discriminator"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 446e81c5cf7e4982a3e87e402152f1ae
+msgid ":py:obj:`GraphDecoder <scglue.models.sc.GraphDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 5ab183eaf18a495b958b0669f1b92cee
+msgid "Graph decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 922b093568d5442dbc7e0b4c0d8faa11
+msgid ":py:obj:`GraphEncoder <scglue.models.sc.GraphEncoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: ad05ff40c4064464be98074855c50fc3
+msgid "Graph encoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 6ede1b128c9545a7bc0c78123bf6c6d1
+msgid ":py:obj:`IndDataDecoder <scglue.models.sc.IndDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 9016a5f898e241a7b01e569ec6188473
+msgid "Data decoder mixin that makes decoding independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 8da41ad0459f4e60ae9729e5eb45f6de
+msgid ":py:obj:`IndNBDataDecoder <scglue.models.sc.IndNBDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 12e01cd924f34fd5b372e5d725e1be8b
+msgid "Negative binomial data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: faf9070acab04447aa779cb8779c48d5
+msgid ":py:obj:`IndNormalDataDocoder <scglue.models.sc.IndNormalDataDocoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 619c62c60d0c4a43bf292cf77dcfdc88
+msgid "Normal data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 13c5b551a5f84027b49f7de7a3d10412
+msgid ":py:obj:`IndZILNDataDecoder <scglue.models.sc.IndZILNDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 32d9e17400124bc4a8cd544826b1508a
+msgid "Zero-inflated log-normal data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 1b50bb58e92e41279d5f2dad2dbdcec4
+msgid ":py:obj:`IndZINBDataDecoder <scglue.models.sc.IndZINBDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 0eaa4b91c9664704840fff326cc5dabf
+msgid "Zero-inflated negative binomial data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 805c80c00c584924adbb5d70f990014a
+msgid ":py:obj:`IndZINDataDecoder <scglue.models.sc.IndZINDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 870450b447714096951b0ebae6b0b43c
+msgid "Zero-inflated normal data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: e5d53f6abd144582bbc980e4cbbc5388
+msgid ":py:obj:`NBDataDecoder <scglue.models.sc.NBDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: f45f2043ce6d4596a30f9c593ff89386
+msgid "Negative binomial data decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 9c7f857affbd43f4ba1f472c9a535de4
+msgid ":py:obj:`NBDataEncoder <scglue.models.sc.NBDataEncoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: beddb103735646e2a6f9964f7a8ddd14
+msgid "Data encoder for negative binomial data"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 053f4b92b2ac4ef784e9dd2fac8d55d5
+msgid ":py:obj:`NormalDataDecoder <scglue.models.sc.NormalDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 276fae9233544acd99dc41712dfd7e4e
+msgid "Normal data decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: ffa5b9a836104e8dae6c3af2ade7bb63
+msgid ":py:obj:`Prior <scglue.models.sc.Prior>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: f0f13891678f4e589c6e64308a4598e7
+msgid "Prior distribution"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: b3ec8c1108744400bf702fc93d8d40bc
+msgid ":py:obj:`VanillaDataEncoder <scglue.models.sc.VanillaDataEncoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: ea3a0efbdc9845918ad152afdfc23b6c
+msgid "Vanilla data encoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 9ab89587c00a4c4bb0d0baee4821cfca
+msgid ":py:obj:`ZILNDataDecoder <scglue.models.sc.ZILNDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: aa3b510f51bb484eb205c46ed30906cd
+msgid "Zero-inflated log-normal data decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 5ecd0e086bb4418db6c9f289cbf9e1ca
+msgid ":py:obj:`ZINBDataDecoder <scglue.models.sc.ZINBDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 935078b1d8384a3a98ca7088026a6c77
+msgid "Zero-inflated negative binomial data decoder"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: 12470752f8614a06b1f355b3ddf4d3a0
+msgid ":py:obj:`ZINDataDecoder <scglue.models.sc.ZINDataDecoder>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.rst:42:<autosummary>:1
+#: ec9691f18f324bdb96ef63963473f2d8
+msgid "Zero-inflated normal data decoder"
+msgstr ""
+

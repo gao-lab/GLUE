@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.prob.rst:2 80525a8296654b9790cc48c28a18dcc3
+msgid "scglue.models.prob"
+msgstr ""
+
+#: ee3ce20f4cf74b5480188e20905504c5 of scglue.models.prob:1
+msgid "Probability distributions"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:17 384863c687be41a6a4874de907531363
+msgid "Classes"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 3f7c3f2f602e4d8895c91fd0e62273e9
+msgid ":py:obj:`MSE <scglue.models.prob.MSE>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 50612df3358a4cfe950f4a78163d1a6a
+msgid "A \"sham\" distribution that outputs negative MSE on ``log_prob``"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 29dc01fd7652462eb886ee6bf6c76f65
+msgid ":py:obj:`RMSE <scglue.models.prob.RMSE>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 26be51e594f84e34a518d2b78922582b
+msgid "A \"sham\" distribution that outputs negative RMSE on ``log_prob``"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 8c4be1b7aa4149c389424dd99f9ad616
+msgid ":py:obj:`ZILN <scglue.models.prob.ZILN>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: ebd0640b11b4410c8d0c8f525ca1f4cc
+msgid "Zero-inflated log-normal distribution with subsetting support"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 064f457d6ccd43f7ba174363b3948dd6
+msgid ":py:obj:`ZIN <scglue.models.prob.ZIN>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: f910be6d1df04dc090874f331f90be6c
+msgid "Zero-inflated normal distribution with subsetting support"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: d7f097b4d642461ba618d31f8d888945
+msgid ":py:obj:`ZINB <scglue.models.prob.ZINB>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.rst:27:<autosummary>:1
+#: 85ee34962638448fa5cbbf0352a843a9
+msgid "Zero-inflated negative binomial distribution"
+msgstr ""
+

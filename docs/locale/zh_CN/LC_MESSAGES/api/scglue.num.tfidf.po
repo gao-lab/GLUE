@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.num.tfidf.rst:2 6307687400254f9da49c514770afe666
+msgid "scglue.num.tfidf"
+msgstr ""
+
+#: 82755f531f364e7fafa4884e60ec7214 of scglue.num.tfidf:1
+msgid "TF-IDF normalization (following the Seurat v3 approach)"
+msgstr ""
+
+#: c842336f066a4198a8a36449d2fedd46 of scglue.num.tfidf
+msgid "Parameters"
+msgstr ""
+
+#: 4d213a2d37314e82badd294b1a2ecc1f of scglue.num.tfidf:4
+msgid "Input matrix"
+msgstr ""
+
+#: e946b39f93d542b8812f2e0e5610e133 of scglue.num.tfidf
+msgid "Return type"
+msgstr ""
+
+#: 2d52812c981946a19df85869f2110a70 of scglue.num.tfidf:6
+msgid ""
+":py:data:`typing.Union`\\[:py:class:`numpy.ndarray`, "
+":py:class:`scipy.sparse._base.spmatrix`]"
+msgstr ""
+
+#: 21adbc5b933246d092f315ae24c64102 of scglue.num.tfidf
+msgid "Returns"
+msgstr ""
+
+#: c9bb9434e6614a4abd2fceda5490657f of scglue.num.tfidf:7
+msgid "*X_tfidf* -- TF-IDF normalized matrix"
+msgstr ""
+

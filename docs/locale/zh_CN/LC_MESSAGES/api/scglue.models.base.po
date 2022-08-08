@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.rst:2 97866695398c463c8032349a81582387
+msgid "scglue.models.base"
+msgstr ""
+
+#: 21b722ba641f4f4697de5caa0274f398 of scglue.models.base:1
+msgid "Base classes for model definition and training"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:17 be6dd079688e41e399e0c6376e4a3533
+msgid "Classes"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 9d580fa58b7e488ea1e94444ce7f5264
+msgid ":py:obj:`Model <scglue.models.base.Model>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 0aaeb496912543a299d4896b9a2e77b8
+msgid "Abstract model class"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 6aea6d4ddc744f259fb9f747049518e6
+msgid ":py:obj:`Trainer <scglue.models.base.Trainer>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 2d13571f2d104a3aa0590f1b2569ade7
+msgid "Abstract trainer class"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 0d54e0ee34dd44e79190af8f53d6b9ce
+msgid ":py:obj:`TrainingPlugin <scglue.models.base.TrainingPlugin>`"
+msgstr ""
+
+#: ../../api/scglue.models.base.rst:25:<autosummary>:1
+#: 13c3a21818b04c7490675d67966a9ffd
+msgid "Plugin used to extend the training process with certain functions"
+msgstr ""
+

@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUEModel.encode_data.rst:2
+#: 208c77c00eec4c129d0491c250be3d05
+msgid "scglue.models.scclue.SCCLUEModel.encode\\_data"
+msgstr ""
+
+#: 6e2e448a86c247738c5e5d174f10a81e of
+#: scglue.models.scclue.SCCLUEModel.encode_data:1
+msgid "Compute data sample (cell) embedding"
+msgstr ""
+
+#: 7f33e1f3c4ee4a28a74b8244a17c2257 of
+#: scglue.models.scclue.SCCLUEModel.encode_data
+msgid "Parameters"
+msgstr ""
+
+#: 9bcc9b06432844ac995c757b72367ebe of
+#: scglue.models.scclue.SCCLUEModel.encode_data:4
+msgid "Domain key"
+msgstr ""
+
+#: 146d4111582346018a9988488230ed7a of
+#: scglue.models.scclue.SCCLUEModel.encode_data:6
+msgid "Input dataset"
+msgstr ""
+
+#: b8522488971143119e020834a1af9d9a of
+#: scglue.models.scclue.SCCLUEModel.encode_data:8
+msgid "Size of minibatches"
+msgstr ""
+
+#: 91c946e2405d4d228bf2ab5298e4f941 of
+#: scglue.models.scclue.SCCLUEModel.encode_data
+msgid "Return type"
+msgstr ""
+
+#: 236bfb25c86d4c2a910bd3f2ded086f9 of
+#: scglue.models.scclue.SCCLUEModel.encode_data:10
+msgid ":py:class:`numpy.ndarray`"
+msgstr ""
+
+#: c2acde60e57d448bab8642e7f0ab3171 of
+#: scglue.models.scclue.SCCLUEModel.encode_data
+msgid "Returns"
+msgstr ""
+
+#: 5be3a67b0fe54a8db5a0443efcf8d55b of
+#: scglue.models.scclue.SCCLUEModel.encode_data:11
+msgid "*embedding* -- Data sample (cell) embedding"
+msgstr ""
+

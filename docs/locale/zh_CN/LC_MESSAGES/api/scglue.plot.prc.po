@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.plot.prc.rst:2 32fada6160134f5692bc8414767618b2
+msgid "scglue.plot.prc"
+msgstr ""
+
+#: 5b101dfa6f064b22a9b0a9ad46036c68 of scglue.plot.prc:1
+msgid "Plot a precision-recall curve"
+msgstr ""
+
+#: 669bcaacaed243aa830431994d68ebeb of scglue.plot.prc
+msgid "Parameters"
+msgstr ""
+
+#: a6906f5037a547e5a4820c839c260217 of scglue.plot.prc:4
+msgid "True labels"
+msgstr ""
+
+#: 290c292dd7864216b082f43f2c7996c9 of scglue.plot.prc:6
+msgid "Prediction values"
+msgstr ""
+
+#: ffa56e2840324413860b6b4d93102266 of scglue.plot.prc:8
+msgid ""
+"Maximal number of points on the precision-recall curve, beyond which the "
+"points are equidistantly subsampled."
+msgstr ""
+
+#: 4dacb2c2f5a643f79386e259aee5844e of scglue.plot.prc:11
+msgid "Existing axes to plot on"
+msgstr ""
+
+#: 6e4f138bf89647b191694982883a3c47 of scglue.plot.prc:12
+msgid "Additional keyword arguments passed to :func:`seaborn.lineplot`"
+msgstr ""
+
+#: eb099d97930142c7b59aac7723a01099 of scglue.plot.prc
+msgid "Return type"
+msgstr ""
+
+#: 345bfb2f5f974a53ae5aae5db438b457 of scglue.plot.prc:14
+msgid ":py:class:`~matplotlib.axes.Axes`"
+msgstr ""
+
+#: f99925de2e4243ffbce2952efa376101 of scglue.plot.prc
+msgid "Returns"
+msgstr ""
+
+#: e2d1d07d6ec04df6ae797eaa16bd1100 of scglue.plot.prc:15
+msgid "*ax* -- Plot axes"
+msgstr ""
+

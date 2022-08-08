@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.prob.ZINB.rst:2 8c0e49a657d34aaea615ded32364e4ad
+msgid "scglue.models.prob.ZINB"
+msgstr ""
+
+#: 2620aa17f66444128853bf2a63404781 of scglue.models.prob.ZINB:1
+msgid "Bases: :py:class:`~torch.distributions.negative_binomial.NegativeBinomial`"
+msgstr ""
+
+#: 6926f9b028f143e98db70a96a8ef59fc of scglue.models.prob.ZINB:1
+msgid "Zero-inflated negative binomial distribution"
+msgstr ""
+
+#: 2cb9723a63ea43fb92b053f9f773648c of scglue.models.prob.ZINB
+msgid "Parameters"
+msgstr ""
+
+#: 6498f2abb36b45b3a9b342bd9c46add7 of scglue.models.prob.ZINB:4
+msgid "Zero-inflation logits"
+msgstr ""
+
+#: e7c753f20f5644539c5c1841bd423628 of scglue.models.prob.ZINB:6
+msgid "Total count of the negative binomial distribution"
+msgstr ""
+
+#: 03d679ae722e470d9a9d67e217af573f of scglue.models.prob.ZINB:8
+msgid "Logits of the negative binomial distribution"
+msgstr ""
+
+#: ../../api/scglue.models.prob.ZINB.rst:12 4c7d74c4c77a426cbc947a4925b5dad2
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.prob.ZINB.rst:22:<autosummary>:1
+#: dcfc452feb014f94aabefa72c844fd3c
+msgid ":py:obj:`log_prob <scglue.models.prob.ZINB.log_prob>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.ZINB.rst:22:<autosummary>:1
+#: 131dcdb906664d1ab84ad155a593d07c
+msgid ""
+"Returns the log of the probability density/mass function evaluated at "
+"`value`."
+msgstr ""
+
+#: ../../api/scglue.models.prob.ZINB.rst:24 2655a6a5a2cc4e199e5be28c16e53fbe
+msgid "Attributes"
+msgstr ""
+

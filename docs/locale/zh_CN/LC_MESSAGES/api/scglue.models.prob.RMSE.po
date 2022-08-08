@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.prob.RMSE.rst:2 1ce1d421af754b59b65d1e785b178fc5
+msgid "scglue.models.prob.RMSE"
+msgstr ""
+
+#: 24f7411ae9f3499fa5e35b986951ac52 of scglue.models.prob.RMSE:1
+msgid "Bases: :py:class:`~scglue.models.prob.MSE`"
+msgstr ""
+
+#: 407b042427cb4d8ebcbdfaad3a81188a of scglue.models.prob.RMSE:1
+msgid "A \"sham\" distribution that outputs negative RMSE on ``log_prob``"
+msgstr ""
+
+#: 1377a75c2ac8406882935e64d8442ad6 of scglue.models.prob.RMSE
+msgid "Parameters"
+msgstr ""
+
+#: 8659e582bc974b538067f48ccfc58f8d of scglue.models.prob.RMSE:4
+msgid "Mean of the distribution"
+msgstr ""
+
+#: ../../api/scglue.models.prob.RMSE.rst:12 2889c3b7864f4d5eb2f8aeacf88812e7
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.prob.RMSE.rst:22:<autosummary>:1
+#: 59f42a41c59e489db874004d44c4da9e
+msgid ":py:obj:`log_prob <scglue.models.prob.RMSE.log_prob>`"
+msgstr ""
+
+#: ../../api/scglue.models.prob.RMSE.rst:22:<autosummary>:1
+#: 4c2c3b6c7dc444438bf2d03d776d7442
+msgid ""
+"Returns the log of the probability density/mass function evaluated at "
+"`value`."
+msgstr ""
+
+#: ../../api/scglue.models.prob.RMSE.rst:24 586ebd253dfb4f97a96af990d3c942b7
+msgid "Attributes"
+msgstr ""
+

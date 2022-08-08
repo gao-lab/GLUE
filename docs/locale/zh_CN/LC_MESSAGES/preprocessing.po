@@ -1,0 +1,319 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../preprocessing.ipynb:9 d9a199f6a57a465094648409af6038fa
+msgid "Stage 1: Data preprocessing"
+msgstr "第一步：数据预处理"
+
+#: ../../preprocessing.ipynb:20 79599972467a421eb724cf1b859b534c
+msgid ""
+"In this tutorial, we will show how to prepare the necessary data for GLUE"
+" model training, using the SNARE-seq data (`Chen, et al. 2019 "
+"<https://doi.org/10.1038/s41587-019-0290-0>`__) as an example. The SNARE-"
+"seq data consists of paired scRNA-seq and scATAC-seq profiles, but we "
+"will treat them as unpaired and try to align these two omics layers using"
+" GLUE."
+msgstr "在本教程中，我们将以SNARE-seq数据 (`Chen, et al. 2019 <https://doi.org/10.1038/s41587-019-0290-0>`__) 为例，展示如何为GLUE模型训练准备必要的数据。SNARE-seq数据由成对的scRNA-seq和scATAC-seq图谱组成，但我们将它们视作非配对的，并尝试使用GLUE来对齐这两个组学层。"
+
+#: ../../preprocessing.ipynb:57 55d4a753deba49b8b4b60402e6da0686
+msgid "Read data"
+msgstr "读取数据"
+
+#: ../../preprocessing.ipynb:68 de0c4e02e092498bb132a50c048e2dbd
+msgid ""
+"First, we need to prepare the scRNA-seq and scATAC-seq data into "
+"``AnnData`` objects. ``AnnData`` is the standard data class we use in "
+"``scglue``. See their `documentation "
+"<https://anndata.readthedocs.io/en/latest/index.html>`__ for more details"
+" if you are unfamiliar, including how to construct ``AnnData`` objects "
+"from scratch, and how to read data in other formats (csv, mtx, loom, "
+"etc.) into ``AnnData`` objects."
+msgstr "首先，我们需要把scRNA-seq和scATAC-seq数据准备成 ``AnnData`` 对象。 ``AnnData`` 是我们在 ``scglue`` 中使用的标准数据类。如果您不熟悉如何从头开始构建 ``AnnData`` 对象，以及如何将其他格式的数据（csv、mtx、loom等）读入 ``AnnData`` 对象，请查看他们的 `文档 <https://anndata.readthedocs.io/en/latest/index.html>`__。"
+
+#: ../../preprocessing.ipynb:79 7f7610d12cdb483d9130255d7184d73b
+msgid ""
+"Here we just load existing ``h5ad`` files, which is the native file "
+"format for ``AnnData``. The ``h5ad`` files used in this tutorial can be "
+"downloaded from here:"
+msgstr "这里我们加载现有的 ``h5ad`` 文件，这是 ``AnnData`` 的本地文件格式。本教程使用的 ``h5ad`` 文件可以从这里下载："
+
+#: ../../preprocessing.ipynb:81 510afcd8d51746769e9622aac4cec571
+msgid "http://download.gao-lab.org/GLUE/tutorial/Chen-2019-RNA.h5ad"
+msgstr ""
+
+#: ../../preprocessing.ipynb:82 1b0fb4d6ab52421788f80a61c0622c8c
+msgid "http://download.gao-lab.org/GLUE/tutorial/Chen-2019-ATAC.h5ad"
+msgstr ""
+
+#: ../../preprocessing.ipynb:172 f048e0ed81e4427d9de5101a185b3807
+msgid "Preprocess scRNA-seq data"
+msgstr "预处理scRNA-seq数据"
+
+#: ../../preprocessing.ipynb:183 ../../preprocessing.ipynb:373
+#: 3e4ade788b624b9f9d27d6c9c9ef4175 be6a1550d8774952be563796f182db83
+msgid "(Estimated time: ~2 min)"
+msgstr "（预计时间：约2分钟）"
+
+#: ../../preprocessing.ipynb:194 f2b9f4a271c44267a9a06f468ec8a7e5
+msgid ""
+"To begin with, the scRNA-seq expression matrix is supposed to contain raw"
+" UMI counts:"
+msgstr "首先，scRNA-seq表达矩阵应该包含原始的UMI计数："
+
+#: ../../preprocessing.ipynb:246 84100c3f9c9e479bac81a53419743cc8
+msgid ""
+"Before any preprocessing, we back up the raw UMI counts in a layer called"
+" “counts”. It will be used later during model training."
+msgstr "在进行预处理之前，我们先将原始UMI计数备份到一个名为“counts”的层中。它将在未来的模型训练中使用到。"
+
+#: ../../preprocessing.ipynb:267 03c5cb01ac1a46248e361735e80865dd
+msgid ""
+"Then follow a minimal ``scanpy`` pipeline for data preprocessing (see "
+"their `tutorial <https://scanpy-"
+"tutorials.readthedocs.io/en/latest/pbmc3k.html>`__ if you are "
+"unfamiliar)."
+msgstr "接着按照最基础的 `scanpy` 流程进行数据预处理（如果您不熟悉，请查看他们的 `教程 <https://scanpy-tutorials.readthedocs.io/en/latest/pbmc3k.html>`__）。"
+
+#: ../../preprocessing.ipynb:278 471c3cd15bfb4a1d8d8d0b95fc3971c9
+msgid ""
+"First up we use the “seurat_v3” method to select 2,000 highly variable "
+"genes."
+msgstr "首先，我们使用“seurat_v3”方法选择2000个高变异基因。"
+
+#: ../../preprocessing.ipynb:299 ad6d3be406de400ea375efc2761e9e1d
+msgid ""
+"Then normalize, scale the data, and perform dimension reduction via PCA. "
+"By default, 100 principal components are used."
+msgstr "然后，对数据进行归一化和缩放，以及PCA降维，默认使用100个主成分。"
+
+#: ../../preprocessing.ipynb:301 c61103e5155445099002454bc77b1b98
+msgid ""
+"The PCA embedding will be used in `stage 2 <training.ipynb#Configure-"
+"data>`__ as the first encoder transformation to reduce model size."
+msgstr "PCA嵌入将被用于 `阶段 2 <training.ipynb#配置数据>`__，作为编码器的第一个转换，以减少模型大小。"
+
+#: ../../preprocessing.ipynb:325 96842adbd6344ea3b5fb8e4f1a905ba4
+msgid "Optionally, we can visualize the RNA domain with UMAP."
+msgstr "可选的，我们可以用UMAP对RNA模态进行可视化。"
+
+#: ../../preprocessing.ipynb:362 91472331d282422b97893dfd71cb0f52
+msgid "Preprocess scATAC-seq data"
+msgstr "预处理scATAC-seq数据"
+
+#: ../../preprocessing.ipynb:384 04bebc02d89842fab622e74fb9603b5b
+msgid ""
+"Similar to scRNA-seq, the scATAC-seq accessibility matrix is also also "
+"supposed to contain raw counts."
+msgstr "与scRNA-seq类似，scATAC-seq染色质可及性矩阵也应该包含原始计数。"
+
+#: ../../preprocessing.ipynb:436 d153b079193449af857df72750e87a87
+msgid ""
+"For scATAC-seq, we apply the latent semantic indexing (LSI) for dimension"
+" reduction, using the function `scglue.data.lsi "
+"<api/scglue.data.lsi.rst>`__. This is just a Python reimplementation of "
+"the LSI function in `Signac <https://satijalab.org/signac/>`__. We also "
+"set the dimensionality to 100. The other keyword argument ``n_iter=15`` "
+"is passed to `sklearn.utils.extmath.randomized_svd <https://scikit-"
+"learn.org/stable/modules/generated/sklearn.utils.extmath.randomized_svd.html>`__."
+" Setting it to larger values increases the precision of randomized SVD."
+msgstr "对于scATAC-seq，我们使用函数 `scglue.data.lsi <api/scglue.data.lsi.rst>`__ 进行潜在语义索引(LSI)降维，这是 `Signac <https://satijalab.org/signac/>`__ 中LSI函数的Python重新实现。我们将维度设置为100。另一个关键参数 ``n_iter=15`` 被传递给 `sklearn.utils.extmath.randomized_svd <https://scikit-learn.org/stable/modules/generated/sklearn.utils.extmath.randomized_svd.html>`__，将其设置为更大的值可以提高随机SVD的精度。"
+
+#: ../../preprocessing.ipynb:439 1da7458b0ef34e0fab35e8b5039af0dd
+msgid ""
+"The LSI embedding will be used in `stage 2 <training.ipynb#Configure-"
+"data>`__ as the first encoder transformation to reduce model size."
+msgstr "LSI嵌入将被用于 `阶段 2 <training.ipynb#配置数据>`__，作为编码器的第一个转换，以减少模型大小。"
+
+#: ../../preprocessing.ipynb:460 eb7e6519caaa48ba8568d4531d86eff2
+msgid "Optionally, we may also visualize the ATAC domain with UMAP."
+msgstr "可选的，我们可以用UMAP将ATAC模态可视化。"
+
+#: ../../preprocessing.ipynb:506 a822d8db23524de9b9b1d84012fd75ab
+msgid "Construct prior regulatory graph"
+msgstr "构建先验调控图"
+
+#: ../../preprocessing.ipynb:517 3cc11c431c0d4ad1b0609865f5aa0127
+msgid "Estimated time: ~2 min"
+msgstr "（预计时间：约2分钟）"
+
+#: ../../preprocessing.ipynb:528 38a5207fb4734c6683ee587a83634c0c
+msgid ""
+"Next, we need to construct the guidance graph, which will be utilized by "
+"GLUE to orient the multi-omics alignment. The graph should contain omics "
+"features as nodes (e.g., genes for scRNA-seq, and peaks for scATAC-seq), "
+"and prior regulatory interactions as edges."
+msgstr "接下来，我们需要构建先验引导图，GLUE将利用它来对齐多组学。该图应该包含对应于组学特征（如scRNA-seq的基因和scATAC-seq峰）的节点，以及对应于先验调控关系的边。"
+
+#: ../../preprocessing.ipynb:539 d0c4591033394f3ba3af39c985dda72d
+msgid ""
+"GLUE accepts prior graph in the form of `networkx "
+"<https://networkx.org/>`__ graph objects (see this `introduction "
+"<https://networkx.org/documentation/stable/reference/introduction.html>`__"
+" if you are unfamilar). So, in principle, you can manually construct the "
+"prior graph tailored to your need, as long as the graph complies to the "
+"following standards:"
+msgstr "GLUE接受 `networkx <https://networkx.org/>`__ 形式的先验图（如果您不熟悉，请查看 `介绍 <https://networkx.org/documentation/stable/reference/introduction.html>`__）。因此，原则上您可以根据需要手动构建先验图，只要该图符合以下标准："
+
+#: ../../preprocessing.ipynb:541 d7d9c01a7711479a90f5c40047a21a27
+msgid ""
+"The `graph nodes "
+"<https://networkx.org/documentation/stable/reference/classes/generated/networkx.Graph.nodes.html>`__"
+" should cover all `omics features "
+"<https://anndata.readthedocs.io/en/latest/anndata.AnnData.var_names.html>`__"
+" in the datasets to be integrated."
+msgstr "`图中的节点 <https://networkx.org/documentation/stable/reference/classes/generated/networkx.Graph.nodes.html>`__ 应该覆盖要整合数据集中所有的 `组学特征 <https://anndata.readthedocs.io/en/latest/anndata.AnnData.var_names.html>`__。"
+
+#: ../../preprocessing.ipynb:542 0f8349f991b640f385fee5e21d177561
+msgid ""
+"The `graph edges "
+"<https://networkx.org/documentation/stable/reference/classes/generated/networkx.Graph.edges.html>`__"
+" should contain “weight” and “sign” as edge attributes. Weights should "
+"have range (0, 1], and signs should take values of either 1 or -1."
+msgstr "`图中的边 <https://networkx.org/documentation/stable/reference/classes/generated/networkx.Graph.edges.html>`__ 应该包含“weight”和“sign”作为边的属性，weight的范围是(0，1]，sign的值是1或-1。"
+
+#: ../../preprocessing.ipynb:543 c23ff2cfadd24f02b9b43669a5627410
+msgid ""
+"The graph should contain a self-loop for each node, with weight = 1, and "
+"sign = 1."
+msgstr "图应该包含每个节点的自环，其中weight = 1 且 sign = 1。"
+
+#: ../../preprocessing.ipynb:544 f0b3a5f0ca19456b9c945176d87d19cd
+msgid ""
+"It is recommended to use undirected graphs (`Graph "
+"<https://networkx.org/documentation/stable/reference/classes/graph.html>`__,"
+" `MultiGraph "
+"<https://networkx.org/documentation/stable/reference/classes/multigraph.html>`__),"
+" or symmetric directed graphs (`DiGraph "
+"<https://networkx.org/documentation/stable/reference/classes/digraph.html>`__,"
+" `MultiDiGraph "
+"<https://networkx.org/documentation/stable/reference/classes/multidigraph.html>`__)."
+msgstr "建议使用无向图 (`Graph <https://networkx.org/documentation/stable/reference/classes/graph.html>`__, `MultiGraph <https://networkx.org/documentation/stable/reference/classes/multigraph.html>`__)，或对称的有向图 (`DiGraph <https://networkx.org/documentation/stable/reference/classes/digraph.html>`__, `MultiDiGraph <https://networkx.org/documentation/stable/reference/classes/multidigraph.html>`__)。"
+
+#: ../../preprocessing.ipynb:555 43daa9ea846c4c9fa1607a2e5c88b37b
+msgid ""
+"Below, we show how to construct a prior graph for scRNA-seq and scATAC-"
+"seq integration, using builtin functions in ``scglue``."
+msgstr "下面，我们将展示如何使用 ``scglue`` 中的内置函数为scRNA-seq和scATAC-seq整合构建先验图。"
+
+#: ../../preprocessing.ipynb:567 15e79db0484a4b6c9d0f7a9895043d3c
+msgid "Obtain genomic coordinates"
+msgstr "获取基因组坐标"
+
+#: ../../preprocessing.ipynb:578 3adae393fc3a42d9922b3ad97198fcfd
+msgid ""
+"The most commonly used prior information linking ATAC peaks with genes is"
+" genomic proximity. To do so, we need the genomic coordinates for peaks "
+"and genes, and store them as feature meta data in the `var "
+"<https://anndata.readthedocs.io/en/latest/anndata.AnnData.var.html#anndata.AnnData.var>`__"
+" slot."
+msgstr "关联ATAC峰与基因最常用的先验信息是基因组的上的距离。因此，我们需要ATAC峰和基因的基因组坐标，并将其作为特征元数据存储在 `var <https://anndata.readthedocs.io/en/latest/anndata.AnnData.var.html#anndata.AnnData.var>`__ 中。"
+
+#: ../../preprocessing.ipynb:589 42442a54a9e84a108aed845975387208
+msgid ""
+"For typical scRNA-seq datasets, only the gene names/IDs are stored, but "
+"not their coordinates, as is the case here:"
+msgstr "对于典型scRNA-seq数据集，只有基因名称或者基因ID被存储，而没有基因组坐标，比如下面这个例子："
+
+#: ../../preprocessing.ipynb:780 c4a8ee930b1a4047b2aac346b34acc2b
+msgid ""
+"So, we provide a utility function `scglue.data.get_gene_annotation "
+"<api/scglue.data.get_gene_annotation.rst>`__ to supplement the coordinate"
+" information from GTF files. The following usage assumes that the "
+"``rna.var_names`` correspond to “gene_name” attribute in the GTF file. "
+"For other cases, please check the `function documentation "
+"<api/scglue.data.get_gene_annotation.rst>`__."
+msgstr "所以，我们提供了一个实用函数 `scglue.data.get_gene_annotation <api/scglue.data.get_gene_annotation.rst>`__ 来补充GTF文件中的坐标信息。下面的例子假设 ``rna.var_names`` 与GTF文件中的“gene_name”属性相对应，对于其他情况，请查看 `函数文档 <api/scglue.data.get_gene_annotation.rst>`__。"
+
+#: ../../preprocessing.ipynb:791 66cb10309ba547238e220ce8c01c463a
+msgid ""
+"The GTF file used here can be downloaded from `GENCODE "
+"<ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.chr_patch_hapl_scaff.annotation.gtf.gz>`__."
+msgstr "这里使用的GTF文件可以从 `GENCODE <ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.chr_patch_hapl_scaff.annotation.gtf.gz>`__ 下载。"
+
+#: ../../preprocessing.ipynb:934 6c3331a143bc4cf4bbe398efa01669fd
+msgid ""
+"Note that the coordinates have column names “chrom”, “chromStart” and "
+"“chromEnd”, corresponding to the first three columns of the `BED format "
+"<https://genome.ucsc.edu/FAQ/FAQformat.html#format1>`__. These exact "
+"column names are required. Alternative names like “chr”, “start”, “end” "
+"are **NOT** recognized."
+msgstr "注意，坐标列名是“chrom”，“chromStart”和“chromEnd”，与 `BED格式 <https://genome.ucsc.edu/FAQ/FAQformat.html#format1>`__ 前三列相对应。这些精确的列名是必须的，像“chr”，“start”，“end”这样的替代名称**不被识别**。"
+
+#: ../../preprocessing.ipynb:945 e45eac9d0bdc4558968681880dcd6e7e
+msgid ""
+"For the scATAC-seq data, the coordinates are already in ``var_names``. We"
+" just need to extract them."
+msgstr "对于scATAC-seq数据，坐标已经在 ``var_names`` 中，我们只需要提取它们。"
+
+#: ../../preprocessing.ipynb:1130 ee666681b0904fd1a1ea1e37cbcb727f
+msgid "Graph construction"
+msgstr "图构建"
+
+#: ../../preprocessing.ipynb:1141 db36ac8755734e1895e4b2ad3951eecb
+msgid ""
+"Now that we have the genomic coordinates for all omics features, we can "
+"use the `scglue.genomics.rna_anchored_prior_graph "
+"<api/scglue.genomics.rna_anchored_prior_graph.rst>`__ function to "
+"construct the prior graph. By default, an ATAC peak is connected to a "
+"gene if they overlap in either the gene body or promoter region. See the "
+"`function documentation "
+"<api/scglue.genomics.rna_anchored_prior_graph.rst>`__ for adjustable "
+"settings."
+msgstr "现在我们有了所有组学层特征的基因组坐标，可以使用 `scglue.genomics.rna_anchored_prior_graph <api/scglue.genomics.rna_anchored_prior_graph.rst>`__ 函数来构建先验图。默认情况下，如果ATAC峰与基因体或启动子区域重叠，就会与该基因相连。关于可以调整的设置，请查看 `函数文档 <api/scglue.genomics.rna_anchored_prior_graph.rst>`__。"
+
+#: ../../preprocessing.ipynb:1260 853f73231b4d430682fd61c7662ae857
+msgid ""
+"We can verify that the obtained prior graph complies to all of the "
+"previous standards."
+msgstr "下面验证所获得的先验图符合之前所有的先验图构建标准。"
+
+#: ../../preprocessing.ipynb:1429 5023edb5d18a4a86987a2017c6c3cbf7
+msgid ""
+"In the meantime, note that highly variable features have been propagated "
+"to the ATAC domain, by marking peaks reachable from the highly variable "
+"genes in the prior graph:"
+msgstr "同时，通过标记先验图中与高变异基因相连通的ATAC峰，可以将高变异特征传播到ATAC模态："
+
+#: ../../preprocessing.ipynb:1575 99fe80f5079349e0a90b6e9ff4f4daf2
+msgid ""
+"If the `rna_anchored_prior_graph "
+"<api/scglue.genomics.rna_anchored_prior_graph.rst>`__ function doesn’t "
+"meet the need (e.g., if you want to incorporate experimental regulatory "
+"evidences), you may need to construct the prior graph manually. We also "
+"provide some lower-level utilities like to help (e.g., "
+"`scglue.genomics.window_graph <api/scglue.genomics.window_graph.rst>`__, "
+"`scglue.graph.compose_multigraph "
+"<api/scglue.graph.compose_multigraph.rst>`__, "
+"`scglue.graph.reachable_vertices "
+"<api/scglue.graph.reachable_vertices.rst>`__). Please refer to our `case "
+"study <https://github.com/gao-"
+"lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.ipynb>`__ for "
+"an example, where we combined genomic proximity with pcHi-C and eQTL "
+"evidences to construct a hybrid prior regulatory graph."
+msgstr "如果 `rna_anchored_prior_graph <api/scglue.genomics.rna_anchored_prior_graph.rst>`__ 函数不能满足需要（例如想加入实验鉴定的调控证据），您可能需要手动构建先验图。我们也提供了一些更底层的实用工具，比如 `scglue.genomics.window_graph <api/scglue.genomics.window_graph.rst>`__, `scglue.graph.compose_multigraph <api/scglue.graph.compose_multigraph.rst>`__, `scglue.graph.reachable_vertices <api/scglue.graph.reachable_vertices.rst>`__。您可以参考我们的 `案例研究 <https://github.com/gao-lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.ipynb>`__，其中我们将基因组线性距离与pcHi-C和eQTL证据相结合，构建了一个混合先验调控图。"
+
+#: ../../preprocessing.ipynb:1588 09f9f07029ff436997cdcecbede8e250
+msgid "Save preprocessed data files"
+msgstr "保存预处理过的数据文件"
+
+#: ../../preprocessing.ipynb:1599 708635b671c54efda81bcc2733970bae
+msgid ""
+"Finally, we save the preprocessed data, for use in `stage 2 "
+"<training.ipynb>`__."
+msgstr "最后，我们保存预处理过的数据，供 `阶段 2 <training.ipynb>`__ 使用。"

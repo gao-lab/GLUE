@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:2
+#: 4e1b088acf71453e9a2afb3b691191ce
+msgid "scglue.models.scclue.BernoulliDataDecoder"
+msgstr ""
+
+#: f23fbfe8182d4a8c9b10eb9ac9e9fca4 of
+#: scglue.models.scclue.BernoulliDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.DataDecoder`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:12
+#: 5836206e33794e2ba9696c16ab623e38
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:22:<autosummary>:1
+#: 32db9c890b05430d9fe9e4ff7552ed17
+msgid ""
+":py:obj:`compute_dist "
+"<scglue.models.scclue.BernoulliDataDecoder.compute_dist>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:22:<autosummary>
+#: 8f5c42d4ef3440b7a155bfaed9473c97
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:22:<autosummary>:1
+#: bfdb490843844473adb6cdfc9aba809b
+msgid ":py:class:`torch.distributions.bernoulli.Bernoulli`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:24
+#: eb39a28170944b8a931856eac21a4a22
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:27:<autosummary>:1
+#: 39c9605d9f984e5fb5f51c28a1a5bd0c
+msgid ""
+":py:obj:`batched_weights "
+"<scglue.models.scclue.BernoulliDataDecoder.batched_weights>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.rst:27:<autosummary>:1
+#: a3d4b5a7ea4b427dad420a347f8b38c0
+msgid "List of batch-specific weights"
+msgstr ""
+

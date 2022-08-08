@@ -1,0 +1,138 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.rst:2 a83248e6fcb24181b3a40b32f9bc6120
+msgid "scglue.data"
+msgstr ""
+
+#: b24f41f6e793447e85460102c6ed1a33 of scglue.data:1
+msgid ""
+"Auxiliary functions for :class:`anndata.AnnData` objects that are not "
+"covered in :mod:`scanpy`."
+msgstr "没有包含在 :mod:`scanpy` 和 :class:`anndata.AnnData` 类中的辅助函数"
+
+#: ../../api/scglue.data.rst:13 71779d44bff34f6884ed4cc022362bfd
+msgid "Functions"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: d4dcbf5079e74f7d921aa702cb6d9c2d
+msgid ":py:obj:`aggregate_obs <scglue.data.aggregate_obs>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 1bc9524cef484a23a120d49facf7616e
+msgid "Aggregate obs in a given dataset by certain categories"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: b004391408904202b51c05136159dfc2
+msgid ":py:obj:`bedmap2anndata <scglue.data.bedmap2anndata>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: f4fa347e3e2143249ef9964404f1c18f
+msgid "Convert bedmap result to :class:`anndata.AnnData` object"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 375fb3d5493046ec9f30b39ccf9d44cd
+msgid ""
+":py:obj:`estimate_balancing_weight "
+"<scglue.data.estimate_balancing_weight>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: a49286b4504742cea85e55493716f2de
+msgid "Estimate balancing weights in an unsupervised manner"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 7612d9266ee14c9f85f187a0f3924a5f
+msgid ""
+":py:obj:`extract_rank_genes_groups "
+"<scglue.data.extract_rank_genes_groups>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: b06883888c794158be6c2c3dee18f0f6
+msgid ""
+"Extract result of :func:`scanpy.tl.rank_genes_groups` in the form of "
+"marker gene data frame for specific cell groups"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: fd067175a8394cc591f3175e9b146a8e
+msgid ":py:obj:`get_gene_annotation <scglue.data.get_gene_annotation>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: d9ebf91247da498791d559ddeffc8b6e
+msgid "Get genomic annotation of genes by joining with a GTF file."
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 810984e5eeab4f9f9ec8b70467354008
+msgid ":py:obj:`get_metacells <scglue.data.get_metacells>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 41104f1884114b71bff69a280c34f8d0
+msgid "Aggregate datasets into metacells"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: ba3609a1e73f4c80abdd2f1d3702ddc8
+msgid ":py:obj:`lsi <scglue.data.lsi>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: e39904bea0e04bcca254e19f0c30b29a
+msgid "LSI analysis (following the Seurat v3 approach)"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 00e16cda80714e98be72e7967a3942da
+msgid ":py:obj:`metacell_corr <scglue.data.metacell_corr>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: f562623742024edfb4b031e96bed4eb5
+msgid "Metacell based correlation"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: d7fad686469f4f348f86581432de2007
+msgid ":py:obj:`metacell_regr <scglue.data.metacell_regr>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 289bc7f7980a4066aaef3b3d0844fda8
+msgid "Metacell-based regression"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: 52b2cf6ee9b9470f8e342e5e75c15ce0
+msgid ":py:obj:`transfer_labels <scglue.data.transfer_labels>`"
+msgstr ""
+
+#: ../../api/scglue.data.rst:27:<autosummary>:1
+#: a9c44933d66249d2890f8c0cac37b35a
+msgid "Transfer discrete labels from reference dataset to query dataset"
+msgstr ""

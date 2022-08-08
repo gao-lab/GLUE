@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.Trainer.val_step.rst:2
+#: 9f560d30ea9c4badb5b270f14d83e817
+msgid "scglue.models.base.Trainer.val\\_step"
+msgstr ""
+
+#: 89f3bca7a7514f2898253db299aee512 of scglue.models.base.Trainer.val_step:1
+msgid "A single validation step"
+msgstr ""
+
+#: 95fd04f916374953bbee653ddd02c6ce of scglue.models.base.Trainer.val_step
+msgid "Parameters"
+msgstr ""
+
+#: bbfa4283592c441f9c9a0e69e0c8cb90 of scglue.models.base.Trainer.val_step:4
+msgid "Validation engine"
+msgstr ""
+
+#: 77e6c707ccaf4e04a304b9e725d3b950 of scglue.models.base.Trainer.val_step:6
+msgid "Data of the validation step"
+msgstr ""
+
+#: 7539ccc237c64892ae3aead56b72bf4b of scglue.models.base.Trainer.val_step
+msgid "Return type"
+msgstr ""
+
+#: ee5260e2d9fd4e7493b1d631b7c00bfd of scglue.models.base.Trainer.val_step:8
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`torch.Tensor`]"
+msgstr ""
+
+#: 195836a24b814843983174be65970ca9 of scglue.models.base.Trainer.val_step
+msgid "Returns"
+msgstr ""
+
+#: 7eef96d3d2c3477c9d7362c161ec4ed5 of scglue.models.base.Trainer.val_step:9
+msgid "*loss_dict* -- Dict containing validation loss values"
+msgstr ""
+

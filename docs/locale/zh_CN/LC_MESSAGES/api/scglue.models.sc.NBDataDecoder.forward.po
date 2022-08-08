@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.NBDataDecoder.forward.rst:2
+#: a2d0f379ea4640ccb9c9b20334c116e1
+msgid "scglue.models.sc.NBDataDecoder.forward"
+msgstr ""
+
+#: 95aa3245f54b4d61bd83361ee93e49e3 of scglue.models.sc.NBDataDecoder.forward:1
+msgid "Decode data from sample and feature latent"
+msgstr ""
+
+#: dc97e1c8687a4b8bb5c399bf7478d29c of scglue.models.sc.NBDataDecoder.forward
+msgid "Parameters"
+msgstr ""
+
+#: 48e731d5d01348b89cbdfee3d5dfe443 of scglue.models.sc.NBDataDecoder.forward:4
+msgid "Sample latent"
+msgstr ""
+
+#: f2a9ff48fbea461d8dc0efea7e199279 of scglue.models.sc.NBDataDecoder.forward:6
+msgid "Feature latent"
+msgstr ""
+
+#: b0a9e6dc9c814d6ea41838a5a499ed44 of scglue.models.sc.NBDataDecoder.forward:8
+msgid "Batch index"
+msgstr ""
+
+#: 79f3ec3d03fd4bb1b7f59be22bf2f3e1 of
+#: scglue.models.sc.NBDataDecoder.forward:10
+msgid "Optional normalizer"
+msgstr ""
+
+#: e0d6cda5676b4905ae2d0420a5851cd7 of scglue.models.sc.NBDataDecoder.forward
+msgid "Return type"
+msgstr ""
+
+#: a200b34f12594f5583e7aa3550c16662 of
+#: scglue.models.sc.NBDataDecoder.forward:12
+msgid ":py:class:`torch.distributions.negative_binomial.NegativeBinomial`"
+msgstr ""
+
+#: f2e7eb28805044169b6644a8677478e9 of scglue.models.sc.NBDataDecoder.forward
+msgid "Returns"
+msgstr ""
+
+#: 0d1449d1b6174c30b095b8862f9fb771 of
+#: scglue.models.sc.NBDataDecoder.forward:13
+msgid "*recon* -- Data reconstruction distribution"
+msgstr ""
+

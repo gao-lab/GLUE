@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.GraphEncoder.rst:2
+#: 2ad7ccba9c6f45869f564849c7ebf3a6
+msgid "scglue.models.glue.GraphEncoder"
+msgstr ""
+
+#: 7e89704d09824df58fc5243eee73e5c3 of scglue.models.glue.GraphEncoder:1
+msgid "Bases: :py:class:`~torch.nn.modules.module.Module`"
+msgstr ""
+
+#: 374944dbe4cc41eea7d5e3808c9d8f5a of scglue.models.glue.GraphEncoder:1
+msgid "Abstract graph encoder"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GraphEncoder.rst:12
+#: 24411ad6d1d642a891cfd764e54b8e79
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GraphEncoder.rst:22:<autosummary>:1
+#: 815b48b4c125496784446b12adf39ce0
+msgid ":py:obj:`forward <scglue.models.glue.GraphEncoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GraphEncoder.rst:22:<autosummary>:1
+#: 6e1a684bf0fc4293b52e835329d14587
+msgid "Encode graph to vertex latent distribution"
+msgstr ""
+
+#: ../../api/scglue.models.glue.GraphEncoder.rst:24
+#: 781ae2adf5f040808d7be7aa5c249c94
+msgid "Attributes"
+msgstr ""
+

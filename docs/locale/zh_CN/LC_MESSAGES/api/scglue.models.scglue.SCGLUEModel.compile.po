@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.compile.rst:2
+#: 85a2dde530aa4ad4bec4e4656fdccfac
+msgid "scglue.models.scglue.SCGLUEModel.compile"
+msgstr ""
+
+#: bf67a97c2447481d825b2d0538eb4ade of
+#: scglue.models.scglue.SCGLUEModel.compile:1
+msgid "Prepare model for training"
+msgstr ""
+
+#: ddaed787e94b49b4b66a18f170e58010 of scglue.models.scglue.SCGLUEModel.compile
+msgid "Parameters"
+msgstr ""
+
+#: 71727e644f4049d99708a5f6a1950d4a of
+#: scglue.models.scglue.SCGLUEModel.compile:4
+msgid "Data weight"
+msgstr ""
+
+#: 9dd8d986ede948a9bba860e08837933f of
+#: scglue.models.scglue.SCGLUEModel.compile:6
+msgid "KL weight"
+msgstr ""
+
+#: cb4a1662d04b4b6a86c4420df581ea7b of
+#: scglue.models.scglue.SCGLUEModel.compile:8
+msgid "Graph weight"
+msgstr ""
+
+#: 89eae7bde0c14928801a6c5a3ee7f42c of
+#: scglue.models.scglue.SCGLUEModel.compile:10
+msgid "Adversarial alignment weight"
+msgstr ""
+
+#: 3257011d3b33457e92d0bbaf38d7286a of
+#: scglue.models.scglue.SCGLUEModel.compile:12
+msgid "Cell type supervision weight"
+msgstr ""
+
+#: 0ca98d3ca1fd4e4980bdbae698f9cd65 of
+#: scglue.models.scglue.SCGLUEModel.compile:14
+msgid "Whether to L2 normalize cell embeddings before decoder"
+msgstr ""
+
+#: 0e785bbc2a7843ca86678dc21e335b5b of
+#: scglue.models.scglue.SCGLUEModel.compile:16
+msgid "Relative domain weight (indexed by domain name)"
+msgstr ""
+
+#: a286e73a810648838956e25681cebe56 of
+#: scglue.models.scglue.SCGLUEModel.compile:18
+msgid "Learning rate"
+msgstr ""
+
+#: e4e0284238284e018a89beaaaf70d3d8 of
+#: scglue.models.scglue.SCGLUEModel.compile:19
+msgid "Additional keyword arguments passed to trainer"
+msgstr ""
+
+#: abeec699667445388daf2a5c18583950 of scglue.models.scglue.SCGLUEModel.compile
+msgid "Return type"
+msgstr ""
+
+#: 37420be4a5784ec6b104d3f6c68386ec of
+#: scglue.models.scglue.SCGLUEModel.compile:22
+msgid ":py:obj:`None`"
+msgstr ""
+

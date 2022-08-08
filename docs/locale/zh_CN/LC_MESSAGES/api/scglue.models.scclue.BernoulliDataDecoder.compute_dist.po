@@ -1,0 +1,34 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.BernoulliDataDecoder.compute_dist.rst:2
+#: bd94965ad224414f9bff1a749cacc1d1
+msgid "scglue.models.scclue.BernoulliDataDecoder.compute\\_dist"
+msgstr ""
+
+#: 5d4bc432df20414f97861e82cd42f528 of
+#: scglue.models.scclue.BernoulliDataDecoder.compute_dist
+msgid "Return type"
+msgstr ""
+
+#: 2bd82424f5254fda8e412a772d597b9b of
+#: scglue.models.scclue.BernoulliDataDecoder.compute_dist:2
+msgid ":py:class:`torch.distributions.bernoulli.Bernoulli`"
+msgstr ""
+

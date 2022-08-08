@@ -1,0 +1,29 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../tutorials.rst:2 e0085c86836c485380063362e7d38b0e
+msgid "Tutorials"
+msgstr "教程"
+
+#: ../../tutorials.rst:4 6caecab5e4b04b529afff80d0d1ba145
+msgid ""
+"An ``scglue`` workflow can be divided into the following two stages. We "
+"provide separate tutorials for each stage, using the integration of "
+"scRNA-seq and scATAC-seq data as an example."
+msgstr "``scglue``  工作流程可以分为以下两个阶段。我们为每个阶段分别提供独立的教程，以scRNA-seq和scATAC-seq数据整合为例进行讲解。"

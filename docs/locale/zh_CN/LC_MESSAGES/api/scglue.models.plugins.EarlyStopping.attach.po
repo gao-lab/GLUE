@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.plugins.EarlyStopping.attach.rst:2
+#: 380db43163f247989b4db7595228530d
+msgid "scglue.models.plugins.EarlyStopping.attach"
+msgstr ""
+
+#: f71a0d092a9f485f8e7dd55517ebd1df of
+#: scglue.models.plugins.EarlyStopping.attach:1
+msgid "Attach custom handlers to training or validation engine"
+msgstr ""
+
+#: fb24efd1754a41c7be42243fc56268a1 of
+#: scglue.models.plugins.EarlyStopping.attach
+msgid "Parameters"
+msgstr ""
+
+#: cee5d4ac5d6943c29df3218ede7292e2 of
+#: scglue.models.plugins.EarlyStopping.attach:4
+msgid "Network module"
+msgstr ""
+
+#: 050e409690844be8b05044834467991a of
+#: scglue.models.plugins.EarlyStopping.attach:6
+msgid "Trainer object"
+msgstr ""
+
+#: c1462cff75e64514ab6e5964d560ed73 of
+#: scglue.models.plugins.EarlyStopping.attach:8
+msgid "Training engine"
+msgstr ""
+
+#: fe05315b6cfc4c3c8e08ef437354cf08 of
+#: scglue.models.plugins.EarlyStopping.attach:10
+msgid "Validation engine"
+msgstr ""
+
+#: bee954c4e4ee4783884c033ad84153d2 of
+#: scglue.models.plugins.EarlyStopping.attach:12
+msgid "Training data loader"
+msgstr ""
+
+#: 507d717c1bb1470ba60fc7be3b1ed062 of
+#: scglue.models.plugins.EarlyStopping.attach:14
+msgid "Validation data loader"
+msgstr ""
+
+#: 4e609c7d405f4571b659bccfc6a47bdf of
+#: scglue.models.plugins.EarlyStopping.attach:16
+msgid "Training directory"
+msgstr ""
+
+#: 97809b65e0ff49859219cd73f19e1229 of
+#: scglue.models.plugins.EarlyStopping.attach
+msgid "Return type"
+msgstr ""
+
+#: 4f033c09bab7450ead45004c3821d82c of
+#: scglue.models.plugins.EarlyStopping.attach:19
+msgid ":py:obj:`None`"
+msgstr ""
+

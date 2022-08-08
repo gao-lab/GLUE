@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.check.check_deps.rst:2 bb0f8e14c868442fab99bc6cd3f27c69
+msgid "scglue.check.check\\_deps"
+msgstr ""
+
+#: b4d1bbd7ed064d55abb6f14265671f82 of scglue.check.check_deps:1
+msgid "Check whether certain dependencies are installed"
+msgstr ""
+
+#: 8805538bc786421a9c7b59f35a377e8a of scglue.check.check_deps
+msgid "Parameters"
+msgstr ""
+
+#: 951dd826438b4966868adf7ddb856e9c of scglue.check.check_deps:3
+msgid "A list of dependencies to check"
+msgstr ""
+
+#: 0d8f2814d2eb4a4ebe92f380ae821c6f of scglue.check.check_deps
+msgid "Return type"
+msgstr ""
+
+#: 005c97b7683947018f20405892922b04 of scglue.check.check_deps:6
+msgid ":py:obj:`None`"
+msgstr ""
+

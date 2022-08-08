@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:2
+#: 088a43d7605c4aa0a7edb05f9afcb752
+msgid "scglue.models.sc.IndNormalDataDocoder"
+msgstr ""
+
+#: d90268c06db24f059eb7bc8ba3b86260 of scglue.models.sc.IndNormalDataDocoder:1
+msgid ""
+"Bases: :py:class:`~scglue.models.sc.IndDataDecoder`, "
+":py:class:`~scglue.models.sc.NormalDataDecoder`"
+msgstr ""
+
+#: 162fdd5e52b14ceb9418fb79acd11412 of scglue.models.sc.IndNormalDataDocoder:1
+msgid "Normal data decoder independent of feature latent"
+msgstr ""
+
+#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:12
+#: 3389e109ba6242cc8fd51d35b7e0f94d
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:23
+#: 4513816046d14f728d79b423576f1a63
+msgid "Attributes"
+msgstr ""
+

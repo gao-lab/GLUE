@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:2
+#: 9f28ee56450748538e6f643811c75bb3
+msgid "scglue.models.sc.DataEncoder"
+msgstr ""
+
+#: 235fb0a84d1d4f21bc9517a3c0fe8a75 of scglue.models.sc.DataEncoder:1
+msgid "Bases: :py:class:`~scglue.models.glue.DataEncoder`"
+msgstr ""
+
+#: eaeac99574684dd7abbbf27d1856cf47 of scglue.models.sc.DataEncoder:1
+msgid "Abstract data encoder"
+msgstr ""
+
+#: cfee2d2692df4c2f846f965fa5165aae of scglue.models.sc.DataEncoder
+msgid "Parameters"
+msgstr ""
+
+#: ca5763ae33564cb59cd84ca411359221 of scglue.models.sc.DataEncoder:4
+msgid "Input dimensionality"
+msgstr ""
+
+#: f0b6a60203c840d5a846286701ce1681 of scglue.models.sc.DataEncoder:6
+msgid "Output dimensionality"
+msgstr ""
+
+#: e007274e3ce04a16a65bef10369ef29b of scglue.models.sc.DataEncoder:8
+msgid "Hidden layer depth"
+msgstr ""
+
+#: 9dae3cad1e9b40cda4638ade43a5ecc8 of scglue.models.sc.DataEncoder:10
+msgid "Hidden layer dimensionality"
+msgstr ""
+
+#: 2b53f151a6f64c9789937aac7f404f10 of scglue.models.sc.DataEncoder:12
+msgid "Dropout rate"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:12
+#: ceb0b4b65d3c49d192708dfe52da500f
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: 6b949678aafc4922af545d0dfede091f
+msgid ":py:obj:`compute_l <scglue.models.sc.DataEncoder.compute_l>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: 1f378edd72cd4f228397ed2906367097
+msgid "Compute normalizer"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: b702b9210e5544ecb0a4014a42d124d1
+msgid ":py:obj:`forward <scglue.models.sc.DataEncoder.forward>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: e744a9bb4a63443380a99a3da0b50934
+msgid "Encode data to sample latent distribution"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: e150e22cc46747438d5fae08a4936423
+msgid ":py:obj:`normalize <scglue.models.sc.DataEncoder.normalize>`"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:24:<autosummary>:1
+#: 86f22dcfe2cd4a1ca2a433560dc19a0e
+msgid "Normalize data"
+msgstr ""
+
+#: ../../api/scglue.models.sc.DataEncoder.rst:26
+#: ec201a63406749439ea1bcecd382d33f
+msgid "Attributes"
+msgstr ""
+

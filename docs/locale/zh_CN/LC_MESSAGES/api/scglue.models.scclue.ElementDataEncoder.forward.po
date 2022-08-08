@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.ElementDataEncoder.forward.rst:2
+#: 5e846c4925f746db91d429a5fed487d6
+msgid "scglue.models.scclue.ElementDataEncoder.forward"
+msgstr ""
+
+#: f4c122b988b24df4b964dd95824814a8 of
+#: scglue.models.scclue.ElementDataEncoder.forward:1
+msgid "Defines the computation performed at every call."
+msgstr ""
+
+#: 42310247fb114f4780b100c4a145014c of
+#: scglue.models.scclue.ElementDataEncoder.forward:3
+msgid "Should be overridden by all subclasses."
+msgstr ""
+
+#: d6d01dbf87994911afef0e00f0d76806 of
+#: scglue.models.scclue.ElementDataEncoder.forward:6
+msgid ""
+"Although the recipe for forward pass needs to be defined within this "
+"function, one should call the :class:`Module` instance afterwards instead"
+" of this since the former takes care of running the registered hooks "
+"while the latter silently ignores them."
+msgstr ""
+
+#: 79761512300b4fed9f8064ec1ea4aff7 of
+#: scglue.models.scclue.ElementDataEncoder.forward
+msgid "Return type"
+msgstr ""
+
+#: 07d7f9969f96494ebd93a8c7a3962dd7 of
+#: scglue.models.scclue.ElementDataEncoder.forward:12
+msgid ""
+":py:data:`typing.Tuple`\\[:py:class:`torch.Tensor`, "
+":py:class:`torch.Tensor`]"
+msgstr ""
+

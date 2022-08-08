@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.estimate_balancing_weight.rst:2
+#: e477d4670bce414aab5e4ee38c18d1bf
+msgid "scglue.data.estimate\\_balancing\\_weight"
+msgstr ""
+
+#: 26f0258864304790bbaf086a7f9de21e of scglue.data.estimate_balancing_weight:1
+msgid "Estimate balancing weights in an unsupervised manner"
+msgstr ""
+
+#: 7d9a151d337048a9a6331780253ba62b of scglue.data.estimate_balancing_weight
+msgid "Parameters"
+msgstr ""
+
+#: 3242bf7785614930a8515c0c5f1c59d3 of scglue.data.estimate_balancing_weight:3
+msgid "Datasets to be balanced"
+msgstr ""
+
+#: 3d56215e836a4e2a9f4fcd114a377836 of scglue.data.estimate_balancing_weight:5
+msgid "Data representation based on which to match clusters"
+msgstr ""
+
+#: ce2bf64be1d84a5aac32adc997f138bc of scglue.data.estimate_balancing_weight:7
+msgid ""
+"Estimate balancing per batch (batch keys and categories must match across"
+" all datasets)"
+msgstr ""
+
+#: cf3825026e204734a1e08baaf5c4b202 of scglue.data.estimate_balancing_weight:10
+msgid "Leiden clustering resolution"
+msgstr ""
+
+#: f4e8adc130cc44fa896c1fed332e602f of scglue.data.estimate_balancing_weight:12
+msgid "Cosine similarity cutoff"
+msgstr ""
+
+#: 5f1cb6389e57433fb0b0853bba2dceeb of scglue.data.estimate_balancing_weight:14
+msgid "Cosine similarity power (for increasing contrast)"
+msgstr ""
+
+#: cb8433a9c80c4443b82074aa306cbb7e of scglue.data.estimate_balancing_weight:16
+msgid "New ``obs`` key added for the balancing weight"
+msgstr ""
+
+#: bf764344f75c4f2db12a2a06070f3b15 of scglue.data.estimate_balancing_weight:20
+msgid ""
+"While the joint similarity array would have a size of :math:`K^n` (where "
+":math:`K` is the average number of clusters per dataset, and :math:`n` is"
+" the number of datasets), a sparse implementation was used, so the "
+"scalability regarding dataset number should be good."
+msgstr ""
+
+#: a3e4cee50d984f3d9cf2a62b20e77d38 of scglue.data.estimate_balancing_weight
+msgid "Return type"
+msgstr ""
+
+#: 07541a595e2c4444b5dfe445003f2ec8 of scglue.data.estimate_balancing_weight:26
+msgid ":py:obj:`None`"
+msgstr ""
+

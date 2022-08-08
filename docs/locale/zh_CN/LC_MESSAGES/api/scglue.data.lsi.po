@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.data.lsi.rst:2 72ee78560cd647519c790780f48c4469
+msgid "scglue.data.lsi"
+msgstr ""
+
+#: aa0489ee834e462fa539c7957ae97ddb of scglue.data.lsi:1
+msgid "LSI analysis (following the Seurat v3 approach)"
+msgstr ""
+
+#: ee7fa9ef2e624aa884b63e149d0b4e5b of scglue.data.lsi
+msgid "Parameters"
+msgstr ""
+
+#: ddb38caa634b4ebeaf549ab7f013bfb3 of scglue.data.lsi:4
+msgid "Input dataset"
+msgstr ""
+
+#: 3463a5f8cff140ec91919d3c3cb0cfe4 of scglue.data.lsi:6
+msgid "Number of dimensions to use"
+msgstr ""
+
+#: 25a1eb9bd15845288846c1fe81794049 of scglue.data.lsi:8
+msgid ""
+"Whether to use highly variable features only, stored in "
+"``adata.var['highly_variable']``. By default uses them if they have been "
+"determined beforehand."
+msgstr ""
+
+#: f1e9ba63ba2740d982e63acc86d25709 of scglue.data.lsi:11
+msgid ""
+"Additional keyword arguments are passed to "
+":func:`sklearn.utils.extmath.randomized_svd`"
+msgstr ""
+
+#: df59a92cbd594fc3abf9953e5cb7cac2 of scglue.data.lsi
+msgid "Return type"
+msgstr ""
+
+#: 399fd550740545b78d3190cec391c371 of scglue.data.lsi:15
+msgid ":py:obj:`None`"
+msgstr ""
+

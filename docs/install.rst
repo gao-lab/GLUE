@@ -22,7 +22,7 @@ Or, it can also be installed via pip:
 
 .. note::
     To avoid potential dependency conflicts, installing within a
-    `conda environment <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`_
+    `conda environment <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`__
     is recommended.
 
 
@@ -31,8 +31,8 @@ Optional dependencies
 *********************
 
 Some functions in the ``scglue`` package use metacell aggregation via k-Means clustering,
-which can receive significant speed up with the `faiss <https://github.com/facebookresearch/faiss>`_ package.
+which can receive significant speed up with the `faiss <https://github.com/facebookresearch/faiss>`__ package.
 
-You may install ``faiss`` following the official `guide <https://github.com/facebookresearch/faiss/blob/main/INSTALL.md>`_.
+You may install ``faiss`` following the official `guide <https://github.com/facebookresearch/faiss/blob/main/INSTALL.md>`__.
 
-Now you are all set. Proceed to `tutorials <tutorials.rst>`_ for how to use the ``scglue`` package.
+Now you are all set. Proceed to `tutorials <tutorials.rst>`__ for how to use the ``scglue`` package.

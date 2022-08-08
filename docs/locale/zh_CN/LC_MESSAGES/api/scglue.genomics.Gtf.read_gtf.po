@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Gtf.read_gtf.rst:2
+#: 785a9461b1e244469cf34ae246dc9c9a
+msgid "scglue.genomics.Gtf.read\\_gtf"
+msgstr ""
+
+#: 23f42fddbff94440b875d41d248b5345 of scglue.genomics.Gtf.read_gtf:1
+msgid "Read GTF file"
+msgstr ""
+
+#: 79e3ee2d796e4ef987a49c46598a9509 of scglue.genomics.Gtf.read_gtf
+msgid "Parameters"
+msgstr ""
+
+#: 54dfd04322b6413780dc78dbef8f6b04 of scglue.genomics.Gtf.read_gtf:4
+msgid "GTF file"
+msgstr ""
+
+#: ccc7687d297c43c186c5d6a29124e8c9 of scglue.genomics.Gtf.read_gtf
+msgid "Return type"
+msgstr ""
+
+#: 76c747abbfd64887917f04d64138870a of scglue.genomics.Gtf.read_gtf:6
+msgid ":py:class:`scglue.genomics.Gtf`"
+msgstr ""
+
+#: 51ceb253c60440009c0a5dcc2df6157c of scglue.genomics.Gtf.read_gtf
+msgid "Returns"
+msgstr ""
+
+#: 82f924c6ba7f4c3486f1a706fd9720be of scglue.genomics.Gtf.read_gtf:7
+msgid "*gtf* -- Loaded :class:`Gtf` object"
+msgstr ""
+

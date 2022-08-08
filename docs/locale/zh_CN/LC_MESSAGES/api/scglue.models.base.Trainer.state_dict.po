@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.base.Trainer.state_dict.rst:2
+#: 73cd45a7dcd34710b0ec372a1449a903
+msgid "scglue.models.base.Trainer.state\\_dict"
+msgstr ""
+
+#: 70b3ac4924164ec19be58d8c87ed06ae of scglue.models.base.Trainer.state_dict:1
+msgid "State dict"
+msgstr ""
+
+#: 704cf14dafdb4cd99df2249acd9ab1ba of scglue.models.base.Trainer.state_dict
+msgid "Return type"
+msgstr ""
+
+#: b7b645f58eb04d3ebbb4b9e2d16fba2f of scglue.models.base.Trainer.state_dict:3
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:data:`typing.Any`]"
+msgstr ""
+
+#: 4228155cd55049feae743b11cd5f3bd9 of scglue.models.base.Trainer.state_dict
+msgid "Returns"
+msgstr ""
+
+#: ca99549e57ab47b080d5e9fbe4e6239a of scglue.models.base.Trainer.state_dict:4
+msgid "*state_dict* -- State dict"
+msgstr ""
+

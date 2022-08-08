@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.SCGLUETrainer.format_data.rst:2
+#: 386e90b1aef144f28b935fea58c92c70
+msgid "scglue.models.scglue.SCGLUETrainer.format\\_data"
+msgstr ""
+
+#: 1d64917150e948189315e38755e44239 of
+#: scglue.models.scglue.SCGLUETrainer.format_data:1
+msgid "Format data tensors"
+msgstr ""
+
+#: 51b81cd11e5d45f8af7ca7db244ad42c of
+#: scglue.models.scglue.SCGLUETrainer.format_data:5
+msgid ""
+"The data dataset should contain data arrays for each domain, followed by "
+"alternative input arrays for each domain, in the same order as domain "
+"keys of the network."
+msgstr ""
+
+#: db2ebb945d7844eba3466efffd31c36b of
+#: scglue.models.scglue.SCGLUETrainer.format_data
+msgid "Return type"
+msgstr ""
+
+#: 0c28cc3d800c449585fbcc9b63188f0b of
+#: scglue.models.scglue.SCGLUETrainer.format_data:10
+msgid ""
+":py:data:`typing.Tuple`\\[:py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`torch.Tensor`, "
+":py:class:`torch.Tensor`, :py:class:`torch.Tensor`]"
+msgstr ""
+

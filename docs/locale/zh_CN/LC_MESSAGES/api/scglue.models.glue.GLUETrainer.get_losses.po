@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.glue.GLUETrainer.get_losses.rst:2
+#: f95785064e5e4bd18d4f4497ff2be3e8
+msgid "scglue.models.glue.GLUETrainer.get\\_losses"
+msgstr ""
+
+#: 65e9eb8154d746de8d44205df7f2f149 of
+#: scglue.models.glue.GLUETrainer.get_losses:1
+msgid "Get loss values for given data"
+msgstr ""
+
+#: 034bddba20f041a4ba602bb2b13a331f of
+#: scglue.models.glue.GLUETrainer.get_losses
+msgid "Parameters"
+msgstr ""
+
+#: a3da3eec807942fd8320ba1a8d3004b8 of
+#: scglue.models.glue.GLUETrainer.get_losses:3
+msgid "Data loader"
+msgstr ""
+
+#: 1fdadb454a9b48498de238b9ba858627 of
+#: scglue.models.glue.GLUETrainer.get_losses
+msgid "Return type"
+msgstr ""
+
+#: eeadc2e55555431a80ad04a438fa8f22 of
+#: scglue.models.glue.GLUETrainer.get_losses:5
+msgid ":py:class:`typing.Mapping`\\[:py:class:`str`, :py:class:`float`]"
+msgstr ""
+
+#: 3f380967358242a8a782eb1ae4f6adad of
+#: scglue.models.glue.GLUETrainer.get_losses
+msgid "Returns"
+msgstr ""
+
+#: 3faf2f6e80a641a3bf85cd460111a0fe of
+#: scglue.models.glue.GLUETrainer.get_losses:6
+msgid "*loss_dict* -- Dict containing loss values"
+msgstr ""
+

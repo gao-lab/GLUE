@@ -1,0 +1,41 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.SCCLUETrainer.format_data.rst:2
+#: 3c17e406c0b84867bba20edb3817d779
+msgid "scglue.models.scclue.SCCLUETrainer.format\\_data"
+msgstr ""
+
+#: 621afa8482a54a8b9ec5dc17a852b7f9 of
+#: scglue.models.scclue.SCCLUETrainer.format_data
+msgid "Return type"
+msgstr ""
+
+#: 530d683f2c144c7bb2c0f1be4be51caf of
+#: scglue.models.scclue.SCCLUETrainer.format_data:2
+msgid ""
+":py:data:`typing.Tuple`\\[:py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`typing.Mapping`\\[:py:class:`str`, "
+":py:class:`torch.Tensor`], :py:class:`torch.Tensor`]"
+msgstr ""
+

@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.AnnDataset.random_split.rst:2
+#: 292cb0b147c84afd9bde2afbb1cd1929
+msgid "scglue.models.scglue.AnnDataset.random\\_split"
+msgstr ""
+
+#: f4e4277722c3418fa1d58c80f0124605 of
+#: scglue.models.scglue.AnnDataset.random_split:1
+msgid ""
+"Randomly split the dataset into multiple subdatasets according to given "
+"fractions."
+msgstr ""
+
+#: 216aa97582fd460e984967c4d522f399 of
+#: scglue.models.scglue.AnnDataset.random_split
+msgid "Parameters"
+msgstr ""
+
+#: fb33bd02fa1643f1bf9fd1b7f8e526ae of
+#: scglue.models.scglue.AnnDataset.random_split:5
+msgid "Fraction of each split"
+msgstr ""
+
+#: e52858701df541e6a4b898276d61f8cf of
+#: scglue.models.scglue.AnnDataset.random_split:7
+msgid "Random state"
+msgstr ""
+
+#: b234694396b3479f86f9c59d576b0247 of
+#: scglue.models.scglue.AnnDataset.random_split
+msgid "Return type"
+msgstr ""
+
+#: 3ee76165b5da4f998d1b8d3af1fdb92c of
+#: scglue.models.scglue.AnnDataset.random_split:9
+msgid ":py:class:`typing.List`\\[:py:class:`scglue.models.scglue.AnnDataset`]"
+msgstr ""
+
+#: f5be1b8094bf4a4da186a77526ad625f of
+#: scglue.models.scglue.AnnDataset.random_split
+msgid "Returns"
+msgstr ""
+
+#: fc0ac4ac1bd74fa9851baa703b719ceb of
+#: scglue.models.scglue.AnnDataset.random_split:10
+msgid "*subdatasets* -- A list of splitted subdatasets"
+msgstr ""
+

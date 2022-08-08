@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:2
+#: 9de9c83576c94d7486a4982555798e47
+msgid "scglue.models.scclue.ZINDataDecoder"
+msgstr ""
+
+#: 2d17bf226fd14de58de715a181a1f29b of scglue.models.scclue.ZINDataDecoder:1
+msgid "Bases: :py:class:`~scglue.models.scclue.NormalDataDecoder`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:12
+#: 3d29d509f5cb454c9de9e2cb47f9c872
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:22:<autosummary>:1
+#: c0fc1b71d4214791835d1d2615d738e0
+msgid ":py:obj:`compute_dist <scglue.models.scclue.ZINDataDecoder.compute_dist>`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:22:<autosummary>
+#: 3954398ef22f4e0fafe339f06c5e684a
+msgid "rtype"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:22:<autosummary>:1
+#: 9047094f6f3b4458b44e78b76fede80a
+msgid ":py:class:`scglue.models.prob.ZIN`"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:24
+#: ec4a733b0fcc4d5a8a72333768920f0c
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:27:<autosummary>:1
+#: d01e65a02b994fceb1b0f1b73f4e1ccb
+msgid ""
+":py:obj:`batched_weights "
+"<scglue.models.scclue.ZINDataDecoder.batched_weights>`\\"
+msgstr ""
+
+#: ../../api/scglue.models.scclue.ZINDataDecoder.rst:27:<autosummary>:1
+#: 6aee96e5095645289d337fef032bd858
+msgid "List of batch-specific weights"
+msgstr ""
+

@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.scglue.AnnDataset.accept_shuffle.rst:2
+#: 59f12e18e0054b0c9e4d190465382dfa
+msgid "scglue.models.scglue.AnnDataset.accept\\_shuffle"
+msgstr ""
+
+#: f2749994391a4ba6bf89474fee0fa2c9 of
+#: scglue.models.scglue.AnnDataset.accept_shuffle:1
+msgid "Accept shuffling result"
+msgstr ""
+
+#: 9fedc9c758bf41839dc6bcccda85d458 of
+#: scglue.models.scglue.AnnDataset.accept_shuffle
+msgid "Parameters"
+msgstr ""
+
+#: 15e172bc4c6d4239886918d0275962b9 of
+#: scglue.models.scglue.AnnDataset.accept_shuffle:4
+msgid "Shuffled result"
+msgstr ""
+
+#: 191b9a13daf84b2994494fa618baa040 of
+#: scglue.models.scglue.AnnDataset.accept_shuffle
+msgid "Return type"
+msgstr ""
+
+#: 04f556f6c6984873aa88ab158699a001 of
+#: scglue.models.scglue.AnnDataset.accept_shuffle:7
+msgid ":py:obj:`None`"
+msgstr ""
+

@@ -1,0 +1,48 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Bed.write_bed.rst:2
+#: 309bf979f9d249a29993395cefd6a856
+msgid "scglue.genomics.Bed.write\\_bed"
+msgstr ""
+
+#: a2d0312d808e4a0f9cbf9d06a29d935b of scglue.genomics.Bed.write_bed:1
+msgid "Write BED file"
+msgstr ""
+
+#: 2d83d5f4cd114e72b7f645e19c682eda of scglue.genomics.Bed.write_bed
+msgid "Parameters"
+msgstr ""
+
+#: 311c1c6e68e643d79da07730dc6feb10 of scglue.genomics.Bed.write_bed:4
+msgid "BED file"
+msgstr ""
+
+#: 6d56a8597d4544ee886e33bca4497c5c of scglue.genomics.Bed.write_bed:6
+msgid "Number of columns to write (by default write all columns)"
+msgstr ""
+
+#: 1ff21043b51f4322aa066fe63adf948c of scglue.genomics.Bed.write_bed
+msgid "Return type"
+msgstr ""
+
+#: 43c7a54a602643b19f9ccd82e9ca4ea1 of scglue.genomics.Bed.write_bed:9
+msgid ":py:obj:`None`"
+msgstr ""
+

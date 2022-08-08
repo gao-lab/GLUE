@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.models.data.Dataset.propose_shuffle.rst:2
+#: 854cbe3635344f73a128e55a3f405f11
+msgid "scglue.models.data.Dataset.propose\\_shuffle"
+msgstr ""
+
+#: 292d7a4c7b6742d8bdca8a49a1f47a88 of
+#: scglue.models.data.Dataset.propose_shuffle:1
+msgid "Propose shuffling using a given random seed"
+msgstr ""
+
+#: 8adf736fae8b4021ad4888a262b5aeb9 of
+#: scglue.models.data.Dataset.propose_shuffle
+msgid "Parameters"
+msgstr ""
+
+#: 604e93f3f6f340faad9c5ea319b5f7a0 of
+#: scglue.models.data.Dataset.propose_shuffle:4
+msgid "Random seed"
+msgstr ""
+
+#: df4f1fd073264069904cd6da98c5ca87 of
+#: scglue.models.data.Dataset.propose_shuffle
+msgid "Return type"
+msgstr ""
+
+#: 508edcd92f954491a3fc68a0b8c4d292 of
+#: scglue.models.data.Dataset.propose_shuffle:6
+msgid ":py:data:`typing.Any`"
+msgstr ""
+
+#: 95be19753e1046a7b43b02f053fd4286 of
+#: scglue.models.data.Dataset.propose_shuffle
+msgid "Returns"
+msgstr ""
+
+#: 77734be88d234c5db0a45d8b0cd76816 of
+#: scglue.models.data.Dataset.propose_shuffle:7
+msgid "*shuffled* -- Shuffled result"
+msgstr ""
+

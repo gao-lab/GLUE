@@ -1,0 +1,365 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../data.rst:2 4c0038a5abe64c6187c026bbea5a5839
+msgid "Example datasets"
+msgstr "示例数据集"
+
+#: ../../data.rst:4 bc038d0128a2470c893daa837913d69a
+msgid ""
+"By courtesy of the original authors, we provide here the following "
+"preprocessed data files used in our paper:"
+msgstr "感谢原作者，以下是我们论文中使用的已经预处理过的数据文件："
+
+#: ../../data.rst:11 a87378cd6f624c8882be303dc5517926
+msgid "Dataset"
+msgstr "数据集"
+
+#: ../../data.rst:12 1799513e18344e00a34dff96d14b8424
+msgid "Protocol"
+msgstr "实验技术"
+
+#: ../../data.rst:13 c041efb875274d6ea6b46004973d220d
+msgid "Species"
+msgstr "物种"
+
+#: ../../data.rst:14 771c2a66a2c94b32b747f9431cbc348d
+msgid "Organ"
+msgstr "器官"
+
+#: ../../data.rst:15 6ab9d533077a4c9e9f21cc800a23a8d6
+msgid "Publication"
+msgstr "论文"
+
+#: ../../data.rst:16 8001fbaf18d4417485c64773639908d0
+msgid "Source"
+msgstr "来源"
+
+#: ../../data.rst:17 32c4b8930e2a4386913720d4d7bc1232
+msgid "Processed files"
+msgstr "处理后的文件"
+
+#: ../../data.rst:18 891bf23de82c4f24ae4b96ea10a7a4e1
+msgid "Chen-2019"
+msgstr ""
+
+#: ../../data.rst:19 a20a5529b3e04f58a21160ee6a1742e5
+msgid "SNARE-seq"
+msgstr ""
+
+#: ../../data.rst:20 ../../data.rst:28 ../../data.rst:44 ../../data.rst:51
+#: ../../data.rst:58 ../../data.rst:89 0be1bd0a32744ecd84d5187a0e34dfd3
+#: 5773b762669042b58d99039424b638ea 61369f5c91ef4419873b03499af6c903
+#: 693bd44941aa4096a932056d94d8ff8b bb5631c036b844fa987ab60374c0d131
+#: e45db9373e74482baac009470baac569
+msgid "Mouse"
+msgstr ""
+
+#: ../../data.rst:21 ../../data.rst:45 ../../data.rst:52 ../../data.rst:59
+#: 7cb3437a26b448f48a31672ea700cd37 810e7a1efdcd4110b87b6d505882aa24
+#: a7227ef4a3584f05b172a968612f0fd7 f7992e27e5434a3d84c98c81ae33f8a1
+msgid "Cortex"
+msgstr ""
+
+#: ../../data.rst:22 b9328e08976548589bc5f3c11833ecb4
+msgid ""
+"`High-throughput sequencing of the transcriptome and chromatin "
+"accessibility in the same cell "
+"<https://doi.org/10.1038/s41587-019-0290-0>`__"
+msgstr ""
+
+#: ../../data.rst:23 69fda2298b014ce2bd3eb56c6504d5c4
+msgid "`GEO <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE126074>`__"
+msgstr ""
+
+#: ../../data.rst 6ddc8e1192c7413aa2143da2e17f59b4
+msgid ""
+"`Chen-2019-RNA.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Chen-2019-RNA.h5ad>`__,"
+msgstr ""
+
+#: ../../data.rst c0353b13237b4332b6830b00159271d7
+msgid ""
+"`Chen-2019-ATAC.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Chen-2019-ATAC.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:26 0ad71756bab1482bbc30a9f06e9c0b91
+msgid "Ma-2020"
+msgstr ""
+
+#: ../../data.rst:27 4ef1cd48ca204fa8ac1e468ef08b23a8
+msgid "SHARE-seq"
+msgstr ""
+
+#: ../../data.rst:29 4b190a4e35af4999a5083b4215e25999
+msgid "Skin"
+msgstr ""
+
+#: ../../data.rst:30 d28af11303f844f1a9ce94993370d75b
+msgid ""
+"`Chromatin potential identified by shared single-cell profiling of RNA "
+"and chromatin <https://doi.org/10.1016/j.cell.2020.09.056>`__"
+msgstr ""
+
+#: ../../data.rst:31 e23a231a4e6a4ffabb868f4e8557599e
+msgid "`GEO <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE140203>`__"
+msgstr ""
+
+#: ../../data.rst 49a5fb1332594b8fb4e645df77403d13
+msgid ""
+"`Ma-2020-RNA.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Ma-2020-RNA.h5ad>`__,"
+msgstr ""
+
+#: ../../data.rst aafe05bc4f054c79a05d6b3ba2f5abc6
+msgid ""
+"`Ma-2020-ATAC.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Ma-2020-ATAC.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:34 5092397dca2249b6b79a6cdc59d5b168
+msgid "10x-Multiome-Pbmc10k"
+msgstr ""
+
+#: ../../data.rst:35 33ed1149fdbd41b6883bd07935db27e4
+msgid "10x Multiome"
+msgstr ""
+
+#: ../../data.rst:36 ../../data.rst:65 ../../data.rst:72 ../../data.rst:80
+#: 0e2983474e9148689d07a9ae1cf4e8a5 748cdc3777e74cd492d6a687d118d510
+#: a27e17422f0b4e6781696f1c8c32dfaa bdebd72849ae491ba653eff57ebc9d08
+msgid "Human"
+msgstr ""
+
+#: ../../data.rst:37 22fd2e404a8344bfa569eec1bf93f143
+msgid "PBMC"
+msgstr ""
+
+#: ../../data.rst:39 fed1b6f60ad04edc9cca0a929b316e9c
+msgid ""
+"`10x Demo <https://support.10xgenomics.com/single-cell-multiome-atac-"
+"gex/datasets/1.0.0/pbmc_granulocyte_sorted_10k>`__"
+msgstr ""
+
+#: ../../data.rst 614aaf78bfd6499ab382304f4533403b
+msgid ""
+"`10x-Multiome-Pbmc10k-RNA.h5ad <http://download.gao-lab.org/GLUE/dataset"
+"/10x-Multiome-Pbmc10k-RNA.h5ad>`__,"
+msgstr ""
+
+#: ../../data.rst cf037467bea940178be25f323ac98a9a
+msgid ""
+"`10x-Multiome-Pbmc10k-ATAC.h5ad <http://download.gao-lab.org/GLUE/dataset"
+"/10x-Multiome-Pbmc10k-ATAC.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:42 e602621bf59849ea90765c7d49c9c056
+msgid "Saunders-2018"
+msgstr ""
+
+#: ../../data.rst:43 6cda2b4c3abf401b938e55882ab475cc
+msgid "Drop-seq"
+msgstr ""
+
+#: ../../data.rst:46 8d33ce39e19c49b6addb452b110f8351
+msgid ""
+"`Molecular diversity and specializations among the cells of the adult "
+"mouse brain <https://doi.org/10.1016/j.cell.2018.07.028>`__"
+msgstr ""
+
+#: ../../data.rst:47 62ce29fa159b4c94816f7055860ae310
+msgid "`dropviz <http://dropviz.org/>`__"
+msgstr ""
+
+#: ../../data.rst:48 0c94b7c1fb4645d9aedfaeccad247be9
+msgid ""
+"`Saunders-2018.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Saunders-2018.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:49 4d48c9ea1d764a3ab55da466aa3e9fcb
+msgid "Luo-2017"
+msgstr ""
+
+#: ../../data.rst:50 a7069cfc550c4faeac93964d7f051e40
+msgid "snmC-seq"
+msgstr ""
+
+#: ../../data.rst:53 c82f79bf5d044a6387274294c5e7ac4d
+msgid ""
+"`Single-cell methylomes identify neuronal subtypes and regulatory "
+"elements in mammalian cortex <https://doi.org/10.1126/science.aan3351>`__"
+msgstr ""
+
+#: ../../data.rst:54 f7fbf9a30b274e0189c565b126ccee8b
+msgid "`annoj <https://brainome.ucsd.edu/annoj/brain_single_nuclei/>`__"
+msgstr ""
+
+#: ../../data.rst:55 4098728e6a594d36a6460f66f49491f0
+msgid "`Luo-2017.h5ad <http://download.gao-lab.org/GLUE/dataset/Luo-2017.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:56 5136d48b01f94aeeb1a26114ccfd42c6
+msgid "10x-ATAC-Brain5k"
+msgstr ""
+
+#: ../../data.rst:57 cfed2b23cf37424cad90ff3f0e05f7d5
+msgid "10x ATAC"
+msgstr ""
+
+#: ../../data.rst:61 c23ba903f27a4a15a57f37a30fe40194
+msgid ""
+"`10x Demo <https://support.10xgenomics.com/single-cell-"
+"atac/datasets/1.1.0/atac_v1_adult_brain_fresh_5k>`__"
+msgstr ""
+
+#: ../../data.rst:62 6912506cb65041ad896dfbb5395a9d22
+msgid ""
+"`10x-ATAC-Brain5k.h5ad <http://download.gao-lab.org/GLUE/dataset/10x-"
+"ATAC-Brain5k.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:63 a31825e1d60d4f7081b15e962b374f95
+msgid "Cao-2020"
+msgstr ""
+
+#: ../../data.rst:64 b9102f973bbe49eb9fe7d2ef3dd009c0
+msgid "sci-RNA-seq3"
+msgstr ""
+
+#: ../../data.rst:66 ../../data.rst:73 66c5b75ed1034d3e9afaa7a3e8c5501e
+#: f665086bce1345b5b7ac4c94542d0023
+msgid "15 organs"
+msgstr ""
+
+#: ../../data.rst:67 3821780957e14afb999b5015ad5e3981
+msgid ""
+"`A human cell atlas of fetal gene expression "
+"<https://doi.org/10.1126/science.aba7721>`__"
+msgstr ""
+
+#: ../../data.rst:68 9e82714118a248ddacdabe44d265f0db
+msgid "`GEO <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE156793>`__"
+msgstr ""
+
+#: ../../data.rst:69 eb13ffe127994d9faf767ade5130a7bd
+msgid "`Cao-2020.h5ad <http://download.gao-lab.org/GLUE/dataset/Cao-2020.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:70 f968c7873fa24dd38271fb342e713034
+msgid "Domcke-2020"
+msgstr ""
+
+#: ../../data.rst:71 24d96bd8dad946e4bdd97a5836c02c34
+msgid "sci-ATAC-seq3"
+msgstr ""
+
+#: ../../data.rst:74 09b63955a4e44aad92451a6e1645b040
+msgid ""
+"`A human cell atlas of fetal chromatin accessibility "
+"<https://doi.org/10.1126/science.aba7612>`__"
+msgstr ""
+
+#: ../../data.rst:75 47e6412e5b414c0f8a2c8bbd92c126b4
+msgid "`GEO <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE149683>`__"
+msgstr ""
+
+#: ../../data.rst:76 c7c4b2c295b64707b99ec8ad48f8de45
+msgid ""
+"`Domcke-2020.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Domcke-2020.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:77 9d5dc52fb9c246a98fccd7cc5b53807c
+msgid "Muto-2021"
+msgstr ""
+
+#: ../../data.rst c25d4d8ac0414ce39923f01802256b1d
+msgid "snRNA-seq,"
+msgstr ""
+
+#: ../../data.rst ae99c16cc7c1465d94eab83c7d266b52
+msgid "scATAC-seq"
+msgstr ""
+
+#: ../../data.rst:81 91adacb6bd1e4d5384208e3e20a77f1a
+msgid "Kidney"
+msgstr ""
+
+#: ../../data.rst:82 d08616cbe95748caa05ad2a03789d30e
+msgid ""
+"`Single cell transcriptional and chromatin accessibility profiling "
+"redefine cellular heterogeneity in the adult human kidney "
+"<https://doi.org/10.1038/s41467-021-22368-w>`__"
+msgstr ""
+
+#: ../../data.rst:83 2f4bf4c3c3544bf4b16b217284f1846c
+msgid "`GEO <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE151302>`__"
+msgstr ""
+
+#: ../../data.rst 9b63d50d44514acc9734704d4de9b16b
+msgid ""
+"`Muto-2021-RNA.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Muto-2021-RNA.h5ad>`__,"
+msgstr ""
+
+#: ../../data.rst 401f0c4e88974a34a9954fcc7c59f7fc
+msgid ""
+"`Muto-2021-ATAC.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Muto-2021-ATAC.h5ad>`__"
+msgstr ""
+
+#: ../../data.rst:86 2b3f95b2c4fd4b9c802723aae5ef87bf
+msgid "Yao-2021"
+msgstr ""
+
+#: ../../data.rst 7af1ca8a7a0a47dc9083490c886fecbb
+msgid "10x RNA v3,"
+msgstr ""
+
+#: ../../data.rst 268946edd5df43079ace964e6abdfe07
+msgid "snATAC-seq"
+msgstr ""
+
+#: ../../data.rst:90 0c1cfe3edb304246a87cdf7dd3c33e97
+msgid "MOp"
+msgstr ""
+
+#: ../../data.rst:91 e027afb06cff4e1eaf0772dc350c18e9
+msgid ""
+"`A transcriptomic and epigenomic cell atlas of the mouse primary motor "
+"cortex <https://doi.org/10.1038/s41586-021-03500-8>`__"
+msgstr ""
+
+#: ../../data.rst:92 2df0c1926e2446ddb9929752a4d45aad
+msgid "`NeMO <https://assets.nemoarchive .org/dat-ch1nqb7>`__"
+msgstr ""
+
+#: ../../data.rst 0c8dc49baa8447ebb583712d6211aa74
+msgid ""
+"`Yao-2021-RNA.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Yao-2021-RNA.h5ad>`__,"
+msgstr ""
+
+#: ../../data.rst 847c97bc515b442191f4d3fe5905503c
+msgid ""
+"`Yao-2021-ATAC.h5ad <http://download.gao-"
+"lab.org/GLUE/dataset/Yao-2021-ATAC.h5ad>`__"
+msgstr ""

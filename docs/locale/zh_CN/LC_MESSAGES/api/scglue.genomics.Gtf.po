@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-08 15:02+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../api/scglue.genomics.Gtf.rst:2 f87d0f6074ab46fe96c4945b4e2a5627
+msgid "scglue.genomics.Gtf"
+msgstr ""
+
+#: 5e8dbbdcfc774116b5dd87029671e074 of scglue.genomics.Gtf:1
+msgid "Bases: :py:class:`~scglue.utils.ConstrainedDataFrame`"
+msgstr ""
+
+#: f2adfb727be14f81a56688a6afbfe427 of scglue.genomics.Gtf:1
+msgid "GTF format data frame"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:12 5f054d9efe6e41b28f207c2ec8dee02d
+msgid "Methods"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: d8406e67bbdd4722bfaab9e74b74cd71
+msgid ":py:obj:`read_gtf <scglue.genomics.Gtf.read_gtf>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: a46e143e7d7f4bbaa95413e14501f82b
+msgid "Read GTF file"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: 4cb44ed5a35b42e4bc7866c5c0271ca9
+msgid ":py:obj:`rectify <scglue.genomics.Gtf.rectify>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: ff9b2818eaff477c8008dccd09f0bcca
+msgid "Rectify data frame for format integrity"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: 484b6a49fcf740c69a79ba943d514d17
+msgid ":py:obj:`split_attribute <scglue.genomics.Gtf.split_attribute>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: 8bb5ed6b521349e7b8f9192b81746412
+msgid ""
+"Extract all attributes from the \"attribute\" column and append them to "
+"existing columns"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: b51fab51994b4657a5ea85de868012ed
+msgid ":py:obj:`to_bed <scglue.genomics.Gtf.to_bed>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: bdf97bdd96e44a889b9dfc19ad71f4e3
+msgid "Convert GTF to BED format"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: 2fb83e1e33bc443face061693bb871f8
+msgid ":py:obj:`verify <scglue.genomics.Gtf.verify>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
+#: 68f6142b543441e6923d8303c759fae5
+msgid "Verify data frame for format integrity"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:28 db0ae5192e1447f8b58391fa2456ee03
+msgid "Attributes"
+msgstr ""
+
+#: ../../api/scglue.genomics.Gtf.rst:31:<autosummary>:1
+#: 32c1289604134d51a8803616f5698d39
+msgid ":py:obj:`COLUMNS <scglue.genomics.Gtf.COLUMNS>`\\"
+msgstr ""
+
