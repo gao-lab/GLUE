@@ -57,6 +57,7 @@ doc = [
     "sphinx",
     "sphinx-autodoc-typehints",
     "sphinx-copybutton",
+    "sphinx-intl",
     "nbsphinx",
     "sphinx-rtd-theme",
     "ipython",
