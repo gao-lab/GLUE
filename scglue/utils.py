@@ -18,6 +18,8 @@ from pybedtools.helpers import set_bedtools_path
 
 from .typehint import RandomState, T
 
+AUTO = "AUTO"  # Flag for using automatically determined hyperparameters
+
 
 #------------------------------ Global containers ------------------------------
 
@@ -572,41 +574,6 @@ def get_chained_attr(x: Any, attr: str) -> Any:
             raise AttributeError(f"{attr} not found!")
         x = getattr(x, k)
     return x
-
-
-def in_ipynb() -> bool:  # pragma: no cover
-    r"""
-    Determine whether running in an ipynb environment.
-
-    Returns
-    -------
-    flag
-        Whether running in an ipynb environment
-    """
-    try:
-        import IPython
-        if IPython.get_ipython().__class__.__name__ == "ZMQInteractiveShell":
-            return True
-    except ModuleNotFoundError:
-        return False
-    return False
-
-
-def smart_tqdm(*args, **kwargs):
-    r"""
-    Use ``tqdm.tqdm`` or ``tqdm.tqdm_notebook`` adaptively based on
-    return value of :func:`in_ipynb`.
-
-    Returns
-    -------
-    tqdm
-        A tqdm instance
-    """
-    if in_ipynb():
-        from tqdm.notebook import tqdm  # pragma: no cover
-    else:
-        from tqdm import tqdm
-    return tqdm(*args, **kwargs)
 
 
 def get_rs(x: RandomState = None) -> np.random.RandomState:

@@ -8,7 +8,7 @@ from collections import defaultdict
 from itertools import chain
 from typing import Callable, List, Mapping, Optional
 
-import anndata
+import anndata as ad
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -26,10 +26,25 @@ from anndata import AnnData
 from networkx.algorithms.bipartite import biadjacency_matrix
 from sklearn.preprocessing import normalize
 from sparse import COO
+from tqdm.auto import tqdm
 
 from . import genomics, num
 from .typehint import Kws
-from .utils import logged, smart_tqdm
+from .utils import logged
+
+
+def count_prep(adata: AnnData) -> None:
+    r"""
+    Standard preprocessing of count-based dataset with
+    total count normalization and log-transformation
+
+    Parameters
+    ----------
+    adata
+        Dataset to be preprocessed
+    """
+    sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata)
 
 
 def lsi(
@@ -53,6 +68,8 @@ def lsi(
         Additional keyword arguments are passed to
         :func:`sklearn.utils.extmath.randomized_svd`
     """
+    if "random_state" not in kwargs:
+        kwargs["random_state"] = 0  # Keep deterministic as the default behavior
     if use_highly_variable is None:
         use_highly_variable = "highly_variable" in adata.var
     adata_use = adata[:, adata.var["highly_variable"]] if use_highly_variable else adata
@@ -194,7 +211,8 @@ def aggregate_obs(
             obs[c] = pd.Categorical(obs[c], categories=adata.obs[c].cat.categories)
     return AnnData(
         X=X, obs=obs, var=adata.var,
-        obsm=obsm, varm=adata.varm, layers=layers
+        obsm=obsm, varm=adata.varm, layers=layers,
+        dtype=None if X is None else X.dtype
     )
 
 
@@ -356,7 +374,7 @@ def bedmap2anndata(
     obs_pool = bedmap[obs_col].str.split(";")
     obs_names = pd.Index(sorted(set(chain.from_iterable(obs_pool))))
     X = scipy.sparse.lil_matrix((var_names.size, obs_names.size))  # Transposed
-    for obs, var in smart_tqdm(zip(obs_pool, var_pool), total=bedmap.shape[0]):
+    for obs, var in tqdm(zip(obs_pool, var_pool), total=bedmap.shape[0], desc="bedmap2anndata"):
         row = obs_names.get_indexer(obs)
         col = var_names.get_loc(var)
         X.rows[col] += row.tolist()
@@ -365,7 +383,8 @@ def bedmap2anndata(
     X.sum_duplicates()
     return AnnData(
         X=X, obs=pd.DataFrame(index=obs_names),
-        var=pd.DataFrame(index=var_names)
+        var=pd.DataFrame(index=var_names),
+        dtype=X.dtype
     )
 
 
@@ -409,7 +428,11 @@ def estimate_balancing_weight(
         for adata in adatas:
             groupby = adata.obs.groupby(use_batch, dropna=False)
             for b, idx in groupby.indices.items():
-                adatas_per_batch[b].append(adata[idx])
+                adata_sub = adata[idx]
+                adatas_per_batch[b].append(AnnData(
+                    obs=adata_sub.obs,
+                    obsm={use_rep: adata_sub.obsm[use_rep]}
+                ))
         if len(set(len(items) for items in adatas_per_batch.values())) != 1:
             raise ValueError("Batches must match across datasets!")
         for b, items in adatas_per_batch.items():
@@ -487,7 +510,7 @@ def estimate_balancing_weight(
 def get_metacells(
         *adatas: AnnData, use_rep: str = None, n_meta: int = None,
         common: bool = True, seed: int = 0,
-        agg_kwargs: Optional[List[Kws]] = None
+        agg_kws: Optional[List[Kws]] = None
 ) -> List[AnnData]:
     r"""
     Aggregate datasets into metacells
@@ -504,7 +527,7 @@ def get_metacells(
         Whether to return only metacells common to all datasets
     seed
         Random seed for k-Means clustering
-    agg_kwargs
+    agg_kws
         Keyword arguments per dataset passed to :func:`aggregate_obs`
 
     Returns
@@ -527,12 +550,13 @@ def get_metacells(
         AnnData(
             X=adata.X,
             obs=adata.obs.set_index(adata.obs_names + f"-{i}"), var=adata.var,
-            obsm=adata.obsm, varm=adata.varm, layers=adata.layers
+            obsm=adata.obsm, varm=adata.varm, layers=adata.layers,
+            dtype=None if adata.X is None else adata.X.dtype
         ) for i, adata in enumerate(adatas)
     ]  # Avoid unwanted updates to the input objects
 
     get_metacells.logger.info("Clustering metacells...")
-    combined = anndata.concat(adatas)
+    combined = ad.concat(adatas)
     try:
         import faiss
         kmeans = faiss.Kmeans(
@@ -554,12 +578,12 @@ def get_metacells(
         adata.obs["metacell"] = combined[adata.obs_names].obs["metacell"]
 
     get_metacells.logger.info("Aggregating metacells...")
-    agg_kwargs = agg_kwargs or [{}] * len(adatas)
-    if not len(agg_kwargs) == len(adatas):
-        raise ValueError("Length of `agg_kwargs` must match the number of datasets!")
+    agg_kws = agg_kws or [{}] * len(adatas)
+    if not len(agg_kws) == len(adatas):
+        raise ValueError("Length of `agg_kws` must match the number of datasets!")
     adatas = [
-        aggregate_obs(adata, "metacell", **kwargs)
-        for adata, kwargs in zip(adatas, agg_kwargs)
+        aggregate_obs(adata, "metacell", **kws)
+        for adata, kws in zip(adatas, agg_kws)
     ]
     if common:
         common_metacells = list(set.intersection(*(
@@ -572,25 +596,27 @@ def get_metacells(
 
 
 def _metacell_corr(
-        *adatas: AnnData, skeleton: nx.Graph = None, method: str = "spr"
+        *adatas: AnnData, skeleton: nx.Graph = None, method: str = "spr",
+        prep_fns: Optional[List[Optional[Callable[[AnnData], None]]]] = None
 ) -> nx.Graph:
     if skeleton is None:
         raise ValueError("Missing required argument `skeleton`!")
-    for adata in adatas:
-        sc.pp.normalize_total(adata)
     if set.intersection(*(set(adata.var_names) for adata in adatas)):
         raise ValueError("Overlapping features are currently not supported!")
-    adata = anndata.concat(adatas, axis=1)
+    prep_fns = prep_fns or [None] * len(adatas)
+    if not len(prep_fns) == len(adatas):
+        raise ValueError("Length of `prep_fns` must match the number of datasets!")
+    for adata, prep_fn in zip(adatas, prep_fns):
+        if prep_fn:
+            prep_fn(adata)
+    adata = ad.concat(adatas, axis=1)
     edgelist = nx.to_pandas_edgelist(skeleton)
     source = adata.var_names.get_indexer(edgelist["source"])
     target = adata.var_names.get_indexer(edgelist["target"])
-    if method == "pcc":
-        sc.pp.log1p(adata)
-        X = num.densify(adata.X.T)
-    elif method == "spr":
-        X = num.densify(adata.X.T)
+    X = num.densify(adata.X.T)
+    if method == "spr":
         X = np.array([scipy.stats.rankdata(x) for x in X])
-    else:
+    elif method != "pcc":
         raise ValueError(f"Unrecognized method: {method}!")
     mean = X.mean(axis=1)
     meansq = np.square(X).mean(axis=1)
@@ -604,8 +630,10 @@ def _metacell_corr(
 
 @logged
 def metacell_corr(
-        *adatas: AnnData, use_rep: str = None, n_meta: int = None,
-        skeleton: nx.Graph = None, method: str = "spr"
+        *adatas: AnnData, skeleton: nx.Graph = None, method: str = "spr",
+        agg_fns: Optional[List[str]] = None,
+        prep_fns: Optional[List[Optional[Callable[[AnnData], None]]]] = None,
+        **kwargs
 ) -> nx.Graph:
     r"""
     Metacell based correlation
@@ -613,32 +641,40 @@ def metacell_corr(
     Parameters
     ----------
     *adatas
-        Datasets to be correlated, where ``.X`` are raw counts
-        (indexed by domain name)
-    use_rep
-        Data representation based on which to cluster meta-cells
-    n_meta
-        Number of metacells to use
+        Datasets to be correlated
     skeleton
         Skeleton graph determining which pair of features to correlate
     method
         Correlation method, must be one of {"pcc", "spr"}
+    agg_fns
+        Aggregation functions used to obtain metacells for each dataset,
+        must be one of {"sum", "mean"}
+    prep_fns
+        Preprocessing functions to be applied to metacells for each dataset,
+        ``None`` indicates no preprocessing
+    **kwargs
+        Additional keyword arguments are passed to :func:`get_metacells`
 
     Returns
     -------
     corr
         A skeleton-based graph containing correlation
         as edge attribute "corr"
+
+    Note
+    ----
+    All aggregation, preprocessing and correlation apply to ``adata.X``.
     """
-    for adata in adatas:
-        if not num.all_counts(adata.X):
-            raise ValueError("``.X`` must contain raw counts!")
-    adatas = get_metacells(*adatas, use_rep=use_rep, n_meta=n_meta, common=True)
+    adatas = get_metacells(*adatas, **kwargs, agg_kws=[
+        dict(X_agg=agg_fn) for agg_fn in agg_fns
+    ] if agg_fns else None)
     metacell_corr.logger.info(
         "Computing correlation on %d common metacells...",
         adatas[0].shape[0]
     )
-    return _metacell_corr(*adatas, skeleton=skeleton, method=method)
+    return _metacell_corr(
+        *adatas, skeleton=skeleton, method=method, prep_fns=prep_fns
+    )
 
 
 def _metacell_regr(
@@ -652,7 +688,7 @@ def _metacell_regr(
         sc.pp.log1p(adata)
     if set.intersection(*(set(adata.var_names) for adata in adatas)):
         raise ValueError("Overlapping features are currently not supported!")
-    adata = anndata.concat(adatas, axis=1)
+    adata = ad.concat(adatas, axis=1)
 
     targets = [node for node, in_degree in skeleton.in_degree() if in_degree]
     biadj = biadjacency_matrix(
@@ -662,7 +698,7 @@ def _metacell_regr(
     Y = num.densify(adata[:, targets].X.T)
     coef = []
     model = getattr(sklearn.linear_model, model)
-    for target, y, mask in smart_tqdm(zip(targets, Y, biadj), total=len(targets)):
+    for target, y, mask in tqdm(zip(targets, Y, biadj), total=len(targets), desc="metacell_regr"):
         X_ = X[:, mask.indices]
         lm = model(**kwargs).fit(X_, y)
         coef.append(pd.DataFrame({
@@ -686,7 +722,7 @@ def metacell_regr(
     ----------
     *adatas
         Datasets to be correlated, where ``.X`` are raw counts
-        (indexed by domain name)
+        (indexed by modality name)
     use_rep
         Data representation based on which to cluster meta-cells
     n_meta

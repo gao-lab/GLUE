@@ -1,6 +1,19 @@
 Release notes
 =============
 
+v0.3.0
+------
+
+New features:
+
+- New `tutorial <reginf.ipynb>`__ and functions for regulatory inference (Resolves `#15 <https://github.com/gao-lab/GLUE/issues/15>`__, `#41 <https://github.com/gao-lab/GLUE/issues/41>`__).
+- New `tutorial <paired.ipynb>`__ for training on partially paired data (Resolves `#24 <https://github.com/gao-lab/GLUE/issues/24>`__).
+
+Enhancements:
+
+- Modularized `scglue.dx.integration_consistency <api/scglue.dx.integration_consistency.rst>`__ to allow for non-raw-count input (Resolves `#30 <https://github.com/gao-lab/GLUE/issues/30>`__).
+- Added documentation translation in Chinese.
+
 v0.2.3
 ------
 

@@ -1,0 +1,24 @@
+motif:
+  JASPAR2022: JASPAR2022_CORE_non-redundant_pfms_meme.txt
+
+genome:
+  hg19: ../genome/GRCh37.p13.genome.fa.gz
+  hg38: ../genome/GRCh38.p13.genome.fa.gz
+  mm9: ../genome/NCBIM37.genome.fa.gz
+  mm10: ../genome/GRCm38.p6.genome.fa.gz
+
+annotation:
+  hg19: ../genome/gencode.v19.chr_patch_hapl_scaff.annotation.gtf.gz
+  hg38: ../genome/gencode.v35.chr_patch_hapl_scaff.annotation.gtf.gz
+  mm9: ../genome/gencode.vM1.annotation.gtf.gz
+  mm10: ../genome/gencode.vM25.chr_patch_hapl_scaff.annotation.gtf.gz
+
+ortholog:
+  hg19:
+    - mouse2human.csv.gz
+  hg38:
+    - mouse2human.csv.gz
+  mm9:
+    - human2mouse.csv.gz
+  mm10:
+    - human2mouse.csv.gz

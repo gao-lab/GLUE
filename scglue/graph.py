@@ -6,8 +6,10 @@ from itertools import chain
 from typing import Any, Callable, Iterable, Mapping, Optional, Set
 
 import networkx as nx
+from anndata import AnnData
+from tqdm.auto import tqdm
 
-from .utils import smart_tqdm
+from .utils import logged
 
 
 def compose_multigraph(*graphs: nx.Graph) -> nx.MultiGraph:
@@ -72,7 +74,7 @@ def collapse_multigraph(
         collapsed = nx.Graph(graph)
     if not merge_fns:
         return collapsed
-    for e in smart_tqdm(list(collapsed.edges)):
+    for e in tqdm(list(collapsed.edges), desc="collapse_multigraph"):
         attrs = graph.get_edge_data(*e).values()
         for k, fn in merge_fns.items():
             try:
@@ -104,3 +106,91 @@ def reachable_vertices(graph: nx.Graph, source: Iterable[Any]) -> Set[Any]:
         nx.descendants(graph, item) for item in source
         if graph.has_node(item)
     )).union(source)
+
+
+@logged
+def check_graph(
+        graph: nx.Graph, adatas: Iterable[AnnData],
+        cov: str = "error", attr: str = "error",
+        loop: str = "error", sym: str = "error"
+) -> None:
+    r"""
+    Check if a graph is a valid guidance graph
+
+    Parameters
+    ----------
+    graph
+        Graph to be checked
+    adatas
+        AnnData objects where graph nodes are variables
+    cov
+        Action to take if graph nodes does not cover all variables,
+        must be one of {"ignore", "warn", "error"}
+    attr
+        Action to take if graph edges does not contain required attributes,
+        must be one of {"ignore", "warn", "error"}
+    loop
+        Action to take if graph does not contain self-loops,
+        must be one of {"ignore", "warn", "error"}
+    sym
+        Action to take if graph is not symmetric,
+        must be one of {"ignore", "warn", "error"}
+    """
+    passed = True
+
+    check_graph.logger.info("Checking variable coverage...")
+    if not all(
+        all(graph.has_node(var_name) for var_name in adata.var_names)
+        for adata in adatas
+    ):
+        passed = False
+        msg = "Some variables are not covered by the graph!"
+        if cov == "error":
+            raise ValueError(msg)
+        elif cov == "warn":
+            check_graph.logger.warning(msg)
+        elif cov != "ignore":
+            raise ValueError(f"Invalid `cov`: {cov}")
+
+    check_graph.logger.info("Checking edge attributes...")
+    if not all(
+        "weight" in edge_attr and "sign" in edge_attr
+        for edge_attr in dict(graph.edges).values()
+    ):
+        passed = False
+        msg = "Missing weight or sign as edge attribute!"
+        if attr == "error":
+            raise ValueError(msg)
+        elif attr == "warn":
+            check_graph.logger.warning(msg)
+        elif cov != "ignore":
+            raise ValueError(f"Invalid `attr`: {attr}")
+
+    check_graph.logger.info("Checking self-loops...")
+    if not all(
+        graph.has_edge(node, node) for node in graph.nodes
+    ):
+        passed = False
+        msg = "Missing self-loop!"
+        if loop == "error":
+            raise ValueError(msg)
+        elif loop == "warn":
+            check_graph.logger.warning(msg)
+        elif loop != "ignore":
+            raise ValueError(f"Invalid `loop`: {loop}")
+
+    check_graph.logger.info("Checking graph symmetry...")
+    if not all(
+        graph.has_edge(e[1], e[0]) for e in graph.edges
+    ):
+        passed = False
+        msg = "Graph is not symmetric!"
+        if sym == "error":
+            raise ValueError(msg)
+        elif sym == "warn":
+            check_graph.logger.warning(msg)
+        elif sym != "ignore":
+            raise ValueError(f"Invalid `sym`: {sym}")
+
+    if passed:
+        check_graph.logger.info("All checks passed!")

@@ -72,24 +72,24 @@ def test_window_graph(bed_file, graph):
     cmp_graphs(result, graph)
 
 
-def test_rna_anchored_prior_graph(rna, atac, gtf_file):  # NOTE: Smoke test
+def test_rna_anchored_guidance_graph(rna, atac, gtf_file):  # NOTE: Smoke test
     scglue.data.get_gene_annotation(
         rna, gtf=gtf_file, gtf_by="gene_id",
         by_func=scglue.genomics.ens_trim_version
     )
     rna.var["highly_variable"] = True
-    scglue.genomics.rna_anchored_prior_graph(
+    scglue.genomics.rna_anchored_guidance_graph(
         rna, atac, gene_region="combined",
         promoter_len=2, extend_range=15,
         extend_fn=lambda x: 1 / x if x > 0 else 1.0
     )
-    scglue.genomics.rna_anchored_prior_graph(
+    scglue.genomics.rna_anchored_guidance_graph(
         rna, atac, gene_region="promoter",
         promoter_len=2, extend_range=15,
         propagate_highly_variable=True, corrupt_rate=0.2
     )
     with pytest.raises(ValueError):
-        scglue.genomics.rna_anchored_prior_graph(rna, atac, gene_region="xxx")
+        scglue.genomics.rna_anchored_guidance_graph(rna, atac, gene_region="xxx")
 
 
 def test_regulatory_inference(rna):
@@ -120,4 +120,27 @@ def test_regulatory_inference(rna):
     _ = scglue.genomics.regulatory_inference(
         rna.var_names, [rna.X.T], skeleton,
         alternative="less", random_state=2
+    )  # NOTE: Smoke test
+
+
+def test_write_links(rna_pp, tmp_path):
+    skeleton = nx.DiGraph([(i, j) for i in rna_pp.var_names for j in rna_pp.var_names])
+    reginf = scglue.genomics.regulatory_inference(
+        rna_pp.var_names, rna_pp.X.T, skeleton,
+        alternative="two.sided", random_state=0
+    )
+    links_file = tmp_path / "test.links"
+    scglue.genomics.write_links(
+        reginf,
+        scglue.genomics.Bed(rna_pp.var.assign(name=rna_pp.var_names)),
+        scglue.genomics.Bed(rna_pp.var.assign(name=rna_pp.var_names)),
+        links_file, keep_attrs=["score"]
+    )  # NOTE: Smoke test
+    links_file.unlink()
+
+
+def test_cis_regulatory_ranking(rna, atac, guidance):
+    _ = scglue.genomics.cis_regulatory_ranking(
+        guidance, guidance.reverse(),
+        rna.var_names, atac.var_names, rna.var_names
     )  # NOTE: Smoke test

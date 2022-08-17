@@ -138,7 +138,7 @@ class DataEncoder(glue.DataEncoder):
         raise NotImplementedError  # pragma: no cover
 
     def forward(  # pylint: disable=arguments-differ
-            self, x: torch.Tensor, xalt: torch.Tensor,
+            self, x: torch.Tensor, xrep: torch.Tensor,
             lazy_normalizer: bool = True
     ) -> Tuple[D.Normal, Optional[torch.Tensor]]:
         r"""
@@ -148,11 +148,11 @@ class DataEncoder(glue.DataEncoder):
         ----------
         x
             Input data
-        xalt
+        xrep
             Alternative input data
         lazy_normalizer
             Whether to skip computing `x` normalizer (just return None)
-            if `xalt` is non-empty
+            if `xrep` is non-empty
 
         Returns
         -------
@@ -164,12 +164,12 @@ class DataEncoder(glue.DataEncoder):
         Note
         ----
         Normalization is always computed on `x`.
-        If xalt is empty, the normalized `x` will be used as input
-        to the encoder neural network, otherwise xalt is used instead.
+        If xrep is empty, the normalized `x` will be used as input
+        to the encoder neural network, otherwise xrep is used instead.
         """
-        if xalt.numel():
+        if xrep.numel():
             l = None if lazy_normalizer else self.compute_l(x)
-            ptr = xalt
+            ptr = xrep
         else:
             l = self.compute_l(x)
             ptr = self.normalize(x, l)
@@ -438,7 +438,7 @@ class ZINBDataDecoder(NBDataDecoder):
 class Discriminator(torch.nn.Sequential, glue.Discriminator):
 
     r"""
-    Domain discriminator
+    Modality discriminator
 
     Parameters
     ----------

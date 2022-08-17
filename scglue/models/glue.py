@@ -140,13 +140,13 @@ class DataDecoder(torch.nn.Module):
 class Discriminator(torch.nn.Module):
 
     r"""
-    Abstract domain discriminator
+    Abstract modality discriminator
     """
 
     @abstractmethod
     def forward(self, u: torch.Tensor) -> torch.Tensor:
         r"""
-        Discriminate among domains
+        Discriminate among modalities
 
         Parameters
         ----------
@@ -156,7 +156,7 @@ class Discriminator(torch.nn.Module):
         Returns
         -------
         logits
-            Domain logits
+            Modality logits
         """
         raise NotImplementedError  # pragma: no cover
 
@@ -194,13 +194,13 @@ class GLUE(torch.nn.Module):
     v2g
         Graph decoder
     x2u
-        Data encoders (indexed by domain name)
+        Data encoders (indexed by modality name)
     u2x
-        Data decoders (indexed by domain name)
+        Data decoders (indexed by modality name)
     idx
-        Feature indices among graph vertices (indexed by domain name)
+        Feature indices among graph vertices (indexed by modality name)
     du
-        Domain discriminator
+        Modality discriminator
     prior
         Latent prior
     """
@@ -254,7 +254,7 @@ class GLUE(torch.nn.Module):
 
 DataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
-    Mapping[str, torch.Tensor],  # xflag (domain indicator)
+    Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
     torch.Tensor  # esgn (edge sign)
@@ -277,8 +277,8 @@ class GLUETrainer(Trainer):
         Graph weight
     lam_align
         Adversarial alignment weight
-    domain_weight
-        Relative domain weight (indexed by domain name)
+    modality_weight
+        Relative modality weight (indexed by modality name)
     optim
         Optimizer
     lr
@@ -290,12 +290,12 @@ class GLUETrainer(Trainer):
     def __init__(
             self, net: GLUE, lam_data: float = None, lam_kl: float = None,
             lam_graph: float = None, lam_align: float = None,
-            domain_weight: Mapping[str, float] = None,
+            modality_weight: Mapping[str, float] = None,
             optim: str = None, lr: float = None, **kwargs
     ) -> None:
         required_kwargs = (
             "lam_data", "lam_kl", "lam_graph", "lam_align",
-            "domain_weight", "optim", "lr"
+            "modality_weight", "optim", "lr"
         )
         for required_kwarg in required_kwargs:
             if locals()[required_kwarg] is None:
@@ -312,10 +312,10 @@ class GLUETrainer(Trainer):
         self.lam_kl = lam_kl
         self.lam_graph = lam_graph
         self.lam_align = lam_align
-        if min(domain_weight.values()) < 0:
-            raise ValueError("Domain weight must be non-negative!")
-        normalizer = sum(domain_weight.values()) / len(domain_weight)
-        self.domain_weight = {k: v / normalizer for k, v in domain_weight.items()}
+        if min(modality_weight.values()) < 0:
+            raise ValueError("Modality weight must be non-negative!")
+        normalizer = sum(modality_weight.values()) / len(modality_weight)
+        self.modality_weight = {k: v / normalizer for k, v in modality_weight.items()}
 
         self.lr = lr
         self.vae_optim = getattr(torch.optim, optim)(
@@ -403,7 +403,7 @@ class GLUETrainer(Trainer):
             k: x_nll[k] + self.lam_kl * x_kl[k]
             for k in net.keys
         }
-        x_elbo_sum = sum(self.domain_weight[k] * x_elbo[k] for k in net.keys)
+        x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
         vae_loss = self.lam_data * x_elbo_sum \
             + self.lam_graph * len(net.keys) * g_elbo
@@ -427,8 +427,8 @@ class GLUETrainer(Trainer):
 
         Note
         ----
-        The data dataset should contain data arrays for each domain
-        in the same order as domain keys of the network.
+        The data dataset should contain data arrays for each modality
+        in the same order as modality keys of the network.
         """
         device = self.net.device
         keys = self.net.keys
@@ -478,7 +478,7 @@ class GLUETrainer(Trainer):
         data = self.format_data(data)
         return self.compute_losses(data, engine.state.epoch)
 
-    def fit(  # pylint: disable=arguments-differ
+    def fit(  # pylint: disable=arguments-renamed
             self, data: ArrayDataset,
             graph: GraphDataset, val_split: float = None,
             data_batch_size: int = None, graph_batch_size: int = None,

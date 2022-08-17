@@ -26,12 +26,11 @@ from anndata import AnnData
 from ..num import EPS
 from ..utils import config, get_chained_attr, logged
 from .base import Model, Trainer, TrainingPlugin
-from .data import DataLoader
+from .data import AnnDataset, DataLoader
 from .nn import autodevice
 from .plugins import EarlyStopping, LRScheduler, Tensorboard
 from .prob import MSE, RMSE, ZILN, ZIN
 from .sc import Prior
-from .scglue import AnnDataset
 
 AUTO = -1  # Flag for using automatically determined hyperparameters
 
@@ -155,7 +154,7 @@ class CompositeDataEncoder(Transferrable):
 
     def __init__(
             self, in_features: int, in_raw_features: int, out_features: int,
-            n_domains: int, h_depth: int = 2, h_dim: int = 256,
+            n_modalities: int, h_depth: int = 2, h_dim: int = 256,
             dropout: float = 0.2
     ) -> None:
         super().__init__()
@@ -163,7 +162,7 @@ class CompositeDataEncoder(Transferrable):
             ElementDataEncoder(
                 in_features, out_features,
                 h_depth=h_depth, h_dim=h_dim, dropout=dropout
-            ) for _ in range(n_domains)
+            ) for _ in range(n_modalities)
         ])
 
     @abstractmethod
@@ -177,12 +176,12 @@ class CompositeDataEncoder(Transferrable):
         raise NotImplementedError  # pragma: no cover
 
     def forward(
-            self, x: torch.Tensor, xalt: torch.Tensor,
+            self, x: torch.Tensor, xrep: torch.Tensor,
             lazy_normalizer: bool = True
     ) -> Tuple[D.Normal, Optional[torch.Tensor]]:
-        if xalt.numel():
+        if xrep.numel():
             l = None if lazy_normalizer else self.compute_l(x)
-            ptr = xalt
+            ptr = xrep
         else:
             l = self.compute_l(x)
             ptr = self.normalize(x, l)
@@ -209,14 +208,14 @@ class NBCompositeDataEncoder(CompositeDataEncoder):
 
     def __init__(
             self, in_features: int, in_raw_features: int, out_features: int,
-            n_domains: int, h_depth: int = 2, h_dim: int = 256,
+            n_modalities: int, h_depth: int = 2, h_dim: int = 256,
             dropout: float = 0.2
     ) -> None:
         super().__init__(
-            in_features, in_raw_features, out_features, n_domains,
+            in_features, in_raw_features, out_features, n_modalities,
             h_depth=h_depth, h_dim=h_dim, dropout=dropout
         )
-        self.est_l = torch.nn.Linear(in_raw_features, n_domains)
+        self.est_l = torch.nn.Linear(in_raw_features, n_modalities)
 
     def compute_l(self, x: torch.Tensor) -> Optional[torch.Tensor]:
         return F.relu(self.est_l(x))
@@ -441,7 +440,7 @@ class Discriminator(torch.nn.Sequential, BatchedTransferrable):
     def batched_weights(self) -> List[str]:
         return ["linear_0.weight" if hasattr(self, "linear_0") else "pred.weight"]
 
-    def forward(self, x: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, b: torch.Tensor) -> torch.Tensor:  # pylint: disable=arguments-differ
         if self.n_batches:
             b_one_hot = F.one_hot(b, num_classes=self.n_batches)
             x = torch.cat([x, b_one_hot], dim=1)
@@ -542,11 +541,11 @@ class SCCLUE(torch.nn.Module):
 
 PairedDataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
-    Mapping[str, torch.Tensor],  # xalt (alternative input data)
+    Mapping[str, torch.Tensor],  # xrep (alternative input data)
     Mapping[str, torch.Tensor],  # xbch (data batch)
     Mapping[str, torch.Tensor],  # xlbl (data label)
-    Mapping[str, torch.Tensor],  # xdwt (domain discriminator sample weight)
-    Mapping[str, torch.Tensor],  # xflag (domain indicator)
+    Mapping[str, torch.Tensor],  # xdwt (modality discriminator sample weight)
+    Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # pmsk (paired mask)
 ]  # Specifies the data format of input to SCCLUETrainer.compute_losses
 
@@ -559,13 +558,13 @@ class SCCLUETrainer(Trainer):
             lam_align: float = None, lam_sup: float = None,
             lam_joint_cross: float = None, lam_real_cross: float = None,
             lam_cos: float = None, normalize_u: bool = None,
-            domain_weight: Mapping[str, float] = None,
+            modality_weight: Mapping[str, float] = None,
             optim: str = None, lr: float = None, **kwargs
     ) -> None:
         required_kwargs = (
             "lam_data", "lam_kl", "lam_align",
             "lam_sup", "lam_joint_cross", "lam_real_cross",
-            "lam_cos", "normalize_u", "domain_weight",
+            "lam_cos", "normalize_u", "modality_weight",
             "optim", "lr"
         )
         for required_kwarg in required_kwargs:
@@ -592,10 +591,10 @@ class SCCLUETrainer(Trainer):
         self.lam_real_cross = lam_real_cross
         self.lam_cos = lam_cos
         self.normalize_u = normalize_u
-        if min(domain_weight.values()) < 0:
-            raise ValueError("Domain weights must be non-negative!")
-        normalizer = sum(domain_weight.values()) / len(domain_weight)
-        self.domain_weight = {k: v / normalizer for k, v in domain_weight.items()}
+        if min(modality_weight.values()) < 0:
+            raise ValueError("Modality weights must be non-negative!")
+        normalizer = sum(modality_weight.values()) / len(modality_weight)
+        self.modality_weight = {k: v / normalizer for k, v in modality_weight.items()}
 
         self.lr = lr
         self.vae_optim = getattr(torch.optim, optim)(
@@ -614,15 +613,15 @@ class SCCLUETrainer(Trainer):
         device = self.net.device
         keys = self.net.keys
         K = len(keys)
-        x, xalt, xbch, xlbl, xdwt, pmsk = \
+        x, xrep, xbch, xlbl, xdwt, pmsk = \
             data[0:K], data[K:2*K], data[2*K:3*K], \
             data[3*K:4*K], data[4*K:5*K], data[5*K]
         x = {
             k: x[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
-        xalt = {
-            k: xalt[i].to(device, non_blocking=True)
+        xrep = {
+            k: xrep[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
         xbch = {
@@ -644,17 +643,17 @@ class SCCLUETrainer(Trainer):
             for i, k in enumerate(keys)
         }
         pmsk = pmsk.to(device, non_blocking=True)
-        return x, xalt, xbch, xlbl, xdwt, xflag, pmsk
+        return x, xrep, xbch, xlbl, xdwt, xflag, pmsk
 
     def compute_losses(
             self, data: PairedDataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:
         net = self.net
-        x, xalt, xbch, xlbl, xdwt, xflag, pmsk = data
+        x, xrep, xbch, xlbl, xdwt, xflag, pmsk = data
 
         u, l = {}, {}
         for k in net.keys:
-            u[k], l[k] = net.x2u[k](x[k], xalt[k], lazy_normalizer=dsc_only)
+            u[k], l[k] = net.x2u[k](x[k], xrep[k], lazy_normalizer=dsc_only)
         usamp = {k: u[k].rsample() for k in net.keys}
         if self.normalize_u:
             usamp = {k: F.normalize(usamp[k], dim=1) for k in net.keys}
@@ -706,7 +705,7 @@ class SCCLUETrainer(Trainer):
             k: x_nll[k] + self.lam_kl * x_kl[k]
             for k in net.keys
         }
-        x_elbo_sum = sum(self.domain_weight[k] * x_elbo[k] for k in net.keys)
+        x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
         pmsk = pmsk.T
         usamp_stack = torch.stack([usamp[k] for k in net.keys])
@@ -723,15 +722,15 @@ class SCCLUETrainer(Trainer):
                 k: -net.u2x[k](
                     usamp_mean_split[i, m], xbch[k][m],
                     None if l[k] is None else l[k][m, i]
-                    # FIXME: This is directly using target domain estimated l.
-                    # We are supposed to use source domain estimated l as well.
+                    # FIXME: This is directly using target modality estimated l.
+                    # We are supposed to use source modality estimated l as well.
                     # Maybe take an average like in usamp? But l does not have
                     # adversarial learning as u, so it is unsure whether that's
                     # going to work.
                 ).log_prob(x[k][m]).mean()
                 for i, (k, m) in enumerate(zip(net.keys, pmsk))
-            }  # Decode the usamp_mean to all domains
-            joint_cross_loss = sum(self.domain_weight[k] * x_joint_cross_nll[k] for k in net.keys)
+            }  # Decode the usamp_mean to all modalities
+            joint_cross_loss = sum(self.modality_weight[k] * x_joint_cross_nll[k] for k in net.keys)
         else:
             joint_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -746,7 +745,7 @@ class SCCLUETrainer(Trainer):
                             None if l[k] is None else l[k][m, i]
                         ).log_prob(x[k_target][m]).mean()
                 x_real_cross_nll[k] = xk_real_cross_nll
-            real_cross_loss = sum(self.domain_weight[k] * x_real_cross_nll[k] for k in net.keys)
+            real_cross_loss = sum(self.modality_weight[k] * x_real_cross_nll[k] for k in net.keys)
         else:
             real_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -812,7 +811,7 @@ class SCCLUETrainer(Trainer):
         data = self.format_data(data)
         return self.compute_losses(data, engine.state.epoch)
 
-    def fit(
+    def fit(  # pylint: disable=arguments-renamed
             self, data: AnnDataset,
             val_split: float = None, batch_size: int = None,
             align_burnin: int = None, max_epochs: int = None,
@@ -920,7 +919,7 @@ class SCCLUEModel(Model):
         self.random_seed = random_seed
         torch.manual_seed(self.random_seed)
 
-        self.domains, x2u, u2x, all_ct = {}, {}, {}, set()
+        self.modalities, x2u, u2x, all_ct = {}, {}, {}, set()
         for k, adata in adatas.items():
             if config.ANNDATA_KEY not in adata.uns:
                 raise ValueError(
@@ -949,12 +948,12 @@ class SCCLUEModel(Model):
                 set() if data_config["cell_types"] is None
                 else data_config["cell_types"]
             )
-            self.domains[k] = data_config
+            self.modalities[k] = data_config
         all_ct = pd.Index(all_ct).sort_values()
-        for domain in self.domains.values():
-            domain["cell_types"] = all_ct
+        for modality in self.modalities.values():
+            modality["cell_types"] = all_ct
         if shared_batches:
-            all_batches = [domain["batches"] for domain in self.domains.values()]
+            all_batches = [modality["batches"] for modality in self.modalities.values()]
             ref_batch = all_batches[0]
             for batches in all_batches:
                 if not np.array_equal(batches, ref_batch):
@@ -963,7 +962,7 @@ class SCCLUEModel(Model):
         else:
             du_batches = []
         du = Discriminator(
-            latent_dim * len(self.domains), len(self.domains),
+            latent_dim * len(self.modalities), len(self.modalities),
             batches=du_batches,
             h_depth=du_h_depth, h_dim=du_h_dim, dropout=dropout
         )
@@ -971,7 +970,7 @@ class SCCLUEModel(Model):
         super().__init__(
             x2u, u2x, du, prior,
             u2c=None if all_ct.empty else Classifier(
-                latent_dim * len(self.domains), all_ct.size
+                latent_dim * len(self.modalities), all_ct.size
             )
         )
 
@@ -987,21 +986,21 @@ class SCCLUEModel(Model):
             lam_real_cross: float = 0.02,
             lam_cos: float = 0.02,
             normalize_u: bool = True,
-            domain_weight: Optional[Mapping[str, float]] = None,
+            modality_weight: Optional[Mapping[str, float]] = None,
             lr: float = 2e-3, **kwargs
     ) -> None:
-        if domain_weight is None:
-            domain_weight = {k: 1.0 for k in self.domains}
+        if modality_weight is None:
+            modality_weight = {k: 1.0 for k in self.modalities}
         self.normalize_u = normalize_u
         super().compile(
             lam_data=lam_data, lam_kl=lam_kl,
             lam_align=lam_align, lam_sup=lam_sup,
             lam_joint_cross=lam_joint_cross, lam_real_cross=lam_real_cross,
-            lam_cos=lam_cos, normalize_u=normalize_u, domain_weight=domain_weight,
+            lam_cos=lam_cos, normalize_u=normalize_u, modality_weight=modality_weight,
             optim="RMSprop", lr=lr, **kwargs
         )
 
-    def fit(
+    def fit(  # pylint: disable=arguments-differ
             self, adatas: Mapping[str, AnnData],
             val_split: float = 0.1, batch_size: int = 128,
             align_burnin: int = AUTO, max_epochs: int = AUTO,
@@ -1010,7 +1009,7 @@ class SCCLUEModel(Model):
     ) -> None:
         data = AnnDataset(
             [adatas[key] for key in self.net.keys],
-            [self.domains[key] for key in self.net.keys],
+            [self.modalities[key] for key in self.net.keys],
             mode="train"
         )
         batch_per_epoch = data.size * (1 - val_split) / batch_size
@@ -1057,7 +1056,7 @@ class SCCLUEModel(Model):
         Parameters
         ----------
         key
-            Domain key
+            Modality key
         adata
             Input dataset
         batch_size
@@ -1071,7 +1070,7 @@ class SCCLUEModel(Model):
         self.net.eval()
         encoder = self.net.x2u[key]
         data = AnnDataset(
-            [adata], [self.domains[key]],
+            [adata], [self.modalities[key]],
             mode="eval", getitem_size=batch_size
         )
         data_loader = DataLoader(
@@ -1079,9 +1078,9 @@ class SCCLUEModel(Model):
             shuffle=False, drop_last=False
         )
         result = []
-        for x, xalt, *_ in data_loader:
+        for x, xrep, *_ in data_loader:
             result.append(encoder(
-                x.to(self.net.device), xalt.to(self.net.device),
+                x.to(self.net.device), xrep.to(self.net.device),
                 lazy_normalizer=True
             )[0].mean.detach().cpu())
         return torch.cat(result).numpy()
@@ -1094,16 +1093,16 @@ class SCCLUEModel(Model):
         self.net.eval()
 
         source_key, target_key = keys
-        if self.domains[target_key]["prob_model"] == "NB":
+        if self.modalities[target_key]["prob_model"] == "NB":
             raise RuntimeError("Cannot use NB prob model for cross prediction!")
-        if self.domains[target_key]["use_batch"] is not None:
+        if self.modalities[target_key]["use_batch"] is not None:
             raise RuntimeError("Cannot use batch for cross prediction!")
         target_idx = self.net.keys.index(target_key)
         x2u = self.net.x2u[source_key]
         u2x = self.net.u2x[target_key]
 
         data = AnnDataset(
-            [adata], [self.domains[source_key]],
+            [adata], [self.modalities[source_key]],
             mode="eval", getitem_size=batch_size
         )
         data_loader = DataLoader(
@@ -1112,9 +1111,9 @@ class SCCLUEModel(Model):
         )
 
         result = []
-        for x, xalt, *_ in data_loader:
+        for x, xrep, *_ in data_loader:
             u, _ = x2u(
-                x.to(self.net.device), xalt.to(self.net.device),
+                x.to(self.net.device), xrep.to(self.net.device),
                 lazy_normalizer=True
             )
             umean = F.normalize(u.mean, dim=1) if self.normalize_u else u.mean
@@ -1127,10 +1126,11 @@ class SCCLUEModel(Model):
                 None
             ).mean.detach().cpu())
 
+        X = torch.cat(result).numpy()
         return AnnData(
-            X=torch.cat(result).numpy(),
-            obs=adata.obs,
-            var=pd.DataFrame(index=self.domains[target_key]["features"])
+            X=X, obs=adata.obs,
+            var=pd.DataFrame(index=self.modalities[target_key]["features"]),
+            dtype=X.dtype
         )
 
     def __repr__(self) -> str:

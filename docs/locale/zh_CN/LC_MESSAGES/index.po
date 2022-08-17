@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) Gao Lab, 2022
 # This file is distributed under the same license as the scglue package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
@@ -6,44 +5,44 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: scglue 0.2.0\n"
+"Project-Id-Version: scglue 0.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 15:35+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2022-08-09 10:12+0800\n"
+"Last-Translator: Pei-Wen Ji <jipw@mail.cbi.pku.edu.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../index.rst:23 a7de829ee66a408aa15c0dc82a44b603
+#: ../../index.rst:23
 msgid "Contents:"
 msgstr "目录："
 
-#: ../../index.rst:2 779bc7eec23e4dc69cf33cfb1c8e7a96
+#: ../../index.rst:2
 msgid "Welcome to scglue's documentation!"
 msgstr "欢迎来到scglue的使用手册！"
 
-#: ../../index.rst:-1 6b725b3a3ff54916897beb9783d82bd1
+#: ../../index.rst:-1
 msgid "GLUE icon"
 msgstr "GLUE图标"
 
-#: ../../index.rst:9 9c4c7e61906744e6a20ae45eb22ff57a
+#: ../../index.rst:9
 msgid ""
 "``scglue`` implements the GLUE (**G**\\ raph **L**\\ inked **U**\\ nified"
 " **E**\\ mbedding) model, for unpaired single-cell multi-omics data "
 "integration."
-msgstr "``scglue`` 实现了模型 GLUE(**G**\ raph **L**\ inked **U**\ nified **E**\ mbedding)，用于整合非配对的单细胞多组学数据。"
+msgstr ""
+"``scglue`` 实现了模型 GLUE(**G**\\ raph **L**\\ inked **U**\\ nified **E**\\ "
+"mbedding)，用于整合非配对的单细胞多组学数据。"
 
-#: ../../index.rst:11 09bb78ad5710444cb3575a208ba622bf
+#: ../../index.rst:11
 msgid ""
 "GLUE is a flexible framework that utilizes prior knowledge about feature "
 "relations to bridge the gap between different feature spaces during "
 "unpaired multi-modal data integration."
 msgstr "GLUE 是一个灵活的框架，它利用包含先验特征关系的知识，在整合非配对的多模态数据的过程中能够弥合不同数据特征空间之间的差距。"
 
-#: ../../index.rst:13 1379ef111e03415381b8aface6c9c242
+#: ../../index.rst:13
 msgid ""
 "In the context of single-cell multi-omics, the data modalities correspond"
 " to omics layers, e.g., scRNA-seq, scATAC-seq, snmC-seq, etc. "
@@ -52,34 +51,40 @@ msgid ""
 "cell population. Prior knowledge consists of prior regulatory "
 "interactions between omics features, e.g., RNA genes and ATAC peaks in "
 "the case of scRNA-seq and scATAC-seq integration. These interactions are "
-"compiled into a regulatory graph, and utilized by GLUE to help orient the"
-" multi-omics integration."
-msgstr "在整合非配对的单细胞多组学背景下，每个数据模态代表了一个组学层，如scRNA-seq, scATAC-seq和snmC-seq等。“非配对”在这里是指：我们并不是在同一个单细胞中探测多个组学层的，而是在(可能来自同一细胞群的)多个细胞中分别探测的。先验知识可以是组学特征之间的调控关系，如在整合scRNA-seq和scATAC-seq时的RNA基因和ATAC峰。RNA基因和ATAC峰之间的相互作用被编译成一个调控图，用于帮助 GLUE 确定多组学整合的方向。"
+"compiled into a guidance graph, and utilized by GLUE to help orient the "
+"multi-omics integration."
+msgstr ""
+"在整合非配对的单细胞多组学背景下，每个数据模态代表了一个组学层，如scRNA-seq, scATAC-seq和snmC-"
+"seq等。“非配对”在这里是指：我们并不是在同一个单细胞中探测多个组学层的，而是在(可能来自同一细胞群的)多个细胞中分别探测的。先验知识可以是组学特征之间的调控关系"
+"，如在整合scRNA-seq和scATAC-seq时的RNA基因和ATAC峰。RNA基因和ATAC峰之间的相互作用被组织成一个引导图，用于帮助 "
+"GLUE 确定多组学整合的方向。"
 
-#: ../../index.rst:-1 43da7b7a2ae14ade9579b46d8b4b54ca
+#: ../../index.rst:-1
 msgid "Model architecture"
 msgstr "模型结构"
 
-#: ../../index.rst:19 8b14e4067b7f48acb88241770a208cda
+#: ../../index.rst:19
 msgid ""
 "To get started with ``scglue``, check out the `installation guide "
 "<install.rst>`__ and `tutorials <tutorials.rst>`__."
 msgstr "如果要开始使用 ``scglue``，请查看 `安装指南 <install.rst>`__ 和 `教程 <tutorials.rst>`__。"
 
-#: ../../index.rst:21 82a7db663e944cd689544da52a8e2bac
+#: ../../index.rst:21
 msgid ""
 "For more details about the GLUE framework, please check out our "
 "`publication <https://doi.org/10.1038/s41587-022-01284-4>`__."
-msgstr "关于 GLUE 框架的更多细节，请查看我们的 `论文 <https://doi.org/10.1038/s41587-022-01284-4>`__。"
+msgstr ""
+"关于 GLUE 框架的更多细节，请查看我们的 `论文 "
+"<https://doi.org/10.1038/s41587-022-01284-4>`__。"
 
-#: ../../index.rst:36 00bcbff89ccb425f932d24ebaa43825a
+#: ../../index.rst:36
 msgid "Indices and tables"
 msgstr "索引和表格"
 
-#: ../../index.rst:38 0e4f337b87344de3b40d442c54236477
+#: ../../index.rst:38
 msgid ":ref:`genindex`"
 msgstr ""
 
-#: ../../index.rst:39 7e4a057313394c8690d82d973960cbae
+#: ../../index.rst:39
 msgid ":ref:`modindex`"
 msgstr ""

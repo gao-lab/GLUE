@@ -80,7 +80,7 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Follows the definition in `OpenProblems NeurIPS 2021 competition
     <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
-    x = AnnData(X=x)
+    x = AnnData(X=x, dtype=x.dtype)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X")
     nmi_list = []
     for res in (np.arange(20) + 1) / 10:
@@ -140,7 +140,7 @@ def graph_connectivity(
     conn
         Graph connectivity
     """
-    x = AnnData(X=x)
+    x = AnnData(X=x, dtype=x.dtype)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X", **kwargs)
     conns = []
     for y_ in np.unique(y):
@@ -298,9 +298,9 @@ def foscttm(
     Parameters
     ----------
     x
-        Coordinates for samples in domain X
+        Coordinates for samples in modality X
     y
-        Coordinates for samples in domain y
+        Coordinates for samples in modality y
     **kwargs
         Additional keyword arguments are passed to
         :func:`scipy.spatial.distance_matrix`
@@ -308,11 +308,11 @@ def foscttm(
     Returns
     -------
     foscttm_x, foscttm_y
-        FOSCTTM for samples in domain X and Y, respectively
+        FOSCTTM for samples in modality X and Y, respectively
 
     Note
     ----
-    Samples in domain X and Y should be paired and given in the same order
+    Samples in modality X and Y should be paired and given in the same order
     """
     if x.shape != y.shape:
         raise ValueError("Shapes do not match!")

@@ -75,8 +75,8 @@ Build documentation:
 ```sh
 sphinx-build -b gettext docs docs/_build/gettext
 sphinx-intl update -p docs/_build/gettext -l zh_CN -d docs/locale
-sphinx-build -a -b html -D language=en docs docs/_build  # English version
-sphinx-build -a -b html -D language=zh_CN docs docs/_build  # Chinese version
+sphinx-build -b html -D language=en docs docs/_build/html/en  # English version
+sphinx-build -b html -D language=zh_CN docs docs/_build/html/zh_CN  # Chinese version
 ```
 
 ## Reproduce results

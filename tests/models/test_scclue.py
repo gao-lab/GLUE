@@ -26,8 +26,8 @@ def test_save_load(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob, backed):
         rna_pp = anndata.read_h5ad(tmp_path / "rna_pp.h5ad", backed="r")
         atac_pp = anndata.read_h5ad(tmp_path / "atac_pp.h5ad", backed="r")
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_cell_type="ct", use_dsc_weight="dsc_weight", use_uid="uid")
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_dsc_weight="dsc_weight", use_uid="uid")
+    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_cell_type="ct", use_dsc_weight="dsc_weight", use_obs_names=True)
+    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_dsc_weight="dsc_weight", use_obs_names=True)
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -71,8 +71,8 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
 
     ActiveModel = scglue.models.SCCLUEModel
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_uid="uid")
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_uid="uid")
+    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
+    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
 
     glue = ActiveModel(
         {"rna": rna_pp, "atac": atac_pp},
@@ -91,11 +91,11 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
 
     rna_pp.obs["batch"] = rna_pp.obs["batch"].astype(str)
     atac_pp.obs["batch"] = atac_pp.obs["batch"].astype(str)
-    rna_pp.obs["batch"].iloc[-1] = "b3"
-    atac_pp.obs["batch"].iloc[-1] = "b3"
+    rna_pp.obs.loc[rna_pp.obs_names[-1], "batch"] = "b3"
+    atac_pp.obs.loc[atac_pp.obs_names[-1], "batch"] = "b3"
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_uid="uid")
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_uid="uid")
+    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
+    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
 
     glue_new = ActiveModel(
         {"rna": rna_pp, "atac": atac_pp},
@@ -118,8 +118,8 @@ def test_repeatability(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
 
     ActiveModel = scglue.models.SCCLUEModel
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_rep="X_pca", use_batch="batch", use_uid="uid")
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_cell_type="ct", use_uid="uid")
+    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_rep="X_pca", use_batch="batch", use_obs_names=True)
+    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_cell_type="ct", use_obs_names=True)
 
     for i in range(2):
         glue = ActiveModel(

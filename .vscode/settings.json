@@ -11,7 +11,8 @@
     ],
     "files.watcherExclude": {
         "**/conda/**": true,
-        "**/conda-build/**": true,
+        "**/conda-latest/**": true,
+        "**/conda-latest-pip/**": true,
         "**/packrat/**": true,
         "**/data/**": true,
         "**/experiments/**": true,

@@ -7,3 +7,5 @@ An ``scglue`` workflow can be divided into the following two stages. We provide 
 
     preprocessing.ipynb
     training.ipynb
+    reginf.ipynb
+    paired.ipynb

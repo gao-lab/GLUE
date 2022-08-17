@@ -1,0 +1,78 @@
+configfile: "config.yaml"
+
+rule all:
+    input:
+        "JASPAR2022-hg19.bed.gz",
+        "JASPAR2022-hg38.bed.gz",
+        "JASPAR2022-mm9.bed.gz",
+        "JASPAR2022-mm10.bed.gz"
+
+rule link:
+    input:
+        "{motif}-{genome}-merge.bed.gz"
+    output:
+        "{motif}-{genome}.bed.gz"
+    threads: 1
+    shell:
+        "ln -s {input} {output}"
+
+rule merge:
+    input:
+        "{motif}-{genome}-clean.csv.gz"
+    output:
+        "{motif}-{genome}-merge.bed.gz"
+    log:
+        "{motif}-{genome}-merge.log"
+    threads: 20
+    shell:
+        "python -u merge.py "
+        "-i {input} -o {output} -j {threads} "
+        "> {log} 2>&1"
+
+rule clean:
+    input:
+        fimo="{motif}-{genome}-fimo.csv.gz",
+        annotation=lambda wildcards: config["annotation"][wildcards.genome],
+        ortholog=lambda wildcards: config["ortholog"][wildcards.genome]
+    output:
+        "{motif}-{genome}-clean.csv.gz"
+    log:
+        "{motif}-{genome}-clean.log"
+    threads: 1
+    shell:
+        "python -u clean.py "
+        "-i {input.fimo} -a {input.annotation} -t {input.ortholog} -o {output} "
+        "> {log} 2>&1"
+
+rule fimo:
+    input:
+        genome=lambda wildcards: config["genome"][wildcards.genome],
+        motif=lambda wildcards: config["motif"][wildcards.motif]
+    output:
+        "{motif}-{genome}-fimo.csv.gz"
+    log:
+        "{motif}-{genome}-fimo.log"
+    threads: 20
+    shell:
+        "python -u fimo.py "
+        "-f <(zcat {input.genome}) -m {input.motif} -o {output} "
+        "-j {threads} -a '--thresh 1e-5' "
+        "> {log} 2>&1"
+
+rule human2mouse:
+    input:
+        "../genome/human-mouse-orthologs.csv.gz"
+    output:
+        "human2mouse.csv.gz"
+    threads: 1
+    shell:
+        "zcat {input} | tail -n+2 | awk 'BEGIN{{FS=\",\";OFS=\",\"}}{{print($5,$2)}}' | gzip > {output}"
+
+rule mouse2human:
+    input:
+        "../genome/human-mouse-orthologs.csv.gz"
+    output:
+        "mouse2human.csv.gz"
+    threads: 1
+    shell:
+        "zcat {input} | tail -n+2 | awk 'BEGIN{{FS=\",\";OFS=\",\"}}{{print($2,$5)}}' | gzip > {output}"

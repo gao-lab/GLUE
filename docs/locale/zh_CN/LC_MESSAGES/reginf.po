@@ -1,0 +1,526 @@
+# Copyright (C) Gao Lab, 2022
+# This file is distributed under the same license as the scglue package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: scglue 0.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-12 20:21+0800\n"
+"Last-Translator: Zhi-Jie Cao <caozj@mail.cbi.pku.edu.cn>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.10.3\n"
+
+#: ../../reginf.ipynb:9
+msgid "Stage 3: Regulatory inference"
+msgstr "第三步：调控推断"
+
+#: ../../reginf.ipynb:11
+msgid ""
+"In this tutorial, we will show how to conduct regulatory inference using "
+"GLUE feature embeddings. We continue with the previous example of scRNA-"
+"seq and scATAC-seq data integration."
+msgstr "在本教程中，我们将介绍如何使用GLUE特征嵌入来进行调控推断。我们继续使用之前的scRNA-seq和scATAC-seq数据集作为例子。"
+
+#: ../../reginf.ipynb:13
+msgid ""
+"In this example, the GLUE-based regulatory inference is used to identify "
+"significant cis-regulatory regions (ATAC peaks) for each gene. We will "
+"also demonstrate how to build TF-target gene regulatory graph based on "
+"the GLUE-inferred cis-regulatory regions, using additional information "
+"about TF binding sites."
+msgstr "在这一例子中，我们将使用基于GLUE的调控推断来鉴定每个基因的显著顺式调控区（ATAC峰）。我们也将展示如何将额外的TF结合位点信息与基于GLUE鉴定的顺式调控区结合在一起构建的TF-靶基因调控图。"
+
+#: ../../reginf.ipynb:55
+msgid "Read intermediate results"
+msgstr "读取中间结果"
+
+#: ../../reginf.ipynb:57
+msgid ""
+"First, read the intermediate results containing cell and feature "
+"embeddings from `stage 2 <training.ipynb>`__."
+msgstr "首先，读取 `第二步 <training.ipynb>`__ 产生的包含细胞和特征嵌入的中间结果。"
+
+#: ../../reginf.ipynb:80
+msgid ""
+"We will be using genomic coordinates a lot in ``BED`` format. It is "
+"convenient to store the variable names as a “name” column."
+msgstr "我们将多次使用 ``BED`` 格式的基因组坐标，这里将变量名称作为“name”列存储会更方便。"
+
+#: ../../reginf.ipynb:102
+msgid ""
+"Given that the GLUE model was trained on highly-variable features, "
+"regulatory inference will also be limited to these features. So, we "
+"extract the list of highly-variable features for future convenience."
+msgstr "由于GLUE模型是用高可变特征训练的，调控推断也只能在这些特征的范围内进行。因此，我们先将高可变特征提取出来，方便之后的使用。"
+
+#: ../../reginf.ipynb:125
+msgid "Cis-regulatory inference with GLUE feature embeddings"
+msgstr "用GLUE特征嵌入进行顺式调控推断"
+
+#: ../../reginf.ipynb:127 ../../reginf.ipynb:270 ../../reginf.ipynb:1672
+msgid "(Estimated time: negligible)"
+msgstr "（预计时间：忽略不计）"
+
+#: ../../reginf.ipynb:129
+msgid ""
+"We first concatenate the feature indices and embeddings of the two "
+"modalities."
+msgstr "我们首先将两个模态的特征索引和嵌入合并。"
+
+#: ../../reginf.ipynb:151
+msgid ""
+"We would also need to extract a “skeleton” graph on which to conduct "
+"regulatory inference. The “skeleton” serves to limit the search space of "
+"potential regulatory pairs, which helps reduce false positives caused by "
+"spurious correlations."
+msgstr "我们还需要提取一个调控推断“骨架”图，“骨架”图的作用是限制潜在调控关系的搜索范围，可以帮助减少由于伪相关性导致的假阳性。"
+
+#: ../../reginf.ipynb:153
+msgid ""
+"The regulatory scores are defined as the cosine similarity between "
+"feature embeddings. As cosine similarities are symmetric, we only choose "
+"one direction between RNA genes and ATAC peaks to avoid repeated "
+"computation."
+msgstr "调控得分被定义为特征嵌入间的余弦相似度，余弦相似度是对称的，因此我们只选择RNA基因和ATAC峰之间的一个方向来避免重复计算。"
+
+#: ../../reginf.ipynb:154
+msgid ""
+"Self-loops are also ignored as self-regulation is not meaningfully "
+"modeled with the current model."
+msgstr "自环也被忽略，因为目前的模型不能有意义地反应自调控。"
+
+#: ../../reginf.ipynb:178
+msgid ""
+"Regulatory inference can be conducted by using the "
+"`scglue.genomics.regulatory_inference "
+"<api/scglue.genomics.regulatory_inference.rst>`__ function. The function "
+"takes feature indices and embeddings as input, together with the skeleton"
+" graph generated above."
+msgstr ""
+"调控推断可以使用 `scglue.genomics.regulatory_inference "
+"<api/scglue.genomics.regulatory_inference.rst>`__ "
+"函数来进行，该函数接受特征索引和嵌入作为输入，并且使用上面生成的骨架图。"
+
+#: ../../reginf.ipynb:180
+msgid "The resulting object is also a graph, with additional edge attributes:"
+msgstr "返回的对象也是一个图，具有以下额外的边属性："
+
+#: ../../reginf.ipynb:182
+msgid ""
+"``\"score\"``: Regulatory score between genomic features, defined as "
+"cosine similair between feature embeddings;"
+msgstr "``\"score\"``：基因组特征间的调控得分，定义为特征嵌入间的余弦相似度；"
+
+#: ../../reginf.ipynb:183
+msgid ""
+"``\"pval\"``: *P*-value of the regulatory scores, obtained by comparing "
+"with a NULL distribution from shuffled feature embeddings;"
+msgstr "``\"pval\"``：调控得分的*P*值，通过与随机打乱特征嵌入得到的调控得分NULL分布比较得到；"
+
+#: ../../reginf.ipynb:184
+msgid ""
+"``\"qval\"``: *Q*-value of the regulatory scores, obtained by FDR "
+"correction of the *P*-values."
+msgstr "``\"qval\"``：调控得分的*Q*值，通过FDR修正*P*值得到。"
+
+#: ../../reginf.ipynb:243
+msgid ""
+"Significant regulatory connections can be extracted based on edge "
+"attribute (Q-value < 0.05)."
+msgstr "可以根据边属性（Q值 < 0.05）提取显著的调控关系。"
+
+#: ../../reginf.ipynb:268
+msgid "Visualize the inferred cis-regulatory regions"
+msgstr "可视化推断的顺式调控区域"
+
+#: ../../reginf.ipynb:272
+msgid ""
+"The inferred cis-regulatory connections can be visualized using "
+"`pyGenomeTracks <https://pygenometracks.readthedocs.io/en/latest/>`__. "
+"You can install it via:"
+msgstr ""
+"推断的顺式调控关系可以用 `pyGenomeTracks "
+"<https://pygenometracks.readthedocs.io/en/latest/>`__ 来可视化。你可以通过以下命令安装 "
+"``pyGenomeTracks``："
+
+#: ../../reginf.ipynb:278
+msgid ""
+"Before making the plot, we need to prepare input files for the "
+"``pygenometracks`` CLI."
+msgstr "在画图之前，我们需要为 ``pygenometracks`` 命令准备输入文件。"
+
+#: ../../reginf.ipynb:280
+msgid ""
+"Specifically, we save the ATAC peaks in BED format, and the inferred "
+"gene-peak connections in “links” format:"
+msgstr "具体来说，我们将ATAC峰保存为BED格式，将推断的基因-ATAC峰调控关系保存为“links”格式："
+
+#: ../../reginf.ipynb:307
+msgid ""
+"Then prepare a track configuration file like below (see their "
+"`documentation "
+"<https://pygenometracks.readthedocs.io/en/latest/content/all_tracks.html>`__"
+" for more details):"
+msgstr ""
+"接着准备一个轨道配置文件，如下所示（详细信息请参考他们的 `文档 "
+"<https://pygenometracks.readthedocs.io/en/latest/content/all_tracks.html>`__）："
+
+#: ../../reginf.ipynb:384
+msgid ""
+"Finally, we can call ``pygenometracks`` CLI to visualizing the inferred "
+"cis-regulatory connections within a proper genomic range (e.g., an area "
+"surrounding the *Gad2* gene):"
+msgstr "最后，我们可以调用 ``pygenometracks`` 命令在一个合适的基因组范围内（例如*Gad2*基因周围区域）可视化推断的顺式调控关系："
+
+#: ../../reginf.ipynb:422
+msgid ""
+"Note that in the tutorials, the guidance graph was constructed using only"
+" genomic overlap (see `Stage 1 <preprocessing.ipynb#Graph-"
+"construction>`__), so the inferred regulatory connections are limited to "
+"the proximal promoter and gene body regions."
+msgstr ""
+"需要注意的是，在本教程中，指导图简单地使用了基因组重叠（请参考 `第一步 <preprocessing.ipynb#图构建>`__），"
+"所以推断的调控关系也仅限于近端启动子和基因本体区。"
+
+#: ../../reginf.ipynb:424
+msgid ""
+"In real-world analyses, it would be beneficial to extend the genomic "
+"range (e.g., 150kb around TSS with distance-decaying weight) or "
+"incorporate additional information like Hi-C and eQTL (see our `case "
+"study <https://github.com/gao-"
+"lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.py>`__ for an "
+"example)."
+msgstr ""
+"在实际的分析中，扩大基因组范围（例如，使用TSS上下游150kb随距离衰减加权）或者引入如Hi-C和eQTL的其他调控证据将是有益的（请参考我们的"
+" `案例研究 <https://github.com/gao-"
+"lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.py>`__）。"
+
+#: ../../reginf.ipynb:427
+msgid "Construct TF-gene regulatory network from inferred cis-regulatory regions"
+msgstr "基于推断的顺式调控区域构建TF-靶基因调控网络"
+
+#: ../../reginf.ipynb:429
+msgid ""
+"Next, we demonstrate how to further construct TF-gene regulatory graph by"
+" combining the GLUE-inferred regulatory regions and TF motif/ChIP-seq "
+"information. Specifically, the `SCENIC pipeline "
+"<https://doi.org/10.1038/nmeth.4463>`__ pipeline is adopted with the "
+"following 3 steps:"
+msgstr ""
+"接着，我们将演示如何将GLUE推断的顺式调控区域与TF motif/ChIP-seq信息结合来构建TF-靶基因调控图。具体来说，我们采用的是 "
+"`SCENIC pipeline <https://doi.org/10.1038/nmeth.4463>`__，分为以下三个步骤："
+
+#: ../../reginf.ipynb:431
+msgid "Generate a coexpression-based draft network using ``GRNBoost2``;"
+msgstr "使用 ``GRNBoost2`` 生成一个共表达网络；"
+
+#: ../../reginf.ipynb:432
+msgid ""
+"Generate gene-wise TF cis-regulatory ranking by combining cis-regulatory "
+"regions and TF motif/ChIP-seq data;"
+msgstr "结合顺式调控区域和TF motif/ChIP-seq数据生成顺式调控排序；"
+
+#: ../../reginf.ipynb:433
+msgid ""
+"Prune the coexpression-based draft network using the above cis-regulatory"
+" ranking with ``cisTarget``."
+msgstr "使用 ``cisTarget`` 基于上述顺式调控排序修剪共表达网络。"
+
+#: ../../reginf.ipynb:435
+msgid "To install pyscenic, use the following commands:"
+msgstr "如果要安装pyscenic，可以使用以下命令："
+
+#: ../../reginf.ipynb:442
+msgid ""
+"For human and mouse, the TF motif/ChIP-seq data used in the second step "
+"can be downloaded from here:"
+msgstr "对于人和小鼠，第二步使用的TF motif/ChIP-seq数据可以从这里下载："
+
+#: ../../reginf.ipynb:444
+msgid "JASPAR motif hits:"
+msgstr "JASPAR motif结合："
+
+#: ../../reginf.ipynb:446
+msgid "http://download.gao-lab.org/GLUE/cisreg/hg19-JASPAR2022-merged.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:447
+msgid "http://download.gao-lab.org/GLUE/cisreg/hg38-JASPAR2022-merged.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:448
+msgid "http://download.gao-lab.org/GLUE/cisreg/mm9-JASPAR2022-merged.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:449
+msgid "http://download.gao-lab.org/GLUE/cisreg/mm10-JASPAR2022-merged.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:451
+msgid "ENCODE TF ChIP-seq:"
+msgstr ""
+
+#: ../../reginf.ipynb:453
+msgid ""
+"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
+"hg38.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:454
+msgid ""
+"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
+"hg19.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:455
+msgid ""
+"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
+"mm10.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:456
+msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-mm9.bed.gz"
+msgstr ""
+
+#: ../../reginf.ipynb:458
+msgid ""
+"Also see `pySCENIC "
+"<https://pyscenic.readthedocs.io/en/latest/index.html>`__ for the "
+"original pipeline."
+msgstr ""
+"原始调控推断流程参见 `pySCENIC "
+"<https://pyscenic.readthedocs.io/en/latest/index.html>`__。"
+
+#: ../../reginf.ipynb:461
+msgid "Draft a coexpression-based network"
+msgstr "生成一个共表达网络"
+
+#: ../../reginf.ipynb:463 ../../reginf.ipynb:1507
+msgid "(Estimated time: ~5 min)"
+msgstr "（预计时间：~5分钟）"
+
+#: ../../reginf.ipynb:465
+msgid ""
+"First, generate a list of eligible TFs. We use TFs covered in both the "
+"scRNA-seq dataset and TF motif/ChIP-seq data."
+msgstr "首先，生成一个可用的TF列表，我们使用被scRNA-seq数据和TF motif/ChIP-seq数据同时覆盖的TF。"
+
+#: ../../reginf.ipynb:467
+msgid ""
+"As ENCODE ChIP-seq covers a very limited number of mouse TFs, we will be "
+"using JASPAR motif hits in this tutorial:"
+msgstr "由于ENCODE ChIP-seq覆盖了非常少的小鼠TF，我们在本教程中将使用JASPAR motif结合数据："
+
+#: ../../reginf.ipynb:709
+msgid ""
+"Since pySCENIC CLI uses ``loom`` files as input, we need to save the "
+"scRNA-seq data as a ``loom`` file (with only highly-variable genes and "
+"TFs). We also need to save the list of TFs as a separate ``txt`` file."
+msgstr ""
+"由于pySCENIC CLI使用的是 ``loom`` 文件作为输入，我们需要将scRNA-"
+"seq数据保存为一个 ``loom`` 文件（只包含高可变基因和TF），我们也需要将TF列表保存为一个单独的 ``txt`` 文件。"
+
+#: ../../reginf.ipynb:762
+msgid ""
+"Now use the command ``pyscenic grn`` to build a coexpression-based draft "
+"network."
+msgstr "使用命令 ``pyscenic grn`` 来生成一个共表达网络。"
+
+#: ../../reginf.ipynb:912
+msgid "Generate TF cis-regulatory ranking bridged by ATAC peaks"
+msgstr "经由ATAC峰生成TF顺式调控排序"
+
+#: ../../reginf.ipynb:914 ../../reginf.ipynb:1247
+msgid "(Estimated time: ~1 h)"
+msgstr "（预计时间：~1小时）"
+
+#: ../../reginf.ipynb:916
+msgid ""
+"We scan the genome with the `scglue.genomics.window_graph "
+"<api/scglue.genomics.window_graph.rst>`__ function to connect ATAC peaks "
+"with TF motif hits based on genomic overlap. This will take some time (~1"
+" hour)."
+msgstr ""
+"我们使用 `scglue.genomics.window_graph "
+"<api/scglue.genomics.window_graph.rst>`__ 函数扫描基因组来连接ATAC峰与TF "
+"motif结合位点，这将需要一些时间（~1小时）。"
+
+#: ../../reginf.ipynb:974
+msgid ""
+"Given the GLUE-inferred gene-peak connections and motif-supported peak-TF"
+" connections, the ATAC peaks can serve as a bridge to help deduce gene-TF"
+" connections."
+msgstr "根据GLUE推断的gene-peak连接和motif支持的peak-TF连接，ATAC峰可以作为一个桥梁帮助推断gene-TF连接。"
+
+#: ../../reginf.ipynb:976
+msgid ""
+"Specifically, we can use the function "
+"`scglue.genomics.cis_regulatory_ranking "
+"<api/scglue.genomics.cis_regulatory_ranking.rst>`__ to combine gene-peak "
+"and peak-TF connections into a gene-TF cis-regulatory ranking. Given that"
+" each gene can connect to a varying number of ATAC peaks with different "
+"lengths, the combined gene-TF connections are not directly comparable. As"
+" such, the function compares the observed connections with randomly "
+"sampled ones (stratified by peak length) to evaluate their levels of "
+"enrichment, which are then used to rank genes for each TF."
+msgstr ""
+"我们可以使用 `scglue.genomics.cis_regulatory_ranking "
+"<api/scglue.genomics.cis_regulatory_ranking.rst>`__ 函数来将gene-peak和peak-"
+"TF连接合并为一个gene-"
+"TF顺式调控排序。由于每个基因可以连接到不同数量、长度的ATAC峰，合并的基因-TF连接不是直接可比的。因此，该函数将观察到的连接与（根据峰长度分层）随机采样的连接进行比较，以评估其富集程度，然后用于排序每个TF的调控基因。"
+
+#: ../../reginf.ipynb:1245
+msgid "Generate TF cis-regulatory ranking with proximal promoters (optional)"
+msgstr "经由近端启动子生成TF顺式调控排序（可选）"
+
+#: ../../reginf.ipynb:1249
+msgid ""
+"One potential limitation of the above approach is that genes with no "
+"regulatory ATAC peaks identified would be left out. As a supplement, we "
+"can also use proximal promoter regions flanking the TSS to generate cis-"
+"regulatory ranking, as in the original pySCENIC pipeline."
+msgstr "上述方法的一个潜在的限制是，若某基因没有与调控ATAC峰相连，将被丢掉。作为补充，我们也可以使用TSS周围的近端启动子区域来生成顺式调控排序，与原始pySCENIC流程相同。"
+
+#: ../../reginf.ipynb:1251
+msgid ""
+"To do that we scan the genome again with the "
+"`scglue.genomics.window_graph <api/scglue.genomics.window_graph.rst>`__ "
+"function to connect TSS flanking regions (-500 to +500bp) with TF motif "
+"hits based on genomic overlap. Here the flanking regions will be named "
+"after the corresponding genes in the resulting graph."
+msgstr ""
+"我们再次使用 `scglue.genomics.window_graph "
+"<api/scglue.genomics.window_graph.rst>`__ "
+"函数扫描基因组来连接TSS周围的近端启动子区域（-500到+500bp）与TF motif结合位点，在结果图中近端启动子区域的命名与相应基因一致。"
+
+#: ../../reginf.ipynb:1308
+msgid ""
+"Similar to the previous section, we use the "
+"`scglue.genomics.cis_regulatory_ranking "
+"<api/scglue.genomics.cis_regulatory_ranking.rst>`__ function to generate "
+"a supplementary cis-regulatory ranking, with the following differences:"
+msgstr ""
+"与上一章节相同，我们使用 `scglue.genomics.cis_regulatory_ranking "
+"<api/scglue.genomics.cis_regulatory_ranking.rst>`__ "
+"函数来生成一个补充的顺式调控排序，与之前的排序有如下的差异："
+
+#: ../../reginf.ipynb:1310
+msgid ""
+"The gene-peak connection is replaced with a gene-flank connection, which "
+"is just a self-loop graph since each TSS flanking region have the same "
+"name as its corresponding gene;"
+msgstr "基因-峰连接被替换为基因-近端启动子连接，因为每个TSS周围的近端启动子区域与其对应的基因具有相同的名称，所以基因-近端启动子连接图就是一个自环图；"
+
+#: ../../reginf.ipynb:1311
+msgid ""
+"Since each gene has exactly one flanking region with the same length, it "
+"is unnecessary to evaluate TF enrichment with stratified random sampling,"
+" so we set ``n_samples=0`` to disable the sampling process."
+msgstr "由于每个基因有且仅有一个长度相同的近端启动子区域，因此无需通过分层随机抽样评估TF富集，我们将 ``n_samples`` 设为0以跳过采样过程。"
+
+#: ../../reginf.ipynb:1505
+msgid "Prune coexpression network using cis-regulatory ranking"
+msgstr "使用顺式调控排序修剪共表达网络"
+
+#: ../../reginf.ipynb:1509
+msgid ""
+"For the final step, we will prune the coexpression-based draft network "
+"with these cis-regulatory rankings to preserve TF-gene connections with "
+"cis-regulatory evidence. To do that, we need to prepare the following "
+"files:"
+msgstr "最后一步，我们将使用上述顺式调控排序修剪共表达网络来保留的存在顺式调控证据的TF-基因连接。为此，我们需要准备以下文件："
+
+#: ../../reginf.ipynb:1511
+msgid "One or more ``feather`` files containing the cis-regulatory ranking;"
+msgstr "一个或多个包含顺式调控排序的 ``feather`` 文件；"
+
+#: ../../reginf.ipynb:1512
+msgid ""
+"A ``tsv`` annotation file mapping column names in the ranking files to TF"
+" names."
+msgstr "一个将顺式调控排序文件中的列名映射到TF名的 ``tsv`` 注释文件。"
+
+#: ../../reginf.ipynb:1514
+msgid ""
+"Here we have two separate rankings (ATAC-based and promoter-based) with "
+"identical column names. We need to differentiate them by appending their "
+"information source."
+msgstr "这里我们有两个不同的顺式调控排序（基于ATAC的和基于启动子的），它们的列名相同，我们需要把它们根据信息来源进行区分。"
+
+#: ../../reginf.ipynb:1536
+msgid ""
+"We can use the `scglue.genomics.write_scenic_feather "
+"<api/scglue.genomics.write_scenic_feather.rst>`__ function to save the "
+"cis-regulatory rankings as ``feather`` files compatible with "
+"``pySCENIC``."
+msgstr ""
+"我们可以使用 `scglue.genomics.write_scenic_feather "
+"<api/scglue.genomics.write_scenic_feather.rst>`__ 函数将顺式调控排序保存为与兼容 "
+"``pySCENIC`` 兼容的 ``feather`` 文件。"
+
+#: ../../reginf.ipynb:1558
+msgid "Then use the following format for the annotation file:"
+msgstr "然后使用以下格式的注释文件："
+
+#: ../../reginf.ipynb:1592
+msgid ""
+"We are now ready to prune the coexpression network. This can be achieved "
+"using the pySCENIC command ``pyscenic ctx`` (here ``rank_threshold`` was "
+"scaled down according to the number of highly-variable genes):"
+msgstr ""
+"我们现在可以使用pySCENIC命令 ``pyscenic "
+"ctx`` 来修剪共表达网络（这里 ``rank_threshold`` 根据高可变基因的数量等比缩小）："
+
+#: ../../reginf.ipynb:1648
+msgid ""
+"The resulting network can be read as a networkx graph using the "
+"`scglue.genomics.read_ctx_grn <api/scglue.genomics.read_ctx_grn.rst>`__ "
+"function:"
+msgstr ""
+"得到修剪后的网络可以使用 `scglue.genomics.read_ctx_grn "
+"<api/scglue.genomics.read_ctx_grn.rst>`__ 函数读取为一个networkx图："
+
+#: ../../reginf.ipynb:1670
+msgid "Visualize the inferred TF-target gene network"
+msgstr "可视化推断得到的TF-靶基因网络"
+
+#: ../../reginf.ipynb:1674
+msgid "The TF-target gene network can be visualized directly in networkx:"
+msgstr "TF-靶基因网络可以直接使用networkx来可视化："
+
+#: ../../reginf.ipynb:1709
+msgid ""
+"You may also export the graph (e.g., in ``graphml`` format) to other "
+"softwares like `Cytoscape <https://cytoscape.org/>`__ and `Gephi "
+"<https://gephi.org/>`__ for more customization."
+msgstr ""
+"您也可以将此图（比如以 ``graphml`` 格式）导出到诸如 `Cytoscape <https://cytoscape.org/>`__ 和 "
+"`Gephi <https://gephi.org/>`__ 等其他软件以进行更多的自定义调整。"
+
+#: ../../reginf.ipynb:1730
+msgid ""
+"Note that the network inferred here is rather limited in size and "
+"connectivity. In real-world data analyses, we recommend:"
+msgstr "需要说明的是，这里推断得到的网络具有较少的节点数和连通性。在真实的数据分析中，我们建议："
+
+#: ../../reginf.ipynb:1732
+msgid ""
+"Extending the genomic range (e.g., 150kb around TSS with distance-"
+"decaying weight) and incorporate additional information like Hi-C and "
+"eQTL (see our `case study <https://github.com/gao-"
+"lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.py>`__) when "
+"building the guidance graph;"
+msgstr ""
+"在构建引导图时扩展基因组范围（比如TSS上下游150kb内距离衰减加权），并引入像Hi-C和eQTL这样的额外调控证据（参见我们的 `案例研究 "
+"<https://github.com/gao-"
+"lab/GLUE/tree/master/experiments/RegInf/s01_preprocessing.py>`__）；"
+
+#: ../../reginf.ipynb:1733
+msgid ""
+"Increase the number of highly-variable genes (e.g., to 4000 or 6000) to "
+"incorporate more genes into the analysis."
+msgstr "增加高可变基因数（比如增加到4000或6000）以将更多基因纳入到分析当中。"

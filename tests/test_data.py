@@ -82,7 +82,7 @@ def test_estimate_balancing_weight(rna_pp, atac_pp):
     )  # NOTE: Smoke test
 
 
-def test_metacell_corr(rna_pp, atac_pp, prior):
+def test_metacell_corr(rna_pp, atac_pp, guidance):
     atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
     with pytest.raises(ValueError):
         scglue.data.metacell_corr(rna_pp, atac_pp, use_rep="X_pca")
@@ -93,22 +93,22 @@ def test_metacell_corr(rna_pp, atac_pp, prior):
     with pytest.raises(ValueError):
         scglue.data.metacell_corr(
             rna_pp, rna_pp, use_rep="X_pca", n_meta=5,
-            skeleton=prior
+            skeleton=guidance
         )
     scglue.data.metacell_corr(
         rna_pp, atac_pp,
-        use_rep="X_pca", n_meta=5, skeleton=prior, method="pcc"
+        use_rep="X_pca", n_meta=5, skeleton=guidance, method="pcc"
     )  # NOTE: Smoke test
     scglue.data.metacell_corr(
         rna_pp, atac_pp,
-        use_rep="X_pca", n_meta=5, skeleton=prior
+        use_rep="X_pca", n_meta=5, skeleton=guidance
     )  # NOTE: Smoke test
 
 
-def test_metacell_regr(rna_pp, atac_pp, prior):
+def test_metacell_regr(rna_pp, atac_pp, guidance):
     atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
-    prior = prior.edge_subgraph(
-        e for e, attr in dict(prior.edges).items()
+    guidance = guidance.edge_subgraph(
+        e for e, attr in dict(guidance.edges).items()
         if attr["type"] == "rev"
     )
     with pytest.raises(ValueError):
@@ -119,9 +119,9 @@ def test_metacell_regr(rna_pp, atac_pp, prior):
         scglue.data.metacell_regr(rna_pp, atac_pp, use_rep="X_pca", n_meta=5)
     scglue.data.metacell_regr(
         rna_pp, atac_pp,
-        use_rep="X_pca", n_meta=5, skeleton=prior, model="ElasticNet"
+        use_rep="X_pca", n_meta=5, skeleton=guidance, model="ElasticNet"
     )  # NOTE: Smoke test
     scglue.data.metacell_regr(
         rna_pp, atac_pp,
-        use_rep="X_pca", n_meta=5, skeleton=prior
+        use_rep="X_pca", n_meta=5, skeleton=guidance
     )  # NOTE: Smoke test

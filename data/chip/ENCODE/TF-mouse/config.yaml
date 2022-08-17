@@ -1,0 +1,6 @@
+assembly_preference:
+  # mm9: null
+  mm10: null
+  mm9: ../../../genome/mm9ToMm10.over.chain.gz
+  # mm10: ../../../genome/mm10ToMm9.over.chain.gz
+metadata_query: null

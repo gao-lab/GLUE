@@ -138,13 +138,12 @@ def rna(mat):
     obs = pd.DataFrame({
         "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct3"], X.shape[0], replace=True)),
         "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
-        "uid": [f"SHARED-{i}" for i in range(100)] + [f"RNA-{i}" for i in range(50)],
         "dsc_weight": np.random.rand(X.shape[0])
-    }, index=pd.RangeIndex(X.shape[0]).astype(str))
+    }, index=[f"SHARED-{i}" for i in range(100)] + [f"RNA-{i}" for i in range(50)])
     var = pd.DataFrame(index=["A", "B", "C"])
     arange = np.expand_dims(np.arange(mat.shape[0]), 1).repeat(mat.shape[1], axis=1)
     obs.index.name, var.index.name = "cells", "genes"
-    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange})
+    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange}, dtype=X.dtype)
 
 
 @pytest.fixture
@@ -153,16 +152,15 @@ def atac(spmat, bed_file):
     obs = pd.DataFrame({
         "ct": pd.Categorical(np.random.choice(["ct1", "ct2", "ct4"], X.shape[0], replace=True)),
         "batch": pd.Categorical(np.random.choice(["b1", "b2"], X.shape[0], replace=True)),
-        "uid": [f"SHARED-{i}" for i in range(100)] + [f"ATAC-{i}" for i in range(20)],
         "dsc_weight": np.random.rand(X.shape[0])
-    }, index=pd.RangeIndex(X.shape[0]).astype(str))
+    }, index=[f"SHARED-{i}" for i in range(100)] + [f"ATAC-{i}" for i in range(20)])
     var = pd.read_csv(
         bed_file, sep="\t", header=None, comment="#",
         names=["chrom", "chromStart", "chromEnd", "name", "score", "strand"]
     ).set_index("name", drop=False)
     arange = np.expand_dims(np.arange(spmat.shape[0]), 1).repeat(spmat.shape[1], axis=1)
     obs.index.name, var.index.name = "cells", "peaks"
-    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange})
+    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange}, dtype=np.float32)
 
 
 @pytest.fixture
@@ -190,8 +188,8 @@ def atac_pp(atac):
 
 
 @pytest.fixture
-def prior(rna_pp, atac_pp):
-    return scglue.genomics.rna_anchored_prior_graph(
+def guidance(rna_pp, atac_pp):
+    return scglue.genomics.rna_anchored_guidance_graph(
         rna_pp, atac_pp, promoter_len=2, extend_range=15,
         propagate_highly_variable=False,
         extend_fn=lambda x: 1 / x if x > 1 else 1.0

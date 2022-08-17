@@ -1,4 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) Gao Lab, 2022
 # This file is distributed under the same license as the scglue package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
@@ -6,148 +5,198 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: scglue 0.2.0\n"
+"Project-Id-Version: scglue 0.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 15:35+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2022-08-14 13:17+0800\n"
+"Last-Translator: Pei-Wen Ji <jipw@mail.cbi.pku.edu.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../release.rst:2 5cbcc2c7baa641f4bdc0d7bd00848b32
+#: ../../release.rst:2
 msgid "Release notes"
 msgstr "发布说明"
 
-#: ../../release.rst:5 ebd9ec53cdd5444a839d2896d22257fc
-msgid "v0.2.3"
-msgstr "版本0.2.3"
+#: ../../release.rst:5
+msgid "v0.3.0"
+msgstr "版本0.3.0"
 
-#: ../../release.rst:7 ../../release.rst:21 c6e493fcbef245b79298bcb5666bcf72
-#: ce1cc2158ae54b9eb9c168b84a6f216f
-msgid "Minor improvements and bug fixes"
-msgstr "小改进和漏洞修复"
+#: ../../release.rst:7 ../../release.rst:54
+msgid "New features:"
+msgstr "新功能："
 
-#: ../../release.rst:9 ../../release.rst:23 ../../release.rst:52
-#: be21ef5177214573a23eee699bcc2add cb63145d02394b7ea394417a46075d0f
-#: d059b9e61ac44c20989ae2fcc308ed9a
-msgid "Bug fixes:"
-msgstr "漏洞修复"
-
-#: ../../release.rst:11 7fff6c1f4bf74eb8ad898ae5f8155b41
+#: ../../release.rst:9
 msgid ""
-"Data frame in ``obsm`` no longer triggers an error during model training "
-"(Resolves `#32 <https://github.com/gao-lab/GLUE/issues/32>`__)."
-msgstr "在模型训练过程中 ``obsm`` 的数据框不再触发错误（解决了 `#32 <https://github.com/gao-lab/GLUE/issues/32>`__）。"
+"New `tutorial <reginf.ipynb>`__ and functions for regulatory inference "
+"(Resolves `#15 <https://github.com/gao-lab/GLUE/issues/15>`__, `#41 "
+"<https://github.com/gao-lab/GLUE/issues/41>`__)."
+msgstr ""
+"增加了新的调控推断 `教程 <reginf.ipynb>`__ 和函数（解决了 `#15 <https://github.com/gao-"
+"lab/GLUE/issues/15>`__ 和 `#41 <https://github.com/gao-"
+"lab/GLUE/issues/41>`__）。"
 
-#: ../../release.rst:13 ../../release.rst:27 ../../release.rst:48
-#: 3999297c07a049eabd0a9d43b74b11cc 75968e22776845899175a3850540da79
-#: aecc2d1bfebe45a38255f5fd1bb6715d
+#: ../../release.rst:10
+msgid ""
+"New `tutorial <paired.ipynb>`__ for training on partially paired data "
+"(Resolves `#24 <https://github.com/gao-lab/GLUE/issues/24>`__)."
+msgstr ""
+"增加了新的针对部分配对多组学数据的训练 `教程 <paired.ipynb>`__ （解决了 `#24 <https://github.com"
+"/gao-lab/GLUE/issues/24>`__）。"
+
+#: ../../release.rst:12 ../../release.rst:26 ../../release.rst:40
+#: ../../release.rst:61
 msgid "Enhancements:"
 msgstr "增强功能："
 
-#: ../../release.rst:15 4c40a5a014d7431f9539438288f2589b
+#: ../../release.rst:14
+msgid ""
+"Modularized `scglue.dx.integration_consistency "
+"<api/scglue.dx.integration_consistency.rst>`__ to allow for non-raw-count"
+" input (Resolves `#30 <https://github.com/gao-lab/GLUE/issues/30>`__)."
+msgstr ""
+"将 `scglue.dx.integration_consistency "
+"<api/scglue.dx.integration_consistency.rst>`__ 函数模块化以支持非原始计数的输入（解决了 `#30 "
+"<https://github.com/gao-lab/GLUE/issues/30>`__）。"
+
+#: ../../release.rst:15
+msgid "Added documentation translation in Chinese."
+msgstr "增加了中文文档翻译。"
+
+#: ../../release.rst:18
+msgid "v0.2.3"
+msgstr "版本0.2.3"
+
+#: ../../release.rst:20 ../../release.rst:34
+msgid "Minor improvements and bug fixes"
+msgstr "小改进和漏洞修复"
+
+#: ../../release.rst:22 ../../release.rst:36 ../../release.rst:65
+msgid "Bug fixes:"
+msgstr "漏洞修复"
+
+#: ../../release.rst:24
+msgid ""
+"Data frame in ``obsm`` no longer triggers an error during model training "
+"(Resolves `#32 <https://github.com/gao-lab/GLUE/issues/32>`__)."
+msgstr ""
+"在模型训练过程中 ``obsm`` 的数据框不再触发错误（解决了 `#32 <https://github.com/gao-"
+"lab/GLUE/issues/32>`__）。"
+
+#: ../../release.rst:28
 msgid ""
 "`scglue.data.transfer_labels <api/scglue.data.transfer_labels.rst>`__ "
 "uses a new strategy with SNN-based estimation of transfer confidence "
 "(Resolves `#23 <https://github.com/gao-lab/GLUE/issues/23>`__)."
-msgstr "`scglue.data.transfer_labels <api/scglue.data.transfer_labels.rst>`__ 使用了一个新的策略，即基于SNN的转移置信度估计（解决了 `#23 <https://github.com/gao-lab/GLUE/issues/23>`__）。"
+msgstr ""
+"`scglue.data.transfer_labels <api/scglue.data.transfer_labels.rst>`__ "
+"使用了一个新的策略，即基于SNN的转移置信度估计（解决了 `#23 <https://github.com/gao-"
+"lab/GLUE/issues/23>`__）。"
 
-#: ../../release.rst:16 f9860bef2a5248fb84607154e37b48e5
+#: ../../release.rst:29
 msgid ""
 "Allow setting custom bedtools path via `scglue.config.BEDTOOLS_PATH "
 "<api/scglue.utils.ConfigManager.rst>`__ (Resolves `#22 "
 "<https://github.com/gao-lab/GLUE/issues/22>`__)."
-msgstr "允许通过 `scglue.config.BEDTOOLS_PATH <api/scglue.utils.ConfigManager.rst>`__ 自定义bedtools路径（解决了 `#22 <https://github.com/gao-lab/GLUE/issues/22>`__）。"
+msgstr ""
+"允许通过 `scglue.config.BEDTOOLS_PATH <api/scglue.utils.ConfigManager.rst>`__"
+" 自定义bedtools路径（解决了 `#22 <https://github.com/gao-lab/GLUE/issues/22>`__）。"
 
-#: ../../release.rst:19 983dccdaaf094e6a89909a4bd44ede29
+#: ../../release.rst:32
 msgid "v0.2.2"
 msgstr "版本0.2.2"
 
-#: ../../release.rst:25 864fc1e2ad584c678c54a60f4ef56abd
+#: ../../release.rst:38
 msgid ""
 "Device detection is now more reliable (Resolves `#17 <https://github.com"
 "/gao-lab/GLUE/issues/17>`__)."
 msgstr "设备检测现在更加可靠（解决了 `#17 <https://github.com/gao-lab/GLUE/issues/17>`__）。"
 
-#: ../../release.rst:29 31072c621bab489d9d06ac62e16d9d4a
+#: ../../release.rst:42
 msgid ""
 "Custom encoders and decoders can now be registered without changing "
 "package code (Resolves `#14 <https://github.com/gao-"
 "lab/GLUE/issues/14>`__)."
-msgstr "现在可以在不改变软件包代码的情况下注册自定义的编码器和解码器（解决了 `#14 <https://github.com/gao-lab/GLUE/issues/14>`__）。"
+msgstr ""
+"现在可以在不改变软件包代码的情况下注册自定义的编码器和解码器（解决了 `#14 <https://github.com/gao-"
+"lab/GLUE/issues/14>`__）。"
 
-#: ../../release.rst:33 52aba21e6825417f81d7eab771605f1d
+#: ../../release.rst:46
 msgid "v0.2.1"
 msgstr "版本0.2.1"
 
-#: ../../release.rst:35 ae21931dcbc64a94a8be36a941166104
+#: ../../release.rst:48
 msgid "Minor improvements and dependency fixes"
 msgstr "小改进和依赖修复"
 
-#: ../../release.rst:39 a3091fee8b89471094671633ee319471
+#: ../../release.rst:52
 msgid "v0.2.0"
 msgstr "版本0.2.0"
 
-#: ../../release.rst:41 c26bfe86d44748638d2e3d7d8cd95b25
-msgid "New features:"
-msgstr "新功能："
-
-#: ../../release.rst:43 980ae0e499cc4245b46dd0f835b6af2d
+#: ../../release.rst:56
 msgid ""
 "Added `fit_SCGLUE <api/scglue.models.fit_SCGLUE.rst>`__ function to "
 "simplify model training - Incorporates weighted adversarial alignment by "
 "default, with increased robustness on datasets with highly-skewed cell "
 "type compositions"
-msgstr "增加了 `fit_SCGLUE <api/scglue.models.fit_SCGLUE.rst>`__ 函数以简化模型训练——默认加入加权对抗对齐，在细胞类型组成高度倾斜的数据集上具有更强的鲁棒性。"
+msgstr ""
+"增加了 `fit_SCGLUE <api/scglue.models.fit_SCGLUE.rst>`__ "
+"函数以简化模型训练——默认加入加权对抗对齐，在细胞类型组成高度倾斜的数据集上具有更强的鲁棒性。"
 
-#: ../../release.rst:45 d290aaef0064411fbf856d645697d584
+#: ../../release.rst:58
 msgid ""
 "Added support for batch effect correction, which can be activated by "
 "setting ``use_batch`` in `configure_dataset "
 "<api/scglue.models.scglue.configure_dataset.rst>`__"
-msgstr "增加了对批量效应校正的支持，可以通过在 `configure_dataset <api/scglue.models.scglue.configure_dataset.rst>`__ 中设置 ``use_batch`` 来激活。"
+msgstr ""
+"增加了对批量效应校正的支持，可以通过在 `configure_dataset "
+"<api/scglue.models.scglue.configure_dataset.rst>`__ 中设置 ``use_batch`` "
+"来激活。"
 
-#: ../../release.rst:46 e2d350c2dcb44cc7a3e89af09a6542d0
+#: ../../release.rst:59
 msgid ""
 "Added a model diagnostics metric `\"integration consistency score\" "
 "<api/scglue.models.dx.integration_consistency.rst>`__"
-msgstr "增加了模型诊断指标 `integration consistency score（整合一致性分数） <api/scglue.models.dx.integration_consistency.rst>`__。"
+msgstr ""
+"增加了模型诊断指标 `integration consistency score（整合一致性分数） "
+"<api/scglue.models.dx.integration_consistency.rst>`__。"
 
-#: ../../release.rst:50 96c7632273a148bdb72e27f100a2af1f
+#: ../../release.rst:63
 msgid ""
 "Support for training directly on disk-backed AnnData objects, scaling to "
 "almost infinite number of cells"
 msgstr "支持直接在disk-backed的AnnData对象上进行训练，可以扩展到几乎无限数量的细胞。"
 
-#: ../../release.rst:54 e4b18a5c15384cf3b461f574ed1776bb
+#: ../../release.rst:67
 msgid "Fixed a bug where the graph dataset was not shuffled across epochs"
 msgstr "修复了一个漏洞，即在不同的epochs中没有把图数据集打乱。"
 
-#: ../../release.rst:56 e692a38afe0649d1a64559dd1769d240
+#: ../../release.rst:69
 msgid "Experimental features:"
 msgstr "实验性特征:"
 
-#: ../../release.rst:58 2b60c39d87b84d43983bbf5d477df853
+#: ../../release.rst:71
 msgid ""
 "A `partially paired GLUE model "
 "<api/scglue.models.scglue.PairedSCGLUEModel.rst>`__ for utilizing paired "
 "cells whenever available"
-msgstr "`部分配对GLUE模型 <api/scglue.models.scglue.PairedSCGLUEModel.rst>`__ 会尽可能利用已经配对的细胞。"
+msgstr ""
+"`部分配对GLUE模型 <api/scglue.models.scglue.PairedSCGLUEModel.rst>`__ "
+"会尽可能利用已经配对的细胞。"
 
-#: ../../release.rst:59 9aba171f643041e0b4b3f934b98bc4a2
+#: ../../release.rst:72
 msgid ""
 "The `CLUE model <api/scglue.models.scclue.SCCLUEModel.rst>`__ that won "
 "the `NeurIPS 2021 competition in multimodal integration "
 "<https://openproblems.bio/neurips_2021/>`__ is here!"
-msgstr "这里是赢得 `2021 NeurIPS 多模态整合竞赛 <https://openproblems.bio/neurips_2021/>`__ 的 `CLUE 模型 <api/scglue.models.scclue.SCCLUEModel.rst>`__！"
+msgstr ""
+"这里是赢得 `2021 NeurIPS 多模态整合竞赛 <https://openproblems.bio/neurips_2021/>`__ 的"
+" `CLUE 模型 <api/scglue.models.scclue.SCCLUEModel.rst>`__！"
 
-#: ../../release.rst:63 b80e353c72de4d0baa28fd95d0934049
+#: ../../release.rst:76
 msgid "v0.1.1"
 msgstr "版本0.1.1"
 
-#: ../../release.rst:65 47f8ff59bbf64be2aff4dca4a1b4dc2a
+#: ../../release.rst:78
 msgid "First public release"
 msgstr "首次公开发布"

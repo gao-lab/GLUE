@@ -31,15 +31,6 @@ unsafe-load-any-extension=no
 # run arbitrary code
 extension-pkg-whitelist=pybedtools.cbedtools
 
-# Allow optimization of some AST trees. This will activate a peephole AST
-# optimizer, which will apply various small optimizations. For instance, it can
-# be used to obtain the result of joining multiple strings with the addition
-# operator. Joining a lot of strings can lead to a maximum recursion error in
-# Pylint and this flag can prevent that. It has one side effect, the resulting
-# AST will be different than the one from reality.
-optimize-ast=no
-
-
 [MESSAGES CONTROL]
 
 # Only show warnings with the listed confidence levels. Leave empty to show
@@ -51,7 +42,8 @@ confidence=
 # multiple time. See also the "--disable" option for examples.
 disable=redefined-builtin,
         abstract-method,
-        import-outside-toplevel
+        import-outside-toplevel,
+        unnecessary-lambda-assignment
 
 [REPORTS]
 
@@ -59,11 +51,6 @@ disable=redefined-builtin,
 # (visual studio) and html. You can also give a reporter class, eg
 # mypackage.mymodule.MyReporterClass.
 output-format=parseable
-
-# Put messages in a separate file for each module / package specified on the
-# command line instead of printing them on stdout. Reports (if any) will be
-# written in a file name "pylint_global.[txt|html]".
-files-output=no
 
 # Tells whether to display a full report or only the messages
 reports=no
@@ -98,12 +85,6 @@ ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 # Allow the body of an if to be on the same line as the test if there is no
 # else.
 single-line-if-stmt=no
-
-# List of optional constructs for which whitespace checking is disabled. `dict-
-# separator` is used to allow tabulation in dicts, etc.: {1  : 1,\n222: 2}.
-# `trailing-comma` allows a space between comma and closing bracket: (a, ).
-# `empty-line` allows space-only lines.
-no-space-check=trailing-comma,dict-separator
 
 # Maximum number of lines in a module
 max-module-lines=5000
@@ -201,9 +182,6 @@ notes=FIXME,XXX,TODO
 
 [BASIC]
 
-# List of builtins function names that should not be used, separated by a comma
-bad-functions=map,filter,input
-
 # Good variable names which should always be accepted, separated by a comma
 good-names=i,j,k,ex,Run,_
 
@@ -220,62 +198,32 @@ include-naming-hint=no
 # Regular expression matching correct function names
 function-rgx=
 
-# Naming hint for function names
-function-name-hint=
-
 # Regular expression matching correct variable names
 variable-rgx=
-
-# Naming hint for variable names
-variable-name-hint=
 
 # Regular expression matching correct constant names
 const-rgx=
 
-# Naming hint for constant names
-const-name-hint=
-
 # Regular expression matching correct attribute names
 attr-rgx=
-
-# Naming hint for attribute names
-attr-name-hint=
 
 # Regular expression matching correct argument names
 argument-rgx=
 
-# Naming hint for argument names
-argument-name-hint=
-
 # Regular expression matching correct class attribute names
 class-attribute-rgx=
-
-# Naming hint for class attribute names
-class-attribute-name-hint=
 
 # Regular expression matching correct inline iteration names
 inlinevar-rgx=
 
-# Naming hint for inline iteration names
-inlinevar-name-hint=
-
 # Regular expression matching correct class names
 class-rgx=
-
-# Naming hint for class names
-class-name-hint=
 
 # Regular expression matching correct module names
 module-rgx=
 
-# Naming hint for module names
-module-name-hint=
-
 # Regular expression matching correct method names
 method-rgx=
-
-# Naming hint for method names
-method-name-hint=
 
 # Regular expression which should only match function or class names that do
 # not require a docstring.

@@ -2,26 +2,32 @@ r"""
 Data handling utilities
 """
 
+import copy
 import functools
 import multiprocessing
 import operator
 import os
 import queue
 import signal
+import uuid
 from math import ceil
 from typing import Any, List, Mapping, Optional, Tuple
 
+import h5py
 import networkx as nx
 import numpy as np
 import pandas as pd
 import scipy.sparse
 import torch
+from anndata import AnnData
 from anndata._core.sparse_dataset import SparseDataset
 
 from ..num import vertex_degrees
-from ..typehint import Array, RandomState
+from ..typehint import AnyArray, Array, RandomState
 from ..utils import config, get_rs, logged, processes
 from .nn import get_default_numpy_dtype
+
+DATA_CONFIG = Mapping[str, Any]
 
 
 #---------------------------------- Datasets -----------------------------------
@@ -282,6 +288,329 @@ class ArrayDataset(Dataset):
 
 
 @logged
+class AnnDataset(Dataset):
+
+    r"""
+    Dataset for :class:`anndata.AnnData` objects with partial pairing support.
+
+    Parameters
+    ----------
+    *adatas
+        An arbitrary number of configured :class:`anndata.AnnData` objects
+    data_configs
+        Data configurations, one per dataset
+    mode
+        Data mode, must be one of ``{"train", "eval"}``
+    getitem_size
+        Unitary fetch size for each __getitem__ call
+    """
+
+    def __init__(
+            self, adatas: List[AnnData], data_configs: List[DATA_CONFIG],
+            mode: str = "train", getitem_size: int = 1
+    ) -> None:
+        super().__init__(getitem_size=getitem_size)
+        if mode not in ("train", "eval"):
+            raise ValueError("Invalid `mode`!")
+        self.mode = mode
+        self.adatas = adatas
+        self.data_configs = data_configs
+
+    @property
+    def adatas(self) -> List[AnnData]:
+        r"""
+        Internal :class:`AnnData` objects
+        """
+        return self._adatas
+
+    @property
+    def data_configs(self) -> List[DATA_CONFIG]:
+        r"""
+        Data configuration for each dataset
+        """
+        return self._data_configs
+
+    @adatas.setter
+    def adatas(self, adatas: List[AnnData]) -> None:
+        self.sizes = [adata.shape[0] for adata in adatas]
+        if min(self.sizes) == 0:
+            raise ValueError("Empty dataset is not allowed!")
+        self._adatas = adatas
+
+    @data_configs.setter
+    def data_configs(self, data_configs: List[DATA_CONFIG]) -> None:
+        if len(data_configs) != len(self.adatas):
+            raise ValueError(
+                "Number of data configs must match "
+                "the number of datasets!"
+            )
+        self.data_idx, self.extracted_data = self._extract_data(data_configs)
+        self.view_idx = pd.concat(
+            [data_idx.to_series() for data_idx in self.data_idx]
+        ).drop_duplicates().to_numpy()
+        self.size = self.view_idx.size
+        self.shuffle_idx, self.shuffle_pmsk = self._get_idx_pmsk(self.view_idx)
+        self._data_configs = data_configs
+
+    def _get_idx_pmsk(
+            self, view_idx: np.ndarray, random_fill: bool = False,
+            random_state: RandomState = None
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        rs = get_rs(random_state) if random_fill else None
+        shuffle_idx, shuffle_pmsk = [], []
+        for data_idx in self.data_idx:
+            idx = data_idx.get_indexer(view_idx)
+            pmsk = idx >= 0
+            n_true = pmsk.sum()
+            n_false = pmsk.size - n_true
+            idx[~pmsk] = rs.choice(idx[pmsk], n_false, replace=True) \
+                if random_fill else idx[pmsk][np.mod(np.arange(n_false), n_true)]
+            shuffle_idx.append(idx)
+            shuffle_pmsk.append(pmsk)
+        return np.stack(shuffle_idx, axis=1), np.stack(shuffle_pmsk, axis=1)
+
+    def __len__(self) -> int:
+        return ceil(self.size / self.getitem_size)
+
+    def __getitem__(self, index: int) -> List[torch.Tensor]:
+        s = slice(
+            index * self.getitem_size,
+            min((index + 1) * self.getitem_size, self.size)
+        )
+        shuffle_idx = self.shuffle_idx[s].T
+        shuffle_pmsk = self.shuffle_pmsk[s]
+        items = [
+            torch.as_tensor(self._index_array(data, idx))
+            for extracted_data in self.extracted_data
+            for idx, data in zip(shuffle_idx, extracted_data)
+        ]
+        items.append(torch.as_tensor(shuffle_pmsk))
+        return items
+
+    @staticmethod
+    def _index_array(arr: AnyArray, idx: np.ndarray) -> np.ndarray:
+        if isinstance(arr, (h5py.Dataset, SparseDataset)):
+            rank = scipy.stats.rankdata(idx, method="dense") - 1
+            sorted_idx = np.empty(rank.max() + 1, dtype=int)
+            sorted_idx[rank] = idx
+            arr = arr[sorted_idx.tolist()][rank.tolist()]  # Convert to sequantial access and back
+        else:
+            arr = arr[idx]
+        return arr.toarray() if scipy.sparse.issparse(arr) else arr
+
+    def _extract_data(self, data_configs: List[DATA_CONFIG]) -> Tuple[
+            List[pd.Index], Tuple[
+                List[AnyArray], List[AnyArray], List[AnyArray],
+                List[AnyArray], List[AnyArray]
+            ]
+    ]:
+        if self.mode == "eval":
+            return self._extract_data_eval(data_configs)
+        return self._extract_data_train(data_configs)  # self.mode == "train"
+
+    def _extract_data_train(self, data_configs: List[DATA_CONFIG]) -> Tuple[
+            List[pd.Index], Tuple[
+                List[AnyArray], List[AnyArray], List[AnyArray],
+                List[AnyArray], List[AnyArray]
+            ]
+    ]:
+        xuid = [
+            self._extract_xuid(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        x = [
+            self._extract_x(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        xrep = [
+            self._extract_xrep(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        xbch = [
+            self._extract_xbch(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        xlbl = [
+            self._extract_xlbl(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        xdwt = [
+            self._extract_xdwt(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        return xuid, (x, xrep, xbch, xlbl, xdwt)
+
+    def _extract_data_eval(self, data_configs: List[DATA_CONFIG]) -> Tuple[
+            List[pd.Index], Tuple[
+                List[AnyArray], List[AnyArray], List[AnyArray],
+                List[AnyArray], List[AnyArray]
+            ]
+    ]:
+        default_dtype = get_default_numpy_dtype()
+        xuid = [
+            self._extract_xuid(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        xrep = [
+            self._extract_xrep(adata, data_config)
+            for adata, data_config in zip(self.adatas, data_configs)
+        ]
+        x = [
+            np.empty((adata.shape[0], 0), dtype=default_dtype)
+            if xrep_.size else self._extract_x(adata, data_config)
+            for adata, data_config, xrep_ in zip(self.adatas, data_configs, xrep)
+        ]
+        xbch = xlbl = [
+            np.empty((adata.shape[0], 0), dtype=int)
+            for adata in self.adatas
+        ]
+        xdwt = [
+            np.empty((adata.shape[0], 0), dtype=default_dtype)
+            for adata in self.adatas
+        ]
+        return xuid, (x, xrep, xbch, xlbl, xdwt)
+
+    def _extract_x(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
+        default_dtype = get_default_numpy_dtype()
+        features = data_config["features"]
+        use_layer = data_config["use_layer"]
+        if not np.array_equal(adata.var_names, features):
+            adata = adata[:, features]  # This will load all data to memory if backed
+        if use_layer:
+            if use_layer not in adata.layers:
+                raise ValueError(
+                    f"Configured data layer '{use_layer}' "
+                    f"cannot be found in input data!"
+                )
+            x = adata.layers[use_layer]
+        else:
+            x = adata.X
+        if x.dtype.type is not default_dtype:
+            if isinstance(x, (h5py.Dataset, SparseDataset)):
+                raise RuntimeError(
+                    f"User is responsible for ensuring a {default_dtype} dtype "
+                    f"when using backed data!"
+                )
+            x = x.astype(default_dtype)
+        if scipy.sparse.issparse(x):
+            x = x.tocsr()
+        return x
+
+    def _extract_xrep(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
+        default_dtype = get_default_numpy_dtype()
+        use_rep = data_config["use_rep"]
+        rep_dim = data_config["rep_dim"]
+        if use_rep:
+            if use_rep not in adata.obsm:
+                raise ValueError(
+                    f"Configured data representation '{use_rep}' "
+                    f"cannot be found in input data!"
+                )
+            xrep = np.asarray(adata.obsm[use_rep]).astype(default_dtype)
+            if xrep.shape[1] != rep_dim:
+                raise ValueError(
+                    f"Input representation dimensionality {xrep.shape[1]} "
+                    f"does not match the configured {rep_dim}!"
+                )
+            return xrep
+        return np.empty((adata.shape[0], 0), dtype=default_dtype)
+
+    def _extract_xbch(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
+        use_batch = data_config["use_batch"]
+        batches = data_config["batches"]
+        if use_batch:
+            if use_batch not in adata.obs:
+                raise ValueError(
+                    f"Configured data batch '{use_batch}' "
+                    f"cannot be found in input data!"
+                )
+            return batches.get_indexer(adata.obs[use_batch])
+        return np.zeros(adata.shape[0], dtype=int)
+
+    def _extract_xlbl(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
+        use_cell_type = data_config["use_cell_type"]
+        cell_types = data_config["cell_types"]
+        if use_cell_type:
+            if use_cell_type not in adata.obs:
+                raise ValueError(
+                    f"Configured cell type '{use_cell_type}' "
+                    f"cannot be found in input data!"
+                )
+            return cell_types.get_indexer(adata.obs[use_cell_type])
+        return -np.ones(adata.shape[0], dtype=int)
+
+    def _extract_xdwt(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
+        default_dtype = get_default_numpy_dtype()
+        use_dsc_weight = data_config["use_dsc_weight"]
+        if use_dsc_weight:
+            if use_dsc_weight not in adata.obs:
+                raise ValueError(
+                    f"Configured discriminator sample weight '{use_dsc_weight}' "
+                    f"cannot be found in input data!"
+                )
+            xdwt = adata.obs[use_dsc_weight].to_numpy().astype(default_dtype)
+            xdwt /= xdwt.sum() / xdwt.size
+        else:
+            xdwt = np.ones(adata.shape[0], dtype=default_dtype)
+        return xdwt
+
+    def _extract_xuid(self, adata: AnnData, data_config: DATA_CONFIG) -> pd.Index:
+        if data_config["use_obs_names"]:
+            xuid = adata.obs_names.to_numpy()
+        else:  # NOTE: Assuming random UUIDs never collapse with anything
+            self.logger.debug("Generating random xuid...")
+            xuid = np.array([uuid.uuid4().hex for _ in range(adata.shape[0])])
+        if len(set(xuid)) != xuid.size:
+            raise ValueError("Non-unique cell ID!")
+        return pd.Index(xuid)
+
+    def propose_shuffle(self, seed: int) -> Tuple[np.ndarray, np.ndarray]:
+        rs = get_rs(seed)
+        view_idx = rs.permutation(self.view_idx)
+        return self._get_idx_pmsk(view_idx, random_fill=True, random_state=rs)
+
+    def accept_shuffle(self, shuffled: Tuple[np.ndarray, np.ndarray]) -> None:
+        self.shuffle_idx, self.shuffle_pmsk = shuffled
+
+    def random_split(
+            self, fractions: List[float], random_state: RandomState = None
+    ) -> List["AnnDataset"]:
+        r"""
+        Randomly split the dataset into multiple subdatasets according to
+        given fractions.
+
+        Parameters
+        ----------
+        fractions
+            Fraction of each split
+        random_state
+            Random state
+
+        Returns
+        -------
+        subdatasets
+            A list of splitted subdatasets
+        """
+        if min(fractions) <= 0:
+            raise ValueError("Fractions should be greater than 0!")
+        if sum(fractions) != 1:
+            raise ValueError("Fractions do not sum to 1!")
+        rs = get_rs(random_state)
+        cum_frac = np.cumsum(fractions)
+        view_idx = rs.permutation(self.view_idx)
+        split_pos = np.round(cum_frac * view_idx.size).astype(int)
+        split_idx = np.split(view_idx, split_pos[:-1])  # Last pos produces an extra empty split
+        subdatasets = []
+        for idx in split_idx:
+            sub = copy.copy(self)
+            sub.view_idx = idx
+            sub.size = idx.size
+            sub.shuffle_idx, sub.shuffle_pmsk = sub._get_idx_pmsk(idx)  # pylint: disable=protected-access
+            subdatasets.append(sub)
+        return subdatasets
+
+
+@logged
 class GraphDataset(Dataset):
 
     r"""
@@ -293,10 +622,6 @@ class GraphDataset(Dataset):
         Graph object
     vertices
         Indexer of graph vertices
-    edge_weight
-        Key of edge attribute for edge weight
-    edge_sign
-        Key of edge attribute for edge sign
     neg_samples
         Number of negative samples per edge
     weighted_sampling
@@ -313,13 +638,12 @@ class GraphDataset(Dataset):
 
     def __init__(
             self, graph: nx.Graph, vertices: pd.Index,
-            edge_weight: str, edge_sign: str,
             neg_samples: int = 1, weighted_sampling: bool = True,
             deemphasize_loops: bool = True, getitem_size: int = 1
     ) -> None:
         super().__init__(getitem_size=getitem_size)
         self.eidx, self.ewt, self.esgn = \
-            self.graph2triplet(graph, vertices, edge_weight, edge_sign)
+            self.graph2triplet(graph, vertices)
         self.eset = {
             (i, j, s) for (i, j), s in
             zip(self.eidx.T, self.esgn)
@@ -355,7 +679,6 @@ class GraphDataset(Dataset):
 
     def graph2triplet(
             self, graph: nx.Graph, vertices: pd.Index,
-            edge_weight: str, edge_sign: str
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         r"""
         Convert graph object to graph triplet
@@ -366,10 +689,6 @@ class GraphDataset(Dataset):
             Graph object
         vertices
             Graph vertices
-        edge_weight
-            Key of edge attribute for edge weight
-        edge_sign
-            Key of edge attribute for edge sign
 
         Returns
         -------
@@ -387,8 +706,8 @@ class GraphDataset(Dataset):
         for k, v in dict(graph.edges).items():
             i.append(k[0])
             j.append(k[1])
-            w.append(v[edge_weight])
-            s.append(v[edge_sign])
+            w.append(v["weight"])
+            s.append(v["sign"])
         eidx = np.stack([
             vertices.get_indexer(i),
             vertices.get_indexer(j)

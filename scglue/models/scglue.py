@@ -5,34 +5,27 @@ data integration
 
 import copy
 import os
-import uuid
 from itertools import chain
 from math import ceil
-from typing import Any, List, Mapping, Optional, Tuple, Union
+from typing import List, Mapping, Optional, Tuple, Union
 
-import h5py
 import ignite
 import networkx as nx
 import numpy as np
 import pandas as pd
-import scipy.sparse
 import torch
 import torch.distributions as D
 import torch.nn.functional as F
 from anndata import AnnData
-from anndata._core.sparse_dataset import SparseDataset
 
+from ..graph import check_graph
 from ..num import normalize_edges
-from ..typehint import AnyArray, RandomState
-from ..utils import config, get_chained_attr, get_rs, logged
+from ..utils import AUTO, config, get_chained_attr, logged
 from . import sc
 from .base import Model
-from .data import ArrayDataset, DataLoader, Dataset, GraphDataset
+from .data import AnnDataset, ArrayDataset, DataLoader, GraphDataset
 from .glue import GLUE, GLUETrainer
-from .nn import freeze_running_stats, get_default_numpy_dtype
-
-AUTO = -1  # Flag for using automatically determined hyperparameters
-DATA_CONFIG = Mapping[str, Any]
+from .nn import freeze_running_stats
 
 
 #---------------------------------- Utilities ----------------------------------
@@ -65,335 +58,6 @@ register_prob_model("NB", sc.NBDataEncoder, sc.NBDataDecoder)
 register_prob_model("ZINB", sc.NBDataEncoder, sc.ZINBDataDecoder)
 
 
-@logged
-class AnnDataset(Dataset):
-
-    r"""
-    Dataset for :class:`anndata.AnnData` objects with partial pairing support.
-
-    Parameters
-    ----------
-    *adatas
-        An arbitrary number of configured :class:`anndata.AnnData` objects
-    data_configs
-        Data configurations, one per dataset
-    mode
-        Data mode, must be one of ``{"train", "eval"}``
-    getitem_size
-        Unitary fetch size for each __getitem__ call
-    """
-
-    def __init__(
-            self, adatas: List[AnnData], data_configs: List[DATA_CONFIG],
-            mode: str = "train", getitem_size: int = 1
-    ) -> None:
-        super().__init__(getitem_size=getitem_size)
-        if mode not in ("train", "eval"):
-            raise ValueError("Invalid `mode`!")
-        self.mode = mode
-        self.adatas = adatas
-        self.data_configs = data_configs
-
-    @property
-    def adatas(self) -> List[AnnData]:
-        r"""
-        Internal :class:`AnnData` objects
-        """
-        return self._adatas
-
-    @property
-    def data_configs(self) -> List[DATA_CONFIG]:
-        r"""
-        Data configuration for each dataset
-        """
-        return self._data_configs
-
-    @adatas.setter
-    def adatas(self, adatas: List[AnnData]) -> None:
-        self.sizes = [adata.shape[0] for adata in adatas]
-        if min(self.sizes) == 0:
-            raise ValueError("Empty dataset is not allowed!")
-        self._adatas = adatas
-
-    @data_configs.setter
-    def data_configs(self, data_configs: List[DATA_CONFIG]) -> None:
-        if len(data_configs) != len(self.adatas):
-            raise ValueError(
-                "Number of data configs must match "
-                "the number of datasets!"
-            )
-        self.data_idx, self.extracted_data = self._extract_data(data_configs)
-        self.view_idx = pd.concat(
-            [data_idx.to_series() for data_idx in self.data_idx]
-        ).drop_duplicates().to_numpy()
-        self.size = self.view_idx.size
-        self.shuffle_idx, self.shuffle_pmsk = self._get_idx_pmsk(self.view_idx)
-        self._data_configs = data_configs
-
-    def _get_idx_pmsk(
-            self, view_idx: np.ndarray, random_fill: bool = False,
-            random_state: RandomState = None
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        rs = get_rs(random_state) if random_fill else None
-        shuffle_idx, shuffle_pmsk = [], []
-        for data_idx in self.data_idx:
-            idx = data_idx.get_indexer(view_idx)
-            pmsk = idx >= 0
-            n_true = pmsk.sum()
-            n_false = pmsk.size - n_true
-            idx[~pmsk] = rs.choice(idx[pmsk], n_false, replace=True) \
-                if random_fill else idx[pmsk][np.mod(np.arange(n_false), n_true)]
-            shuffle_idx.append(idx)
-            shuffle_pmsk.append(pmsk)
-        return np.stack(shuffle_idx, axis=1), np.stack(shuffle_pmsk, axis=1)
-
-    def __len__(self) -> int:
-        return ceil(self.size / self.getitem_size)
-
-    def __getitem__(self, index: int) -> List[torch.Tensor]:
-        s = slice(
-            index * self.getitem_size,
-            min((index + 1) * self.getitem_size, self.size)
-        )
-        shuffle_idx = self.shuffle_idx[s].T
-        shuffle_pmsk = self.shuffle_pmsk[s]
-        items = [
-            torch.as_tensor(self._index_array(data, idx))
-            for extracted_data in self.extracted_data
-            for idx, data in zip(shuffle_idx, extracted_data)
-        ]
-        items.append(torch.as_tensor(shuffle_pmsk))
-        return items
-
-    @staticmethod
-    def _index_array(arr: AnyArray, idx: np.ndarray) -> np.ndarray:
-        if isinstance(arr, (h5py.Dataset, SparseDataset)):
-            rank = scipy.stats.rankdata(idx, method="dense") - 1
-            sorted_idx = np.empty(rank.max() + 1, dtype=int)
-            sorted_idx[rank] = idx
-            arr = arr[sorted_idx][rank]  # Convert to sequantial access and back
-        else:
-            arr = arr[idx]
-        return arr.toarray() if scipy.sparse.issparse(arr) else arr
-
-    def _extract_data(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
-    ]:
-        if self.mode == "eval":
-            return self._extract_data_eval(data_configs)
-        return self._extract_data_train(data_configs)  # self.mode == "train"
-
-    def _extract_data_train(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
-    ]:
-        xuid = [
-            self._extract_xuid(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        x = [
-            self._extract_x(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        xalt = [
-            self._extract_xalt(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        xbch = [
-            self._extract_xbch(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        xlbl = [
-            self._extract_xlbl(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        xdwt = [
-            self._extract_xdwt(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        return xuid, (x, xalt, xbch, xlbl, xdwt)
-
-    def _extract_data_eval(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
-    ]:
-        default_dtype = get_default_numpy_dtype()
-        xuid = [
-            self._extract_xuid(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        xalt = [
-            self._extract_xalt(adata, data_config)
-            for adata, data_config in zip(self.adatas, data_configs)
-        ]
-        x = [
-            np.empty((adata.shape[0], 0), dtype=default_dtype)
-            if xalt_.size else self._extract_x(adata, data_config)
-            for adata, data_config, xalt_ in zip(self.adatas, data_configs, xalt)
-        ]
-        xbch = xlbl = [
-            np.empty((adata.shape[0], 0), dtype=int)
-            for adata in self.adatas
-        ]
-        xdwt = [
-            np.empty((adata.shape[0], 0), dtype=default_dtype)
-            for adata in self.adatas
-        ]
-        return xuid, (x, xalt, xbch, xlbl, xdwt)
-
-    def _extract_x(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        default_dtype = get_default_numpy_dtype()
-        features = data_config["features"]
-        use_layer = data_config["use_layer"]
-        if not np.array_equal(adata.var_names, features):
-            adata = adata[:, features]  # This will load all data to memory if backed
-        if use_layer:
-            if use_layer not in adata.layers:
-                raise ValueError(
-                    f"Configured data layer '{use_layer}' "
-                    f"cannot be found in input data!"
-                )
-            x = adata.layers[use_layer]
-        else:
-            x = adata.X
-        if x.dtype.type is not default_dtype:
-            if isinstance(x, (h5py.Dataset, SparseDataset)):
-                raise RuntimeError(
-                    f"User is responsible for ensuring a {default_dtype} dtype "
-                    f"when using backed data!"
-                )
-            x = x.astype(default_dtype)
-        if scipy.sparse.issparse(x):
-            x = x.tocsr()
-        return x
-
-    def _extract_xalt(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        default_dtype = get_default_numpy_dtype()
-        use_rep = data_config["use_rep"]
-        rep_dim = data_config["rep_dim"]
-        if use_rep:
-            if use_rep not in adata.obsm:
-                raise ValueError(
-                    f"Configured data representation '{use_rep}' "
-                    f"cannot be found in input data!"
-                )
-            xalt = np.asarray(adata.obsm[use_rep]).astype(default_dtype)
-            if xalt.shape[1] != rep_dim:
-                raise ValueError(
-                    f"Input representation dimensionality {xalt.shape[1]} "
-                    f"does not match the configured {rep_dim}!"
-                )
-            return xalt
-        return np.empty((adata.shape[0], 0), dtype=default_dtype)
-
-    def _extract_xbch(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        use_batch = data_config["use_batch"]
-        batches = data_config["batches"]
-        if use_batch:
-            if use_batch not in adata.obs:
-                raise ValueError(
-                    f"Configured data batch '{use_batch}' "
-                    f"cannot be found in input data!"
-                )
-            return batches.get_indexer(adata.obs[use_batch])
-        return np.zeros(adata.shape[0], dtype=int)
-
-    def _extract_xlbl(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        use_cell_type = data_config["use_cell_type"]
-        cell_types = data_config["cell_types"]
-        if use_cell_type:
-            if use_cell_type not in adata.obs:
-                raise ValueError(
-                    f"Configured cell type '{use_cell_type}' "
-                    f"cannot be found in input data!"
-                )
-            return cell_types.get_indexer(adata.obs[use_cell_type])
-        return -np.ones(adata.shape[0], dtype=int)
-
-    def _extract_xdwt(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        default_dtype = get_default_numpy_dtype()
-        use_dsc_weight = data_config["use_dsc_weight"]
-        if use_dsc_weight:
-            if use_dsc_weight not in adata.obs:
-                raise ValueError(
-                    f"Configured discriminator sample weight '{use_dsc_weight}' "
-                    f"cannot be found in input data!"
-                )
-            xdwt = adata.obs[use_dsc_weight].to_numpy().astype(default_dtype)
-            xdwt /= xdwt.sum() / xdwt.size
-        else:
-            xdwt = np.ones(adata.shape[0], dtype=default_dtype)
-        return xdwt
-
-    def _extract_xuid(self, adata: AnnData, data_config: DATA_CONFIG) -> pd.Index:
-        use_uid = data_config["use_uid"]
-        if use_uid:
-            if use_uid not in adata.obs:
-                raise ValueError(
-                    f"Configured cell unique ID '{use_uid}' "
-                    f"cannot be found in input data!"
-                )
-            xuid = adata.obs[use_uid].to_numpy()
-        else:  # NOTE: Assuming random UUIDs never collapse with anything
-            self.logger.debug("Generating random xuid...")
-            xuid = np.array([uuid.uuid4().hex for _ in range(adata.shape[0])])
-        if len(set(xuid)) != xuid.size:
-            raise ValueError("Non-unique cell ID!")
-        return pd.Index(xuid)
-
-    def propose_shuffle(self, seed: int) -> Tuple[np.ndarray, np.ndarray]:
-        rs = get_rs(seed)
-        view_idx = rs.permutation(self.view_idx)
-        return self._get_idx_pmsk(view_idx, random_fill=True, random_state=rs)
-
-    def accept_shuffle(self, shuffled: Tuple[np.ndarray, np.ndarray]) -> None:
-        self.shuffle_idx, self.shuffle_pmsk = shuffled
-
-    def random_split(
-            self, fractions: List[float], random_state: RandomState = None
-    ) -> List["AnnDataset"]:
-        r"""
-        Randomly split the dataset into multiple subdatasets according to
-        given fractions.
-
-        Parameters
-        ----------
-        fractions
-            Fraction of each split
-        random_state
-            Random state
-
-        Returns
-        -------
-        subdatasets
-            A list of splitted subdatasets
-        """
-        if min(fractions) <= 0:
-            raise ValueError("Fractions should be greater than 0!")
-        if sum(fractions) != 1:
-            raise ValueError("Fractions do not sum to 1!")
-        rs = get_rs(random_state)
-        cum_frac = np.cumsum(fractions)
-        view_idx = rs.permutation(self.view_idx)
-        split_pos = np.round(cum_frac * view_idx.size).astype(int)
-        split_idx = np.split(view_idx, split_pos[:-1])  # Last pos produces an extra empty split
-        subdatasets = []
-        for idx in split_idx:
-            sub = copy.copy(self)
-            sub.view_idx = idx
-            sub.size = idx.size
-            sub.shuffle_idx, sub.shuffle_pmsk = sub._get_idx_pmsk(idx)  # pylint: disable=protected-access
-            subdatasets.append(sub)
-        return subdatasets
-
-
 #----------------------------- Network definition ------------------------------
 
 class SCGLUE(GLUE):
@@ -408,13 +72,13 @@ class SCGLUE(GLUE):
     v2g
         Graph decoder
     x2u
-        Data encoders (indexed by domain name)
+        Data encoders (indexed by modality name)
     u2x
-        Data decoders (indexed by domain name)
+        Data decoders (indexed by modality name)
     idx
-        Feature indices among graph vertices (indexed by domain name)
+        Feature indices among graph vertices (indexed by modality name)
     du
-        Domain discriminator
+        Modality discriminator
     prior
         Latent prior
     u2c
@@ -436,7 +100,7 @@ class SCGLUE(GLUE):
 class IndSCGLUE(SCGLUE):
 
     r"""
-    GLUE network where cell and feature in different domains are independent
+    GLUE network where cell and feature in different modalities are independent
 
     Parameters
     ----------
@@ -445,13 +109,13 @@ class IndSCGLUE(SCGLUE):
     v2g
         Graph decoder
     x2u
-        Data encoders (indexed by domain name)
+        Data encoders (indexed by modality name)
     u2x
-        Data decoders (indexed by domain name)
+        Data decoders (indexed by modality name)
     idx
-        Feature indices among graph vertices (indexed by domain name)
+        Feature indices among graph vertices (indexed by modality name)
     du
-        Domain discriminator
+        Modality discriminator
     prior
         Latent prior
     u2c
@@ -473,11 +137,11 @@ class IndSCGLUE(SCGLUE):
 
 DataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
-    Mapping[str, torch.Tensor],  # xalt (alternative input data)
+    Mapping[str, torch.Tensor],  # xrep (alternative input data)
     Mapping[str, torch.Tensor],  # xbch (data batch)
     Mapping[str, torch.Tensor],  # xlbl (data label)
-    Mapping[str, torch.Tensor],  # xdwt (domain discriminator sample weight)
-    Mapping[str, torch.Tensor],  # xflag (domain indicator)
+    Mapping[str, torch.Tensor],  # xdwt (modality discriminator sample weight)
+    Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
     torch.Tensor  # esgn (edge sign)
@@ -506,8 +170,8 @@ class SCGLUETrainer(GLUETrainer):
         Cell type supervision weight
     normalize_u
         Whether to L2 normalize cell embeddings before decoder
-    domain_weight
-        Relative domain weight (indexed by domain name)
+    modality_weight
+        Relative modality weight (indexed by modality name)
     optim
         Optimizer
     lr
@@ -522,12 +186,12 @@ class SCGLUETrainer(GLUETrainer):
             self, net: SCGLUE, lam_data: float = None, lam_kl: float = None,
             lam_graph: float = None, lam_align: float = None,
             lam_sup: float = None, normalize_u: bool = None,
-            domain_weight: Mapping[str, float] = None,
+            modality_weight: Mapping[str, float] = None,
             optim: str = None, lr: float = None, **kwargs
     ) -> None:
         super().__init__(
             net, lam_data=lam_data, lam_kl=lam_kl, lam_graph=lam_graph,
-            lam_align=lam_align, domain_weight=domain_weight,
+            lam_align=lam_align, modality_weight=modality_weight,
             optim=optim, lr=lr, **kwargs
         )
         required_kwargs = ("lam_sup", "normalize_u")
@@ -559,22 +223,22 @@ class SCGLUETrainer(GLUETrainer):
 
         Note
         ----
-        The data dataset should contain data arrays for each domain,
-        followed by alternative input arrays for each domain,
-        in the same order as domain keys of the network.
+        The data dataset should contain data arrays for each modality,
+        followed by alternative input arrays for each modality,
+        in the same order as modality keys of the network.
         """
         device = self.net.device
         keys = self.net.keys
         K = len(keys)
-        x, xalt, xbch, xlbl, xdwt, (eidx, ewt, esgn) = \
+        x, xrep, xbch, xlbl, xdwt, (eidx, ewt, esgn) = \
             data[0:K], data[K:2*K], data[2*K:3*K], data[3*K:4*K], data[4*K:5*K], \
             data[5*K+1:]
         x = {
             k: x[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
-        xalt = {
-            k: xalt[i].to(device, non_blocking=True)
+        xrep = {
+            k: xrep[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
         xbch = {
@@ -598,17 +262,17 @@ class SCGLUETrainer(GLUETrainer):
         eidx = eidx.to(device, non_blocking=True)
         ewt = ewt.to(device, non_blocking=True)
         esgn = esgn.to(device, non_blocking=True)
-        return x, xalt, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn
+        return x, xrep, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn
 
     def compute_losses(
             self, data: DataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:
         net = self.net
-        x, xalt, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn = data
+        x, xrep, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn = data
 
         u, l = {}, {}
         for k in net.keys:
-            u[k], l[k] = net.x2u[k](x[k], xalt[k], lazy_normalizer=dsc_only)
+            u[k], l[k] = net.x2u[k](x[k], xrep[k], lazy_normalizer=dsc_only)
         usamp = {k: u[k].rsample() for k in net.keys}
         if self.normalize_u:
             usamp = {k: F.normalize(usamp[k], dim=1) for k in net.keys}
@@ -667,7 +331,7 @@ class SCGLUETrainer(GLUETrainer):
             k: x_nll[k] + self.lam_kl * x_kl[k]
             for k in net.keys
         }
-        x_elbo_sum = sum(self.domain_weight[k] * x_elbo[k] for k in net.keys)
+        x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
         vae_loss = self.lam_data * x_elbo_sum \
             + self.lam_graph * len(net.keys) * g_elbo \
@@ -726,116 +390,13 @@ class SCGLUETrainer(GLUETrainer):
         )
 
 
-@logged
-class IndSCGLUETrainer(SCGLUETrainer):
-
-    r"""
-    Trainer for :class:`IndSCGLUE`
-    """
-
-    def compute_losses(  # pylint: disable=arguments-differ
-            self, data: DataTensors, epoch: int
-    ) -> Mapping[str, torch.Tensor]:
-        net = self.net
-        x, xalt, xbch, xlbl, _, _, eidx, ewt, esgn = data
-
-        u, l = {}, {}
-        for k in net.keys:
-            u[k], l[k] = net.x2u[k](x[k], xalt[k], lazy_normalizer=False)
-        usamp = {k: u[k].rsample() for k in net.keys}
-        if self.normalize_u:
-            usamp = {k: F.normalize(usamp[k], dim=1) for k in net.keys}
-        prior = net.prior()
-
-        u_cat = torch.cat([u[k].mean for k in net.keys])
-        dsc_loss = torch.tensor(0.0, device=self.net.device)
-
-        if net.u2c:
-            xlbl_cat = torch.cat([xlbl[k] for k in net.keys])
-            lmsk = xlbl_cat >= 0
-            sup_loss = F.cross_entropy(
-                net.u2c(u_cat[lmsk]), xlbl_cat[lmsk], reduction="none"
-            ).sum() / max(lmsk.sum(), 1)
-        else:
-            sup_loss = torch.tensor(0.0, device=self.net.device)
-
-        v = net.g2v(self.eidx, self.enorm, self.esgn)
-        vsamp = v.rsample()
-
-        g_nll = -net.v2g(vsamp, eidx, esgn).log_prob(ewt)
-        pos_mask = (ewt != 0).to(torch.int64)
-        n_pos = pos_mask.sum().item()
-        n_neg = pos_mask.numel() - n_pos
-        g_nll_pn = torch.zeros(2, dtype=g_nll.dtype, device=g_nll.device)
-        g_nll_pn.scatter_add_(0, pos_mask, g_nll)
-        avgc = (n_pos > 0) + (n_neg > 0)
-        g_nll = (g_nll_pn[0] / max(n_neg, 1) + g_nll_pn[1] / max(n_pos, 1)) / avgc
-        g_kl = D.kl_divergence(v, prior).sum(dim=1).mean() / vsamp.shape[0]
-        g_elbo = g_nll + self.lam_kl * g_kl
-
-        x_nll = {
-            k: -net.u2x[k](
-                usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k]
-            ).log_prob(x[k]).mean()
-            for k in net.keys
-        }
-        x_kl = {
-            k: D.kl_divergence(
-                u[k], prior
-            ).sum(dim=1).mean() / x[k].shape[1]
-            for k in net.keys
-        }
-        x_elbo = {
-            k: x_nll[k] + self.lam_kl * x_kl[k]
-            for k in net.keys
-        }
-        x_elbo_sum = sum(self.domain_weight[k] * x_elbo[k] for k in net.keys)
-
-        vae_loss = self.lam_data * x_elbo_sum \
-            + self.lam_graph * len(net.keys) * g_elbo \
-            + self.lam_sup * sup_loss
-        gen_loss = vae_loss - self.lam_align * dsc_loss
-
-        losses = {
-            "dsc_loss": dsc_loss, "vae_loss": vae_loss, "gen_loss": gen_loss,
-            "g_nll": g_nll, "g_kl": g_kl, "g_elbo": g_elbo
-        }
-        for k in net.keys:
-            losses.update({
-                f"x_{k}_nll": x_nll[k],
-                f"x_{k}_kl": x_kl[k],
-                f"x_{k}_elbo": x_elbo[k]
-            })
-        if net.u2c:
-            losses["sup_loss"] = sup_loss
-        return losses
-
-    def train_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
-    ) -> Mapping[str, torch.Tensor]:
-        self.net.train()
-        data = self.format_data(data)
-        epoch = engine.state.epoch
-
-        if self.freeze_u:
-            self.net.x2u.apply(freeze_running_stats)
-
-        # Generator step
-        losses = self.compute_losses(data, epoch)
-        self.net.zero_grad(set_to_none=True)
-        losses["gen_loss"].backward()
-        self.vae_optim.step()
-
-        return losses
-
-
 PairedDataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
-    Mapping[str, torch.Tensor],  # xalt (alternative input data)
+    Mapping[str, torch.Tensor],  # xrep (alternative input data)
     Mapping[str, torch.Tensor],  # xbch (data batch)
     Mapping[str, torch.Tensor],  # xlbl (data label)
-    Mapping[str, torch.Tensor],  # xdwt (domain discriminator sample weight)
-    Mapping[str, torch.Tensor],  # xflag (domain indicator)
+    Mapping[str, torch.Tensor],  # xdwt (modality discriminator sample weight)
+    Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # pmsk (paired mask)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
@@ -871,8 +432,8 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         Cosine similarity weight
     normalize_u
         Whether to L2 normalize cell embeddings before decoder
-    domain_weight
-        Relative domain weight (indexed by domain name)
+    modality_weight
+        Relative modality weight (indexed by modality name)
     optim
         Optimizer
     lr
@@ -886,14 +447,14 @@ class PairedSCGLUETrainer(SCGLUETrainer):
             lam_graph: float = None, lam_align: float = None, lam_sup: float = None,
             lam_joint_cross: float = None, lam_real_cross: float = None,
             lam_cos: float = None, normalize_u: bool = None,
-            domain_weight: Mapping[str, float] = None,
+            modality_weight: Mapping[str, float] = None,
             optim: str = None, lr: float = None, **kwargs
     ) -> None:
         super().__init__(
             net, lam_data=lam_data, lam_kl=lam_kl,
             lam_graph=lam_graph, lam_align=lam_align,
             lam_sup=lam_sup, normalize_u=normalize_u,
-            domain_weight=domain_weight,
+            modality_weight=modality_weight,
             optim=optim, lr=lr, **kwargs
         )
         required_kwargs = ("lam_joint_cross", "lam_real_cross", "lam_cos")
@@ -911,22 +472,22 @@ class PairedSCGLUETrainer(SCGLUETrainer):
 
         Note
         ----
-        The data dataset should contain data arrays for each domain,
-        followed by alternative input arrays for each domain,
-        in the same order as domain keys of the network.
+        The data dataset should contain data arrays for each modality,
+        followed by alternative input arrays for each modality,
+        in the same order as modality keys of the network.
         """
         device = self.net.device
         keys = self.net.keys
         K = len(keys)
-        x, xalt, xbch, xlbl, xdwt, pmsk, (eidx, ewt, esgn) = \
+        x, xrep, xbch, xlbl, xdwt, pmsk, (eidx, ewt, esgn) = \
             data[0:K], data[K:2*K], data[2*K:3*K], data[3*K:4*K], data[4*K:5*K], \
             data[5*K], data[5*K+1:]
         x = {
             k: x[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
-        xalt = {
-            k: xalt[i].to(device, non_blocking=True)
+        xrep = {
+            k: xrep[i].to(device, non_blocking=True)
             for i, k in enumerate(keys)
         }
         xbch = {
@@ -951,17 +512,17 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         eidx = eidx.to(device, non_blocking=True)
         ewt = ewt.to(device, non_blocking=True)
         esgn = esgn.to(device, non_blocking=True)
-        return x, xalt, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn
+        return x, xrep, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn
 
     def compute_losses(
             self, data: PairedDataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:
         net = self.net
-        x, xalt, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn = data
+        x, xrep, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn = data
 
         u, l = {}, {}
         for k in net.keys:
-            u[k], l[k] = net.x2u[k](x[k], xalt[k], lazy_normalizer=dsc_only)
+            u[k], l[k] = net.x2u[k](x[k], xrep[k], lazy_normalizer=dsc_only)
         usamp = {k: u[k].rsample() for k in net.keys}
         if self.normalize_u:
             usamp = {k: F.normalize(usamp[k], dim=1) for k in net.keys}
@@ -1020,7 +581,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
             k: x_nll[k] + self.lam_kl * x_kl[k]
             for k in net.keys
         }
-        x_elbo_sum = sum(self.domain_weight[k] * x_elbo[k] for k in net.keys)
+        x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
         pmsk = pmsk.T
         usamp_stack = torch.stack([usamp[k] for k in net.keys])
@@ -1037,7 +598,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
                 ).log_prob(x[k][m]).mean()
                 for k, m in zip(net.keys, pmsk)
             }
-            joint_cross_loss = sum(self.domain_weight[k] * x_joint_cross_nll[k] for k in net.keys)
+            joint_cross_loss = sum(self.modality_weight[k] * x_joint_cross_nll[k] for k in net.keys)
         else:
             joint_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -1052,7 +613,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
                             xbch[k_target][m], None if l[k_target] is None else l[k_target][m]
                         ).log_prob(x[k_target][m]).mean()
                 x_real_cross_nll[k] = xk_real_cross_nll
-            real_cross_loss = sum(self.domain_weight[k] * x_real_cross_nll[k] for k in net.keys)
+            real_cross_loss = sum(self.modality_weight[k] * x_real_cross_nll[k] for k in net.keys)
         else:
             real_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -1095,113 +656,6 @@ class PairedSCGLUETrainer(SCGLUETrainer):
 #--------------------------------- Public API ----------------------------------
 
 @logged
-def configure_dataset(
-        adata: AnnData, prob_model: str,
-        use_highly_variable: bool = True,
-        use_layer: Optional[str] = None,
-        use_rep: Optional[str] = None,
-        use_batch: Optional[str] = None,
-        use_cell_type: Optional[str] = None,
-        use_dsc_weight: Optional[str] = None,
-        use_uid: Optional[str] = None
-) -> None:
-    r"""
-    Configure dataset for model training
-
-    Parameters
-    ----------
-    adata
-        Dataset to be configured
-    prob_model
-        Probabilistic generative model used by the decoder,
-        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB"}``.
-    use_highly_variable
-        Whether to use highly variable features
-    use_layer
-        Data layer to use (key in ``adata.layers``)
-    use_rep
-        Data representation to use as the first encoder transformation
-        (key in ``adata.obsm``)
-    use_batch
-        Data batch to use (key in ``adata.obs``)
-    use_cell_type
-        Data cell type to use (key in ``adata.obs``)
-    use_dsc_weight
-        Discriminator sample weight to use (key in ``adata.obs``)
-    use_uid
-        Unique cell ID used to mark paired cells across multiple datasets
-        (key in ``adata.obsm``)
-
-    Note
-    -----
-    The ``use_rep`` option applies to encoder inputs, but not the decoders,
-    which are always fitted on data in the original space.
-    """
-    if config.ANNDATA_KEY in adata.uns:
-        configure_dataset.logger.warning(
-            "`configure_dataset` has already been called. "
-            "Previous configuration will be overwritten!"
-        )
-    data_config = {}
-    data_config["prob_model"] = prob_model
-    if use_highly_variable:
-        if "highly_variable" not in adata.var:
-            raise ValueError("Please mark highly variable features first!")
-        data_config["use_highly_variable"] = True
-        data_config["features"] = adata.var.query("highly_variable").index.to_numpy().tolist()
-    else:
-        data_config["use_highly_variable"] = False
-        data_config["features"] = adata.var_names.to_numpy().tolist()
-    if use_layer:
-        if use_layer not in adata.layers:
-            raise ValueError("Invalid `use_layer`!")
-        data_config["use_layer"] = use_layer
-    else:
-        data_config["use_layer"] = None
-    if use_rep:
-        if use_rep not in adata.obsm:
-            raise ValueError("Invalid `use_rep`!")
-        data_config["use_rep"] = use_rep
-        data_config["rep_dim"] = adata.obsm[use_rep].shape[1]
-    else:
-        data_config["use_rep"] = None
-        data_config["rep_dim"] = None
-    if use_batch:
-        if use_batch not in adata.obs:
-            raise ValueError("Invalid `use_batch`!")
-        data_config["use_batch"] = use_batch
-        data_config["batches"] = pd.Index(
-            adata.obs[use_batch]
-        ).dropna().drop_duplicates().sort_values().to_numpy()  # AnnData does not support saving pd.Index in uns
-    else:
-        data_config["use_batch"] = None
-        data_config["batches"] = None
-    if use_cell_type:
-        if use_cell_type not in adata.obs:
-            raise ValueError("Invalid `use_cell_type`!")
-        data_config["use_cell_type"] = use_cell_type
-        data_config["cell_types"] = pd.Index(
-            adata.obs[use_cell_type]
-        ).dropna().drop_duplicates().sort_values().to_numpy()  # AnnData does not support saving pd.Index in uns
-    else:
-        data_config["use_cell_type"] = None
-        data_config["cell_types"] = None
-    if use_dsc_weight:
-        if use_dsc_weight not in adata.obs:
-            raise ValueError("Invalid `use_dsc_weight`!")
-        data_config["use_dsc_weight"] = use_dsc_weight
-    else:
-        data_config["use_dsc_weight"] = None
-    if use_uid:
-        if use_uid not in adata.obs:
-            raise ValueError("Invalid `use_uid`!")
-        data_config["use_uid"] = use_uid
-    else:
-        data_config["use_uid"] = None
-    adata.uns[config.ANNDATA_KEY] = data_config
-
-
-@logged
 class SCGLUEModel(Model):
 
     r"""
@@ -1210,9 +664,9 @@ class SCGLUEModel(Model):
     Parameters
     ----------
     adatas
-        Datasets (indexed by domain name)
+        Datasets (indexed by modality name)
     vertices
-        Prior graph vertices (must cover feature names in all domains)
+        Guidance graph vertices (must cover feature names in all modalities)
     latent_dim
         Latent dimensionality
     h_depth
@@ -1222,7 +676,7 @@ class SCGLUEModel(Model):
     dropout
         Dropout rate
     shared_batches
-        Whether the same batches are shared across domains
+        Whether the same batches are shared across modalities
     random_seed
         Random seed
     """
@@ -1249,7 +703,7 @@ class SCGLUEModel(Model):
 
         g2v = sc.GraphEncoder(self.vertices.size, latent_dim)
         v2g = sc.GraphDecoder()
-        self.domains, idx, x2u, u2x, all_ct = {}, {}, {}, {}, set()
+        self.modalities, idx, x2u, u2x, all_ct = {}, {}, {}, {}, set()
         for k, adata in adatas.items():
             if config.ANNDATA_KEY not in adata.uns:
                 raise ValueError(
@@ -1264,7 +718,7 @@ class SCGLUEModel(Model):
                 )
             idx[k] = self.vertices.get_indexer(data_config["features"]).astype(np.int64)
             if idx[k].min() < 0:
-                raise ValueError("Not all domain features exist in the graph!")
+                raise ValueError("Not all modality features exist in the graph!")
             idx[k] = torch.as_tensor(idx[k])
             x2u[k] = _ENCODER_MAP[data_config["prob_model"]](
                 data_config["rep_dim"] or len(data_config["features"]), latent_dim,
@@ -1280,12 +734,12 @@ class SCGLUEModel(Model):
                 set() if data_config["cell_types"] is None
                 else data_config["cell_types"]
             )
-            self.domains[k] = data_config
+            self.modalities[k] = data_config
         all_ct = pd.Index(all_ct).sort_values()
-        for domain in self.domains.values():
-            domain["cell_types"] = all_ct
+        for modality in self.modalities.values():
+            modality["cell_types"] = all_ct
         if shared_batches:
-            all_batches = [domain["batches"] for domain in self.domains.values()]
+            all_batches = [modality["batches"] for modality in self.modalities.values()]
             ref_batch = all_batches[0]
             for batches in all_batches:
                 if not np.array_equal(batches, ref_batch):
@@ -1294,7 +748,7 @@ class SCGLUEModel(Model):
         else:
             du_n_batches = 0
         du = sc.Discriminator(
-            latent_dim, len(self.domains), n_batches=du_n_batches,
+            latent_dim, len(self.modalities), n_batches=du_n_batches,
             h_depth=h_depth, h_dim=h_dim, dropout=dropout
         )
         prior = sc.Prior()
@@ -1356,7 +810,7 @@ class SCGLUEModel(Model):
             lam_align: float = 0.05,
             lam_sup: float = 0.02,
             normalize_u: bool = False,
-            domain_weight: Optional[Mapping[str, float]] = None,
+            modality_weight: Optional[Mapping[str, float]] = None,
             lr: float = 2e-3, **kwargs
     ) -> None:
         r"""
@@ -1376,25 +830,24 @@ class SCGLUEModel(Model):
             Cell type supervision weight
         normalize_u
             Whether to L2 normalize cell embeddings before decoder
-        domain_weight
-            Relative domain weight (indexed by domain name)
+        modality_weight
+            Relative modality weight (indexed by modality name)
         lr
             Learning rate
         **kwargs
             Additional keyword arguments passed to trainer
         """
-        if domain_weight is None:
-            domain_weight = {k: 1.0 for k in self.net.keys}
+        if modality_weight is None:
+            modality_weight = {k: 1.0 for k in self.net.keys}
         super().compile(
             lam_data=lam_data, lam_kl=lam_kl,
             lam_graph=lam_graph, lam_align=lam_align, lam_sup=lam_sup,
-            normalize_u=normalize_u, domain_weight=domain_weight,
+            normalize_u=normalize_u, modality_weight=modality_weight,
             optim="RMSprop", lr=lr, **kwargs
         )
 
     def fit(  # pylint: disable=arguments-differ
             self, adatas: Mapping[str, AnnData], graph: nx.Graph,
-            edge_weight: str = "weight", edge_sign: str = "sign",
             neg_samples: int = 10, val_split: float = 0.1,
             data_batch_size: int = 128, graph_batch_size: int = AUTO,
             align_burnin: int = AUTO, safe_burnin: bool = True,
@@ -1408,13 +861,9 @@ class SCGLUEModel(Model):
         Parameters
         ----------
         adatas
-            Datasets (indexed by domain name)
+            Datasets (indexed by modality name)
         graph
-            Prior graph
-        edge_weight
-            Key of edge attribute for edge weight
-        edge_sign
-            Key of edge attribute for edge sign
+            Guidance graph
         neg_samples
             Number of negative samples for each edge
         val_split
@@ -1441,19 +890,16 @@ class SCGLUEModel(Model):
         """
         data = AnnDataset(
             [adatas[key] for key in self.net.keys],
-            [self.domains[key] for key in self.net.keys],
+            [self.modalities[key] for key in self.net.keys],
             mode="train"
         )
-        if not all(graph.has_edge(v, v) for v in graph.nodes):
-            self.logger.warning(
-                "Not all vertices contain self-loops! "
-                "Self-loops are recommended."
-            )
+        check_graph(
+            graph, adatas.values(),
+            cov="ignore", attr="error", loop="warn", sym="warn"
+        )
         graph = GraphDataset(
-            graph, self.vertices, edge_weight, edge_sign,
-            neg_samples=neg_samples,
-            weighted_sampling=True,
-            deemphasize_loops=True
+            graph, self.vertices, neg_samples=neg_samples,
+            weighted_sampling=True, deemphasize_loops=True
         )
 
         batch_per_epoch = data.size * (1 - val_split) / data_batch_size
@@ -1501,7 +947,6 @@ class SCGLUEModel(Model):
     @torch.no_grad()
     def get_losses(  # pylint: disable=arguments-differ
             self, adatas: Mapping[str, AnnData], graph: nx.Graph,
-            edge_weight: str = "weight", edge_sign: str = "sign",
             neg_samples: int = 10, data_batch_size: int = 128,
             graph_batch_size: int = AUTO
     ) -> Mapping[str, np.ndarray]:
@@ -1511,13 +956,9 @@ class SCGLUEModel(Model):
         Parameters
         ----------
         adatas
-            Datasets (indexed by domain name)
+            Datasets (indexed by modality name)
         graph
-            Prior graph
-        edge_weight
-            Key of edge attribute for edge weight
-        edge_sign
-            Key of edge attribute for edge sign
+            Guidance graph
         neg_samples
             Number of negative samples for each edge
         data_batch_size
@@ -1532,11 +973,11 @@ class SCGLUEModel(Model):
         """
         data = AnnDataset(
             [adatas[key] for key in self.net.keys],
-            [self.domains[key] for key in self.net.keys],
+            [self.modalities[key] for key in self.net.keys],
             mode="train"
         )
         graph = GraphDataset(
-            graph, self.vertices, edge_weight, edge_sign,
+            graph, self.vertices,
             neg_samples=neg_samples,
             weighted_sampling=True,
             deemphasize_loops=True
@@ -1552,9 +993,7 @@ class SCGLUEModel(Model):
 
     @torch.no_grad()
     def encode_graph(
-            self, graph: nx.Graph,
-            edge_weight: str = "weight", edge_sign: str = "sign",
-            n_sample: Optional[int] = None
+            self, graph: nx.Graph, n_sample: Optional[int] = None
     ) -> np.ndarray:
         r"""
         Compute graph (feature) embedding
@@ -1563,10 +1002,6 @@ class SCGLUEModel(Model):
         ----------
         graph
             Input graph
-        edge_weight
-            Key of edge attribute for edge weight
-        edge_sign
-            Key of edge attribute for edge sign
         n_sample
             Number of samples from the embedding distribution,
             by default ``None``, returns the mean of the embedding distribution.
@@ -1581,7 +1016,7 @@ class SCGLUEModel(Model):
             if ``n_sample`` is not ``None``.
         """
         self.net.eval()
-        graph = GraphDataset(graph, self.vertices, edge_weight, edge_sign)
+        graph = GraphDataset(graph, self.vertices)
         enorm = torch.as_tensor(
             normalize_edges(graph.eidx, graph.ewt),
             device=self.net.device
@@ -1600,14 +1035,14 @@ class SCGLUEModel(Model):
     def encode_data(
             self, key: str, adata: AnnData, batch_size: int = 128,
             n_sample: Optional[int] = None
-    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+    ) -> np.ndarray:
         r"""
         Compute data (cell) embedding
 
         Parameters
         ----------
         key
-            Domain key
+            Modality key
         adata
             Input dataset
         batch_size
@@ -1628,7 +1063,7 @@ class SCGLUEModel(Model):
         self.net.eval()
         encoder = self.net.x2u[key]
         data = AnnDataset(
-            [adata], [self.domains[key]],
+            [adata], [self.modalities[key]],
             mode="eval", getitem_size=batch_size
         )
         data_loader = DataLoader(
@@ -1638,10 +1073,10 @@ class SCGLUEModel(Model):
             persistent_workers=False
         )
         result = []
-        for x, xalt, *_ in data_loader:
+        for x, xrep, *_ in data_loader:
             u = encoder(
                 x.to(self.net.device, non_blocking=True),
-                xalt.to(self.net.device, non_blocking=True),
+                xrep.to(self.net.device, non_blocking=True),
                 lazy_normalizer=True
             )[0]
             if n_sample:
@@ -1654,7 +1089,6 @@ class SCGLUEModel(Model):
     def decode_data(
             self, source_key: str, target_key: str,
             adata: AnnData, graph: nx.Graph,
-            edge_weight: str = "weight", edge_sign: str = "sign",
             target_libsize: Optional[Union[float, np.ndarray]] = None,
             target_batch: Optional[np.ndarray] = None,
             batch_size: int = 128
@@ -1665,21 +1099,17 @@ class SCGLUEModel(Model):
         Parameters
         ----------
         source_key
-            Source domain key
+            Source modality key
         target_key
-            Target domain key
+            Target modality key
         adata
-            Source domain data
+            Source modality data
         graph
-            Prior graph
-        edge_weight
-            Key of edge attribute for edge weight
-        edge_sign
-            Key of edge attribute for edge sign
+            Guidance graph
         target_libsize
-            Target domain library size, by default 1.0
+            Target modality library size, by default 1.0
         target_batch
-            Target domain batch, by default batch 0
+            Target modality batch, by default batch 0
         batch_size
             Size of minibatches
 
@@ -1706,8 +1136,8 @@ class SCGLUEModel(Model):
             raise ValueError("`target_libsize` must have the same size as `adata`!")
         l = l.reshape((-1, 1))
 
-        use_batch = self.domains[target_key]["use_batch"]
-        batches = self.domains[target_key]["batches"]
+        use_batch = self.modalities[target_key]["use_batch"]
+        batches = self.modalities[target_key]["batches"]
         if use_batch and target_batch is not None:
             target_batch = np.asarray(target_batch)
             if target_batch.size != adata.shape[0]:
@@ -1721,7 +1151,7 @@ class SCGLUEModel(Model):
         net.eval()
 
         u = self.encode_data(source_key, adata, batch_size=batch_size)
-        v = self.encode_graph(graph, edge_weight=edge_weight, edge_sign=edge_sign)
+        v = self.encode_graph(graph)
         v = torch.as_tensor(v, device=device)
         v = v[getattr(net, f"{target_key}_idx")]
 
@@ -1742,47 +1172,18 @@ class SCGLUEModel(Model):
             result.append(decoder(u_, v, b_, l_).mean.detach().cpu())
         return torch.cat(result).numpy()
 
+    def upgrade(self) -> None:
+        if hasattr(self, "domains"):
+            self.logger.warning("Upgrading model generated by older versions...")
+            self.modalities = getattr(self, "domains")
+            delattr(self, "domains")
+
     def __repr__(self) -> str:
         return (
             f"SCGLUE model with the following network and trainer:\n\n"
             f"{repr(self.net)}\n\n"
             f"{repr(self.trainer)}\n"
         )
-
-
-@logged
-class IndSCGLUEModel(SCGLUEModel):
-
-    r"""
-    Independent GLUE model as a negative control where data reconstruction
-    is independent from feature embeddings
-
-    Parameters
-    ----------
-    adatas
-        Datasets (indexed by domain name)
-    vertices
-        Prior graph vertices (must cover feature names in all domains)
-    latent_dim
-        Latent dimensionality
-    h_depth
-        Hidden layer depth for encoder and discriminator
-    h_dim
-        Hidden layer dimensionality for encoder and discriminator
-    dropout
-        Dropout rate
-    shared_batches
-        Whether the same batches are shared across domains
-    random_seed
-        Random seed
-
-    Note
-    ----
-    Do **NOT** use!
-    """
-
-    NET_TYPE = IndSCGLUE
-    TRAINER_TYPE = IndSCGLUETrainer
 
 
 @logged
@@ -1794,9 +1195,9 @@ class PairedSCGLUEModel(SCGLUEModel):
     Parameters
     ----------
     adatas
-        Datasets (indexed by domain name)
+        Datasets (indexed by modality name)
     vertices
-        Prior graph vertices (must cover feature names in all domains)
+        Guidance graph vertices (must cover feature names in all modalities)
     latent_dim
         Latent dimensionality
     h_depth
@@ -1806,14 +1207,14 @@ class PairedSCGLUEModel(SCGLUEModel):
     dropout
         Dropout rate
     shared_batches
-        Whether the same batches are shared across domains
+        Whether the same batches are shared across modalities
     random_seed
         Random seed
     """
 
     TRAINER_TYPE = PairedSCGLUETrainer
 
-    def compile(  # pylint: disable=arguments-differ
+    def compile(  # pylint: disable=arguments-renamed
             self, lam_data: float = 1.0,
             lam_kl: float = 1.0,
             lam_graph: float = 0.02,
@@ -1823,7 +1224,7 @@ class PairedSCGLUEModel(SCGLUEModel):
             lam_real_cross: float = 0.02,
             lam_cos: float = 0.02,
             normalize_u: bool = False,
-            domain_weight: Optional[Mapping[str, float]] = None,
+            modality_weight: Optional[Mapping[str, float]] = None,
             lr: float = 2e-3, **kwargs
     ) -> None:
         r"""
@@ -1849,8 +1250,8 @@ class PairedSCGLUEModel(SCGLUEModel):
             Cosine similarity weight
         normalize_u
             Whether to L2 normalize cell embeddings before decoder
-        domain_weight
-            Relative domain weight (indexed by domain name)
+        modality_weight
+            Relative modality weight (indexed by modality name)
         lr
             Learning rate
         """
@@ -1858,6 +1259,6 @@ class PairedSCGLUEModel(SCGLUEModel):
             lam_data=lam_data, lam_kl=lam_kl,
             lam_graph=lam_graph, lam_align=lam_align, lam_sup=lam_sup,
             lam_joint_cross=lam_joint_cross, lam_real_cross=lam_real_cross,
-            lam_cos=lam_cos, normalize_u=normalize_u, domain_weight=domain_weight,
+            lam_cos=lam_cos, normalize_u=normalize_u, modality_weight=modality_weight,
             lr=lr, **kwargs
         )

@@ -5,8 +5,9 @@ Genomics operations
 import collections
 import os
 import re
+from ast import literal_eval
 from functools import reduce
-from itertools import chain
+from itertools import chain, product
 from operator import add
 from typing import Any, Callable, List, Mapping, Optional, Union
 
@@ -14,15 +15,19 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import pybedtools
+import scipy.sparse
+import scipy.stats
 from anndata import AnnData
+from networkx.algorithms.bipartite import biadjacency_matrix
 from pybedtools import BedTool
 from pybedtools.cbedtools import Interval
 from statsmodels.stats.multitest import fdrcorrection
+from tqdm.auto import tqdm
 
 from .check import check_deps
 from .graph import compose_multigraph, reachable_vertices
 from .typehint import RandomState
-from .utils import ConstrainedDataFrame, logged, smart_tqdm, get_rs
+from .utils import ConstrainedDataFrame, logged, get_rs
 
 
 class Bed(ConstrainedDataFrame):
@@ -420,7 +425,7 @@ def window_graph(
 
     attr_fn = attr_fn or (lambda l, r, d: {})
     if pbar_total is not None:
-        left = smart_tqdm(left, total=pbar_total)
+        left = tqdm(left, total=pbar_total, desc="window_graph")
     graph = nx.MultiDiGraph()
     window = collections.OrderedDict()  # Used as ordered set
     for l in left:
@@ -465,7 +470,7 @@ def dist_power_decay(x: int) -> float:
 
 
 @logged
-def rna_anchored_prior_graph(
+def rna_anchored_guidance_graph(
     rna: AnnData, *others: AnnData,
     gene_region: str = "combined", promoter_len: int = 2000,
     extend_range: int = 0, extend_fn: Callable[[int], float] = dist_power_decay,
@@ -473,7 +478,7 @@ def rna_anchored_prior_graph(
     corrupt_rate: float = 0.0, random_state: RandomState = None
 ) -> nx.MultiDiGraph:
     r"""
-    Build prior regulatory graph anchored on RNA genes
+    Build guidance graph anchored on RNA genes
 
     Parameters
     ----------
@@ -512,7 +517,7 @@ def rna_anchored_prior_graph(
     ----
     In this function, features in the same dataset can only connect to
     anchor genes via the same edge sign. For more flexibility, please
-    construct the prior graph manually.
+    construct the guidance graph manually.
     """
     signs = signs or [1] * len(others)
     if len(others) != len(signs):
@@ -538,7 +543,7 @@ def rna_anchored_prior_graph(
 
     corrupt_num = round(corrupt_rate * graph.number_of_edges())
     if corrupt_num:
-        rna_anchored_prior_graph.logger.warning("Corrupting prior graph!")
+        rna_anchored_guidance_graph.logger.warning("Corrupting guidance graph!")
         rs = get_rs(random_state)
         rna_var_names = rna.var_names.tolist()
         other_var_names = reduce(add, [other.var_names.tolist() for other in others])
@@ -614,6 +619,9 @@ def regulatory_inference(
         raise ValueError("All feature embeddings must have the same number of rows!")
     if n_features.pop() != features.shape[0]:
         raise ValueError("Feature embeddings do not match the number of feature names!")
+    node_idx = features.get_indexer(skeleton.nodes)
+    features = features[node_idx]
+    feature_embeddings = [item[node_idx] for item in feature_embeddings]
 
     rs = get_rs(random_state)
     vperm = np.stack([rs.permutation(item) for item in feature_embeddings], axis=1)
@@ -626,7 +634,7 @@ def regulatory_inference(
     target = features.get_indexer(edgelist["target"])
     fg, bg = [], []
 
-    for s, t in smart_tqdm(zip(source, target), total=skeleton.number_of_edges()):
+    for s, t in tqdm(zip(source, target), total=skeleton.number_of_edges(), desc="regulatory_inference"):
         fg.append((v[s] * v[t]).sum(axis=1).mean())
         bg.append((vperm[s] * vperm[t]).sum(axis=1))
     edgelist["score"] = fg
@@ -643,6 +651,200 @@ def regulatory_inference(
         raise ValueError("Unrecognized `alternative`!")
     edgelist["qval"] = fdrcorrection(edgelist["pval"])[1]
     return nx.from_pandas_edgelist(edgelist, edge_attr=True, create_using=type(skeleton))
+
+
+def write_links(
+    graph: nx.Graph, source: Bed, target: Bed, file: os.PathLike,
+    keep_attrs: Optional[List[str]] = None
+) -> None:
+    r"""
+    Export regulatory graph into a links file
+
+    Parameters
+    ----------
+    graph
+        Regulatory graph
+    source
+        Genomic coordinates of source nodes
+    target
+        Genomic coordinates of target nodes
+    file
+        Output file
+    keep_attrs
+        A list of attributes to keep for each link
+    """
+    nx.to_pandas_edgelist(
+        graph
+    ).merge(
+        source.df.iloc[:, :4], how="left", left_on="source", right_on="name"
+    ).merge(
+        target.df.iloc[:, :4], how="left", left_on="target", right_on="name"
+    ).loc[:, [
+        "chrom_x", "chromStart_x", "chromEnd_x",
+        "chrom_y", "chromStart_y", "chromEnd_y",
+        *(keep_attrs or [])
+    ]].to_csv(file, sep="\t", index=False, header=False)
+
+
+def cis_regulatory_ranking(
+        gene2region: nx.Graph, region2tf: nx.Graph,
+        genes: List[str], regions: List[str], tfs: List[str],
+        region_lens: Optional[List[int]] = None, n_samples: int = 1000,
+        random_state: RandomState = None
+) -> pd.DataFrame:
+    r"""
+    Generate cis-regulatory ranking between genes and transcription factors
+
+    Parameters
+    ----------
+    gene2region
+        A graph connecting genes to cis-regulatory regions
+    region2tf
+        A graph connecting cis-regulatory regions to transcription factors
+    genes
+        A list of genes
+    tfs
+        A list of transcription factors
+    regions
+        A list of cis-regulatory regions
+    region_lens
+        Lengths of cis-regulatory regions
+        (if not provided, it is assumed that all regions have the same length)
+    n_samples
+        Number of random samples used to evaluate regulatory enrichment
+        (setting this to 0 disables enrichment evaluation)
+    random_state
+        Random state
+
+    Returns
+    -------
+    gene2tf_rank
+        Cis regulatory ranking between genes and transcription factors
+    """
+    gene2region = biadjacency_matrix(gene2region, genes, regions, dtype=np.int16, weight=None)
+    region2tf = biadjacency_matrix(region2tf, regions, tfs, dtype=np.int16, weight=None)
+
+    if n_samples:
+        region_lens = [1] * len(regions) if region_lens is None else region_lens
+        if len(region_lens) != len(regions):
+            raise ValueError("`region_lens` must have the same length as `regions`!")
+        region_bins = pd.qcut(region_lens, min(len(set(region_lens)), 500), duplicates="drop")
+        region_bins_lut = pd.RangeIndex(region_bins.size).groupby(region_bins)
+
+        rs = get_rs(random_state)
+        row, col_rand, data = [], [], []
+        lil = gene2region.tolil()
+        for r, (c, d) in tqdm(
+                enumerate(zip(lil.rows, lil.data)),
+                total=len(lil.rows), desc="cis_reg_ranking.sampling"
+        ):
+            if not c:  # Empty row
+                continue
+            row.append(np.ones_like(c) * r)
+            col_rand.append(np.stack([
+                rs.choice(region_bins_lut[region_bins[c_]], n_samples, replace=True)
+                for c_ in c
+            ], axis=0))
+            data.append(d)
+        row = np.concatenate(row)
+        col_rand = np.concatenate(col_rand)
+        data = np.concatenate(data)
+
+        gene2tf_obs = (gene2region @ region2tf).toarray()
+        gene2tf_rand = np.empty((len(genes), len(tfs), n_samples), dtype=np.int16)
+        for k in tqdm(range(n_samples), desc="cis_reg_ranking.mapping"):
+            gene2region_rand = scipy.sparse.coo_matrix((
+                data, (row, col_rand[:, k])
+            ), shape=(len(genes), len(regions)))
+            gene2tf_rand[:, :, k] = (gene2region_rand @ region2tf).toarray()
+        gene2tf_rand.sort(axis=2)
+
+        gene2tf_enrich = np.empty_like(gene2tf_obs)
+        for i, j in product(range(len(genes)), range(len(tfs))):
+            if gene2tf_obs[i, j] == 0:
+                gene2tf_enrich[i, j] = 0
+                continue
+            gene2tf_enrich[i, j] = np.searchsorted(
+                gene2tf_rand[i, j, :], gene2tf_obs[i, j], side="right"
+            )
+    else:
+        gene2tf_enrich = (gene2region @ region2tf).toarray()
+
+    return pd.DataFrame(
+        scipy.stats.rankdata(-gene2tf_enrich, axis=0),
+        index=genes, columns=tfs
+    )
+
+
+def write_scenic_feather(
+        gene2tf_rank: pd.DataFrame, feather: os.PathLike,
+        version: int = 2
+) -> None:
+    r"""
+    Write cis-regulatory ranking to a SCENIC-compatible feather file
+
+    Parameters
+    ----------
+    gene2tf_rank
+        Cis regulatory ranking between genes and transcription factors,
+        as generated by :func:`cis_reg_ranking`
+    feather
+        Path to the output feather file
+    version
+        SCENIC feather version
+    """
+    if version not in {1, 2}:
+        raise ValueError("Unrecognized SCENIC feather version!")
+    if version == 2:
+        suffix = ".genes_vs_tracks.rankings.feather"
+        if not str(feather).endswith(suffix):
+            raise ValueError(f"Feather file name must end with `{suffix}`!")
+    tf2gene_rank = gene2tf_rank.T
+    tf2gene_rank = tf2gene_rank.loc[
+        np.unique(tf2gene_rank.index), np.unique(tf2gene_rank.columns)
+    ].astype(np.int16)
+    tf2gene_rank.index.name = "features" if version == 1 else "tracks"
+    tf2gene_rank.columns.name = None
+    columns = tf2gene_rank.columns.tolist()
+    tf2gene_rank = tf2gene_rank.reset_index()
+    if version == 2:
+        tf2gene_rank = tf2gene_rank.loc[:, [*columns, "tracks"]]
+    tf2gene_rank.to_feather(feather)
+
+
+def read_ctx_grn(file: os.PathLike) -> nx.DiGraph:
+    r"""
+    Read pruned TF-target GRN as generated by ``pyscenic ctx``
+
+    Parameters
+    ----------
+    file
+        Input file (.csv)
+
+    Returns
+    -------
+    grn
+        Pruned TF-target GRN
+
+    Note
+    ----
+    Node attribute "type" can be used to distinguish TFs and genes
+    """
+    df = pd.read_csv(
+        file, header=None, skiprows=3,
+        usecols=[0, 8], names=["TF", "targets"]
+    )
+    df["targets"] = df["targets"].map(lambda x: set(i[0] for i in literal_eval(x)))
+    df = df.groupby("TF").aggregate({"targets": lambda x: reduce(set.union, x)})
+    grn = nx.DiGraph([
+        (tf, target)
+        for tf, row in df.iterrows()
+        for target in row["targets"]]
+    )
+    nx.set_node_attributes(grn, "target", name="type")
+    for tf in df.index:
+        grn.nodes[tf]["target"] = "TF"
+    return grn
 
 
 def get_chr_len_from_fai(fai: os.PathLike) -> Mapping[str, int]:

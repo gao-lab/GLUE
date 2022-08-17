@@ -47,14 +47,14 @@ __pycache__
 *Untitled*
 .deprecated
 reports
-conda
+conda*/
 cov.xml
 dask-worker-space
 objectdb
 packrat/lib
 packrat/lib*/
 packrat/src/
-Temp
+temp
 tmp
 tools
 dist

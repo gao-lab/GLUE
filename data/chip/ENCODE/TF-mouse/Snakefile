@@ -21,10 +21,8 @@ if config["metadata_query"]:
 metadata = metadata.query(
     "`File format` == 'bed narrowPeak' & "
     "`Output type` == 'conservative IDR thresholded peaks'"
-).groupby("Experiment target").apply(
-    prioritize_assembly
-).reset_index(level="Experiment target", drop=True)
-metadata["Experiment target"] = metadata["Experiment target"].map(lambda x: re.sub(r"-human$", "", x))
+).groupby("Experiment target").apply(prioritize_assembly)
+metadata["Experiment target"] = metadata["Experiment target"].map(lambda x: re.sub(r"-mouse$", "", x))
 
 
 rule all:
@@ -39,6 +37,14 @@ rule link:
     shell:
         "ln -s {input} {output}"
 
+rule rename:
+    input:
+        f"combined-{config['preferred_assembly']}-human-names.bed.gz"
+    output:
+        f"combined-{config['preferred_assembly']}.bed.gz"
+    shell:
+        "python rename.py -i {input} -o {output}"
+
 rule combine:
     input:
         expand(
@@ -46,7 +52,7 @@ rule combine:
             target=np.unique(metadata["Experiment target"])
         )
     output:
-        f"combined-{config['preferred_assembly']}.bed.gz"
+        f"combined-{config['preferred_assembly']}-human-names.bed.gz"
     shell:
         "zcat {input} | sort -k1,1 -k2,2n | gzip > {output}"
 
