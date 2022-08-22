@@ -728,9 +728,12 @@ class SCCLUETrainer(Trainer):
                     # adversarial learning as u, so it is unsure whether that's
                     # going to work.
                 ).log_prob(x[k][m]).mean()
-                for i, (k, m) in enumerate(zip(net.keys, pmsk))
+                for i, (k, m) in enumerate(zip(net.keys, pmsk)) if m.sum()
             }  # Decode the usamp_mean to all modalities
-            joint_cross_loss = sum(self.modality_weight[k] * x_joint_cross_nll[k] for k in net.keys)
+            joint_cross_loss = sum(
+                self.modality_weight[k] * nll
+                for k, nll in x_joint_cross_nll.items()
+            )
         else:
             joint_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -739,13 +742,16 @@ class SCCLUETrainer(Trainer):
             for k in net.keys:
                 xk_real_cross_nll = 0
                 for i, (k_target, m) in enumerate(zip(net.keys, pmsk)):
-                    if k != k_target:
+                    if k != k_target and m.sum():
                         xk_real_cross_nll += -net.u2x[k_target](
                             usamp_split[k][i, m], xbch[k_target][m],
                             None if l[k] is None else l[k][m, i]
                         ).log_prob(x[k_target][m]).mean()
                 x_real_cross_nll[k] = xk_real_cross_nll
-            real_cross_loss = sum(self.modality_weight[k] * x_real_cross_nll[k] for k in net.keys)
+            real_cross_loss = sum(
+                self.modality_weight[k] * nll
+                for k, nll in x_real_cross_nll.items()
+            )
         else:
             real_cross_loss = torch.as_tensor(0.0, device=net.device)
 
@@ -754,7 +760,7 @@ class SCCLUETrainer(Trainer):
                 1 - F.cosine_similarity(
                     usamp_stack[i, m], usamp_mean[m]
                 ).mean()
-                for i, m in enumerate(pmsk)
+                for i, m in enumerate(pmsk) if m.sum()
             )
         else:
             cos_loss = torch.as_tensor(0.0, device=net.device)

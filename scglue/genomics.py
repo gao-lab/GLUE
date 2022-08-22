@@ -584,6 +584,28 @@ def rna_anchored_guidance_graph(
     return graph
 
 
+@logged
+def rna_anchored_prior_graph(
+    rna: AnnData, *others: AnnData,
+    gene_region: str = "combined", promoter_len: int = 2000,
+    extend_range: int = 0, extend_fn: Callable[[int], float] = dist_power_decay,
+    signs: Optional[List[int]] = None, propagate_highly_variable: bool = True,
+    corrupt_rate: float = 0.0, random_state: RandomState = None
+) -> nx.MultiDiGraph:  # pragma: no cover
+    r"""
+    Deprecated, please use :func:`rna_anchored_guidance_graph` instead
+    """
+    rna_anchored_prior_graph.logger.warning(
+        "Deprecated, please use `rna_anchored_guidance_graph` instead!"
+    )
+    return rna_anchored_guidance_graph(
+        rna, *others, gene_region=gene_region, promoter_len=promoter_len,
+        extend_range=extend_range, extend_fn=extend_fn, signs=signs,
+        propagate_highly_variable=propagate_highly_variable,
+        corrupt_rate=corrupt_rate, random_state=random_state
+    )
+
+
 def regulatory_inference(
         features: pd.Index, feature_embeddings: Union[np.ndarray, List[np.ndarray]],
         skeleton: nx.Graph, alternative: str = "two.sided",

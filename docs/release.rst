@@ -1,6 +1,15 @@
 Release notes
 =============
 
+v0.3.1
+------
+
+Bug fixes:
+
+- Fixed NaN loss in `PairedSCGLUETrainer <api/scglue.models.scglue.PairedSCGLUETrainer.rst>`__.
+- Restored `rna_anchored_prior_graph <api/scglue.genomics.rna_anchored_prior_graph.rst>`__ as a deprecated function
+  (to be replaced by `rna_anchored_guidance_graph <api/scglue.genomics.rna_anchored_guidance_graph.rst>`__).
+
 v0.3.0
 ------
 

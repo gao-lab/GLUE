@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scglue 0.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-12 20:21+0800\n"
+"POT-Creation-Date: 2022-08-22 14:24+0800\n"
 "Last-Translator: Zhi-Jie Cao <caozj@mail.cbi.pku.edu.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -183,8 +183,8 @@ msgid ""
 "construction>`__), so the inferred regulatory connections are limited to "
 "the proximal promoter and gene body regions."
 msgstr ""
-"需要注意的是，在本教程中，指导图简单地使用了基因组重叠（请参考 `第一步 <preprocessing.ipynb#图构建>`__），"
-"所以推断的调控关系也仅限于近端启动子和基因本体区。"
+"需要注意的是，在本教程中，指导图简单地使用了基因组重叠（请参考 `第一步 "
+"<preprocessing.ipynb#图构建>`__），所以推断的调控关系也仅限于近端启动子和基因本体区。"
 
 #: ../../reginf.ipynb:424
 msgid ""
@@ -245,19 +245,19 @@ msgid "JASPAR motif hits:"
 msgstr "JASPAR motif结合："
 
 #: ../../reginf.ipynb:446
-msgid "http://download.gao-lab.org/GLUE/cisreg/hg19-JASPAR2022-merged.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/JASPAR2022-hg19.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:447
-msgid "http://download.gao-lab.org/GLUE/cisreg/hg38-JASPAR2022-merged.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/JASPAR2022-hg38.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:448
-msgid "http://download.gao-lab.org/GLUE/cisreg/mm9-JASPAR2022-merged.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/JASPAR2022-mm9.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:449
-msgid "http://download.gao-lab.org/GLUE/cisreg/mm10-JASPAR2022-merged.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/JASPAR2022-mm10.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:451
@@ -265,25 +265,19 @@ msgid "ENCODE TF ChIP-seq:"
 msgstr ""
 
 #: ../../reginf.ipynb:453
-msgid ""
-"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
-"hg38.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-hg38.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:454
-msgid ""
-"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
-"hg19.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-hg19.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:455
-msgid ""
-"http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-"
-"mm10.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-mm10.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:456
-msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-combined-mm9.bed.gz"
+msgid "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-ChIP-mm9.bed.gz"
 msgstr ""
 
 #: ../../reginf.ipynb:458
@@ -321,8 +315,8 @@ msgid ""
 "scRNA-seq data as a ``loom`` file (with only highly-variable genes and "
 "TFs). We also need to save the list of TFs as a separate ``txt`` file."
 msgstr ""
-"由于pySCENIC CLI使用的是 ``loom`` 文件作为输入，我们需要将scRNA-"
-"seq数据保存为一个 ``loom`` 文件（只包含高可变基因和TF），我们也需要将TF列表保存为一个单独的 ``txt`` 文件。"
+"由于pySCENIC CLI使用的是 ``loom`` 文件作为输入，我们需要将scRNA-seq数据保存为一个 ``loom`` "
+"文件（只包含高可变基因和TF），我们也需要将TF列表保存为一个单独的 ``txt`` 文件。"
 
 #: ../../reginf.ipynb:762
 msgid ""
@@ -472,8 +466,8 @@ msgid ""
 "using the pySCENIC command ``pyscenic ctx`` (here ``rank_threshold`` was "
 "scaled down according to the number of highly-variable genes):"
 msgstr ""
-"我们现在可以使用pySCENIC命令 ``pyscenic "
-"ctx`` 来修剪共表达网络（这里 ``rank_threshold`` 根据高可变基因的数量等比缩小）："
+"我们现在可以使用pySCENIC命令 ``pyscenic ctx`` 来修剪共表达网络（这里 ``rank_threshold`` "
+"根据高可变基因的数量等比缩小）："
 
 #: ../../reginf.ipynb:1648
 msgid ""
@@ -498,8 +492,8 @@ msgid ""
 "softwares like `Cytoscape <https://cytoscape.org/>`__ and `Gephi "
 "<https://gephi.org/>`__ for more customization."
 msgstr ""
-"您也可以将此图（比如以 ``graphml`` 格式）导出到诸如 `Cytoscape <https://cytoscape.org/>`__ 和 "
-"`Gephi <https://gephi.org/>`__ 等其他软件以进行更多的自定义调整。"
+"您也可以将此图（比如以 ``graphml`` 格式）导出到诸如 `Cytoscape <https://cytoscape.org/>`__ 和"
+" `Gephi <https://gephi.org/>`__ 等其他软件以进行更多的自定义调整。"
 
 #: ../../reginf.ipynb:1730
 msgid ""
@@ -524,3 +518,35 @@ msgid ""
 "Increase the number of highly-variable genes (e.g., to 4000 or 6000) to "
 "incorporate more genes into the analysis."
 msgstr "增加高可变基因数（比如增加到4000或6000）以将更多基因纳入到分析当中。"
+
+#~ msgid "http://download.gao-lab.org/GLUE/cisreg/hg19-JASPAR2022-merged.bed.gz"
+#~ msgstr ""
+
+#~ msgid "http://download.gao-lab.org/GLUE/cisreg/hg38-JASPAR2022-merged.bed.gz"
+#~ msgstr ""
+
+#~ msgid "http://download.gao-lab.org/GLUE/cisreg/mm9-JASPAR2022-merged.bed.gz"
+#~ msgstr ""
+
+#~ msgid "http://download.gao-lab.org/GLUE/cisreg/mm10-JASPAR2022-merged.bed.gz"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-"
+#~ "ChIP-combined-hg38.bed.gz"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-"
+#~ "ChIP-combined-hg19.bed.gz"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-"
+#~ "ChIP-combined-mm10.bed.gz"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "http://download.gao-lab.org/GLUE/cisreg/ENCODE-TF-"
+#~ "ChIP-combined-mm9.bed.gz"
+#~ msgstr ""
