@@ -1,6 +1,13 @@
 Release notes
 =============
 
+v0.3.2
+------
+
+Bug fixes:
+
+- Fixed "real_cross" loss in `PairedSCGLUETrainer <api/scglue.models.scglue.PairedSCGLUETrainer.rst>`__ and `SCCLUETrainer <api/scglue.models.scclue.SCCLUETrainer>`__.
+
 v0.3.1
 ------
 

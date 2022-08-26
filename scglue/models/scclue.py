@@ -739,15 +739,18 @@ class SCCLUETrainer(Trainer):
 
         if self.lam_real_cross:
             x_real_cross_nll = {}
-            for k in net.keys:
-                xk_real_cross_nll = 0
-                for i, (k_target, m) in enumerate(zip(net.keys, pmsk)):
-                    if k != k_target and m.sum():
-                        xk_real_cross_nll += -net.u2x[k_target](
-                            usamp_split[k][i, m], xbch[k_target][m],
-                            None if l[k] is None else l[k][m, i]
-                        ).log_prob(x[k_target][m]).mean()
-                x_real_cross_nll[k] = xk_real_cross_nll
+            for i, (k_tgt, m_tgt) in enumerate(zip(net.keys, pmsk)):
+                x_tgt_real_cross_nll = torch.as_tensor(0.0, device=net.device)
+                for k_src, m_src in zip(net.keys, pmsk):
+                    if k_src == k_tgt:
+                        continue
+                    m = m_src & m_tgt
+                    if m.sum():
+                        x_tgt_real_cross_nll += -net.u2x[k_tgt](
+                            usamp_split[k_src][i, m], xbch[k_tgt][m],
+                            None if l[k_src] is None else l[k_src][m, i]
+                        ).log_prob(x[k_tgt][m]).mean()
+                x_real_cross_nll[k_tgt] = x_tgt_real_cross_nll
             real_cross_loss = sum(
                 self.modality_weight[k] * nll
                 for k, nll in x_real_cross_nll.items()
