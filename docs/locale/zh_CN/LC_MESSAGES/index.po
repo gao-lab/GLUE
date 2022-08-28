@@ -20,7 +20,7 @@ msgstr "目录："
 
 #: ../../index.rst:2
 msgid "Welcome to scglue's documentation!"
-msgstr "欢迎来到scglue的使用手册！"
+msgstr "scglue官方中文文档"
 
 #: ../../index.rst:-1
 msgid "GLUE icon"
