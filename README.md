@@ -1,11 +1,12 @@
 # GLUE (Graph-Linked Unified Embedding)
 
-[![license-badge](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Stars](https://img.shields.io/github/stars/gao-lab/GLUE?logo=GitHub&color=yellow)](https://github.com/gao-lab/GLUE/stargazers)
 [![pypi-badge](https://img.shields.io/pypi/v/scglue)](https://pypi.org/project/scglue)
 [![conda-badge](https://anaconda.org/bioconda/scglue/badges/version.svg)](https://anaconda.org/bioconda/scglue)
 [![docs-badge](https://readthedocs.org/projects/scglue/badge/?version=latest)](https://scglue.readthedocs.io/en/latest/?badge=latest)
 [![build-badge](https://github.com/gao-lab/GLUE/actions/workflows/build.yml/badge.svg)](https://github.com/gao-lab/GLUE/actions/workflows/build.yml)
 [![coverage-badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Jeff1995/e704b2f886ff6a37477311b90fdf7efa/raw/coverage.json)](https://github.com/gao-lab/GLUE/actions/workflows/build.yml)
+[![license-badge](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Graph-linked unified embedding for single-cell multi-omics data integration
 
@@ -54,6 +55,8 @@ pip install scglue
 
 Please checkout the documentations and tutorials at
 [scglue.readthedocs.io](https://scglue.readthedocs.io).
+
+A Chinese version is also available [here](https://scglue.readthedocs.io/zh_CN/latest/).
 
 ## Development
 

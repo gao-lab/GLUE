@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: scglue 0.2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 10:12+0800\n"
+"POT-Creation-Date: 2022-08-28 14:24+0800\n"
 "Last-Translator: Pei-Wen Ji <jipw@mail.cbi.pku.edu.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: ../../index.rst:23
+#: ../../index.rst:25
 msgid "Contents:"
 msgstr "目录："
 
@@ -77,14 +77,23 @@ msgstr ""
 "关于 GLUE 框架的更多细节，请查看我们的 `论文 "
 "<https://doi.org/10.1038/s41587-022-01284-4>`__。"
 
-#: ../../index.rst:36
+#: ../../index.rst:23
+msgid ""
+"For a Chinese version of this documentation, please visit "
+"`https://scglue.readthedocs.io/zh_CN/latest/ "
+"<https://scglue.readthedocs.io/zh_CN/latest/>`__."
+msgstr ""
+"如果要查看本文档的英文版本，请访问 `https://scglue.readthedocs.io "
+"<https://scglue.readthedocs.io>`__。"
+
+#: ../../index.rst:38
 msgid "Indices and tables"
 msgstr "索引和表格"
 
-#: ../../index.rst:38
+#: ../../index.rst:40
 msgid ":ref:`genindex`"
 msgstr ""
 
-#: ../../index.rst:39
+#: ../../index.rst:41
 msgid ":ref:`modindex`"
 msgstr ""

@@ -27,7 +27,7 @@ New features:
 
 Enhancements:
 
-- Modularized `scglue.dx.integration_consistency <api/scglue.dx.integration_consistency.rst>`__ to allow for non-raw-count input (Resolves `#30 <https://github.com/gao-lab/GLUE/issues/30>`__).
+- Modularized `scglue.models.integration_consistency <api/scglue.models.dx.integration_consistency.rst>`__ to allow for non-raw-count input (Resolves `#30 <https://github.com/gao-lab/GLUE/issues/30>`__).
 - Added documentation translation in Chinese.
 
 v0.2.3

@@ -93,12 +93,12 @@ msgstr "增强功能："
 
 #: ../../release.rst:30
 msgid ""
-"Modularized `scglue.dx.integration_consistency "
-"<api/scglue.dx.integration_consistency.rst>`__ to allow for non-raw-count"
+"Modularized `scglue.models.integration_consistency "
+"<api/scglue.models.dx.integration_consistency.rst>`__ to allow for non-raw-count"
 " input (Resolves `#30 <https://github.com/gao-lab/GLUE/issues/30>`__)."
 msgstr ""
-"将 `scglue.dx.integration_consistency "
-"<api/scglue.dx.integration_consistency.rst>`__ 函数模块化以支持非原始计数的输入（解决了 `#30 "
+"将 `scglue.models.integration_consistency "
+"<api/scglue.models.dx.integration_consistency.rst>`__ 函数模块化以支持非原始计数的输入（解决了 `#30 "
 "<https://github.com/gao-lab/GLUE/issues/30>`__）。"
 
 #: ../../release.rst:31

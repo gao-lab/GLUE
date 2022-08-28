@@ -1,3 +1,4 @@
-FROM continuumio/miniconda3
-RUN conda install -c conda-forge -c bioconda -y faiss-cpu pytorch-cpu plotly scglue
-RUN conda clean -a -y
+FROM mambaorg/micromamba
+RUN micromamba install -y -n base -c conda-forge -c bioconda \
+    faiss-cpu pytorch-cpu plotly scglue && \
+    micromamba clean -y -a

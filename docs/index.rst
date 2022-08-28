@@ -20,6 +20,8 @@ To get started with ``scglue``, check out the `installation guide <install.rst>`
 
 For more details about the GLUE framework, please check out our `publication <https://doi.org/10.1038/s41587-022-01284-4>`__.
 
+For a Chinese version of this documentation, please visit `https://scglue.readthedocs.io/zh_CN/latest/ <https://scglue.readthedocs.io/zh_CN/latest/>`__.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
