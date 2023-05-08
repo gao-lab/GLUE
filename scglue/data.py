@@ -129,7 +129,7 @@ def get_gene_annotation(
         pd.DataFrame(gtf.to_bed(name=gtf_by)),
         pd.DataFrame(gtf).drop(columns=genomics.Gtf.COLUMNS)  # Only use the splitted attributes
     ], axis=1).set_index(gtf_by).reindex(var_by).set_index(adata.var.index)
-    adata.var = pd.concat([adata.var, merge_df], axis=1)
+    adata.var = adata.var.assign(**merge_df)
 
 
 def aggregate_obs(
