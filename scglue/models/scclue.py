@@ -597,12 +597,21 @@ class SCCLUETrainer(Trainer):
         self.modality_weight = {k: v / normalizer for k, v in modality_weight.items()}
 
         self.lr = lr
-        self.vae_optim = getattr(torch.optim, optim)(
-            chain(
-                self.net.x2u.parameters(),
-                self.net.u2x.parameters()
-            ), lr=self.lr, **kwargs
-        )
+        if self.net.u2c:
+            self.vae_optim = getattr(torch.optim, optim)(
+                itertools.chain(
+                    self.net.x2u.parameters(),
+                    self.net.u2x.parameters(),
+                    self.net.u2c.parameters()
+                ), lr=self.lr, **kwargs
+            )
+        else:
+            self.vae_optim = getattr(torch.optim, optim)(
+                itertools.chain(
+                    self.net.x2u.parameters(),
+                    self.net.u2x.parameters()
+                ), lr=self.lr, **kwargs
+            )
         self.dsc_optim = getattr(torch.optim, optim)(
             self.net.du.parameters(), lr=self.lr, **kwargs
         )
