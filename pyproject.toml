@@ -55,7 +55,7 @@ dependencies = [
 
 [project.optional-dependencies]
 doc = [
-    "sphinx",
+    "sphinx<7",
     "sphinx-autodoc-typehints",
     "sphinx-copybutton",
     "sphinx-intl",
