@@ -204,7 +204,7 @@ class SCGLUETrainer(GLUETrainer):
         if net.u2c:
             self.required_losses.append("sup_loss")
             self.vae_optim = getattr(torch.optim, optim)(
-                itertools.chain(
+                chain(
                     self.net.g2v.parameters(),
                     self.net.v2g.parameters(),
                     self.net.x2u.parameters(),
