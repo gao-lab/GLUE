@@ -599,7 +599,7 @@ class SCCLUETrainer(Trainer):
         self.lr = lr
         if self.net.u2c:
             self.vae_optim = getattr(torch.optim, optim)(
-                itertools.chain(
+                chain(
                     self.net.x2u.parameters(),
                     self.net.u2x.parameters(),
                     self.net.u2c.parameters()
@@ -607,7 +607,7 @@ class SCCLUETrainer(Trainer):
             )
         else:
             self.vae_optim = getattr(torch.optim, optim)(
-                itertools.chain(
+                chain(
                     self.net.x2u.parameters(),
                     self.net.u2x.parameters()
                 ), lr=self.lr, **kwargs
