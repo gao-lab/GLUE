@@ -10,10 +10,14 @@ import sys
 from collections import defaultdict
 from multiprocessing import Process
 from typing import Any, List, Mapping, Optional
+from warnings import warn
 
+from scipy.sparse import issparse, csc_matrix, csr_matrix
+from anndata import AnnData
 import numpy as np
 import pandas as pd
 import torch
+import networkx as nx
 from pybedtools.helpers import set_bedtools_path
 
 from .typehint import RandomState, T
@@ -671,3 +675,62 @@ def run_command(
             f"{executable} exited with error code: {ret}.{err_message}")
     if stdout == subprocess.PIPE and not print_output:
         return output_lines
+
+
+# Function for DIY gudiance graph
+def generate_prot_gudiance_graph(rna, 
+                                 prot, 
+                                 protein_gene_match):
+    guidance =nx.MultiDiGraph()
+    for k, v in protein_gene_match.items():
+        guidance.add_edge(k, v, weight=1.0, sign=1)
+        guidance.add_edge(v, k, weight=1.0, sign=1)
+    for item in rna.var_names:
+        guidance.add_edge(item, item, weight=1.0, sign=1)
+    for item in prot.var_names:
+        guidance.add_edge(item, item, weight=1.0, sign=1)
+
+    return guidance
+
+
+
+def clr(adata:AnnData, inplace= True, axis= 0):
+    """
+    Apply the centered log ratio (CLR) transformation
+    to normalize counts in adata.X.
+
+    Args:
+        data: AnnData object with protein expression counts.
+        inplace: Whether to update adata.X inplace.
+        axis: Axis across which CLR is performed.
+    """
+
+    if axis not in [0, 1]:
+        raise ValueError("Invalid value for `axis` provided. Admissible options are `0` and `1`.")
+
+    if not inplace:
+        adata = adata.copy()
+
+    if issparse(adata.X) and axis == 0 and not isinstance(adata.X, csc_matrix):
+        warn("adata.X is sparse but not in CSC format. Converting to CSC.")
+        x = csc_matrix(adata.X)
+    elif issparse(adata.X) and axis == 1 and not isinstance(adata.X, csr_matrix):
+        warn("adata.X is sparse but not in CSR format. Converting to CSR.")
+        x = csr_matrix(adata.X)
+    else:
+        x = adata.X
+
+    if issparse(x):
+        x.data /= np.repeat(
+            np.exp(np.log1p(x).sum(axis=axis).A / x.shape[axis]), x.getnnz(axis=axis)
+        )
+        np.log1p(x.data, out=x.data)
+    else:
+        np.log1p(
+            x / np.exp(np.log1p(x).sum(axis=axis, keepdims=True) / x.shape[axis]),
+            out=x,
+        )
+
+    adata.X = x
+
+    return None if inplace else adata

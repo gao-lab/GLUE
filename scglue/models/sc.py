@@ -402,6 +402,48 @@ class NBDataDecoder(DataDecoder):
             logits=(mu + EPS).log() - log_theta
         )
 
+class NBMixtureDataDecoder(DataDecoder):
+
+    r"""
+    Negative binomial data decoder
+
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias1 = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias2 = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.log_theta = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+
+    def forward(
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: torch.Tensor # l is sequencing depth
+    ) -> D.NegativeBinomial:
+        scale = F.softplus(self.scale_lin[b])
+        logit_mu1 = scale * (u @ v.t()) + self.bias1[b]
+        logit_mu2 = scale * (u @ v.t()) + self.bias2[b]
+
+        mu1 = F.softmax(logit_mu1, dim=1)
+        mu2 = F.softmax(logit_mu2, dim=1)
+
+        # beta = self.zi_logits[b].expand_as(mu1) # to avoid negative value in the bernoulli distribution, we use l later.
+        v_s = torch.distributions.Bernoulli(mu1).sample()
+        # mu_mixture = v_s* l + (1-v_s)*mu2* l
+        mu_mixture = v_s + (1-v_s)*mu2* l
+        # print(mu_mixture)
+        log_theta = self.log_theta[b]
+        return D.NegativeBinomial(
+            log_theta.exp(),
+            logits=(mu_mixture + EPS).log() - log_theta
+        )
 
 class ZINBDataDecoder(NBDataDecoder):
 
