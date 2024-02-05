@@ -32,17 +32,21 @@ class GraphEncoder(glue.GraphEncoder):
     """
 
     def __init__(
-            self, vnum: int, out_features: int
+            self, vnum: int, out_features: int, init_fea_emb
     ) -> None:
         super().__init__()
-        self.vrepr = torch.nn.Parameter(torch.zeros(vnum, out_features))
         self.conv = GraphConv()
         self.loc = torch.nn.Linear(out_features, out_features)
         self.std_lin = torch.nn.Linear(out_features, out_features)
+        if init_fea_emb is None:
+            self.vrepr = torch.nn.Parameter(torch.zeros(vnum, out_features))
+        else:
+            self.vrepr = torch.nn.Parameter(torch.FloatTensor(init_fea_emb))
 
     def forward(
-            self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor
+            self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor, init_fea_emb = None
     ) -> D.Normal:
+        # self.vrepr = self.vrepr.to(eidx.device)
         ptr = self.conv(self.vrepr, eidx, enorm, esgn)
         loc = self.loc(ptr)
         std = F.softplus(self.std_lin(ptr)) + EPS
@@ -401,6 +405,7 @@ class NBDataDecoder(DataDecoder):
             log_theta.exp(),
             logits=(mu + EPS).log() - log_theta
         )
+    
 
 class NBMixtureDataDecoder(DataDecoder):
 
@@ -436,14 +441,15 @@ class NBMixtureDataDecoder(DataDecoder):
 
         # beta = self.zi_logits[b].expand_as(mu1) # to avoid negative value in the bernoulli distribution, we use l later.
         v_s = torch.distributions.Bernoulli(mu1).sample()
-        # mu_mixture = v_s* l + (1-v_s)*mu2* l
-        mu_mixture = v_s + (1-v_s)*mu2* l
+        mu_mixture = v_s* l + (1-v_s)*mu2* l # keep the same format with TOTALVI
+        # mu_mixture = v_s + (1-v_s)*mu2* l
         # print(mu_mixture)
         log_theta = self.log_theta[b]
         return D.NegativeBinomial(
             log_theta.exp(),
             logits=(mu_mixture + EPS).log() - log_theta
         )
+
 
 class ZINBDataDecoder(NBDataDecoder):
 
