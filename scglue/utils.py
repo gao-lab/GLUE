@@ -677,25 +677,6 @@ def run_command(
         return output_lines
 
 
-# Function for DIY gudiance graph
-def generate_prot_gudiance_graph(rna, 
-                                 prot, 
-                                 protein_gene_match):
-    guidance =nx.MultiDiGraph()
-    for k, v in protein_gene_match.items():
-        guidance.add_edge(k, v, weight=1.0, sign=1,  type="rev")
-        guidance.add_edge(v, k, weight=1.0, sign=1,  type="fwd")
-
-    for item in rna.var_names:
-        guidance.add_edge(item, item, weight=1.0, sign=1, type="loop")
-    for item in prot.var_names:
-        guidance.add_edge(item, item, weight=1.0, sign=1, type="loop")
-
-
-    return guidance
-
-
-
 def clr(adata:AnnData, inplace= True, axis= 0):
     """
     Apply the centered log ratio (CLR) transformation

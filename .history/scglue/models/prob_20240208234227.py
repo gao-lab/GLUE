@@ -149,3 +149,72 @@ class ZINB(D.NegativeBinomial):
         zi_log_prob[~z_mask] = raw_log_prob[~z_mask] - F.softplus(nz_zi_logits)
         return zi_log_prob
 
+
+class NBMixture(D.NegativeBinomial):
+
+    r"""
+    Zero-inflated negative binomial distribution
+
+    Parameters
+    ----------
+    zi_logits
+        Zero-inflation logits
+    total_count
+        Total count of the negative binomial distribution
+    logits
+        Logits of the negative binomial distribution
+    """
+
+    def __init__(
+            self,                     
+                     mu_1: torch.Tensor,
+                     mu_2: torch.Tensor,
+                     theta_1: torch.Tensor,
+                     theta_2: torch.Tensor,
+                     eps=1e-8,  
+                     logits: torch.Tensor = None
+    ) -> None:
+        super().__init__(logits=logits)
+        self.mu_1 = mu_1 
+        self.mu_2 = mu_2 
+        self.theta_1 = theta_1
+        self.theta_2 = theta_2 
+        self.eps = eps
+        self.logits = logits
+
+
+    def log_prob(self, value: torch.Tensor
+    ) -> torch.Tensor:
+        theta = self.theta_1
+        if theta.ndimension() == 1:
+            theta = theta.view(
+                1, theta.size(0)
+            )  # In this case, we reshape theta for broadcasting
+
+        log_theta_mu_1_eps = torch.log(theta + self.mu_1 + self.eps)
+        log_theta_mu_2_eps = torch.log(theta + self.mu_2 + self.eps)
+        lgamma_x_theta = torch.lgamma(value + theta)
+        lgamma_theta = torch.lgamma(theta)
+        lgamma_x_plus_1 = torch.lgamma(value + 1)
+
+        log_nb_1 = (
+            theta * (torch.log(theta + self.eps) - log_theta_mu_1_eps)
+            + value * (torch.log(self.mu_1 + self.eps) - log_theta_mu_1_eps)
+            + lgamma_x_theta
+            - lgamma_theta
+            - lgamma_x_plus_1
+        )
+        log_nb_2 = (
+            theta * (torch.log(theta + self.eps) - log_theta_mu_2_eps)
+            + value * (torch.log(self.mu_2 + self.eps) - log_theta_mu_2_eps)
+            + lgamma_x_theta
+            - lgamma_theta
+            - lgamma_x_plus_1
+        )
+
+        logsumexp = torch.logsumexp(torch.stack((log_nb_1, log_nb_2 - self.logits)), dim=0)
+        softplus_pi = F.softplus(-self.logits)
+
+        log_mixture_nb = logsumexp - softplus_pi
+
+        return log_mixture_nb
