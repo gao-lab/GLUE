@@ -406,7 +406,7 @@ class NBDataDecoder(DataDecoder):
 class NBMixtureDataDecoder(DataDecoder):
 
     r"""
-    The Mixture of negative binomial data decoder
+    Negative binomial data decoder
 
     Parameters
     ----------
@@ -427,8 +427,7 @@ class NBMixtureDataDecoder(DataDecoder):
     def forward(
             self, u: torch.Tensor, v: torch.Tensor,
             b: torch.Tensor, l: torch.Tensor # l is sequencing depth
-    ) -> D.MixtureSameFamily:
-        # print(b)
+    ) -> D.NegativeBinomial:
         scale = F.softplus(self.scale_lin[b])
         logit_mu1 = scale * (u @ v.t()) + self.bias1[b]
         logit_mu2 = scale * (u @ v.t()) + self.bias2[b]
@@ -436,16 +435,16 @@ class NBMixtureDataDecoder(DataDecoder):
         mu1 = F.softmax(logit_mu1, dim=1)
         mu2 = F.softmax(logit_mu2, dim=1)
 
+        # beta = self.zi_logits[b].expand_as(mu1) # to avoid negative value in the bernoulli distribution, we use l later.
+        v_s = torch.distributions.Bernoulli(mu1).sample()
+        mu_mixture = v_s* l + (1-v_s)*mu2* l # keep the same format with TOTALVI
+        # mu_mixture = v_s + (1-v_s)*mu2* l
+        # print(mu_mixture)
         log_theta = self.log_theta[b]
-        log_theta = torch.stack([log_theta,log_theta], axis=-1)
-
-        mix = D.Categorical(logits=torch.stack([logit_mu1,  logit_mu2], axis=-1))
-        
-        mu = torch.stack([mu1*l, mu2*l], axis=-1)
-
-        comp = D.NegativeBinomial(log_theta.exp(), logits=(mu + EPS).log() - log_theta)
-
-        return D.MixtureSameFamily(mix, comp)
+        return D.NegativeBinomial(
+            log_theta.exp(),
+            logits=(mu_mixture + EPS).log() - log_theta
+        )
 
 
 class ZINBDataDecoder(NBDataDecoder):
