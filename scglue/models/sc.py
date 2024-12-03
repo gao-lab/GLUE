@@ -359,7 +359,7 @@ class MuPhiBetaBinomialDataDecoder(DataDecoder):
         Number of batches.
     """
     def __init__(self, out_features: int, n_batches: int = 1):
-        super().__init__()
+        super().__init__(out_features=out_features, n_batches=n_batches)
         self.mu_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
         self.phi_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
         self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
