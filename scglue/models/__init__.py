@@ -42,7 +42,7 @@ def configure_dataset(
         Dataset to be configured
     prob_model
         Probabilistic generative model used by the decoder,
-        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB"}``.
+        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB", "BB"}``.
     use_highly_variable
         Whether to use highly variable features
     use_layer

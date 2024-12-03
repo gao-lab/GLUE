@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from ..num import EPS
 from . import glue
 from .nn import GraphConv
-from .prob import ZILN, ZIN, ZINB
+from .prob import ZILN, ZIN, ZINB, BetaBinomial, BetaBinomialReparams, MuPhiBetaBinomial
 
 
 #-------------------------- Network modules for GLUE ---------------------------
@@ -333,15 +333,15 @@ class BetaBinomialDataDecoder(DataDecoder):
     def forward(
             self, u: torch.Tensor, v: torch.Tensor,
             b: torch.Tensor, l: Optional[torch.Tensor]
-    ) -> D.BetaBinomial:
+    ) -> BetaBinomial:
         scale = F.softplus(self.scale_lin[b])
         logit_mu = scale * (u @ v.t()) + self.bias[b]
         mu = F.softmax(logit_mu, dim=1) * l
         log_m = self.log_theta[b]
         #logits = TO DO, Compute log of Eqn (3) in the http://dx.doi.org/10.15446/rce.v40n1.61779 paper
         log_B = torch.lgamma(u) + torch.lgamma(v) - torch.lgamma(u+v)
-        log_choose = 
-        return D.BetaBinomial(
+        #log_choose = 
+        return BetaBinomial(
             log_m.exp(),
             logits= logits
 
@@ -415,7 +415,7 @@ class BBDataDecoder(torch.nn.Module):
     
     def forward(
         self, u: torch.Tensor, v: torch.Tensor, b: torch.Tensor, l: torch.Tensor
-    ) -> D.BetaBinomial:
+    ) -> BetaBinomial:
         # Compute scale and bias
         scale = F.softplus(self.scale_lin[b])
         logit_mu = scale * (u @ v.t()) + self.bias[b]
@@ -428,7 +428,7 @@ class BBDataDecoder(torch.nn.Module):
         total_count = torch.clamp(self.total_count[b], min=1).long()
         
         # Return Beta Binomial distribution
-        return D.BetaBinomial(
+        return BetaBinomial(
             total_count=total_count, 
             concentration1=mu * total_count, 
             concentration0=(1 - mu) * total_count + phi

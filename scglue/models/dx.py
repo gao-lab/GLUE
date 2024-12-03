@@ -71,7 +71,7 @@ def integration_consistency(
     if "agg_fns" not in kwargs:
         agg_fns = []
         for k, adata in adatas.items():
-            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
+            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB", "BB"):
                 logger.info("Selecting aggregation \"sum\" for modality \"%s\"", k)
                 agg_fns.append("sum")
             else:
@@ -82,7 +82,7 @@ def integration_consistency(
     if "prep_fns" not in kwargs:
         prep_fns = []
         for k, adata in adatas.items():
-            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
+            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB", "BB"):
                 logger.info("Selecting log-norm preprocessing for modality \"%s\"", k)
                 prep_fns.append(count_prep)
             else:
