@@ -13,12 +13,15 @@ from anndata._core.sparse_dataset import SparseDataset
 from ..data import count_prep, metacell_corr
 from ..utils import config, logged
 from .scglue import SCGLUEModel
+import numpy as np
 
 
 @logged
 def integration_consistency(
         model: SCGLUEModel, adatas: Mapping[str, AnnData],
-        graph: nx.Graph, **kwargs
+        graph: nx.Graph, 
+        abs_val = False,
+        **kwargs
 ) -> pd.DataFrame:
     r"""
     Integration consistency score, defined as the consistency between
@@ -32,6 +35,8 @@ def integration_consistency(
         Datasets (indexed by modality name)
     graph
         Guidance graph
+    abs_val
+        Use absolute value of correlations (default=False)
     **kwargs
         Additional keyword arguments are passed to
         :func:`scglue.data.metacell_corr`
@@ -41,6 +46,7 @@ def integration_consistency(
     consistency_df
         Consistency score at different numbers of meta cells
     """
+
     for adata in adatas.values():
         if isinstance(adata.X, (h5py.Dataset, SparseDataset)):
             raise RuntimeError("Backed data is not currently supported!")
@@ -95,9 +101,14 @@ def integration_consistency(
         corr = corr.edge_subgraph(e for e in corr.edges if e[0] != e[1])  # Exclude self-loops
         edgelist = nx.to_pandas_edgelist(corr)
         n_metas.append(n_meta)
-        consistencies.append((
-            edgelist["sign"] * edgelist["weight"] * edgelist["corr"]
-        ).sum() / edgelist["weight"].sum())
+        if abs_val:
+            consistencies.append((
+                np.abs(edgelist["sign"] * edgelist["weight"] * edgelist["corr"])
+            ).sum() / edgelist["weight"].sum())
+        else:
+            consistencies.append((
+                edgelist["sign"] * edgelist["weight"] * edgelist["corr"]
+            ).sum() / edgelist["weight"].sum())
     return pd.DataFrame({
         "n_meta": n_metas,
         "consistency": consistencies
