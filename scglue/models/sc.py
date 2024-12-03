@@ -347,7 +347,7 @@ class BetaBinomialDataDecoder(DataDecoder):
 
         )
     
-class MuPhiBetaBinomialDataDecoder:
+class MuPhiBetaBinomialDataDecoder(DataDecoder):
     """
     Data decoder using the Beta-Binomial distribution with (mu, phi) parametrization.
     
