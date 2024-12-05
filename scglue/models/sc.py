@@ -365,12 +365,17 @@ class MuPhiBetaBinomialDataDecoder(DataDecoder):
         self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
         self.total_count = torch.nn.Parameter(torch.ones(n_batches, out_features))
 
-    def forward(self, u: torch.Tensor, v: torch.Tensor, b: torch.Tensor, l: torch.Tensor) -> MuPhiBetaBinomial:
+    def forward(self, u: torch.Tensor, v: torch.Tensor, b: torch.Tensor, l: torch.Tensor) -> BetaBinomial:
         logits = (u @ v.t()) + self.bias[b]
         mu = F.softmax(logits, dim=1)
         phi = F.softplus(self.phi_lin[b])
         total_count = F.softplus(self.total_count[b])
-        return MuPhiBetaBinomial(mu, phi, total_count)
+        #return MuPhiBetaBinomial(mu, phi, total_count)
+        return BetaBinomial(
+            total_count=total_count, 
+            alpha=mu * total_count, 
+            beta=(1 - mu) * total_count + phi
+        )
 
 
     
@@ -389,7 +394,7 @@ class MuPhiBetaBinomialDataDecoder(DataDecoder):
         )'''
 
 
-class BBDataDecoder(torch.nn.Module):
+class BBDataDecoder(DataDecoder):
     r""" Beta Binomial data decoder with (μ, ϕ) parameterization
     
     Parameters:
@@ -400,7 +405,7 @@ class BBDataDecoder(torch.nn.Module):
         Number of batches
     """
     def __init__(self, out_features: int, n_batches: int = 1) -> None:
-        super().__init__()
+        super().__init__(out_features=out_features, n_batches=n_batches)
         
         # Learnable parameters for mean (μ) and dispersion (ϕ)
         self.mu_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
@@ -419,7 +424,7 @@ class BBDataDecoder(torch.nn.Module):
         # Compute scale and bias
         scale = F.softplus(self.scale_lin[b])
         logit_mu = scale * (u @ v.t()) + self.bias[b]
-        mu = F.softmax(logit_mu, dim=1) * l
+        mu = F.softmax(logit_mu, dim=1) * l + EPS
         
         # Compute dispersion parameter (ϕ) with softplus to ensure positivity
         phi = F.softplus(self.phi_lin[b]) + 1  # Adding 1 to ensure ϕ > 0
@@ -430,10 +435,70 @@ class BBDataDecoder(torch.nn.Module):
         # Return Beta Binomial distribution
         return BetaBinomial(
             total_count=total_count, 
-            concentration1=mu * total_count, 
-            concentration0=(1 - mu) * total_count + phi
+            alpha=mu * total_count, 
+            beta=(1 - mu) * total_count + phi
         )
+        #return MuPhiBetaBinomial(
+        #    total_count=total_count, 
+        #    mu = mu,
+        #    phi = phi
+        #    #concentration1=mu * total_count, 
+        #    #concentration0=(1 - mu) * total_count + phi
+        #)
 
+#class BinomialDataDecoder(DataDecoder):
+#    def _init_(self, out_features: int, n_batches: int = 1) -> None:
+#        super().__init__(out_features=out_features, n_batches=n_batches)
+#        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+#        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+#        self.log_total_count = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+#
+#    def forward(
+#            self, u: torch.Tensor, v: torch.Tensor,
+#            b: torch.Tensor, l: torch.Tensor
+#    ) -> D.Binomial:
+#        EPS = 1e-8  # To avoid numerical issues
+#        scale = F.softplus(self.scale_lin[b]) 
+#        logit_mu = scale * (u @ v.t()) + self.bias[b]  
+#        #mu = F.softmax(logit_mu, dim=1) * l  
+#        total_count = self.log_total_count[b].exp()
+#
+#        return D.Binomial(
+#            total_count=total_count,
+#            logits=logit_mu#mu + EPS).log()  
+#        )
+
+class BinomialDataDecoder(DataDecoder):
+
+    r"""
+    binomial data decoder
+
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.log_theta = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+
+    def forward(
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: torch.Tensor
+    ) -> D.Binomial:
+        scale = F.softplus(self.scale_lin[b])
+        logit_mu = scale * (u @ v.t()) + self.bias[b]
+        mu = F.softmax(logit_mu, dim=1) * l
+        log_theta = self.log_theta[b]
+        return D.Binomial(
+            log_theta.exp(),
+            logits=(mu + EPS).log() - log_theta
+        )
 
 class ZINDataDecoder(NormalDataDecoder):
 

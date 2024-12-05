@@ -56,6 +56,7 @@ register_prob_model("ZIN", sc.VanillaDataEncoder, sc.ZINDataDecoder)
 register_prob_model("ZILN", sc.VanillaDataEncoder, sc.ZILNDataDecoder)
 register_prob_model("NB", sc.NBDataEncoder, sc.NBDataDecoder)
 register_prob_model("ZINB", sc.NBDataEncoder, sc.ZINBDataDecoder)
+register_prob_model("Binomial", sc.NBDataEncoder, sc.BinomialDataDecoder)
 register_prob_model("BB", sc.NBDataEncoder, sc.MuPhiBetaBinomialDataDecoder)
 
 
@@ -1093,6 +1094,8 @@ class SCGLUEModel(Model):
         )
         result = []
         for x, xrep, *_ in data_loader:
+            assert x.isfinite().all().item()
+            assert xrep.isfinite().all().item()
             u = encoder(
                 x.to(self.net.device, non_blocking=True),
                 xrep.to(self.net.device, non_blocking=True),
