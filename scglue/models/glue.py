@@ -19,8 +19,8 @@ from .data import ArrayDataset, DataLoader, GraphDataset, ParallelDataLoader
 from .nn import autodevice
 from .plugins import EarlyStopping, LRScheduler, Tensorboard
 
+# ---------------------- Component interface definitions -----------------------
 
-#----------------------- Component interface definitions -----------------------
 
 class GraphEncoder(torch.nn.Module):
 
@@ -30,7 +30,7 @@ class GraphEncoder(torch.nn.Module):
 
     @abstractmethod
     def forward(
-            self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor
+        self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor
     ) -> D.Distribution:
         r"""
         Encode graph to vertex latent distribution
@@ -61,8 +61,7 @@ class GraphDecoder(torch.nn.Module):
 
     @abstractmethod
     def forward(
-            self, v: torch.Tensor, eidx: torch.Tensor,
-            esgn: torch.Tensor
+        self, v: torch.Tensor, eidx: torch.Tensor, esgn: torch.Tensor
     ) -> D.Distribution:
         r"""
         Decode graph from vertex latent
@@ -116,9 +115,7 @@ class DataDecoder(torch.nn.Module):
     """
 
     @abstractmethod
-    def forward(
-            self, u: torch.Tensor, v: torch.Tensor
-    ) -> D.Distribution:
+    def forward(self, u: torch.Tensor, v: torch.Tensor) -> D.Distribution:
         r"""
         Decode data from sample and feature latent
 
@@ -180,7 +177,8 @@ class Prior(torch.nn.Module):
         raise NotImplementedError  # pragma: no cover
 
 
-#------------------------ Network interface definition -------------------------
+# ----------------------- Network interface definition -------------------------
+
 
 class GLUE(torch.nn.Module):
 
@@ -206,17 +204,19 @@ class GLUE(torch.nn.Module):
     """
 
     def __init__(
-            self, g2v: GraphEncoder, v2g: GraphDecoder,
-            x2u: Mapping[str, DataEncoder],
-            u2x: Mapping[str, DataDecoder],
-            idx: Mapping[str, torch.Tensor],
-            du: Discriminator, prior: Prior
+        self,
+        g2v: GraphEncoder,
+        v2g: GraphDecoder,
+        x2u: Mapping[str, DataEncoder],
+        u2x: Mapping[str, DataDecoder],
+        idx: Mapping[str, torch.Tensor],
+        du: Discriminator,
+        prior: Prior,
     ) -> None:
         super().__init__()
         if not set(x2u.keys()) == set(u2x.keys()) == set(idx.keys()) != set():
             raise ValueError(
-                "`x2u`, `u2x`, `idx` should share the same keys "
-                "and non-empty!"
+                "`x2u`, `u2x`, `idx` should share the same keys " "and non-empty!"
             )
         self.keys = list(idx.keys())  # Keeps a specific order
 
@@ -250,14 +250,14 @@ class GLUE(torch.nn.Module):
         raise RuntimeError("GLUE does not support forward operation!")
 
 
-#----------------------------- Trainer definition ------------------------------
+# ---------------------------- Trainer definition ------------------------------
 
 DataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
     Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
-    torch.Tensor  # esgn (edge sign)
+    torch.Tensor,  # esgn (edge sign)
 ]  # Specifies the data format of input to GLUETrainer.compute_losses
 
 
@@ -288,14 +288,25 @@ class GLUETrainer(Trainer):
     """
 
     def __init__(
-            self, net: GLUE, lam_data: float = None, lam_kl: float = None,
-            lam_graph: float = None, lam_align: float = None,
-            modality_weight: Mapping[str, float] = None,
-            optim: str = None, lr: float = None, **kwargs
+        self,
+        net: GLUE,
+        lam_data: float = None,
+        lam_kl: float = None,
+        lam_graph: float = None,
+        lam_align: float = None,
+        modality_weight: Mapping[str, float] = None,
+        optim: str = None,
+        lr: float = None,
+        **kwargs,
     ) -> None:
         required_kwargs = (
-            "lam_data", "lam_kl", "lam_graph", "lam_align",
-            "modality_weight", "optim", "lr"
+            "lam_data",
+            "lam_kl",
+            "lam_graph",
+            "lam_align",
+            "modality_weight",
+            "optim",
+            "lr",
         )
         for required_kwarg in required_kwargs:
             if locals()[required_kwarg] is None:
@@ -323,8 +334,10 @@ class GLUETrainer(Trainer):
                 self.net.g2v.parameters(),
                 self.net.v2g.parameters(),
                 self.net.x2u.parameters(),
-                self.net.u2x.parameters()
-            ), lr=self.lr, **kwargs
+                self.net.u2x.parameters(),
+            ),
+            lr=self.lr,
+            **kwargs,
         )
         self.dsc_optim = getattr(torch.optim, optim)(
             self.net.du.parameters(), lr=self.lr, **kwargs
@@ -332,11 +345,13 @@ class GLUETrainer(Trainer):
 
         self.align_burnin: Optional[int] = None
         self.eidx: Optional[torch.Tensor] = None  # Full graph used by the graph encoder
-        self.enorm: Optional[torch.Tensor] = None  # Full graph used by the graph encoder
+        self.enorm: Optional[
+            torch.Tensor
+        ] = None  # Full graph used by the graph encoder
         self.esgn: Optional[torch.Tensor] = None  # Full graph used by the graph encoder
 
     def compute_losses(
-            self, data: DataTensors, epoch: int, dsc_only: bool = False
+        self, data: DataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:  # pragma: no cover
         r"""
         Compute loss functions
@@ -364,8 +379,7 @@ class GLUETrainer(Trainer):
 
         u_cat = torch.cat([u[k].mean for k in net.keys])
         xflag_cat = torch.cat([xflag[k] for k in net.keys])
-        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) \
-            if self.align_burnin else 0
+        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) if self.align_burnin else 0
         if anneal:
             noise = prior.sample(u_cat.shape)
             u_cat = u_cat + anneal * noise
@@ -388,37 +402,33 @@ class GLUETrainer(Trainer):
         g_elbo = g_nll + self.lam_kl * g_kl
 
         x_nll = {
-            k: -net.u2x[k](
-                usamp[k], vsamp[getattr(net, f"{k}_idx")]
-            ).log_prob(x[k]).mean()
+            k: -net.u2x[k](usamp[k], vsamp[getattr(net, f"{k}_idx")])
+            .log_prob(x[k])
+            .mean()
             for k in net.keys
         }
         x_kl = {
-            k: D.kl_divergence(
-                u[k], prior
-            ).sum(dim=1).mean() / x[k].shape[1]
+            k: D.kl_divergence(u[k], prior).sum(dim=1).mean() / x[k].shape[1]
             for k in net.keys
         }
-        x_elbo = {
-            k: x_nll[k] + self.lam_kl * x_kl[k]
-            for k in net.keys
-        }
+        x_elbo = {k: x_nll[k] + self.lam_kl * x_kl[k] for k in net.keys}
         x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
-        vae_loss = self.lam_data * x_elbo_sum \
-            + self.lam_graph * len(net.keys) * g_elbo
+        vae_loss = self.lam_data * x_elbo_sum + self.lam_graph * len(net.keys) * g_elbo
         gen_loss = vae_loss - self.lam_align * dsc_loss
 
         losses = {
-            "dsc_loss": dsc_loss, "vae_loss": vae_loss, "gen_loss": gen_loss,
-            "g_nll": g_nll, "g_kl": g_kl, "g_elbo": g_elbo
+            "dsc_loss": dsc_loss,
+            "vae_loss": vae_loss,
+            "gen_loss": gen_loss,
+            "g_nll": g_nll,
+            "g_kl": g_kl,
+            "g_elbo": g_elbo,
         }
         for k in net.keys:
-            losses.update({
-                f"x_{k}_nll": x_nll[k],
-                f"x_{k}_kl": x_kl[k],
-                f"x_{k}_elbo": x_elbo[k]
-            })
+            losses.update(
+                {f"x_{k}_nll": x_nll[k], f"x_{k}_kl": x_kl[k], f"x_{k}_elbo": x_elbo[k]}
+            )
         return losses
 
     def format_data(self, data: List[torch.Tensor]) -> DataTensors:  # pragma: no cover
@@ -434,14 +444,11 @@ class GLUETrainer(Trainer):
         keys = self.net.keys
         K = len(keys)
         x, (eidx, ewt, esgn) = data[:K], data[K:]
-        x = {
-            k: x[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
+        x = {k: x[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
         xflag = {
-            k: torch.as_tensor(
-                i, dtype=torch.int64, device=device
-            ).expand(x[k].shape[0])
+            k: torch.as_tensor(i, dtype=torch.int64, device=device).expand(
+                x[k].shape[0]
+            )
             for i, k in enumerate(keys)
         }
         eidx = eidx.to(device, non_blocking=True)
@@ -450,7 +457,7 @@ class GLUETrainer(Trainer):
         return x, xflag, eidx, ewt, esgn
 
     def train_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
+        self, engine: ignite.engine.Engine, data: List[torch.Tensor]
     ) -> Mapping[str, torch.Tensor]:  # pragma: no cover
         self.net.train()
         data = self.format_data(data)
@@ -472,22 +479,28 @@ class GLUETrainer(Trainer):
 
     @torch.no_grad()
     def val_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
+        self, engine: ignite.engine.Engine, data: List[torch.Tensor]
     ) -> Mapping[str, torch.Tensor]:
         self.net.eval()
         data = self.format_data(data)
         return self.compute_losses(data, engine.state.epoch)
 
     def fit(  # pylint: disable=arguments-renamed
-            self, data: ArrayDataset,
-            graph: GraphDataset, val_split: float = None,
-            data_batch_size: int = None, graph_batch_size: int = None,
-            align_burnin: int = None, safe_burnin: bool = True,
-            max_epochs: int = None, patience: Optional[int] = None,
-            reduce_lr_patience: Optional[int] = None,
-            wait_n_lrs: Optional[int] = None,
-            random_seed: int = None, directory: Optional[os.PathLike] = None,
-            plugins: Optional[List[TrainingPlugin]] = None
+        self,
+        data: ArrayDataset,
+        graph: GraphDataset,
+        val_split: float = None,
+        data_batch_size: int = None,
+        graph_batch_size: int = None,
+        align_burnin: int = None,
+        safe_burnin: bool = True,
+        max_epochs: int = None,
+        patience: Optional[int] = None,
+        reduce_lr_patience: Optional[int] = None,
+        wait_n_lrs: Optional[int] = None,
+        random_seed: int = None,
+        directory: Optional[os.PathLike] = None,
+        plugins: Optional[List[TrainingPlugin]] = None,
     ) -> None:
         r"""
         Fit network
@@ -525,8 +538,12 @@ class GLUETrainer(Trainer):
             Optional list of training plugins
         """
         required_kwargs = (
-            "val_split", "data_batch_size", "graph_batch_size",
-            "align_burnin", "max_epochs", "random_seed"
+            "val_split",
+            "data_batch_size",
+            "graph_batch_size",
+            "align_burnin",
+            "max_epochs",
+            "random_seed",
         )
         for required_kwarg in required_kwargs:
             if locals()[required_kwarg] is None:
@@ -538,77 +555,108 @@ class GLUETrainer(Trainer):
             )
 
         self.enorm = torch.as_tensor(
-            normalize_edges(graph.eidx, graph.ewt),
-            device=self.net.device
+            normalize_edges(graph.eidx, graph.ewt), device=self.net.device
         )
         self.esgn = torch.as_tensor(graph.esgn, device=self.net.device)
         self.eidx = torch.as_tensor(graph.eidx, device=self.net.device)
 
-        data.getitem_size = max(1, round(data_batch_size / config.DATALOADER_FETCHES_PER_BATCH))
-        graph.getitem_size = max(1, round(graph_batch_size / config.DATALOADER_FETCHES_PER_BATCH))
-        data_train, data_val = data.random_split([1 - val_split, val_split], random_state=random_seed)
-        data_train.prepare_shuffle(num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed)
-        data_val.prepare_shuffle(num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed)
-        graph.prepare_shuffle(num_workers=config.GRAPH_SHUFFLE_NUM_WORKERS, random_seed=random_seed)
+        data.getitem_size = max(
+            1, round(data_batch_size / config.DATALOADER_FETCHES_PER_BATCH)
+        )
+        graph.getitem_size = max(
+            1, round(graph_batch_size / config.DATALOADER_FETCHES_PER_BATCH)
+        )
+        data_train, data_val = data.random_split(
+            [1 - val_split, val_split], random_state=random_seed
+        )
+        data_train.prepare_shuffle(
+            num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed
+        )
+        data_val.prepare_shuffle(
+            num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed
+        )
+        graph.prepare_shuffle(
+            num_workers=config.GRAPH_SHUFFLE_NUM_WORKERS, random_seed=random_seed
+        )
 
         train_loader = ParallelDataLoader(
             DataLoader(
-                data_train, batch_size=config.DATALOADER_FETCHES_PER_BATCH, shuffle=True,
+                data_train,
+                batch_size=config.DATALOADER_FETCHES_PER_BATCH,
+                shuffle=True,
                 num_workers=config.DATALOADER_NUM_WORKERS,
                 pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
                 drop_last=len(data_train) > config.DATALOADER_FETCHES_PER_BATCH,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
             DataLoader(
-                graph, batch_size=config.DATALOADER_FETCHES_PER_BATCH, shuffle=True,
+                graph,
+                batch_size=config.DATALOADER_FETCHES_PER_BATCH,
+                shuffle=True,
                 num_workers=config.DATALOADER_NUM_WORKERS,
                 pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
                 drop_last=len(graph) > config.DATALOADER_FETCHES_PER_BATCH,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
-            cycle_flags=[False, True]
+            cycle_flags=[False, True],
         )
         val_loader = ParallelDataLoader(
             DataLoader(
-                data_val, batch_size=config.DATALOADER_FETCHES_PER_BATCH, shuffle=True,
+                data_val,
+                batch_size=config.DATALOADER_FETCHES_PER_BATCH,
+                shuffle=True,
                 num_workers=config.DATALOADER_NUM_WORKERS,
-                pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY, drop_last=False,
+                pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
+                drop_last=False,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
             DataLoader(
-                graph, batch_size=config.DATALOADER_FETCHES_PER_BATCH, shuffle=True,
+                graph,
+                batch_size=config.DATALOADER_FETCHES_PER_BATCH,
+                shuffle=True,
                 num_workers=config.DATALOADER_NUM_WORKERS,
-                pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY, drop_last=False,
+                pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
+                drop_last=False,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
-            cycle_flags=[False, True]
+            cycle_flags=[False, True],
         )
 
         self.align_burnin = align_burnin
 
         default_plugins = [Tensorboard()]
         if reduce_lr_patience:
-            default_plugins.append(LRScheduler(
-                self.vae_optim, self.dsc_optim,
-                monitor=self.earlystop_loss, patience=reduce_lr_patience,
-                burnin=self.align_burnin if safe_burnin else 0
-            ))
+            default_plugins.append(
+                LRScheduler(
+                    self.vae_optim,
+                    self.dsc_optim,
+                    monitor=self.earlystop_loss,
+                    patience=reduce_lr_patience,
+                    burnin=self.align_burnin if safe_burnin else 0,
+                )
+            )
         if patience:
-            default_plugins.append(EarlyStopping(
-                monitor=self.earlystop_loss, patience=patience,
-                burnin=self.align_burnin if safe_burnin else 0,
-                wait_n_lrs=wait_n_lrs or 0
-            ))
+            default_plugins.append(
+                EarlyStopping(
+                    monitor=self.earlystop_loss,
+                    patience=patience,
+                    burnin=self.align_burnin if safe_burnin else 0,
+                    wait_n_lrs=wait_n_lrs or 0,
+                )
+            )
         plugins = default_plugins + (plugins or [])
         try:
             super().fit(
-                train_loader, val_loader=val_loader,
-                max_epochs=max_epochs, random_seed=random_seed,
-                directory=directory, plugins=plugins
+                train_loader,
+                val_loader=val_loader,
+                max_epochs=max_epochs,
+                random_seed=random_seed,
+                directory=directory,
+                plugins=plugins,
             )
         finally:
             data.clean()
@@ -621,9 +669,12 @@ class GLUETrainer(Trainer):
             self.esgn = None
 
     def get_losses(  # pylint: disable=arguments-differ
-            self, data: ArrayDataset, graph: GraphDataset,
-            data_batch_size: int = None, graph_batch_size: int = None,
-            random_seed: int = None
+        self,
+        data: ArrayDataset,
+        graph: GraphDataset,
+        data_batch_size: int = None,
+        graph_batch_size: int = None,
+        random_seed: int = None,
     ) -> Mapping[str, float]:
         required_kwargs = ("data_batch_size", "graph_batch_size", "random_seed")
         for required_kwarg in required_kwargs:
@@ -631,31 +682,40 @@ class GLUETrainer(Trainer):
                 raise ValueError(f"`{required_kwarg}` must be specified!")
 
         self.enorm = torch.as_tensor(
-            normalize_edges(graph.eidx, graph.ewt),
-            device=self.net.device
+            normalize_edges(graph.eidx, graph.ewt), device=self.net.device
         )
         self.esgn = torch.as_tensor(graph.esgn, device=self.net.device)
         self.eidx = torch.as_tensor(graph.eidx, device=self.net.device)
 
         data.getitem_size = data_batch_size
         graph.getitem_size = graph_batch_size
-        data.prepare_shuffle(num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed)
-        graph.prepare_shuffle(num_workers=config.GRAPH_SHUFFLE_NUM_WORKERS, random_seed=random_seed)
+        data.prepare_shuffle(
+            num_workers=config.ARRAY_SHUFFLE_NUM_WORKERS, random_seed=random_seed
+        )
+        graph.prepare_shuffle(
+            num_workers=config.GRAPH_SHUFFLE_NUM_WORKERS, random_seed=random_seed
+        )
 
         loader = ParallelDataLoader(
             DataLoader(
-                data, batch_size=1, shuffle=True, drop_last=False,
+                data,
+                batch_size=1,
+                shuffle=True,
+                drop_last=False,
                 pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
             DataLoader(
-                graph, batch_size=1, shuffle=True, drop_last=False,
+                graph,
+                batch_size=1,
+                shuffle=True,
+                drop_last=False,
                 pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
                 generator=torch.Generator().manual_seed(random_seed),
-                persistent_workers=False
+                persistent_workers=False,
             ),
-            cycle_flags=[False, True]
+            cycle_flags=[False, True],
         )
 
         try:
@@ -673,7 +733,7 @@ class GLUETrainer(Trainer):
         return {
             **super().state_dict(),
             "vae_optim": self.vae_optim.state_dict(),
-            "dsc_optim": self.dsc_optim.state_dict()
+            "dsc_optim": self.dsc_optim.state_dict(),
         }
 
     def load_state_dict(self, state_dict: Mapping[str, Any]) -> None:

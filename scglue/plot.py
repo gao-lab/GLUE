@@ -7,37 +7,47 @@ from typing import Callable, List, Optional, Union
 import matplotlib.axes as ma
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import scanpy as sc
+import seaborn as sns
 import sklearn.metrics
 from matplotlib import rcParams
 
 from .check import check_deps
 
+# --------------------------- Global configuration -----------------------------
 
-#---------------------------- Global configuration -----------------------------
 
 def set_publication_params() -> None:
     r"""
     Set publication-level figure parameters
     """
     sc.set_figure_params(
-        scanpy=True, dpi_save=600, vector_friendly=True, format="pdf",
-        facecolor=(1.0, 1.0, 1.0, 0.0), transparent=False
+        scanpy=True,
+        dpi_save=600,
+        vector_friendly=True,
+        format="pdf",
+        facecolor=(1.0, 1.0, 1.0, 0.0),
+        transparent=False,
     )
     rcParams["savefig.bbox"] = "tight"
 
 
-#----------------------------------- Generic -----------------------------------
+# ---------------------------------- Generic -----------------------------------
+
 
 def sankey(
-        left: List[str], right: List[str], title: str = "Sankey",
-        left_color: Union[str, Callable[[str], str]] = "#E64B35",
-        right_color: Union[str, Callable[[str], str]] = "#4EBBD5",
-        link_color: Union[str, Callable[[pd.Series], str]] = "#CCCCCC",
-        font_family: str = "Arial", font_size: float = 15.0,
-        width: int = 400, height: int = 400,
-        show: bool = True, embed_js: bool = False
+    left: List[str],
+    right: List[str],
+    title: str = "Sankey",
+    left_color: Union[str, Callable[[str], str]] = "#E64B35",
+    right_color: Union[str, Callable[[str], str]] = "#4EBBD5",
+    link_color: Union[str, Callable[[pd.Series], str]] = "#CCCCCC",
+    font_family: str = "Arial",
+    font_size: float = 15.0,
+    width: int = 400,
+    height: int = 400,
+    show: bool = True,
+    embed_js: bool = False,
 ) -> dict:
     r"""
     Make a sankey diagram
@@ -89,18 +99,32 @@ def sankey(
         - right: the right node
         - value: population size connecting the two nodes
     """
-    crosstab = pd.crosstab(
-        pd.Series(left, name="left").astype(str),
-        pd.Series(right, name="right").astype(str)
-    ).reset_index().melt(id_vars=["left"]).sort_values("value")
+    crosstab = (
+        pd.crosstab(
+            pd.Series(left, name="left").astype(str),
+            pd.Series(right, name="right").astype(str),
+        )
+        .reset_index()
+        .melt(id_vars=["left"])
+        .sort_values("value")
+    )
     left_idx = pd.Index(np.unique(left))
     right_idx = pd.Index(np.unique(right))
-    left_color = left_idx.map(left_color) if callable(left_color) \
+    left_color = (
+        left_idx.map(left_color)
+        if callable(left_color)
         else [left_color] * left_idx.size
-    right_color = right_idx.map(right_color) if callable(right_color) \
+    )
+    right_color = (
+        right_idx.map(right_color)
+        if callable(right_color)
         else [right_color] * right_idx.size
-    link_color = crosstab.apply(link_color, axis=1) if callable(link_color) \
+    )
+    link_color = (
+        crosstab.apply(link_color, axis=1)
+        if callable(link_color)
         else [link_color] * crosstab.shape[0]
+    )
 
     sankey_data = dict(
         type="sankey",
@@ -109,14 +133,14 @@ def sankey(
             thickness=20,
             line=dict(color="black", width=0.5),
             label=np.concatenate([left_idx, right_idx]),
-            color=np.concatenate([left_color, right_color])
+            color=np.concatenate([left_color, right_color]),
         ),
         link=dict(
             source=left_idx.get_indexer(crosstab["left"]),
             target=right_idx.get_indexer(crosstab["right"]) + left_idx.size,
             value=crosstab["value"],
-            color=link_color
-        )
+            color=link_color,
+        ),
     )
     sankey_layout = dict(
         width=width,
@@ -132,14 +156,18 @@ def sankey(
     if show:
         check_deps("plotly")
         import plotly.offline
+
         plotly.offline.init_notebook_mode(connected=not embed_js)
         plotly.offline.iplot(fig)
     return fig
 
 
 def roc(
-        true: np.ndarray, pred: np.ndarray, max_points: int = 500,
-        ax: Optional[ma.Axes] = None, **kwargs
+    true: np.ndarray,
+    pred: np.ndarray,
+    max_points: int = 500,
+    ax: Optional[ma.Axes] = None,
+    **kwargs
 ) -> ma.Axes:
     r"""
     Plot an ROC curve
@@ -164,9 +192,11 @@ def roc(
         Plot axes
     """
     fpr, tpr, _ = sklearn.metrics.roc_curve(true, pred)
-    idx = np.linspace(
-        0, fpr.size, min(fpr.size, max_points), endpoint=False
-    ).round().astype(int)
+    idx = (
+        np.linspace(0, fpr.size, min(fpr.size, max_points), endpoint=False)
+        .round()
+        .astype(int)
+    )
     idx[-1] = fpr.size - 1  # Always keep the last point
     data = pd.DataFrame({"FPR": fpr[idx], "TPR": tpr[idx]})
     ax = sns.lineplot(x="FPR", y="TPR", data=data, ax=ax, **kwargs)
@@ -174,8 +204,11 @@ def roc(
 
 
 def prc(
-        true: np.ndarray, pred: np.ndarray, max_points: int = 500,
-        ax: Optional[ma.Axes] = None, **kwargs
+    true: np.ndarray,
+    pred: np.ndarray,
+    max_points: int = 500,
+    ax: Optional[ma.Axes] = None,
+    **kwargs
 ) -> ma.Axes:
     r"""
     Plot a precision-recall curve
@@ -200,9 +233,11 @@ def prc(
         Plot axes
     """
     prec, rec, _ = sklearn.metrics.precision_recall_curve(true, pred)
-    idx = np.linspace(
-        0, prec.size, min(prec.size, max_points), endpoint=False
-    ).round().astype(int)
+    idx = (
+        np.linspace(0, prec.size, min(prec.size, max_points), endpoint=False)
+        .round()
+        .astype(int)
+    )
     idx[-1] = prec.size - 1  # Always keep the last point
     data = pd.DataFrame({"Precision": prec[idx], "Recall": rec[idx]})
     ax = sns.lineplot(x="Recall", y="Precision", data=data, ax=ax, **kwargs)

@@ -1,6 +1,20 @@
 Release notes
 =============
 
+v0.3.3
+------
+
+Bug fixes:
+
+- Fixed compatibility with latest version of `anndata <https://github.com/scverse/anndata>`__.
+- Fixed trainers when "use_cell_type" is used, see this `PR <https://github.com/gao-lab/GLUE/pull/86>`__.
+
+New features:
+
+- A general anchored guidance graph construction function `anchored_guidance_graph <api/scglue.genomics.anchored_guidance_graph.rst>`__.
+- Add function `classify_data <api/scglue.models.scglue.SCGLUEModel.classify_data.rst>`__ to retrieve the cell type classification from compatible models.
+
+
 v0.3.2
 ------
 

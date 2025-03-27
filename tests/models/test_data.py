@@ -4,13 +4,14 @@ Tests for the :mod:`scglue.models.nn` module
 
 # pylint: disable=wildcard-import, unused-wildcard-import, redefined-outer-name
 
+import networkx as nx
 import numpy as np
+import pandas as pd
 import pytest
 
 import scglue
 import scglue.models.data
 
-from ..fixtures import *
 from ..utils import cmp_arrays
 
 
@@ -38,30 +39,45 @@ def test_array_dataset(rna, atac):
 
 @pytest.mark.parametrize("use_obs_names", [True, False])
 def test_anndataset(rna, atac, use_obs_names):
-    scglue.models.configure_dataset(rna, "NB", use_highly_variable=False, use_layer="arange", use_obs_names=use_obs_names)
-    scglue.models.configure_dataset(atac, "NB", use_highly_variable=False, use_layer="arange", use_obs_names=use_obs_names)
+    scglue.models.configure_dataset(
+        rna,
+        "NB",
+        use_highly_variable=False,
+        use_layer="arange",
+        use_obs_names=use_obs_names,
+    )
+    scglue.models.configure_dataset(
+        atac,
+        "NB",
+        use_highly_variable=False,
+        use_layer="arange",
+        use_obs_names=use_obs_names,
+    )
     with pytest.raises(ValueError):
         dataset = scglue.models.data.AnnDataset(
             [rna[[], :], atac],
             [rna.uns[scglue.config.ANNDATA_KEY], atac.uns[scglue.config.ANNDATA_KEY]],
-            mode="train", getitem_size=5
+            mode="train",
+            getitem_size=5,
         )
     with pytest.raises(ValueError):
         dataset = scglue.models.data.AnnDataset(
             [rna, atac],
             [rna.uns[scglue.config.ANNDATA_KEY]],
-            mode="train", getitem_size=5
+            mode="train",
+            getitem_size=5,
         )
     with pytest.raises(ValueError):
         dataset = scglue.models.data.AnnDataset(
             [rna, atac],
             [rna.uns[scglue.config.ANNDATA_KEY], atac.uns[scglue.config.ANNDATA_KEY]],
-            mode="xxx", getitem_size=5
+            mode="xxx",
+            getitem_size=5,
         )
     dataset = scglue.models.data.AnnDataset(
         [rna, atac],
         [rna.uns[scglue.config.ANNDATA_KEY], atac.uns[scglue.config.ANNDATA_KEY]],
-        getitem_size=5
+        getitem_size=5,
     )
     with pytest.raises(ValueError):
         dataset.random_split([-0.2, 1.2])
@@ -100,14 +116,20 @@ def test_graph_dataset(graph):
 
 
 def test_parallel_dataloader():
-    pdl = scglue.models.data.ParallelDataLoader(range(3), range(5), cycle_flags=[False, False])
+    pdl = scglue.models.data.ParallelDataLoader(
+        range(3), range(5), cycle_flags=[False, False]
+    )
     for i, _ in enumerate(pdl):
         pass
     assert i == 2  # pylint: disable=undefined-loop-variable
-    pdl = scglue.models.data.ParallelDataLoader(range(3), range(5), cycle_flags=[True, False])
+    pdl = scglue.models.data.ParallelDataLoader(
+        range(3), range(5), cycle_flags=[True, False]
+    )
     for i, _ in enumerate(pdl):
         pass
     assert i == 4  # pylint: disable=undefined-loop-variable
 
     with pytest.raises(ValueError):
-        _ = scglue.models.data.ParallelDataLoader(range(3), range(5), cycle_flags=[False])
+        _ = scglue.models.data.ParallelDataLoader(
+            range(3), range(5), cycle_flags=[False]
+        )

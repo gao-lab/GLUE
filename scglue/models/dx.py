@@ -8,7 +8,12 @@ import h5py
 import networkx as nx
 import pandas as pd
 from anndata import AnnData
-from anndata._core.sparse_dataset import SparseDataset
+
+try:
+    from anndata._core.sparse_dataset import SparseDataset
+except ImportError:  # Newer version of anndata
+    from anndata._core.sparse_dataset import \
+        BaseCompressedSparseDataset as SparseDataset
 
 from ..data import count_prep, metacell_corr
 from ..utils import config, logged
@@ -17,8 +22,7 @@ from .scglue import SCGLUEModel
 
 @logged
 def integration_consistency(
-        model: SCGLUEModel, adatas: Mapping[str, AnnData],
-        graph: nx.Graph, **kwargs
+    model: SCGLUEModel, adatas: Mapping[str, AnnData], graph: nx.Graph, **kwargs
 ) -> pd.DataFrame:
     r"""
     Integration consistency score, defined as the consistency between
@@ -48,10 +52,15 @@ def integration_consistency(
 
     adatas = {
         k: AnnData(
-            X=adata.X, obs=adata.obs, var=adata.var,
-            obsm=adata.obsm.copy(), layers=adata.layers,
-            uns=adata.uns, dtype=adata.X.dtype
-        ) for k, adata in adatas.items()
+            X=adata.X,
+            obs=adata.obs,
+            var=adata.var,
+            obsm=adata.obsm.copy(),
+            layers=adata.layers,
+            uns=adata.uns,
+            dtype=adata.X.dtype,
+        )
+        for k, adata in adatas.items()
     }  # Avoid unwanted updates to the input objects
     for k, adata in adatas.items():
         adata.obsm["X_glue"] = model.encode_data(k, adata)
@@ -59,17 +68,17 @@ def integration_consistency(
     for k, adata in adatas.items():
         use_layer = adata.uns[config.ANNDATA_KEY]["use_layer"]
         if use_layer:
-            logger.info("Using layer \"%s\" for modality \"%s\"", use_layer, k)
+            logger.info('Using layer "%s" for modality "%s"', use_layer, k)
             adata.X = adata.layers[use_layer]
 
     if "agg_fns" not in kwargs:
         agg_fns = []
         for k, adata in adatas.items():
             if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
-                logger.info("Selecting aggregation \"sum\" for modality \"%s\"", k)
+                logger.info('Selecting aggregation "sum" for modality "%s"', k)
                 agg_fns.append("sum")
             else:
-                logger.info("Selecting aggregation \"mean\" for modality \"%s\"", k)
+                logger.info('Selecting aggregation "mean" for modality "%s"', k)
                 agg_fns.append("mean")
         kwargs["agg_fns"] = agg_fns
 
@@ -77,10 +86,10 @@ def integration_consistency(
         prep_fns = []
         for k, adata in adatas.items():
             if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
-                logger.info("Selecting log-norm preprocessing for modality \"%s\"", k)
+                logger.info('Selecting log-norm preprocessing for modality "%s"', k)
                 prep_fns.append(count_prep)
             else:
-                logger.info("Selecting no preprocessing for modality \"%s\"", k)
+                logger.info('Selecting no preprocessing for modality "%s"', k)
                 prep_fns.append(None)
         kwargs["prep_fns"] = prep_fns
 
@@ -89,16 +98,15 @@ def integration_consistency(
         if n_meta > min(adata.shape[0] for adata in adatas.values()):
             continue
         corr = metacell_corr(
-            *adatas.values(), skeleton=graph,
-            use_rep="X_glue", n_meta=n_meta, **kwargs
+            *adatas.values(), skeleton=graph, use_rep="X_glue", n_meta=n_meta, **kwargs
         )
-        corr = corr.edge_subgraph(e for e in corr.edges if e[0] != e[1])  # Exclude self-loops
+        corr = corr.edge_subgraph(
+            e for e in corr.edges if e[0] != e[1]
+        )  # Exclude self-loops
         edgelist = nx.to_pandas_edgelist(corr)
         n_metas.append(n_meta)
-        consistencies.append((
-            edgelist["sign"] * edgelist["weight"] * edgelist["corr"]
-        ).sum() / edgelist["weight"].sum())
-    return pd.DataFrame({
-        "n_meta": n_metas,
-        "consistency": consistencies
-    })
+        consistencies.append(
+            (edgelist["sign"] * edgelist["weight"] * edgelist["corr"]).sum()
+            / edgelist["weight"].sum()
+        )
+    return pd.DataFrame({"n_meta": n_metas, "consistency": consistencies})

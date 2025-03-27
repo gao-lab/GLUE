@@ -9,8 +9,6 @@ import pytest
 
 import scglue
 
-from .fixtures import *
-
 
 def test_sigmoid():
     assert scglue.num.sigmoid(0) == 0.5
@@ -71,8 +69,7 @@ def test_spr_mat(mat, spmat):
 
 def test_tfidf(spmat):
     assert np.allclose(
-        scglue.num.tfidf(spmat).toarray(),
-        scglue.num.tfidf(spmat.toarray())
+        scglue.num.tfidf(spmat).toarray(), scglue.num.tfidf(spmat.toarray())
     )
 
 
@@ -87,22 +84,30 @@ def test_vertex_degrees(eidx, ewt):
 
 def test_normalize_edges(eidx, ewt):
     enorm = scglue.num.normalize_edges(eidx, ewt, method="in")
-    assert np.allclose(enorm, np.array([
-        1.0 / 1.0, 0.4 / 0.4,
-        0.7 / 0.8, 0.1 / 0.8
-    ]))
+    assert np.allclose(enorm, np.array([1.0 / 1.0, 0.4 / 0.4, 0.7 / 0.8, 0.1 / 0.8]))
     enorm = scglue.num.normalize_edges(eidx, ewt, method="out")
-    assert np.allclose(enorm, np.array([
-        1.0 / 1.0, 0.4 / 0.5,
-        0.7 / 0.7, 0.1 / 0.5
-    ]))
+    assert np.allclose(enorm, np.array([1.0 / 1.0, 0.4 / 0.5, 0.7 / 0.7, 0.1 / 0.5]))
     enorm = scglue.num.normalize_edges(eidx, ewt, method="sym")
-    assert np.allclose(enorm, np.array([
-        1.0 / np.sqrt(1.0 * 1.0), 0.4 / np.sqrt(0.4 * 0.5),
-        0.7 / np.sqrt(0.8 * 0.7), 0.1 / np.sqrt(0.8 * 0.5)
-    ]))
+    assert np.allclose(
+        enorm,
+        np.array(
+            [
+                1.0 / np.sqrt(1.0 * 1.0),
+                0.4 / np.sqrt(0.4 * 0.5),
+                0.7 / np.sqrt(0.8 * 0.7),
+                0.1 / np.sqrt(0.8 * 0.5),
+            ]
+        ),
+    )
     enorm = scglue.num.normalize_edges(eidx, ewt, method="keepvar")
-    assert np.allclose(enorm, np.array([
-        1.0 / np.sqrt(1.0), 0.4 / np.sqrt(0.4),
-        0.7 / np.sqrt(0.8), 0.1 / np.sqrt(0.8)
-    ]))
+    assert np.allclose(
+        enorm,
+        np.array(
+            [
+                1.0 / np.sqrt(1.0),
+                0.4 / np.sqrt(0.4),
+                0.7 / np.sqrt(0.8),
+                0.1 / np.sqrt(0.8),
+            ]
+        ),
+    )

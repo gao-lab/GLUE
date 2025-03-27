@@ -6,11 +6,11 @@ Tests for the :mod:`scglue.models.scclue` module
 
 import warnings
 
+import anndata
 import pytest
 
 import scglue
 
-from ..fixtures import *
 from ..utils import cmp_arrays
 
 
@@ -26,25 +26,38 @@ def test_save_load(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob, backed):
         rna_pp = anndata.read_h5ad(tmp_path / "rna_pp.h5ad", backed="r")
         atac_pp = anndata.read_h5ad(tmp_path / "atac_pp.h5ad", backed="r")
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_cell_type="ct", use_dsc_weight="dsc_weight", use_obs_names=True)
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_dsc_weight="dsc_weight", use_obs_names=True)
+    scglue.models.configure_dataset(
+        rna_pp,
+        rna_prob,
+        use_highly_variable=True,
+        use_cell_type="ct",
+        use_dsc_weight="dsc_weight",
+        use_obs_names=True,
+    )
+    scglue.models.configure_dataset(
+        atac_pp,
+        atac_prob,
+        use_highly_variable=True,
+        use_batch="batch",
+        use_dsc_weight="dsc_weight",
+        use_obs_names=True,
+    )
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         with pytest.raises(ValueError):
             glue = ActiveModel({}, latent_dim=2)
-    glue = ActiveModel(
-        {"rna": rna_pp, "atac": atac_pp},
-        latent_dim=2, random_seed=0
-    )
+    glue = ActiveModel({"rna": rna_pp, "atac": atac_pp}, latent_dim=2, random_seed=0)
     glue.compile()
     with pytest.raises(ValueError):
         glue.fit({"rna": rna_pp, "atac": atac_pp}, max_epochs=None)
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp},
         batch_size=32,
-        align_burnin=2, max_epochs=5, patience=3,
-        directory=tmp_path
+        align_burnin=2,
+        max_epochs=5,
+        patience=3,
+        directory=tmp_path,
     )
     print(glue)
     with pytest.raises(RuntimeError):
@@ -71,19 +84,34 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
 
     ActiveModel = scglue.models.SCCLUEModel
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
+    scglue.models.configure_dataset(
+        rna_pp,
+        rna_prob,
+        use_highly_variable=True,
+        use_batch="batch",
+        use_obs_names=True,
+    )
+    scglue.models.configure_dataset(
+        atac_pp,
+        atac_prob,
+        use_highly_variable=True,
+        use_batch="batch",
+        use_obs_names=True,
+    )
 
     glue = ActiveModel(
         {"rna": rna_pp, "atac": atac_pp},
-        latent_dim=2, shared_batches=True, random_seed=0
+        latent_dim=2,
+        shared_batches=True,
+        random_seed=0,
     )
-    glue.compile()
+    glue.compile(lr=1e-4)
     glue.fit(
         {"rna": rna_pp, "atac": atac_pp},
-        batch_size=32,
-        align_burnin=2, max_epochs=5, patience=3,
-        directory=tmp_path
+        batch_size=128,
+        align_burnin=1,
+        max_epochs=1,
+        directory=tmp_path,
     )
 
     rna_pp.obsm["X_glue1"] = glue.encode_data("rna", rna_pp)
@@ -94,12 +122,26 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
     rna_pp.obs.loc[rna_pp.obs_names[-1], "batch"] = "b3"
     atac_pp.obs.loc[atac_pp.obs_names[-1], "batch"] = "b3"
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_batch="batch", use_obs_names=True)
+    scglue.models.configure_dataset(
+        rna_pp,
+        rna_prob,
+        use_highly_variable=True,
+        use_batch="batch",
+        use_obs_names=True,
+    )
+    scglue.models.configure_dataset(
+        atac_pp,
+        atac_prob,
+        use_highly_variable=True,
+        use_batch="batch",
+        use_obs_names=True,
+    )
 
     glue_new = ActiveModel(
         {"rna": rna_pp, "atac": atac_pp},
-        latent_dim=2, shared_batches=True, random_seed=0
+        latent_dim=2,
+        shared_batches=True,
+        random_seed=0,
     )
     glue_new.adopt_pretrained_model(glue)
 
@@ -118,20 +160,34 @@ def test_repeatability(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
 
     ActiveModel = scglue.models.SCCLUEModel
 
-    scglue.models.configure_dataset(rna_pp, rna_prob, use_highly_variable=True, use_rep="X_pca", use_batch="batch", use_obs_names=True)
-    scglue.models.configure_dataset(atac_pp, atac_prob, use_highly_variable=True, use_cell_type="ct", use_obs_names=True)
+    scglue.models.configure_dataset(
+        rna_pp,
+        rna_prob,
+        use_highly_variable=True,
+        use_rep="X_pca",
+        use_batch="batch",
+        use_obs_names=True,
+    )
+    scglue.models.configure_dataset(
+        atac_pp,
+        atac_prob,
+        use_highly_variable=True,
+        use_cell_type="ct",
+        use_obs_names=True,
+    )
 
     for i in range(2):
         glue = ActiveModel(
-            {"rna": rna_pp, "atac": atac_pp},
-            latent_dim=2, random_seed=0
+            {"rna": rna_pp, "atac": atac_pp}, latent_dim=2, random_seed=0
         )
         glue.compile()
         glue.fit(
             {"rna": rna_pp, "atac": atac_pp},
             batch_size=40,
-            align_burnin=2, max_epochs=5, patience=3,
-            directory=tmp_path
+            align_burnin=2,
+            max_epochs=5,
+            patience=3,
+            directory=tmp_path,
         )
 
         rna_pp.obsm[f"X_glue{i + 1}"] = glue.encode_data("rna", rna_pp)

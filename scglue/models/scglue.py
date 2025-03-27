@@ -27,8 +27,7 @@ from .data import AnnDataset, ArrayDataset, DataLoader, GraphDataset
 from .glue import GLUE, GLUETrainer
 from .nn import freeze_running_stats
 
-
-#---------------------------------- Utilities ----------------------------------
+# --------------------------------- Utilities ----------------------------------
 
 _ENCODER_MAP: Mapping[str, type] = {}
 _DECODER_MAP: Mapping[str, type] = {}
@@ -58,7 +57,8 @@ register_prob_model("NB", sc.NBDataEncoder, sc.NBDataDecoder)
 register_prob_model("ZINB", sc.NBDataEncoder, sc.ZINBDataDecoder)
 
 
-#----------------------------- Network definition ------------------------------
+# ---------------------------- Network definition ------------------------------
+
 
 class SCGLUE(GLUE):
 
@@ -86,12 +86,15 @@ class SCGLUE(GLUE):
     """
 
     def __init__(
-            self, g2v: sc.GraphEncoder, v2g: sc.GraphDecoder,
-            x2u: Mapping[str, sc.DataEncoder],
-            u2x: Mapping[str, sc.DataDecoder],
-            idx: Mapping[str, torch.Tensor],
-            du: sc.Discriminator, prior: sc.Prior,
-            u2c: Optional[sc.Classifier] = None
+        self,
+        g2v: sc.GraphEncoder,
+        v2g: sc.GraphDecoder,
+        x2u: Mapping[str, sc.DataEncoder],
+        u2x: Mapping[str, sc.DataDecoder],
+        idx: Mapping[str, torch.Tensor],
+        du: sc.Discriminator,
+        prior: sc.Prior,
+        u2c: Optional[sc.Classifier] = None,
     ) -> None:
         super().__init__(g2v, v2g, x2u, u2x, idx, du, prior)
         self.u2c = u2c.to(self.device) if u2c else None
@@ -123,17 +126,20 @@ class IndSCGLUE(SCGLUE):
     """
 
     def __init__(
-            self, g2v: sc.GraphEncoder, v2g: sc.GraphDecoder,
-            x2u: Mapping[str, sc.DataEncoder],
-            u2x: Mapping[str, sc.IndDataDecoder],
-            idx: Mapping[str, torch.Tensor],
-            du: sc.Discriminator, prior: sc.Prior,
-            u2c: Optional[sc.Classifier] = None
+        self,
+        g2v: sc.GraphEncoder,
+        v2g: sc.GraphDecoder,
+        x2u: Mapping[str, sc.DataEncoder],
+        u2x: Mapping[str, sc.IndDataDecoder],
+        idx: Mapping[str, torch.Tensor],
+        du: sc.Discriminator,
+        prior: sc.Prior,
+        u2c: Optional[sc.Classifier] = None,
     ) -> None:
         super().__init__(g2v, v2g, x2u, u2x, idx, du, prior, u2c)
 
 
-#----------------------------- Trainer definition ------------------------------
+# ---------------------------- Trainer definition ------------------------------
 
 DataTensors = Tuple[
     Mapping[str, torch.Tensor],  # x (data)
@@ -144,7 +150,7 @@ DataTensors = Tuple[
     Mapping[str, torch.Tensor],  # xflag (modality indicator)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
-    torch.Tensor  # esgn (edge sign)
+    torch.Tensor,  # esgn (edge sign)
 ]  # Specifies the data format of input to SCGLUETrainer.compute_losses
 
 
@@ -183,16 +189,29 @@ class SCGLUETrainer(GLUETrainer):
     BURNIN_NOISE_EXAG: float = 1.5  # Burn-in noise exaggeration
 
     def __init__(
-            self, net: SCGLUE, lam_data: float = None, lam_kl: float = None,
-            lam_graph: float = None, lam_align: float = None,
-            lam_sup: float = None, normalize_u: bool = None,
-            modality_weight: Mapping[str, float] = None,
-            optim: str = None, lr: float = None, **kwargs
+        self,
+        net: SCGLUE,
+        lam_data: float = None,
+        lam_kl: float = None,
+        lam_graph: float = None,
+        lam_align: float = None,
+        lam_sup: float = None,
+        normalize_u: bool = None,
+        modality_weight: Mapping[str, float] = None,
+        optim: str = None,
+        lr: float = None,
+        **kwargs,
     ) -> None:
         super().__init__(
-            net, lam_data=lam_data, lam_kl=lam_kl, lam_graph=lam_graph,
-            lam_align=lam_align, modality_weight=modality_weight,
-            optim=optim, lr=lr, **kwargs
+            net,
+            lam_data=lam_data,
+            lam_kl=lam_kl,
+            lam_graph=lam_graph,
+            lam_align=lam_align,
+            modality_weight=modality_weight,
+            optim=optim,
+            lr=lr,
+            **kwargs,
         )
         required_kwargs = ("lam_sup", "normalize_u")
         for required_kwarg in required_kwargs:
@@ -209,8 +228,10 @@ class SCGLUETrainer(GLUETrainer):
                     self.net.v2g.parameters(),
                     self.net.x2u.parameters(),
                     self.net.u2x.parameters(),
-                    self.net.u2c.parameters()
-                ), lr=self.lr, **kwargs
+                    self.net.u2c.parameters(),
+                ),
+                lr=self.lr,
+                **kwargs,
             )
 
     @property
@@ -239,33 +260,23 @@ class SCGLUETrainer(GLUETrainer):
         device = self.net.device
         keys = self.net.keys
         K = len(keys)
-        x, xrep, xbch, xlbl, xdwt, (eidx, ewt, esgn) = \
-            data[0:K], data[K:2*K], data[2*K:3*K], data[3*K:4*K], data[4*K:5*K], \
-            data[5*K+1:]
-        x = {
-            k: x[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xrep = {
-            k: xrep[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xbch = {
-            k: xbch[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xlbl = {
-            k: xlbl[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xdwt = {
-            k: xdwt[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
+        x, xrep, xbch, xlbl, xdwt, (eidx, ewt, esgn) = (
+            data[0:K],
+            data[K : 2 * K],
+            data[2 * K : 3 * K],
+            data[3 * K : 4 * K],
+            data[4 * K : 5 * K],
+            data[5 * K + 1 :],
+        )
+        x = {k: x[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xrep = {k: xrep[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xbch = {k: xbch[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xlbl = {k: xlbl[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xdwt = {k: xdwt[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
         xflag = {
-            k: torch.as_tensor(
-                i, dtype=torch.int64, device=device
-            ).expand(x[k].shape[0])
+            k: torch.as_tensor(i, dtype=torch.int64, device=device).expand(
+                x[k].shape[0]
+            )
             for i, k in enumerate(keys)
         }
         eidx = eidx.to(device, non_blocking=True)
@@ -274,7 +285,7 @@ class SCGLUETrainer(GLUETrainer):
         return x, xrep, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn
 
     def compute_losses(
-            self, data: DataTensors, epoch: int, dsc_only: bool = False
+        self, data: DataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:
         net = self.net
         x, xrep, xbch, xlbl, xdwt, xflag, eidx, ewt, esgn = data
@@ -291,10 +302,9 @@ class SCGLUETrainer(GLUETrainer):
         xbch_cat = torch.cat([xbch[k] for k in net.keys])
         xdwt_cat = torch.cat([xdwt[k] for k in net.keys])
         xflag_cat = torch.cat([xflag[k] for k in net.keys])
-        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) \
-            if self.align_burnin else 0
+        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) if self.align_burnin else 0
         if anneal:
-            noise = D.Normal(0, u_cat.std(axis=0)).sample((u_cat.shape[0], ))
+            noise = D.Normal(0, u_cat.std(axis=0)).sample((u_cat.shape[0],))
             u_cat = u_cat + (anneal * self.BURNIN_NOISE_EXAG) * noise
         dsc_loss = F.cross_entropy(net.du(u_cat, xbch_cat), xflag_cat, reduction="none")
         dsc_loss = (dsc_loss * xdwt_cat).sum() / xdwt_cat.numel()
@@ -325,44 +335,43 @@ class SCGLUETrainer(GLUETrainer):
         g_elbo = g_nll + self.lam_kl * g_kl
 
         x_nll = {
-            k: -net.u2x[k](
-                usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k]
-            ).log_prob(x[k]).mean()
+            k: -net.u2x[k](usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k])
+            .log_prob(x[k])
+            .mean()
             for k in net.keys
         }
         x_kl = {
-            k: D.kl_divergence(
-                u[k], prior
-            ).sum(dim=1).mean() / x[k].shape[1]
+            k: D.kl_divergence(u[k], prior).sum(dim=1).mean() / x[k].shape[1]
             for k in net.keys
         }
-        x_elbo = {
-            k: x_nll[k] + self.lam_kl * x_kl[k]
-            for k in net.keys
-        }
+        x_elbo = {k: x_nll[k] + self.lam_kl * x_kl[k] for k in net.keys}
         x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
-        vae_loss = self.lam_data * x_elbo_sum \
-            + self.lam_graph * len(net.keys) * g_elbo \
+        vae_loss = (
+            self.lam_data * x_elbo_sum
+            + self.lam_graph * len(net.keys) * g_elbo
             + self.lam_sup * sup_loss
+        )
         gen_loss = vae_loss - self.lam_align * dsc_loss
 
         losses = {
-            "dsc_loss": dsc_loss, "vae_loss": vae_loss, "gen_loss": gen_loss,
-            "g_nll": g_nll, "g_kl": g_kl, "g_elbo": g_elbo
+            "dsc_loss": dsc_loss,
+            "vae_loss": vae_loss,
+            "gen_loss": gen_loss,
+            "g_nll": g_nll,
+            "g_kl": g_kl,
+            "g_elbo": g_elbo,
         }
         for k in net.keys:
-            losses.update({
-                f"x_{k}_nll": x_nll[k],
-                f"x_{k}_kl": x_kl[k],
-                f"x_{k}_elbo": x_elbo[k]
-            })
+            losses.update(
+                {f"x_{k}_nll": x_nll[k], f"x_{k}_kl": x_kl[k], f"x_{k}_elbo": x_elbo[k]}
+            )
         if net.u2c:
             losses["sup_loss"] = sup_loss
         return losses
 
     def train_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
+        self, engine: ignite.engine.Engine, data: List[torch.Tensor]
     ) -> Mapping[str, torch.Tensor]:
         self.net.train()
         data = self.format_data(data)
@@ -409,7 +418,7 @@ PairedDataTensors = Tuple[
     torch.Tensor,  # pmsk (paired mask)
     torch.Tensor,  # eidx (edge index)
     torch.Tensor,  # ewt (edge weight)
-    torch.Tensor  # esgn (edge sign)
+    torch.Tensor,  # esgn (edge sign)
 ]  # Specifies the data format of input to PairedSCGLUETrainer.compute_losses
 
 
@@ -452,19 +461,34 @@ class PairedSCGLUETrainer(SCGLUETrainer):
     """
 
     def __init__(
-            self, net: SCGLUE, lam_data: float = None, lam_kl: float = None,
-            lam_graph: float = None, lam_align: float = None, lam_sup: float = None,
-            lam_joint_cross: float = None, lam_real_cross: float = None,
-            lam_cos: float = None, normalize_u: bool = None,
-            modality_weight: Mapping[str, float] = None,
-            optim: str = None, lr: float = None, **kwargs
+        self,
+        net: SCGLUE,
+        lam_data: float = None,
+        lam_kl: float = None,
+        lam_graph: float = None,
+        lam_align: float = None,
+        lam_sup: float = None,
+        lam_joint_cross: float = None,
+        lam_real_cross: float = None,
+        lam_cos: float = None,
+        normalize_u: bool = None,
+        modality_weight: Mapping[str, float] = None,
+        optim: str = None,
+        lr: float = None,
+        **kwargs,
     ) -> None:
         super().__init__(
-            net, lam_data=lam_data, lam_kl=lam_kl,
-            lam_graph=lam_graph, lam_align=lam_align,
-            lam_sup=lam_sup, normalize_u=normalize_u,
+            net,
+            lam_data=lam_data,
+            lam_kl=lam_kl,
+            lam_graph=lam_graph,
+            lam_align=lam_align,
+            lam_sup=lam_sup,
+            normalize_u=normalize_u,
             modality_weight=modality_weight,
-            optim=optim, lr=lr, **kwargs
+            optim=optim,
+            lr=lr,
+            **kwargs,
         )
         required_kwargs = ("lam_joint_cross", "lam_real_cross", "lam_cos")
         for required_kwarg in required_kwargs:
@@ -488,33 +512,24 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         device = self.net.device
         keys = self.net.keys
         K = len(keys)
-        x, xrep, xbch, xlbl, xdwt, pmsk, (eidx, ewt, esgn) = \
-            data[0:K], data[K:2*K], data[2*K:3*K], data[3*K:4*K], data[4*K:5*K], \
-            data[5*K], data[5*K+1:]
-        x = {
-            k: x[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xrep = {
-            k: xrep[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xbch = {
-            k: xbch[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xlbl = {
-            k: xlbl[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
-        xdwt = {
-            k: xdwt[i].to(device, non_blocking=True)
-            for i, k in enumerate(keys)
-        }
+        x, xrep, xbch, xlbl, xdwt, pmsk, (eidx, ewt, esgn) = (
+            data[0:K],
+            data[K : 2 * K],
+            data[2 * K : 3 * K],
+            data[3 * K : 4 * K],
+            data[4 * K : 5 * K],
+            data[5 * K],
+            data[5 * K + 1 :],
+        )
+        x = {k: x[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xrep = {k: xrep[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xbch = {k: xbch[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xlbl = {k: xlbl[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
+        xdwt = {k: xdwt[i].to(device, non_blocking=True) for i, k in enumerate(keys)}
         xflag = {
-            k: torch.as_tensor(
-                i, dtype=torch.int64, device=device
-            ).expand(x[k].shape[0])
+            k: torch.as_tensor(i, dtype=torch.int64, device=device).expand(
+                x[k].shape[0]
+            )
             for i, k in enumerate(keys)
         }
         pmsk = pmsk.to(device, non_blocking=True)
@@ -524,7 +539,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         return x, xrep, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn
 
     def compute_losses(
-            self, data: PairedDataTensors, epoch: int, dsc_only: bool = False
+        self, data: PairedDataTensors, epoch: int, dsc_only: bool = False
     ) -> Mapping[str, torch.Tensor]:
         net = self.net
         x, xrep, xbch, xlbl, xdwt, xflag, pmsk, eidx, ewt, esgn = data
@@ -541,10 +556,9 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         xbch_cat = torch.cat([xbch[k] for k in net.keys])
         xdwt_cat = torch.cat([xdwt[k] for k in net.keys])
         xflag_cat = torch.cat([xflag[k] for k in net.keys])
-        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) \
-            if self.align_burnin else 0
+        anneal = max(1 - (epoch - 1) / self.align_burnin, 0) if self.align_burnin else 0
         if anneal:
-            noise = D.Normal(0, u_cat.std(axis=0)).sample((u_cat.shape[0], ))
+            noise = D.Normal(0, u_cat.std(axis=0)).sample((u_cat.shape[0],))
             u_cat = u_cat + (anneal * self.BURNIN_NOISE_EXAG) * noise
         dsc_loss = F.cross_entropy(net.du(u_cat, xbch_cat), xflag_cat, reduction="none")
         dsc_loss = (dsc_loss * xdwt_cat).sum() / xdwt_cat.numel()
@@ -575,21 +589,16 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         g_elbo = g_nll + self.lam_kl * g_kl
 
         x_nll = {
-            k: -net.u2x[k](
-                usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k]
-            ).log_prob(x[k]).mean()
+            k: -net.u2x[k](usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k])
+            .log_prob(x[k])
+            .mean()
             for k in net.keys
         }
         x_kl = {
-            k: D.kl_divergence(
-                u[k], prior
-            ).sum(dim=1).mean() / x[k].shape[1]
+            k: D.kl_divergence(u[k], prior).sum(dim=1).mean() / x[k].shape[1]
             for k in net.keys
         }
-        x_elbo = {
-            k: x_nll[k] + self.lam_kl * x_kl[k]
-            for k in net.keys
-        }
+        x_elbo = {k: x_nll[k] + self.lam_kl * x_kl[k] for k in net.keys}
         x_elbo_sum = sum(self.modality_weight[k] * x_elbo[k] for k in net.keys)
 
         pmsk = pmsk.T
@@ -602,14 +611,18 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         if self.lam_joint_cross:
             x_joint_cross_nll = {
                 k: -net.u2x[k](
-                    usamp_mean[m], vsamp[getattr(net, f"{k}_idx")],
-                    xbch[k][m], None if l[k] is None else l[k][m]
-                ).log_prob(x[k][m]).mean()
-                for k, m in zip(net.keys, pmsk) if m.sum()
+                    usamp_mean[m],
+                    vsamp[getattr(net, f"{k}_idx")],
+                    xbch[k][m],
+                    None if l[k] is None else l[k][m],
+                )
+                .log_prob(x[k][m])
+                .mean()
+                for k, m in zip(net.keys, pmsk)
+                if m.sum()
             }
             joint_cross_loss = sum(
-                self.modality_weight[k] * nll
-                for k, nll in x_joint_cross_nll.items()
+                self.modality_weight[k] * nll for k, nll in x_joint_cross_nll.items()
             )
         else:
             joint_cross_loss = torch.as_tensor(0.0, device=net.device)
@@ -623,55 +636,64 @@ class PairedSCGLUETrainer(SCGLUETrainer):
                         continue
                     m = m_src & m_tgt
                     if m.sum():
-                        x_tgt_real_cross_nll += -net.u2x[k_tgt](
-                            usamp[k_src][m], vsamp[getattr(net, f"{k_tgt}_idx")],
-                            xbch[k_tgt][m], None if l[k_tgt] is None else l[k_tgt][m]
-                        ).log_prob(x[k_tgt][m]).mean()
+                        x_tgt_real_cross_nll += (
+                            -net.u2x[k_tgt](
+                                usamp[k_src][m],
+                                vsamp[getattr(net, f"{k_tgt}_idx")],
+                                xbch[k_tgt][m],
+                                None if l[k_tgt] is None else l[k_tgt][m],
+                            )
+                            .log_prob(x[k_tgt][m])
+                            .mean()
+                        )
                 x_real_cross_nll[k_tgt] = x_tgt_real_cross_nll
             real_cross_loss = sum(
-                self.modality_weight[k] * nll
-                for k, nll in x_real_cross_nll.items()
+                self.modality_weight[k] * nll for k, nll in x_real_cross_nll.items()
             )
         else:
             real_cross_loss = torch.as_tensor(0.0, device=net.device)
 
         if self.lam_cos:
             cos_loss = sum(
-                1 - F.cosine_similarity(
-                    usamp_stack[i, m], usamp_mean[m]
-                ).mean()
-                for i, m in enumerate(pmsk) if m.sum()
+                1 - F.cosine_similarity(usamp_stack[i, m], usamp_mean[m]).mean()
+                for i, m in enumerate(pmsk)
+                if m.sum()
             )
         else:
             cos_loss = torch.as_tensor(0.0, device=net.device)
 
-        vae_loss = self.lam_data * x_elbo_sum \
-            + self.lam_graph * len(net.keys) * g_elbo \
-            + self.lam_sup * sup_loss \
-            + self.lam_joint_cross * joint_cross_loss \
-            + self.lam_real_cross * real_cross_loss \
+        vae_loss = (
+            self.lam_data * x_elbo_sum
+            + self.lam_graph * len(net.keys) * g_elbo
+            + self.lam_sup * sup_loss
+            + self.lam_joint_cross * joint_cross_loss
+            + self.lam_real_cross * real_cross_loss
             + self.lam_cos * cos_loss
+        )
         gen_loss = vae_loss - self.lam_align * dsc_loss
 
         losses = {
-            "dsc_loss": dsc_loss, "vae_loss": vae_loss, "gen_loss": gen_loss,
-            "g_nll": g_nll, "g_kl": g_kl, "g_elbo": g_elbo,
+            "dsc_loss": dsc_loss,
+            "vae_loss": vae_loss,
+            "gen_loss": gen_loss,
+            "g_nll": g_nll,
+            "g_kl": g_kl,
+            "g_elbo": g_elbo,
             "joint_cross_loss": joint_cross_loss,
             "real_cross_loss": real_cross_loss,
-            "cos_loss": cos_loss
+            "cos_loss": cos_loss,
         }
         for k in net.keys:
-            losses.update({
-                f"x_{k}_nll": x_nll[k],
-                f"x_{k}_kl": x_kl[k],
-                f"x_{k}_elbo": x_elbo[k]
-            })
+            losses.update(
+                {f"x_{k}_nll": x_nll[k], f"x_{k}_kl": x_kl[k], f"x_{k}_elbo": x_elbo[k]}
+            )
         if net.u2c:
             losses["sup_loss"] = sup_loss
         return losses
 
 
-#--------------------------------- Public API ----------------------------------
+# -------------------------------- Public API ----------------------------------
+
 
 @logged
 class SCGLUEModel(Model):
@@ -705,15 +727,21 @@ class SCGLUEModel(Model):
     GRAPH_BATCHES: int = 32  # Number of graph batches in each graph epoch
     ALIGN_BURNIN_PRG: float = 8.0  # Effective optimization progress of align_burnin (learning rate * iterations)
     MAX_EPOCHS_PRG: float = 48.0  # Effective optimization progress of max_epochs (learning rate * iterations)
-    PATIENCE_PRG: float = 4.0  # Effective optimization progress of patience (learning rate * iterations)
+    PATIENCE_PRG: float = (
+        4.0  # Effective optimization progress of patience (learning rate * iterations)
+    )
     REDUCE_LR_PATIENCE_PRG: float = 2.0  # Effective optimization progress of reduce_lr_patience (learning rate * iterations)
 
     def __init__(
-            self, adatas: Mapping[str, AnnData],
-            vertices: List[str], latent_dim: int = 50,
-            h_depth: int = 2, h_dim: int = 256,
-            dropout: float = 0.2, shared_batches: bool = False,
-            random_seed: int = 0
+        self,
+        adatas: Mapping[str, AnnData],
+        vertices: List[str],
+        latent_dim: int = 50,
+        h_depth: int = 2,
+        h_dim: int = 256,
+        dropout: float = 0.2,
+        shared_batches: bool = False,
+        random_seed: int = 0,
     ) -> None:
         self.vertices = pd.Index(vertices)
         self.random_seed = random_seed
@@ -739,17 +767,24 @@ class SCGLUEModel(Model):
                 raise ValueError("Not all modality features exist in the graph!")
             idx[k] = torch.as_tensor(idx[k])
             x2u[k] = _ENCODER_MAP[data_config["prob_model"]](
-                data_config["rep_dim"] or len(data_config["features"]), latent_dim,
-                h_depth=h_depth, h_dim=h_dim, dropout=dropout
+                data_config["rep_dim"] or len(data_config["features"]),
+                latent_dim,
+                h_depth=h_depth,
+                h_dim=h_dim,
+                dropout=dropout,
             )
-            data_config["batches"] = pd.Index([]) if data_config["batches"] is None \
+            data_config["batches"] = (
+                pd.Index([])
+                if data_config["batches"] is None
                 else pd.Index(data_config["batches"])
+            )
             u2x[k] = _DECODER_MAP[data_config["prob_model"]](
                 len(data_config["features"]),
-                n_batches=max(data_config["batches"].size, 1)
+                n_batches=max(data_config["batches"].size, 1),
             )
             all_ct = all_ct.union(
-                set() if data_config["cell_types"] is None
+                set()
+                if data_config["cell_types"] is None
                 else data_config["cell_types"]
             )
             self.modalities[k] = data_config
@@ -761,18 +796,30 @@ class SCGLUEModel(Model):
             ref_batch = all_batches[0]
             for batches in all_batches:
                 if not np.array_equal(batches, ref_batch):
-                    raise RuntimeError("Batches must match when using `shared_batches`!")
+                    raise RuntimeError(
+                        "Batches must match when using `shared_batches`!"
+                    )
             du_n_batches = ref_batch.size
         else:
             du_n_batches = 0
         du = sc.Discriminator(
-            latent_dim, len(self.modalities), n_batches=du_n_batches,
-            h_depth=h_depth, h_dim=h_dim, dropout=dropout
+            latent_dim,
+            len(self.modalities),
+            n_batches=du_n_batches,
+            h_depth=h_depth,
+            h_dim=h_dim,
+            dropout=dropout,
         )
         prior = sc.Prior()
         super().__init__(
-            g2v, v2g, x2u, u2x, idx, du, prior,
-            u2c=None if all_ct.empty else sc.Classifier(latent_dim, all_ct.size)
+            g2v,
+            v2g,
+            x2u,
+            u2x,
+            idx,
+            du,
+            prior,
+            u2c=None if all_ct.empty else sc.Classifier(latent_dim, all_ct.size),
         )
 
     def freeze_cells(self) -> None:
@@ -788,7 +835,7 @@ class SCGLUEModel(Model):
         self.trainer.freeze_u = False
 
     def adopt_pretrained_model(
-            self, source: "SCGLUEModel", submodule: Optional[str] = None
+        self, source: "SCGLUEModel", submodule: Optional[str] = None
     ) -> None:
         r"""
         Adopt buffers and parameters from a pretrained model
@@ -822,14 +869,16 @@ class SCGLUEModel(Model):
             self.logger.debug("Copied: %s", k)
 
     def compile(  # pylint: disable=arguments-differ
-            self, lam_data: float = 1.0,
-            lam_kl: float = 1.0,
-            lam_graph: float = 0.02,
-            lam_align: float = 0.05,
-            lam_sup: float = 0.02,
-            normalize_u: bool = False,
-            modality_weight: Optional[Mapping[str, float]] = None,
-            lr: float = 2e-3, **kwargs
+        self,
+        lam_data: float = 1.0,
+        lam_kl: float = 1.0,
+        lam_graph: float = 0.02,
+        lam_align: float = 0.05,
+        lam_sup: float = 0.02,
+        normalize_u: bool = False,
+        modality_weight: Optional[Mapping[str, float]] = None,
+        lr: float = 2e-3,
+        **kwargs,
     ) -> None:
         r"""
         Prepare model for training
@@ -858,20 +907,33 @@ class SCGLUEModel(Model):
         if modality_weight is None:
             modality_weight = {k: 1.0 for k in self.net.keys}
         super().compile(
-            lam_data=lam_data, lam_kl=lam_kl,
-            lam_graph=lam_graph, lam_align=lam_align, lam_sup=lam_sup,
-            normalize_u=normalize_u, modality_weight=modality_weight,
-            optim="RMSprop", lr=lr, **kwargs
+            lam_data=lam_data,
+            lam_kl=lam_kl,
+            lam_graph=lam_graph,
+            lam_align=lam_align,
+            lam_sup=lam_sup,
+            normalize_u=normalize_u,
+            modality_weight=modality_weight,
+            optim="RMSprop",
+            lr=lr,
+            **kwargs,
         )
 
     def fit(  # pylint: disable=arguments-differ
-            self, adatas: Mapping[str, AnnData], graph: nx.Graph,
-            neg_samples: int = 10, val_split: float = 0.1,
-            data_batch_size: int = 128, graph_batch_size: int = AUTO,
-            align_burnin: int = AUTO, safe_burnin: bool = True,
-            max_epochs: int = AUTO, patience: Optional[int] = AUTO,
-            reduce_lr_patience: Optional[int] = AUTO,
-            wait_n_lrs: int = 1, directory: Optional[os.PathLike] = None
+        self,
+        adatas: Mapping[str, AnnData],
+        graph: nx.Graph,
+        neg_samples: int = 10,
+        val_split: float = 0.1,
+        data_batch_size: int = 128,
+        graph_batch_size: int = AUTO,
+        align_burnin: int = AUTO,
+        safe_burnin: bool = True,
+        max_epochs: int = AUTO,
+        patience: Optional[int] = AUTO,
+        reduce_lr_patience: Optional[int] = AUTO,
+        wait_n_lrs: int = 1,
+        directory: Optional[os.PathLike] = None,
     ) -> None:
         r"""
         Fit model on given datasets
@@ -909,15 +971,17 @@ class SCGLUEModel(Model):
         data = AnnDataset(
             [adatas[key] for key in self.net.keys],
             [self.modalities[key] for key in self.net.keys],
-            mode="train"
+            mode="train",
         )
         check_graph(
-            graph, adatas.values(),
-            cov="ignore", attr="error", loop="warn", sym="warn"
+            graph, adatas.values(), cov="ignore", attr="error", loop="warn", sym="warn"
         )
         graph = GraphDataset(
-            graph, self.vertices, neg_samples=neg_samples,
-            weighted_sampling=True, deemphasize_loops=True
+            graph,
+            self.vertices,
+            neg_samples=neg_samples,
+            weighted_sampling=True,
+            deemphasize_loops=True,
         )
 
         batch_per_epoch = data.size * (1 - val_split) / data_batch_size
@@ -927,25 +991,25 @@ class SCGLUEModel(Model):
         if align_burnin == AUTO:
             align_burnin = max(
                 ceil(self.ALIGN_BURNIN_PRG / self.trainer.lr / batch_per_epoch),
-                ceil(self.ALIGN_BURNIN_PRG)
+                ceil(self.ALIGN_BURNIN_PRG),
             )
             self.logger.info("Setting `align_burnin` = %d", align_burnin)
         if max_epochs == AUTO:
             max_epochs = max(
                 ceil(self.MAX_EPOCHS_PRG / self.trainer.lr / batch_per_epoch),
-                ceil(self.MAX_EPOCHS_PRG)
+                ceil(self.MAX_EPOCHS_PRG),
             )
             self.logger.info("Setting `max_epochs` = %d", max_epochs)
         if patience == AUTO:
             patience = max(
                 ceil(self.PATIENCE_PRG / self.trainer.lr / batch_per_epoch),
-                ceil(self.PATIENCE_PRG)
+                ceil(self.PATIENCE_PRG),
             )
             self.logger.info("Setting `patience` = %d", patience)
         if reduce_lr_patience == AUTO:
             reduce_lr_patience = max(
                 ceil(self.REDUCE_LR_PATIENCE_PRG / self.trainer.lr / batch_per_epoch),
-                ceil(self.REDUCE_LR_PATIENCE_PRG)
+                ceil(self.REDUCE_LR_PATIENCE_PRG),
             )
             self.logger.info("Setting `reduce_lr_patience` = %d", reduce_lr_patience)
 
@@ -953,20 +1017,29 @@ class SCGLUEModel(Model):
             self.logger.info("Cell embeddings are frozen")
 
         super().fit(
-            data, graph, val_split=val_split,
-            data_batch_size=data_batch_size, graph_batch_size=graph_batch_size,
-            align_burnin=align_burnin, safe_burnin=safe_burnin,
-            max_epochs=max_epochs, patience=patience,
-            reduce_lr_patience=reduce_lr_patience, wait_n_lrs=wait_n_lrs,
+            data,
+            graph,
+            val_split=val_split,
+            data_batch_size=data_batch_size,
+            graph_batch_size=graph_batch_size,
+            align_burnin=align_burnin,
+            safe_burnin=safe_burnin,
+            max_epochs=max_epochs,
+            patience=patience,
+            reduce_lr_patience=reduce_lr_patience,
+            wait_n_lrs=wait_n_lrs,
             random_seed=self.random_seed,
-            directory=directory
+            directory=directory,
         )
 
     @torch.no_grad()
     def get_losses(  # pylint: disable=arguments-differ
-            self, adatas: Mapping[str, AnnData], graph: nx.Graph,
-            neg_samples: int = 10, data_batch_size: int = 128,
-            graph_batch_size: int = AUTO
+        self,
+        adatas: Mapping[str, AnnData],
+        graph: nx.Graph,
+        neg_samples: int = 10,
+        data_batch_size: int = 128,
+        graph_batch_size: int = AUTO,
     ) -> Mapping[str, np.ndarray]:
         r"""
         Compute loss function values
@@ -992,26 +1065,29 @@ class SCGLUEModel(Model):
         data = AnnDataset(
             [adatas[key] for key in self.net.keys],
             [self.modalities[key] for key in self.net.keys],
-            mode="train"
+            mode="train",
         )
         graph = GraphDataset(
-            graph, self.vertices,
+            graph,
+            self.vertices,
             neg_samples=neg_samples,
             weighted_sampling=True,
-            deemphasize_loops=True
+            deemphasize_loops=True,
         )
         if graph_batch_size == AUTO:
             graph_batch_size = ceil(graph.size / self.GRAPH_BATCHES)
             self.logger.info("Setting `graph_batch_size` = %d", graph_batch_size)
         return super().get_losses(
-            data, graph, data_batch_size=data_batch_size,
+            data,
+            graph,
+            data_batch_size=data_batch_size,
             graph_batch_size=graph_batch_size,
-            random_seed=self.random_seed
+            random_seed=self.random_seed,
         )
 
     @torch.no_grad()
     def encode_graph(
-            self, graph: nx.Graph, n_sample: Optional[int] = None
+        self, graph: nx.Graph, n_sample: Optional[int] = None
     ) -> np.ndarray:
         r"""
         Compute graph (feature) embedding
@@ -1036,23 +1112,27 @@ class SCGLUEModel(Model):
         self.net.eval()
         graph = GraphDataset(graph, self.vertices)
         enorm = torch.as_tensor(
-            normalize_edges(graph.eidx, graph.ewt),
-            device=self.net.device
+            normalize_edges(graph.eidx, graph.ewt), device=self.net.device
         )
         esgn = torch.as_tensor(graph.esgn, device=self.net.device)
         eidx = torch.as_tensor(graph.eidx, device=self.net.device)
 
         v = self.net.g2v(eidx, enorm, esgn)
         if n_sample:
-            return torch.cat([
-                v.sample((1, )).cpu() for _ in range(n_sample)
-            ]).permute(1, 0, 2).numpy()
+            return (
+                torch.cat([v.sample((1,)).cpu() for _ in range(n_sample)])
+                .permute(1, 0, 2)
+                .numpy()
+            )
         return v.mean.detach().cpu().numpy()
 
     @torch.no_grad()
     def encode_data(
-            self, key: str, adata: AnnData, batch_size: int = 128,
-            n_sample: Optional[int] = None
+        self,
+        key: str,
+        adata: AnnData,
+        batch_size: int = 128,
+        n_sample: Optional[int] = None,
     ) -> np.ndarray:
         r"""
         Compute data (cell) embedding
@@ -1081,35 +1161,95 @@ class SCGLUEModel(Model):
         self.net.eval()
         encoder = self.net.x2u[key]
         data = AnnDataset(
-            [adata], [self.modalities[key]],
-            mode="eval", getitem_size=batch_size
+            [adata], [self.modalities[key]], mode="eval", getitem_size=batch_size
         )
         data_loader = DataLoader(
-            data, batch_size=1, shuffle=False,
+            data,
+            batch_size=1,
+            shuffle=False,
             num_workers=config.DATALOADER_NUM_WORKERS,
-            pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY, drop_last=False,
-            persistent_workers=False
+            pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
+            drop_last=False,
+            persistent_workers=False,
         )
         result = []
         for x, xrep, *_ in data_loader:
             u = encoder(
                 x.to(self.net.device, non_blocking=True),
                 xrep.to(self.net.device, non_blocking=True),
-                lazy_normalizer=True
+                lazy_normalizer=True,
             )[0]
             if n_sample:
-                result.append(u.sample((n_sample, )).cpu().permute(1, 0, 2))
+                result.append(u.sample((n_sample,)).cpu().permute(1, 0, 2))
             else:
                 result.append(u.mean.detach().cpu())
         return torch.cat(result).numpy()
 
     @torch.no_grad()
+    def classify_data(
+        self,
+        key: str,
+        adata: AnnData,
+        batch_size: int = 128,
+    ) -> pd.DataFrame:
+        r"""
+        Obtain cell type classification
+
+        Parameters
+        ----------
+        key
+            Modality key
+        adata
+            Input dataset
+        batch_size
+            Size of minibatches
+
+        Returns
+        -------
+        data_class
+            Cell type classification
+            with shape :math:`n_{cell} \times n_{classes}`
+        """
+        self.net.eval()
+        encoder = self.net.x2u[key]
+        classifier = self.net.u2c
+        data = AnnDataset(
+            [adata], [self.modalities[key]], mode="eval", getitem_size=batch_size
+        )
+        data_loader = DataLoader(
+            data,
+            batch_size=1,
+            shuffle=False,
+            num_workers=config.DATALOADER_NUM_WORKERS,
+            pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
+            drop_last=False,
+            persistent_workers=False,
+        )
+        result = []
+        for x, xrep, *_ in data_loader:
+            u = encoder(
+                x.to(self.net.device, non_blocking=True),
+                xrep.to(self.net.device, non_blocking=True),
+                lazy_normalizer=True,
+            )[0]
+            c = classifier(u.mean).softmax(dim=-1)
+            result.append(c.detach().cpu())
+        return pd.DataFrame(
+            torch.cat(result).numpy(),
+            index=adata.obs_names,
+            columns=self.modalities[key]["cell_types"],
+        )
+
+    @torch.no_grad()
     def decode_data(
-            self, source_key: str, target_key: str,
-            adata: AnnData, graph: nx.Graph,
-            target_libsize: Optional[Union[float, np.ndarray]] = None,
-            target_batch: Optional[np.ndarray] = None,
-            batch_size: int = 128
+        self,
+        source_key: str,
+        target_key: str,
+        adata: AnnData,
+        graph: nx.Graph,
+        target_libsize: Optional[Union[float, np.ndarray]] = None,
+        target_batch: Optional[np.ndarray] = None,
+        batch_size: int = 128,
     ) -> np.ndarray:
         r"""
         Decode data
@@ -1175,10 +1315,13 @@ class SCGLUEModel(Model):
 
         data = ArrayDataset(u, b, l, getitem_size=batch_size)
         data_loader = DataLoader(
-            data, batch_size=1, shuffle=False,
+            data,
+            batch_size=1,
+            shuffle=False,
             num_workers=config.DATALOADER_NUM_WORKERS,
-            pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY, drop_last=False,
-            persistent_workers=False
+            pin_memory=config.DATALOADER_PIN_MEMORY and not config.CPU_ONLY,
+            drop_last=False,
+            persistent_workers=False,
         )
         decoder = net.u2x[target_key]
 
@@ -1233,17 +1376,19 @@ class PairedSCGLUEModel(SCGLUEModel):
     TRAINER_TYPE = PairedSCGLUETrainer
 
     def compile(  # pylint: disable=arguments-renamed
-            self, lam_data: float = 1.0,
-            lam_kl: float = 1.0,
-            lam_graph: float = 0.02,
-            lam_align: float = 0.05,
-            lam_sup: float = 0.02,
-            lam_joint_cross: float = 0.02,
-            lam_real_cross: float = 0.02,
-            lam_cos: float = 0.02,
-            normalize_u: bool = False,
-            modality_weight: Optional[Mapping[str, float]] = None,
-            lr: float = 2e-3, **kwargs
+        self,
+        lam_data: float = 1.0,
+        lam_kl: float = 1.0,
+        lam_graph: float = 0.02,
+        lam_align: float = 0.05,
+        lam_sup: float = 0.02,
+        lam_joint_cross: float = 0.02,
+        lam_real_cross: float = 0.02,
+        lam_cos: float = 0.02,
+        normalize_u: bool = False,
+        modality_weight: Optional[Mapping[str, float]] = None,
+        lr: float = 2e-3,
+        **kwargs,
     ) -> None:
         r"""
         Prepare model for training
@@ -1274,9 +1419,16 @@ class PairedSCGLUEModel(SCGLUEModel):
             Learning rate
         """
         super().compile(
-            lam_data=lam_data, lam_kl=lam_kl,
-            lam_graph=lam_graph, lam_align=lam_align, lam_sup=lam_sup,
-            lam_joint_cross=lam_joint_cross, lam_real_cross=lam_real_cross,
-            lam_cos=lam_cos, normalize_u=normalize_u, modality_weight=modality_weight,
-            lr=lr, **kwargs
+            lam_data=lam_data,
+            lam_kl=lam_kl,
+            lam_graph=lam_graph,
+            lam_align=lam_align,
+            lam_sup=lam_sup,
+            lam_joint_cross=lam_joint_cross,
+            lam_real_cross=lam_real_cross,
+            lam_cos=lam_cos,
+            normalize_u=normalize_u,
+            modality_weight=modality_weight,
+            lr=lr,
+            **kwargs,
         )

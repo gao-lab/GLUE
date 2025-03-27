@@ -4,16 +4,21 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "scglue"
-version = "0.3.2"
+version = "0.3.3"
 description = "Graph-linked unified embedding for unpaired single-cell multi-omics data integration"
 readme = "README.md"
 requires-python = ">=3.6"
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 authors = [
-    {name = "Zhi-Jie Cao", email = "caozj@mail.cbi.pku.edu.cn"},
-    {name = "Xin-Ming Tu", email = "xinmingtu@pku.edu.cn"}
+    { name = "Zhi-Jie Cao", email = "caozj@mail.cbi.pku.edu.cn" },
+    { name = "Xin-Ming Tu", email = "xinmingtu@pku.edu.cn" },
 ]
-keywords = ["bioinformatics", "deep-learning", "single-cell", "single-cell-multiomics"]
+keywords = [
+    "bioinformatics",
+    "deep-learning",
+    "single-cell",
+    "single-cell-multiomics",
+]
 classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
@@ -26,7 +31,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Topic :: Scientific/Engineering :: Bio-Informatics"
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
     "numpy>=1.19",
@@ -50,7 +55,7 @@ dependencies = [
     "h5py>=2.10",
     "sparse>=0.3.1",
     "packaging>=16.8",
-    "leidenalg>=0.7"
+    "leidenalg>=0.7",
 ]
 
 [project.optional-dependencies]
@@ -62,13 +67,9 @@ doc = [
     "nbsphinx",
     "sphinx-rtd-theme",
     "ipython",
-    "jinja2"
+    "jinja2",
 ]
-test = [
-    "plotly",
-    "pytest",
-    "pytest-cov"
-]
+test = ["plotly", "pytest", "pytest-cov"]
 
 [project.urls]
 Github = "https://github.com/gao-lab/GLUE"

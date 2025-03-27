@@ -27,7 +27,7 @@ from tqdm.auto import tqdm
 from .check import check_deps
 from .graph import compose_multigraph, reachable_vertices
 from .typehint import RandomState
-from .utils import ConstrainedDataFrame, logged, get_rs
+from .utils import ConstrainedDataFrame, get_rs, logged
 
 
 class Bed(ConstrainedDataFrame):
@@ -36,11 +36,22 @@ class Bed(ConstrainedDataFrame):
     BED format data frame
     """
 
-    COLUMNS = pd.Index([
-        "chrom", "chromStart", "chromEnd", "name", "score",
-        "strand", "thickStart", "thickEnd", "itemRgb",
-        "blockCount", "blockSizes", "blockStarts"
-    ])
+    COLUMNS = pd.Index(
+        [
+            "chrom",
+            "chromStart",
+            "chromEnd",
+            "name",
+            "score",
+            "strand",
+            "thickStart",
+            "thickEnd",
+            "itemRgb",
+            "blockCount",
+            "blockSizes",
+            "blockStarts",
+        ]
+    )
 
     @classmethod
     def rectify(cls, df: pd.DataFrame) -> pd.DataFrame:
@@ -81,7 +92,7 @@ class Bed(ConstrainedDataFrame):
         """
         COLUMNS = cls.COLUMNS.copy(deep=True)
         loaded = pd.read_csv(fname, sep="\t", header=None, comment="#")
-        loaded.columns = COLUMNS[:loaded.shape[1]]
+        loaded.columns = COLUMNS[: loaded.shape[1]]
         return cls(loaded)
 
     def write_bed(self, fname: os.PathLike, ncols: Optional[int] = None) -> None:
@@ -109,10 +120,17 @@ class Bed(ConstrainedDataFrame):
         bedtool
             Converted :class:`pybedtools.BedTool` object
         """
-        return BedTool(Interval(
-            row["chrom"], row["chromStart"], row["chromEnd"],
-            name=row["name"], score=row["score"], strand=row["strand"]
-        ) for _, row in self.iterrows())
+        return BedTool(
+            Interval(
+                row["chrom"],
+                row["chromStart"],
+                row["chromEnd"],
+                name=row["name"],
+                score=row["score"],
+                strand=row["strand"],
+            )
+            for _, row in self.iterrows()
+        )
 
     def nucleotide_content(self, fasta: os.PathLike) -> pd.DataFrame:
         r"""
@@ -128,19 +146,35 @@ class Bed(ConstrainedDataFrame):
         nucleotide_stat
             Data frame containing nucleotide content statistics for each region
         """
-        result = self.to_bedtool().nucleotide_content(fi=os.fspath(fasta), s=True)  # pylint: disable=unexpected-keyword-arg
+        result = self.to_bedtool().nucleotide_content(
+            fi=os.fspath(fasta), s=True
+        )  # pylint: disable=unexpected-keyword-arg
         result = pd.DataFrame(
             np.stack([interval.fields[6:15] for interval in result]),
             columns=[
-                r"%AT", r"%GC",
-                r"#A", r"#C", r"#G", r"#T", r"#N",
-                r"#other", r"length"
-            ]
-        ).astype({
-            r"%AT": float, r"%GC": float,
-            r"#A": int, r"#C": int, r"#G": int, r"#T": int, r"#N": int,
-            r"#other": int, r"length": int
-        })
+                r"%AT",
+                r"%GC",
+                r"#A",
+                r"#C",
+                r"#G",
+                r"#T",
+                r"#N",
+                r"#other",
+                r"length",
+            ],
+        ).astype(
+            {
+                r"%AT": float,
+                r"%GC": float,
+                r"#A": int,
+                r"#C": int,
+                r"#G": int,
+                r"#T": int,
+                r"#N": int,
+                r"#other": int,
+                r"length": int,
+            }
+        )
         pybedtools.cleanup()
         return result
 
@@ -183,8 +217,10 @@ class Bed(ConstrainedDataFrame):
         return type(self)(df)
 
     def expand(
-            self, upstream: int, downstream: int,
-            chr_len: Optional[Mapping[str, int]] = None
+        self,
+        upstream: int,
+        downstream: int,
+        chr_len: Optional[Mapping[str, int]] = None,
     ) -> "Bed":
         r"""
         Expand genomic features towards upstream and downstream
@@ -207,7 +243,7 @@ class Bed(ConstrainedDataFrame):
         Note
         ----
         Starting position < 0 after expansion is always trimmed.
-        Ending position exceeding chromosome length is trimed only if
+        Ending position exceeding chromosome length is trimmed only if
         ``chr_len`` is specified.
         """
         if upstream == downstream == 0:
@@ -240,10 +276,19 @@ class Gtf(ConstrainedDataFrame):  # gffutils is too slow
     GTF format data frame
     """
 
-    COLUMNS = pd.Index([
-        "seqname", "source", "feature", "start", "end",
-        "score", "strand", "frame", "attribute"
-    ])  # Additional columns after "attribute" is allowed
+    COLUMNS = pd.Index(
+        [
+            "seqname",
+            "source",
+            "feature",
+            "start",
+            "end",
+            "score",
+            "strand",
+            "frame",
+            "attribute",
+        ]
+    )  # Additional columns after "attribute" is allowed
 
     @classmethod
     def rectify(cls, df: pd.DataFrame) -> pd.DataFrame:
@@ -270,8 +315,9 @@ class Gtf(ConstrainedDataFrame):  # gffutils is too slow
     @classmethod
     def verify(cls, df: pd.DataFrame) -> None:
         super(Gtf, cls).verify(df)
-        if len(df.columns) < len(cls.COLUMNS) or \
-                np.any(df.columns[:len(cls.COLUMNS)] != cls.COLUMNS):
+        if len(df.columns) < len(cls.COLUMNS) or np.any(
+            df.columns[: len(cls.COLUMNS)] != cls.COLUMNS
+        ):
             raise ValueError("Invalid GTF format!")
 
     @classmethod
@@ -291,7 +337,7 @@ class Gtf(ConstrainedDataFrame):  # gffutils is too slow
         """
         COLUMNS = cls.COLUMNS.copy(deep=True)
         loaded = pd.read_csv(fname, sep="\t", header=None, comment="#")
-        loaded.columns = COLUMNS[:loaded.shape[1]]
+        loaded.columns = COLUMNS[: loaded.shape[1]]
         return cls(loaded)
 
     def split_attribute(self) -> "Gtf":
@@ -305,9 +351,12 @@ class Gtf(ConstrainedDataFrame):  # gffutils is too slow
             Gtf with splitted attribute columns appended
         """
         pattern = re.compile(r'([^\s]+) "([^"]+)";')
-        splitted = pd.DataFrame.from_records(np.vectorize(lambda x: {
-            key: val for key, val in pattern.findall(x)
-        })(self["attribute"]), index=self.index)
+        splitted = pd.DataFrame.from_records(
+            np.vectorize(lambda x: {key: val for key, val in pattern.findall(x)})(
+                self["attribute"]
+            ),
+            index=self.index,
+        )
         if set(self.COLUMNS).intersection(splitted.columns):
             self.logger.warning(
                 "Splitted attribute names overlap standard GTF fields! "
@@ -333,13 +382,11 @@ class Gtf(ConstrainedDataFrame):  # gffutils is too slow
         bed_df = pd.DataFrame(self, copy=True).loc[
             :, ("seqname", "start", "end", "score", "strand")
         ]
-        bed_df.insert(3, "name", np.repeat(
-            ".", len(bed_df)
-        ) if name is None else self[name])
-        bed_df["start"] -= 1  # Convert to zero-based
-        bed_df.columns = (
-            "chrom", "chromStart", "chromEnd", "name", "score", "strand"
+        bed_df.insert(
+            3, "name", np.repeat(".", len(bed_df)) if name is None else self[name]
         )
+        bed_df["start"] -= 1  # Convert to zero-based
+        bed_df.columns = ("chrom", "chromStart", "chromEnd", "name", "score", "strand")
         return Bed(bed_df)
 
 
@@ -370,9 +417,12 @@ def interval_dist(x: Interval, y: Interval) -> int:
 
 
 def window_graph(
-        left: Union[Bed, str], right: Union[Bed, str], window_size: int,
-        left_sorted: bool = False, right_sorted: bool = False,
-        attr_fn: Optional[Callable[[Interval, Interval, float], Mapping[str, Any]]] = None
+    left: Union[Bed, str],
+    right: Union[Bed, str],
+    window_size: int,
+    left_sorted: bool = False,
+    right_sorted: bool = False,
+    attr_fn: Optional[Callable[[Interval, Interval, float], Mapping[str, Any]]] = None,
 ) -> nx.MultiDiGraph:
     r"""
     Construct a window graph between two sets of genomic features, where
@@ -471,11 +521,16 @@ def dist_power_decay(x: int) -> float:
 
 @logged
 def rna_anchored_guidance_graph(
-    rna: AnnData, *others: AnnData,
-    gene_region: str = "combined", promoter_len: int = 2000,
-    extend_range: int = 0, extend_fn: Callable[[int], float] = dist_power_decay,
-    signs: Optional[List[int]] = None, propagate_highly_variable: bool = True,
-    corrupt_rate: float = 0.0, random_state: RandomState = None
+    rna: AnnData,
+    *others: AnnData,
+    gene_region: str = "combined",
+    promoter_len: int = 2000,
+    extend_range: int = 0,
+    extend_fn: Callable[[int], float] = dist_power_decay,
+    signs: Optional[List[int]] = None,
+    propagate_highly_variable: bool = True,
+    corrupt_rate: float = 0.0,
+    random_state: RandomState = None,
 ) -> nx.MultiDiGraph:
     r"""
     Build guidance graph anchored on RNA genes
@@ -533,12 +588,19 @@ def rna_anchored_guidance_graph(
         rna_bed = rna_bed.expand(promoter_len, 0)
     elif gene_region != "gene_body":
         raise ValueError("Unrecognized `gene_range`!")
-    graphs = [window_graph(
-        rna_bed, other_bed, window_size=extend_range,
-        attr_fn=lambda l, r, d, s=sign: {
-            "dist": abs(d), "weight": extend_fn(abs(d)), "sign": s
-        }
-    ) for other_bed, sign in zip(other_beds, signs)]
+    graphs = [
+        window_graph(
+            rna_bed,
+            other_bed,
+            window_size=extend_range,
+            attr_fn=lambda l, r, d, s=sign: {
+                "dist": abs(d),
+                "weight": extend_fn(abs(d)),
+                "sign": s,
+            },
+        )
+        for other_bed, sign in zip(other_beds, signs)
+    ]
     graph = compose_multigraph(*graphs)
 
     corrupt_num = round(corrupt_rate * graph.number_of_edges())
@@ -548,25 +610,35 @@ def rna_anchored_guidance_graph(
         rna_var_names = rna.var_names.tolist()
         other_var_names = reduce(add, [other.var_names.tolist() for other in others])
 
-        corrupt_remove = set(rs.choice(graph.number_of_edges(), corrupt_num, replace=False))
-        corrupt_remove = set(edge for i, edge in enumerate(graph.edges) if i in corrupt_remove)
+        corrupt_remove = set(
+            rs.choice(graph.number_of_edges(), corrupt_num, replace=False)
+        )
+        corrupt_remove = set(
+            edge for i, edge in enumerate(graph.edges) if i in corrupt_remove
+        )
         corrupt_add = []
         while len(corrupt_add) < corrupt_num:
             corrupt_add += [
-                (u, v) for u, v in zip(
+                (u, v)
+                for u, v in zip(
                     rs.choice(rna_var_names, corrupt_num - len(corrupt_add)),
-                    rs.choice(other_var_names, corrupt_num - len(corrupt_add))
-                ) if not graph.has_edge(u, v)
+                    rs.choice(other_var_names, corrupt_num - len(corrupt_add)),
+                )
+                if not graph.has_edge(u, v)
             ]
 
-        graph.add_edges_from([
-            (add[0], add[1], graph.edges[remove])
-            for add, remove in zip(corrupt_add, corrupt_remove)
-        ])
+        graph.add_edges_from(
+            [
+                (add[0], add[1], graph.edges[remove])
+                for add, remove in zip(corrupt_add, corrupt_remove)
+            ]
+        )
         graph.remove_edges_from(corrupt_remove)
 
     if propagate_highly_variable:
-        hvg_reachable = reachable_vertices(graph, rna.var.query("highly_variable").index)
+        hvg_reachable = reachable_vertices(
+            graph, rna.var.query("highly_variable").index
+        )
         for other in others:
             other.var["highly_variable"] = [
                 item in hvg_reachable for item in other.var_names
@@ -576,9 +648,93 @@ def rna_anchored_guidance_graph(
     nx.set_edge_attributes(graph, "fwd", name="type")
     nx.set_edge_attributes(rgraph, "rev", name="type")
     graph = compose_multigraph(graph, rgraph)
-    all_features = set(chain.from_iterable(
-        map(lambda x: x.var_names, [rna, *others])
-    ))
+    all_features = set(chain.from_iterable(map(lambda x: x.var_names, [rna, *others])))
+    for item in all_features:
+        graph.add_edge(item, item, weight=1.0, sign=1, type="loop")
+    return graph
+
+
+@logged
+def anchored_guidance_graph(
+    anchor: AnnData,
+    *others: AnnData,
+    extend_range: int = 0,
+    extend_fn: Callable[[int], float] = dist_power_decay,
+    signs: Optional[List[int]] = None,
+    propagate_highly_variable: bool = True,
+) -> nx.MultiDiGraph:
+    r"""
+    Build guidance graph anchored on one particular dataset
+
+    Parameters
+    ----------
+    adata
+        Anchor dataset
+    *others
+        Other datasets
+    extend_range
+        Maximal extend distance beyond anchor genomic features
+    extend_fn
+        Distance-decreasing weight function for the extended regions
+        (by default :func:`dist_power_decay`)
+    signs
+        Sign of edges between anchor features and features in each ``*others``
+        dataset, must have the same length as ``*others``. Signs must be
+        one of ``{-1, 1}``. By default, all edges have positive signs of ``1``.
+    propagate_highly_variable
+        Whether to propagate highly variable genes to other datasets,
+        datasets in ``*others`` would be modified in place.
+
+    Returns
+    -------
+    graph
+        Prior regulatory graph
+
+    Note
+    ----
+    In this function, features in the same dataset can only connect to
+    anchor genes via the same edge sign. For more flexibility, please
+    construct the guidance graph manually.
+    """
+    signs = signs or [1] * len(others)
+    if len(others) != len(signs):
+        raise RuntimeError("Length of ``others`` and ``signs`` must match!")
+    if set(signs).difference({-1, 1}):
+        raise RuntimeError("``signs`` can only contain {-1, 1}!")
+
+    anchor_bed = Bed(anchor.var.assign(name=anchor.var_names))
+    other_beds = [Bed(other.var.assign(name=other.var_names)) for other in others]
+    graphs = [
+        window_graph(
+            anchor_bed,
+            other_bed,
+            window_size=extend_range,
+            attr_fn=lambda l, r, d, s=sign: {
+                "dist": abs(d),
+                "weight": extend_fn(abs(d)),
+                "sign": s,
+            },
+        )
+        for other_bed, sign in zip(other_beds, signs)
+    ]
+    graph = compose_multigraph(*graphs)
+
+    if propagate_highly_variable:
+        hvg_reachable = reachable_vertices(
+            graph, anchor.var.query("highly_variable").index
+        )
+        for other in others:
+            other.var["highly_variable"] = [
+                item in hvg_reachable for item in other.var_names
+            ]
+
+    rgraph = graph.reverse()
+    nx.set_edge_attributes(graph, "fwd", name="type")
+    nx.set_edge_attributes(rgraph, "rev", name="type")
+    graph = compose_multigraph(graph, rgraph)
+    all_features = set(
+        chain.from_iterable(map(lambda x: x.var_names, [anchor, *others]))
+    )
     for item in all_features:
         graph.add_edge(item, item, weight=1.0, sign=1, type="loop")
     return graph
@@ -586,11 +742,16 @@ def rna_anchored_guidance_graph(
 
 @logged
 def rna_anchored_prior_graph(
-    rna: AnnData, *others: AnnData,
-    gene_region: str = "combined", promoter_len: int = 2000,
-    extend_range: int = 0, extend_fn: Callable[[int], float] = dist_power_decay,
-    signs: Optional[List[int]] = None, propagate_highly_variable: bool = True,
-    corrupt_rate: float = 0.0, random_state: RandomState = None
+    rna: AnnData,
+    *others: AnnData,
+    gene_region: str = "combined",
+    promoter_len: int = 2000,
+    extend_range: int = 0,
+    extend_fn: Callable[[int], float] = dist_power_decay,
+    signs: Optional[List[int]] = None,
+    propagate_highly_variable: bool = True,
+    corrupt_rate: float = 0.0,
+    random_state: RandomState = None,
 ) -> nx.MultiDiGraph:  # pragma: no cover
     r"""
     Deprecated, please use :func:`rna_anchored_guidance_graph` instead
@@ -599,17 +760,25 @@ def rna_anchored_prior_graph(
         "Deprecated, please use `rna_anchored_guidance_graph` instead!"
     )
     return rna_anchored_guidance_graph(
-        rna, *others, gene_region=gene_region, promoter_len=promoter_len,
-        extend_range=extend_range, extend_fn=extend_fn, signs=signs,
+        rna,
+        *others,
+        gene_region=gene_region,
+        promoter_len=promoter_len,
+        extend_range=extend_range,
+        extend_fn=extend_fn,
+        signs=signs,
         propagate_highly_variable=propagate_highly_variable,
-        corrupt_rate=corrupt_rate, random_state=random_state
+        corrupt_rate=corrupt_rate,
+        random_state=random_state,
     )
 
 
 def regulatory_inference(
-        features: pd.Index, feature_embeddings: Union[np.ndarray, List[np.ndarray]],
-        skeleton: nx.Graph, alternative: str = "two.sided",
-        random_state: RandomState = None
+    features: pd.Index,
+    feature_embeddings: Union[np.ndarray, List[np.ndarray]],
+    skeleton: nx.Graph,
+    alternative: str = "two.sided",
+    random_state: RandomState = None,
 ) -> nx.Graph:
     r"""
     Regulatory inference based on feature embeddings
@@ -656,7 +825,11 @@ def regulatory_inference(
     target = features.get_indexer(edgelist["target"])
     fg, bg = [], []
 
-    for s, t in tqdm(zip(source, target), total=skeleton.number_of_edges(), desc="regulatory_inference"):
+    for s, t in tqdm(
+        zip(source, target),
+        total=skeleton.number_of_edges(),
+        desc="regulatory_inference",
+    ):
         fg.append((v[s] * v[t]).sum(axis=1).mean())
         bg.append((vperm[s] * vperm[t]).sum(axis=1))
     edgelist["score"] = fg
@@ -672,12 +845,17 @@ def regulatory_inference(
     else:
         raise ValueError("Unrecognized `alternative`!")
     edgelist["qval"] = fdrcorrection(edgelist["pval"])[1]
-    return nx.from_pandas_edgelist(edgelist, edge_attr=True, create_using=type(skeleton))
+    return nx.from_pandas_edgelist(
+        edgelist, edge_attr=True, create_using=type(skeleton)
+    )
 
 
 def write_links(
-    graph: nx.Graph, source: Bed, target: Bed, file: os.PathLike,
-    keep_attrs: Optional[List[str]] = None
+    graph: nx.Graph,
+    source: Bed,
+    target: Bed,
+    file: os.PathLike,
+    keep_attrs: Optional[List[str]] = None,
 ) -> None:
     r"""
     Export regulatory graph into a links file
@@ -695,24 +873,33 @@ def write_links(
     keep_attrs
         A list of attributes to keep for each link
     """
-    nx.to_pandas_edgelist(
-        graph
-    ).merge(
+    nx.to_pandas_edgelist(graph).merge(
         source.df.iloc[:, :4], how="left", left_on="source", right_on="name"
-    ).merge(
-        target.df.iloc[:, :4], how="left", left_on="target", right_on="name"
-    ).loc[:, [
-        "chrom_x", "chromStart_x", "chromEnd_x",
-        "chrom_y", "chromStart_y", "chromEnd_y",
-        *(keep_attrs or [])
-    ]].to_csv(file, sep="\t", index=False, header=False)
+    ).merge(target.df.iloc[:, :4], how="left", left_on="target", right_on="name").loc[
+        :,
+        [
+            "chrom_x",
+            "chromStart_x",
+            "chromEnd_x",
+            "chrom_y",
+            "chromStart_y",
+            "chromEnd_y",
+            *(keep_attrs or []),
+        ],
+    ].to_csv(
+        file, sep="\t", index=False, header=False
+    )
 
 
 def cis_regulatory_ranking(
-        gene2region: nx.Graph, region2tf: nx.Graph,
-        genes: List[str], regions: List[str], tfs: List[str],
-        region_lens: Optional[List[int]] = None, n_samples: int = 1000,
-        random_state: RandomState = None
+    gene2region: nx.Graph,
+    region2tf: nx.Graph,
+    genes: List[str],
+    regions: List[str],
+    tfs: List[str],
+    region_lens: Optional[List[int]] = None,
+    n_samples: int = 1000,
+    random_state: RandomState = None,
 ) -> pd.DataFrame:
     r"""
     Generate cis-regulatory ranking between genes and transcription factors
@@ -743,30 +930,42 @@ def cis_regulatory_ranking(
     gene2tf_rank
         Cis regulatory ranking between genes and transcription factors
     """
-    gene2region = biadjacency_matrix(gene2region, genes, regions, dtype=np.int16, weight=None)
+    gene2region = biadjacency_matrix(
+        gene2region, genes, regions, dtype=np.int16, weight=None
+    )
     region2tf = biadjacency_matrix(region2tf, regions, tfs, dtype=np.int16, weight=None)
 
     if n_samples:
         region_lens = [1] * len(regions) if region_lens is None else region_lens
         if len(region_lens) != len(regions):
             raise ValueError("`region_lens` must have the same length as `regions`!")
-        region_bins = pd.qcut(region_lens, min(len(set(region_lens)), 500), duplicates="drop")
+        region_bins = pd.qcut(
+            region_lens, min(len(set(region_lens)), 500), duplicates="drop"
+        )
         region_bins_lut = pd.RangeIndex(region_bins.size).groupby(region_bins)
 
         rs = get_rs(random_state)
         row, col_rand, data = [], [], []
         lil = gene2region.tolil()
         for r, (c, d) in tqdm(
-                enumerate(zip(lil.rows, lil.data)),
-                total=len(lil.rows), desc="cis_reg_ranking.sampling"
+            enumerate(zip(lil.rows, lil.data)),
+            total=len(lil.rows),
+            desc="cis_reg_ranking.sampling",
         ):
             if not c:  # Empty row
                 continue
             row.append(np.ones_like(c) * r)
-            col_rand.append(np.stack([
-                rs.choice(region_bins_lut[region_bins[c_]], n_samples, replace=True)
-                for c_ in c
-            ], axis=0))
+            col_rand.append(
+                np.stack(
+                    [
+                        rs.choice(
+                            region_bins_lut[region_bins[c_]], n_samples, replace=True
+                        )
+                        for c_ in c
+                    ],
+                    axis=0,
+                )
+            )
             data.append(d)
         row = np.concatenate(row)
         col_rand = np.concatenate(col_rand)
@@ -775,9 +974,9 @@ def cis_regulatory_ranking(
         gene2tf_obs = (gene2region @ region2tf).toarray()
         gene2tf_rand = np.empty((len(genes), len(tfs), n_samples), dtype=np.int16)
         for k in tqdm(range(n_samples), desc="cis_reg_ranking.mapping"):
-            gene2region_rand = scipy.sparse.coo_matrix((
-                data, (row, col_rand[:, k])
-            ), shape=(len(genes), len(regions)))
+            gene2region_rand = scipy.sparse.coo_matrix(
+                (data, (row, col_rand[:, k])), shape=(len(genes), len(regions))
+            )
             gene2tf_rand[:, :, k] = (gene2region_rand @ region2tf).toarray()
         gene2tf_rand.sort(axis=2)
 
@@ -793,14 +992,12 @@ def cis_regulatory_ranking(
         gene2tf_enrich = (gene2region @ region2tf).toarray()
 
     return pd.DataFrame(
-        scipy.stats.rankdata(-gene2tf_enrich, axis=0),
-        index=genes, columns=tfs
+        scipy.stats.rankdata(-gene2tf_enrich, axis=0), index=genes, columns=tfs
     )
 
 
 def write_scenic_feather(
-        gene2tf_rank: pd.DataFrame, feather: os.PathLike,
-        version: int = 2
+    gene2tf_rank: pd.DataFrame, feather: os.PathLike, version: int = 2
 ) -> None:
     r"""
     Write cis-regulatory ranking to a SCENIC-compatible feather file
@@ -853,15 +1050,12 @@ def read_ctx_grn(file: os.PathLike) -> nx.DiGraph:
     Node attribute "type" can be used to distinguish TFs and genes
     """
     df = pd.read_csv(
-        file, header=None, skiprows=3,
-        usecols=[0, 8], names=["TF", "targets"]
+        file, header=None, skiprows=3, usecols=[0, 8], names=["TF", "targets"]
     )
     df["targets"] = df["targets"].map(lambda x: set(i[0] for i in literal_eval(x)))
     df = df.groupby("TF").aggregate({"targets": lambda x: reduce(set.union, x)})
-    grn = nx.DiGraph([
-        (tf, target)
-        for tf, row in df.iterrows()
-        for target in row["targets"]]
+    grn = nx.DiGraph(
+        [(tf, target) for tf, row in df.iterrows() for target in row["targets"]]
     )
     nx.set_node_attributes(grn, "target", name="type")
     for tf in df.index:
