@@ -162,6 +162,7 @@ def fit_SCGLUE(
     adatas: Mapping[str, AnnData],
     graph: nx.Graph,
     model: type = SCGLUEModel,
+    skip_balance: bool = False,
     init_kws: Kws = None,
     compile_kws: Kws = None,
     fit_kws: Kws = None,
@@ -180,6 +181,8 @@ def fit_SCGLUE(
         Model class, must be one of
         {:class:`scglue.models.scglue.SCGLUEModel`,
         :class:`scglue.models.scglue.PairedSCGLUEModel`}
+    skip_balance
+        Skip the balancing step and use equal weight for all cells
     init_kws
         Model initialization keyword arguments
         (see the constructor of the ``model`` class,
@@ -223,26 +226,27 @@ def fit_SCGLUE(
     if "directory" in pretrain_fit_kws:
         pretrain.save(os.path.join(pretrain_fit_kws["directory"], "pretrain.dill"))
 
-    fit_SCGLUE.logger.info("Estimating balancing weight...")
-    for k, adata in adatas.items():
-        adata.obsm[f"X_{config.TMP_PREFIX}"] = pretrain.encode_data(k, adata)
-    if init_kws.get("shared_batches"):
-        use_batch = set(
-            adata.uns[config.ANNDATA_KEY]["use_batch"] for adata in adatas.values()
+    if not skip_balance:
+        fit_SCGLUE.logger.info("Estimating balancing weight...")
+        for k, adata in adatas.items():
+            adata.obsm[f"X_{config.TMP_PREFIX}"] = pretrain.encode_data(k, adata)
+        if init_kws.get("shared_batches"):
+            use_batch = set(
+                adata.uns[config.ANNDATA_KEY]["use_batch"] for adata in adatas.values()
+            )
+            use_batch = use_batch.pop() if len(use_batch) == 1 else None
+        else:
+            use_batch = None
+        estimate_balancing_weight(
+            *adatas.values(),
+            use_rep=f"X_{config.TMP_PREFIX}",
+            use_batch=use_batch,
+            key_added="balancing_weight",
+            **balance_kws,
         )
-        use_batch = use_batch.pop() if len(use_batch) == 1 else None
-    else:
-        use_batch = None
-    estimate_balancing_weight(
-        *adatas.values(),
-        use_rep=f"X_{config.TMP_PREFIX}",
-        use_batch=use_batch,
-        key_added="balancing_weight",
-        **balance_kws,
-    )
-    for adata in adatas.values():
-        adata.uns[config.ANNDATA_KEY]["use_dsc_weight"] = "balancing_weight"
-        del adata.obsm[f"X_{config.TMP_PREFIX}"]
+        for adata in adatas.values():
+            adata.uns[config.ANNDATA_KEY]["use_dsc_weight"] = "balancing_weight"
+            del adata.obsm[f"X_{config.TMP_PREFIX}"]
 
     fit_SCGLUE.logger.info("Fine-tuning SCGLUE model...")
     finetune_fit_kws = fit_kws.copy()
