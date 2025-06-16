@@ -47,20 +47,28 @@ def make_dist_bins(dist, bins):
 
 
 def boxplot(x=None, y=None, hue=None, data=None):
-    r"""
+    """
     Box plot with marginal distributions
     """
+    # Ensure the specified columns exist in the DataFrame
     assert x in data and y in data and hue in data
-    data = data.copy(deep=False)
-    if not pd.api.types.is_categorical_dtype(data[x]):
-        data[x] = data[x].astype("category")
-    if not pd.api.types.is_categorical_dtype(data[hue]):
-        data[hue] = data[hue].astype("category")
-    data[y] = data[y].astype(float)
-
-    g = sns.JointGrid(x=x, y=y, data=data, height=5)
+    
+    # Make a copy of the DataFrame to avoid modifying the original data
+    plot_data = data.copy(deep=False)
+    
+    # Convert columns to appropriate data types
+    if not pd.api.types.is_categorical_dtype(plot_data[x]):
+        plot_data[x] = plot_data[x].astype("category")
+    if not pd.api.types.is_categorical_dtype(plot_data[hue]):
+        plot_data[hue] = plot_data[hue].astype("category")
+    plot_data[y] = plot_data[y].astype(float)
+    
+    # Create the JointGrid instance
+    g = sns.JointGrid(x=x, y=y, data=plot_data, height=5)
+    
+    # Boxplot on joint
     sns.boxplot(
-        x=x, y=y, hue=hue, data=data,
+        x=x, y=y, hue=hue, data=plot_data,
         saturation=1.0, showmeans=True,
         meanprops=dict(marker="^", markerfacecolor="white", markeredgecolor="black"),
         boxprops=dict(edgecolor="black"), medianprops=dict(color="black"),
@@ -68,15 +76,28 @@ def boxplot(x=None, y=None, hue=None, data=None):
         flierprops=dict(marker=".", markerfacecolor="black", markeredgecolor="none", markersize=3),
         ax=g.ax_joint
     )
+    
+    # KDE plot on marginal Y
     sns.kdeplot(
-        y=y, hue=hue, data=data,
+        y=y, hue=hue, data=plot_data,
         common_norm=False, shade=True, legend=False, ax=g.ax_marg_y
     )
-    data = data.groupby(x)[hue].value_counts(normalize=True).rename("frac").reset_index()
-    bottom = np.zeros(data[x].cat.categories.size)
-    for _, d in data.groupby(hue):
-        g.ax_marg_x.bar(d[x], d["frac"], bottom=bottom, width=0.7, edgecolor="black")
-        bottom += d["frac"]
+    
+    # Group data by 'x' and 'hue' columns and calculate fractions
+    grouped_data = plot_data.groupby([x, hue])[y].size().groupby(level=0).apply(lambda x: x / float(x.sum())).reset_index(name='frac')
+    
+    # Initialize bottom array for the stacked bar chart
+    bottom = np.zeros(len(plot_data[x].cat.categories))
+    
+    # Loop through each level of the hue and plot the bars
+    for name, group in grouped_data.groupby(hue):
+        g.ax_marg_x.bar(group[x], group['frac'], bottom=bottom, label=name, width=0.7, edgecolor="black")
+        bottom += group['frac'].values
+    
+    # Add a legend if there are hue levels
+    if len(plot_data[hue].cat.categories) > 1:
+        g.ax_marg_x.legend(title=hue)
+    
     return g
 
 
