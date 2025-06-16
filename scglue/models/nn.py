@@ -184,6 +184,8 @@ def autodevice() -> torch.device:
     used_device = -1
     if not config.CPU_ONLY:
         try:
+            if os.environ.get("CUDA_VISIBLE_DEVICES"):
+                return torch.device("cuda")
             pynvml.nvmlInit()
             free_mems = np.array(
                 [
