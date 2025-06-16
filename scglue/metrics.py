@@ -2,6 +2,7 @@ r"""
 Performance evaluation metrics
 """
 
+from functools import wraps
 from typing import Tuple
 
 import numpy as np
@@ -17,6 +18,17 @@ from .typehint import RandomState
 from .utils import get_rs
 
 
+def native_return(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        ret = func(*args, **kwargs)
+        if isinstance(ret, np.generic):
+            ret = ret.item()
+        return ret
+    return wrapped
+
+
+@native_return
 def mean_average_precision(
     x: np.ndarray, y: np.ndarray, neighbor_frac: float = 0.01, **kwargs
 ) -> float:
@@ -46,16 +58,18 @@ def mean_average_precision(
     ).fit(x)
     nni = nn.kneighbors(x, return_distance=False)
     match = np.equal(y[nni[:, 1:]], np.expand_dims(y, 1))
-    return np.apply_along_axis(_average_precision, 1, match).mean().item()
+    return np.apply_along_axis(_average_precision, 1, match).mean()
 
 
+@native_return
 def _average_precision(match: np.ndarray) -> float:
     if np.any(match):
         cummean = np.cumsum(match) / (np.arange(match.size) + 1)
-        return cummean[match].mean().item()
+        return cummean[match].mean()
     return 0.0
 
 
+@native_return
 def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Normalized mutual information with true clustering
@@ -87,11 +101,12 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
         sc.tl.leiden(x, resolution=res)
         leiden = x.obs["leiden"]
         nmi_list.append(
-            sklearn.metrics.normalized_mutual_info_score(y, leiden, **kwargs).item()
+            sklearn.metrics.normalized_mutual_info_score(y, leiden, **kwargs)
         )
     return max(nmi_list)
 
 
+@native_return
 def avg_silhouette_width(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Cell type average silhouette width
@@ -116,9 +131,10 @@ def avg_silhouette_width(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Follows the definition in `OpenProblems NeurIPS 2021 competition
     <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
-    return (sklearn.metrics.silhouette_score(x, y, **kwargs).item() + 1) / 2
+    return (sklearn.metrics.silhouette_score(x, y, **kwargs) + 1) / 2
 
 
+@native_return
 def graph_connectivity(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Graph connectivity
@@ -146,9 +162,10 @@ def graph_connectivity(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
         _, c = connected_components(x_.obsp["connectivities"], connection="strong")
         counts = pd.value_counts(c)
         conns.append(counts.max() / counts.sum())
-    return np.mean(conns).item()
+    return np.mean(conns)
 
 
+@native_return
 def seurat_alignment_score(
     x: np.ndarray,
     y: np.ndarray,
@@ -205,9 +222,10 @@ def seurat_alignment_score(
         repeat_scores.append(
             min(repeat_score, 1)
         )  # score may exceed 1, if same_y_hits is lower than expected by chance
-    return np.mean(repeat_scores).item()
+    return np.mean(repeat_scores)
 
 
+@native_return
 def avg_silhouette_width_batch(
     x: np.ndarray, y: np.ndarray, ct: np.ndarray, **kwargs
 ) -> float:
@@ -245,9 +263,10 @@ def avg_silhouette_width_batch(
             s = 0
         s = (1 - np.fabs(s)).mean()
         s_per_ct.append(s)
-    return np.mean(s_per_ct).item()
+    return np.mean(s_per_ct)
 
 
+@native_return
 def neighbor_conservation(
     x: np.ndarray,
     y: np.ndarray,
@@ -299,7 +318,7 @@ def neighbor_conservation(
         n_intersection = nnx.multiply(nny).sum(axis=1).A1
         n_union = (nnx + nny).astype(bool).sum(axis=1).A1
         nn_cons_per_batch.append((n_intersection / n_union).mean())
-    return np.mean(nn_cons_per_batch).item()
+    return np.mean(nn_cons_per_batch)
 
 
 def foscttm(x: np.ndarray, y: np.ndarray, **kwargs) -> Tuple[np.ndarray, np.ndarray]:

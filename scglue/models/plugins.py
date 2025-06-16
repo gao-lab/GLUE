@@ -204,7 +204,7 @@ class LRScheduler(TrainingPlugin):
         if patience is None:
             raise ValueError("`patience` must be specified!")
         self.schedulers = [
-            ReduceLROnPlateau(optim, patience=patience, verbose=True)
+            ReduceLROnPlateau(optim, patience=patience)
             for optim in optims
         ]
         self.burnin = burnin
