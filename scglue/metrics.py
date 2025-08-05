@@ -2,6 +2,7 @@ r"""
 Performance evaluation metrics
 """
 
+from functools import wraps
 from typing import Tuple
 
 import numpy as np
@@ -17,8 +18,19 @@ from .typehint import RandomState
 from .utils import get_rs
 
 
+def native_return(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        ret = func(*args, **kwargs)
+        if isinstance(ret, np.generic):
+            ret = ret.item()
+        return ret
+    return wrapped
+
+
+@native_return
 def mean_average_precision(
-        x: np.ndarray, y: np.ndarray, neighbor_frac: float = 0.01, **kwargs
+    x: np.ndarray, y: np.ndarray, neighbor_frac: float = 0.01, **kwargs
 ) -> float:
     r"""
     Mean average precision
@@ -46,16 +58,18 @@ def mean_average_precision(
     ).fit(x)
     nni = nn.kneighbors(x, return_distance=False)
     match = np.equal(y[nni[:, 1:]], np.expand_dims(y, 1))
-    return np.apply_along_axis(_average_precision, 1, match).mean().item()
+    return np.apply_along_axis(_average_precision, 1, match).mean()
 
 
+@native_return
 def _average_precision(match: np.ndarray) -> float:
     if np.any(match):
         cummean = np.cumsum(match) / (np.arange(match.size) + 1)
-        return cummean[match].mean().item()
+        return cummean[match].mean()
     return 0.0
 
 
+@native_return
 def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Normalized mutual information with true clustering
@@ -86,12 +100,13 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     for res in (np.arange(20) + 1) / 10:
         sc.tl.leiden(x, resolution=res)
         leiden = x.obs["leiden"]
-        nmi_list.append(sklearn.metrics.normalized_mutual_info_score(
-            y, leiden, **kwargs
-        ).item())
+        nmi_list.append(
+            sklearn.metrics.normalized_mutual_info_score(y, leiden, **kwargs)
+        )
     return max(nmi_list)
 
 
+@native_return
 def avg_silhouette_width(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Cell type average silhouette width
@@ -116,12 +131,11 @@ def avg_silhouette_width(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Follows the definition in `OpenProblems NeurIPS 2021 competition
     <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
     """
-    return (sklearn.metrics.silhouette_score(x, y, **kwargs).item() + 1) / 2
+    return (sklearn.metrics.silhouette_score(x, y, **kwargs) + 1) / 2
 
 
-def graph_connectivity(
-        x: np.ndarray, y: np.ndarray, **kwargs
-) -> float:
+@native_return
+def graph_connectivity(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     r"""
     Graph connectivity
 
@@ -145,18 +159,20 @@ def graph_connectivity(
     conns = []
     for y_ in np.unique(y):
         x_ = x[y == y_]
-        _, c = connected_components(
-            x_.obsp['connectivities'],
-            connection='strong'
-        )
+        _, c = connected_components(x_.obsp["connectivities"], connection="strong")
         counts = pd.value_counts(c)
         conns.append(counts.max() / counts.sum())
-    return np.mean(conns).item()
+    return np.mean(conns)
 
 
+@native_return
 def seurat_alignment_score(
-        x: np.ndarray, y: np.ndarray, neighbor_frac: float = 0.01,
-        n_repeats: int = 4, random_state: RandomState = None, **kwargs
+    x: np.ndarray,
+    y: np.ndarray,
+    neighbor_frac: float = 0.01,
+    n_repeats: int = 4,
+    random_state: RandomState = None,
+    **kwargs
 ) -> float:
     r"""
     Seurat alignment score
@@ -187,27 +203,31 @@ def seurat_alignment_score(
     min_size = min(idx.size for idx in idx_list)
     repeat_scores = []
     for _ in range(n_repeats):
-        subsample_idx = np.concatenate([
-            rs.choice(idx, min_size, replace=False)
-            for idx in idx_list
-        ])
+        subsample_idx = np.concatenate(
+            [rs.choice(idx, min_size, replace=False) for idx in idx_list]
+        )
         subsample_x = x[subsample_idx]
         subsample_y = y[subsample_idx]
         k = max(round(subsample_idx.size * neighbor_frac), 1)
-        nn = sklearn.neighbors.NearestNeighbors(
-            n_neighbors=k + 1, **kwargs
-        ).fit(subsample_x)
+        nn = sklearn.neighbors.NearestNeighbors(n_neighbors=k + 1, **kwargs).fit(
+            subsample_x
+        )
         nni = nn.kneighbors(subsample_x, return_distance=False)
         same_y_hits = (
-            subsample_y[nni[:, 1:]] == np.expand_dims(subsample_y, axis=1)
-        ).sum(axis=1).mean()
+            (subsample_y[nni[:, 1:]] == np.expand_dims(subsample_y, axis=1))
+            .sum(axis=1)
+            .mean()
+        )
         repeat_score = (k - same_y_hits) * len(idx_list) / (k * (len(idx_list) - 1))
-        repeat_scores.append(min(repeat_score, 1))  # score may exceed 1, if same_y_hits is lower than expected by chance
-    return np.mean(repeat_scores).item()
+        repeat_scores.append(
+            min(repeat_score, 1)
+        )  # score may exceed 1, if same_y_hits is lower than expected by chance
+    return np.mean(repeat_scores)
 
 
+@native_return
 def avg_silhouette_width_batch(
-        x: np.ndarray, y: np.ndarray, ct: np.ndarray, **kwargs
+    x: np.ndarray, y: np.ndarray, ct: np.ndarray, **kwargs
 ) -> float:
     r"""
     Batch average silhouette width
@@ -243,12 +263,16 @@ def avg_silhouette_width_batch(
             s = 0
         s = (1 - np.fabs(s)).mean()
         s_per_ct.append(s)
-    return np.mean(s_per_ct).item()
+    return np.mean(s_per_ct)
 
 
+@native_return
 def neighbor_conservation(
-        x: np.ndarray, y: np.ndarray, batch: np.ndarray,
-        neighbor_frac: float = 0.01, **kwargs
+    x: np.ndarray,
+    y: np.ndarray,
+    batch: np.ndarray,
+    neighbor_frac: float = 0.01,
+    **kwargs
 ) -> float:
     r"""
     Neighbor conservation score
@@ -256,7 +280,7 @@ def neighbor_conservation(
     Parameters
     ----------
     x
-        Cooordinates after integration
+        Coordinates after integration
     y
         Coordinates before integration
     b
@@ -275,23 +299,29 @@ def neighbor_conservation(
         mask = batch == b
         x_, y_ = x[mask], y[mask]
         k = max(round(x.shape[0] * neighbor_frac), 1)
-        nnx = sklearn.neighbors.NearestNeighbors(
-            n_neighbors=min(x_.shape[0], k + 1), **kwargs
-        ).fit(x_).kneighbors_graph(x_)
-        nny = sklearn.neighbors.NearestNeighbors(
-            n_neighbors=min(y_.shape[0], k + 1), **kwargs
-        ).fit(y_).kneighbors_graph(y_)
+        nnx = (
+            sklearn.neighbors.NearestNeighbors(
+                n_neighbors=min(x_.shape[0], k + 1), **kwargs
+            )
+            .fit(x_)
+            .kneighbors_graph(x_)
+        )
+        nny = (
+            sklearn.neighbors.NearestNeighbors(
+                n_neighbors=min(y_.shape[0], k + 1), **kwargs
+            )
+            .fit(y_)
+            .kneighbors_graph(y_)
+        )
         nnx.setdiag(0)  # Remove self
         nny.setdiag(0)  # Remove self
         n_intersection = nnx.multiply(nny).sum(axis=1).A1
         n_union = (nnx + nny).astype(bool).sum(axis=1).A1
         nn_cons_per_batch.append((n_intersection / n_union).mean())
-    return np.mean(nn_cons_per_batch).item()
+    return np.mean(nn_cons_per_batch)
 
 
-def foscttm(
-        x: np.ndarray, y: np.ndarray, **kwargs
-) -> Tuple[np.ndarray, np.ndarray]:
+def foscttm(x: np.ndarray, y: np.ndarray, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
     r"""
     Fraction of samples closer than true match (smaller is better)
 

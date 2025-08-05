@@ -30,8 +30,7 @@ class Checker:
     """
 
     def __init__(
-            self, name: str, vmin: Optional[str] = None,
-            install_hint: Optional[str] = None
+        self, name: str, vmin: Optional[str] = None, install_hint: Optional[str] = None
     ) -> None:
         self.name = name
         self.vmin = parse(vmin) if vmin else vmin
@@ -63,8 +62,11 @@ class ModuleChecker(Checker):
     """
 
     def __init__(
-            self, name: str, package_name: Optional[str] = None,
-            vmin: Optional[str] = None, install_hint: Optional[str] = None
+        self,
+        name: str,
+        package_name: Optional[str] = None,
+        vmin: Optional[str] = None,
+        install_hint: Optional[str] = None,
     ) -> None:
         super().__init__(name, vmin, install_hint)
         self.package_name = package_name or name
@@ -76,10 +78,16 @@ class ModuleChecker(Checker):
             raise RuntimeError(" ".join([self.vreq_hint, self.install_hint])) from e
         v = parse(version(self.package_name))
         if self.vmin and v < self.vmin:
-            raise RuntimeError(" ".join([
-                self.vreq_hint, f"Detected version is {v}.",
-                "Please install a newer version.", self.install_hint
-            ]))
+            raise RuntimeError(
+                " ".join(
+                    [
+                        self.vreq_hint,
+                        f"Detected version is {v}.",
+                        "Please install a newer version.",
+                        self.install_hint,
+                    ]
+                )
+            )
 
 
 class CmdChecker(Checker):
@@ -102,8 +110,12 @@ class CmdChecker(Checker):
     """
 
     def __init__(
-            self, name: str, cmd: str, vregex: str,
-            vmin: Optional[str] = None, install_hint: Optional[str] = None
+        self,
+        name: str,
+        cmd: str,
+        vregex: str,
+        vmin: Optional[str] = None,
+        install_hint: Optional[str] = None,
     ) -> None:
         super().__init__(name, vmin=vmin, install_hint=install_hint)
         self.cmd = cmd
@@ -111,10 +123,10 @@ class CmdChecker(Checker):
 
     def check(self) -> None:
         output_lines = run_command(
-            self.cmd, log_command=False, print_output=False,
-            err_message={
-                127: " ".join([self.vreq_hint, self.install_hint])
-            }
+            self.cmd,
+            log_command=False,
+            print_output=False,
+            err_message={127: " ".join([self.vreq_hint, self.install_hint])},
         )
         for output_line in output_lines:
             v = re.search(self.vregex, output_line)
@@ -124,35 +136,43 @@ class CmdChecker(Checker):
         else:
             v = None
         if self.vmin and v < self.vmin:
-            raise RuntimeError(" ".join([
-                self.vreq_hint, f"Detected version is {v}.",
-                "Please install a newer version.", self.install_hint
-            ]))
+            raise RuntimeError(
+                " ".join(
+                    [
+                        self.vreq_hint,
+                        f"Detected version is {v}.",
+                        "Please install a newer version.",
+                        self.install_hint,
+                    ]
+                )
+            )
 
 
 INSTALL_HINTS = types.SimpleNamespace(
-    bedtools=
+    bedtools=(
         "You may install bedtools following the guide from "
         "https://bedtools.readthedocs.io/en/latest/content/installation.html, "
         "or use `conda install -c bioconda bedtools` "
-        "if a conda environment is being used.",
-    plotly=
+        "if a conda environment is being used."
+    ),
+    plotly=(
         "You may install plotly following the guide from "
         "https://plotly.com/python/getting-started/, "
         "or use `conda install -c plotly plotly` "
         "if a conda environment is being used."
+    ),
 )
 
 
 CHECKERS = dict(
     bedtools=CmdChecker(
-        "bedtools", f"{config.BEDTOOLS_PATH or 'bedtools'} --version", r"v([0-9\.]+)",
-        vmin="2.29.2", install_hint=INSTALL_HINTS.bedtools
+        "bedtools",
+        f"{config.BEDTOOLS_PATH or 'bedtools'} --version",
+        r"v([0-9\.]+)",
+        vmin="2.29.2",
+        install_hint=INSTALL_HINTS.bedtools,
     ),
-    plotly=ModuleChecker(
-        "plotly",
-        vmin=None, install_hint=INSTALL_HINTS.plotly
-    )
+    plotly=ModuleChecker("plotly", vmin=None, install_hint=INSTALL_HINTS.plotly),
 )
 
 

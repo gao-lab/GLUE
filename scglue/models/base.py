@@ -44,7 +44,7 @@ class Trainer:
 
     @abstractmethod
     def train_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
+        self, engine: ignite.engine.Engine, data: List[torch.Tensor]
     ) -> Mapping[str, torch.Tensor]:
         r"""
         A single training step
@@ -65,7 +65,7 @@ class Trainer:
 
     @abstractmethod
     def val_step(
-            self, engine: ignite.engine.Engine, data: List[torch.Tensor]
+        self, engine: ignite.engine.Engine, data: List[torch.Tensor]
     ) -> Mapping[str, torch.Tensor]:
         r"""
         A single validation step
@@ -85,8 +85,7 @@ class Trainer:
         raise NotImplementedError  # pragma: no cover
 
     def report_metrics(
-            self, train_state: ignite.engine.State,
-            val_state: Optional[ignite.engine.State]
+        self, train_state: ignite.engine.State, val_state: Optional[ignite.engine.State]
     ) -> None:
         r"""
         Report loss values during training
@@ -101,24 +100,29 @@ class Trainer:
         if train_state.epoch % config.PRINT_LOSS_INTERVAL:
             return
         train_metrics = {
-            key: float(f"{val:.3f}")
-            for key, val in train_state.metrics.items()
+            key: float(f"{val:.3f}") for key, val in train_state.metrics.items()
         }
-        val_metrics = {
-            key: float(f"{val:.3f}")
-            for key, val in val_state.metrics.items()
-        } if val_state else None
+        val_metrics = (
+            {key: float(f"{val:.3f}") for key, val in val_state.metrics.items()}
+            if val_state
+            else None
+        )
         self.logger.info(
             "[Epoch %d] train=%s, val=%s, %.1fs elapsed",
-            train_state.epoch, train_metrics, val_metrics,
-            train_state.times["EPOCH_COMPLETED"]  # Also includes validator time
+            train_state.epoch,
+            train_metrics,
+            val_metrics,
+            train_state.times["EPOCH_COMPLETED"],  # Also includes validator time
         )
 
     def fit(
-            self, train_loader: Iterable, val_loader: Optional[Iterable] = None,
-            max_epochs: int = 100, random_seed: int = 0,
-            directory: Optional[os.PathLike] = None,
-            plugins: Optional[List["TrainingPlugin"]] = None
+        self,
+        train_loader: Iterable,
+        val_loader: Optional[Iterable] = None,
+        max_epochs: int = 100,
+        random_seed: int = 0,
+        directory: Optional[os.PathLike] = None,
+        plugins: Optional[List["TrainingPlugin"]] = None,
     ) -> None:
         r"""
         Fit network
@@ -139,8 +143,10 @@ class Trainer:
             Optional list of training plugins
         """
         interrupt_delayer = DelayedKeyboardInterrupt()
-        directory = pathlib.Path(directory or tempfile.mkdtemp(prefix=config.TMP_PREFIX))
-        self.logger.info("Using training directory: \"%s\"", directory)
+        directory = pathlib.Path(
+            directory or tempfile.mkdtemp(prefix=config.TMP_PREFIX)
+        )
+        self.logger.info('Using training directory: "%s"', directory)
 
         # Construct engines
         train_engine = ignite.engine.Engine(self.train_step)
@@ -151,7 +157,9 @@ class Trainer:
         train_engine.add_event_handler(COMPLETED, delay_interrupt)
 
         # Exception handling
-        train_engine.add_event_handler(ITERATION_COMPLETED, ignite.handlers.TerminateOnNan())
+        train_engine.add_event_handler(
+            ITERATION_COMPLETED, ignite.handlers.TerminateOnNan()
+        )
 
         @train_engine.on(EXCEPTION_RAISED)
         def _handle_exception(engine, e):
@@ -172,6 +180,7 @@ class Trainer:
                 ).attach(val_engine, item)
 
         if val_engine:
+
             @train_engine.on(EPOCH_COMPLETED)
             def _validate(engine):
                 val_engine.run(
@@ -184,13 +193,18 @@ class Trainer:
 
         for plugin in plugins or []:
             plugin.attach(
-                net=self.net, trainer=self,
-                train_engine=train_engine, val_engine=val_engine,
-                train_loader=train_loader, val_loader=val_loader,
-                directory=directory
+                net=self.net,
+                trainer=self,
+                train_engine=train_engine,
+                val_engine=val_engine,
+                train_loader=train_loader,
+                val_loader=val_loader,
+                directory=directory,
             )
 
-        restore_interrupt = lambda: interrupt_delayer.__exit__(None, None, None)
+        def restore_interrupt():
+            return interrupt_delayer.__exit__(None, None, None)
+
         train_engine.add_event_handler(EPOCH_COMPLETED, restore_interrupt)
         train_engine.add_event_handler(COMPLETED, restore_interrupt)
 
@@ -286,8 +300,7 @@ class Model:
         """
         if self._trainer is None:
             raise RuntimeError(
-                "No trainer has been registered! "
-                "Please call `.compile()` first."
+                "No trainer has been registered! " "Please call `.compile()` first."
             )
         return self._trainer
 
@@ -386,12 +399,14 @@ class TrainingPlugin:
 
     @abstractmethod
     def attach(
-            self, net: torch.nn.Module, trainer: Trainer,
-            train_engine: ignite.engine.Engine,
-            val_engine: ignite.engine.Engine,
-            train_loader: Iterable,
-            val_loader: Optional[Iterable],
-            directory: pathlib.Path
+        self,
+        net: torch.nn.Module,
+        trainer: Trainer,
+        train_engine: ignite.engine.Engine,
+        val_engine: ignite.engine.Engine,
+        train_loader: Iterable,
+        val_loader: Optional[Iterable],
+        directory: pathlib.Path,
     ) -> None:
         r"""
         Attach custom handlers to training or validation engine

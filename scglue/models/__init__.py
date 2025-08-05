@@ -24,14 +24,15 @@ from .scglue import PairedSCGLUEModel, SCGLUEModel
 
 @logged
 def configure_dataset(
-        adata: AnnData, prob_model: str,
-        use_highly_variable: bool = True,
-        use_layer: Optional[str] = None,
-        use_rep: Optional[str] = None,
-        use_batch: Optional[str] = None,
-        use_cell_type: Optional[str] = None,
-        use_dsc_weight: Optional[str] = None,
-        use_obs_names: bool = False
+    adata: AnnData,
+    prob_model: str,
+    use_highly_variable: bool = True,
+    use_layer: Optional[str] = None,
+    use_rep: Optional[str] = None,
+    use_batch: Optional[str] = None,
+    use_cell_type: Optional[str] = None,
+    use_dsc_weight: Optional[str] = None,
+    use_obs_names: bool = False,
 ) -> None:
     r"""
     Configure dataset for model training
@@ -76,7 +77,9 @@ def configure_dataset(
         if "highly_variable" not in adata.var:
             raise ValueError("Please mark highly variable features first!")
         data_config["use_highly_variable"] = True
-        data_config["features"] = adata.var.query("highly_variable").index.to_numpy().tolist()
+        data_config["features"] = (
+            adata.var.query("highly_variable").index.to_numpy().tolist()
+        )
     else:
         data_config["use_highly_variable"] = False
         data_config["features"] = adata.var_names.to_numpy().tolist()
@@ -98,9 +101,13 @@ def configure_dataset(
         if use_batch not in adata.obs:
             raise ValueError("Invalid `use_batch`!")
         data_config["use_batch"] = use_batch
-        data_config["batches"] = pd.Index(
-            adata.obs[use_batch]
-        ).dropna().drop_duplicates().sort_values().to_numpy()  # AnnData does not support saving pd.Index in uns
+        data_config["batches"] = (
+            pd.Index(adata.obs[use_batch])
+            .dropna()
+            .drop_duplicates()
+            .sort_values()
+            .to_numpy()
+        )  # AnnData does not support saving pd.Index in uns
     else:
         data_config["use_batch"] = None
         data_config["batches"] = None
@@ -108,9 +115,13 @@ def configure_dataset(
         if use_cell_type not in adata.obs:
             raise ValueError("Invalid `use_cell_type`!")
         data_config["use_cell_type"] = use_cell_type
-        data_config["cell_types"] = pd.Index(
-            adata.obs[use_cell_type]
-        ).dropna().drop_duplicates().sort_values().to_numpy()  # AnnData does not support saving pd.Index in uns
+        data_config["cell_types"] = (
+            pd.Index(adata.obs[use_cell_type])
+            .dropna()
+            .drop_duplicates()
+            .sort_values()
+            .to_numpy()
+        )  # AnnData does not support saving pd.Index in uns
     else:
         data_config["use_cell_type"] = None
         data_config["cell_types"] = None
@@ -148,9 +159,14 @@ def load_model(fname: os.PathLike) -> Model:
 
 @logged
 def fit_SCGLUE(
-        adatas: Mapping[str, AnnData], graph: nx.Graph, model: type = SCGLUEModel,
-        init_kws: Kws = None, compile_kws: Kws = None, fit_kws: Kws = None,
-        balance_kws: Kws = None
+    adatas: Mapping[str, AnnData],
+    graph: nx.Graph,
+    model: type = SCGLUEModel,
+    skip_balance: bool = False,
+    init_kws: Kws = None,
+    compile_kws: Kws = None,
+    fit_kws: Kws = None,
+    balance_kws: Kws = None,
 ) -> SCGLUEModel:
     r"""
     Fit GLUE model to integrate single-cell multi-omics data
@@ -165,6 +181,8 @@ def fit_SCGLUE(
         Model class, must be one of
         {:class:`scglue.models.scglue.SCGLUEModel`,
         :class:`scglue.models.scglue.PairedSCGLUEModel`}
+    skip_balance
+        Skip the balancing step and use equal weight for all cells
     init_kws
         Model initialization keyword arguments
         (see the constructor of the ``model`` class,
@@ -198,8 +216,9 @@ def fit_SCGLUE(
     pretrain_fit_kws = fit_kws.copy()
     pretrain_fit_kws.update({"align_burnin": np.inf, "safe_burnin": False})
     if "directory" in pretrain_fit_kws:
-        pretrain_fit_kws["directory"] = \
-            os.path.join(pretrain_fit_kws["directory"], "pretrain")
+        pretrain_fit_kws["directory"] = os.path.join(
+            pretrain_fit_kws["directory"], "pretrain"
+        )
 
     pretrain = model(adatas, sorted(graph.nodes), **pretrain_init_kws)
     pretrain.compile(**compile_kws)
@@ -207,35 +226,41 @@ def fit_SCGLUE(
     if "directory" in pretrain_fit_kws:
         pretrain.save(os.path.join(pretrain_fit_kws["directory"], "pretrain.dill"))
 
-    fit_SCGLUE.logger.info("Estimating balancing weight...")
-    for k, adata in adatas.items():
-        adata.obsm[f"X_{config.TMP_PREFIX}"] = pretrain.encode_data(k, adata)
-    if init_kws.get("shared_batches"):
-        use_batch = set(
-            adata.uns[config.ANNDATA_KEY]["use_batch"]
-            for adata in adatas.values()
+    if not skip_balance:
+        fit_SCGLUE.logger.info("Estimating balancing weight...")
+        for k, adata in adatas.items():
+            adata.obsm[f"X_{config.TMP_PREFIX}"] = pretrain.encode_data(k, adata)
+        if init_kws.get("shared_batches"):
+            use_batch = set(
+                adata.uns[config.ANNDATA_KEY]["use_batch"] for adata in adatas.values()
+            )
+            use_batch = use_batch.pop() if len(use_batch) == 1 else None
+        else:
+            use_batch = None
+        estimate_balancing_weight(
+            *adatas.values(),
+            use_rep=f"X_{config.TMP_PREFIX}",
+            use_batch=use_batch,
+            key_added="balancing_weight",
+            **balance_kws,
         )
-        use_batch = use_batch.pop() if len(use_batch) == 1 else None
-    else:
-        use_batch = None
-    estimate_balancing_weight(
-        *adatas.values(), use_rep=f"X_{config.TMP_PREFIX}", use_batch=use_batch,
-        key_added="balancing_weight", **balance_kws
-    )
-    for adata in adatas.values():
-        adata.uns[config.ANNDATA_KEY]["use_dsc_weight"] = "balancing_weight"
-        del adata.obsm[f"X_{config.TMP_PREFIX}"]
+        for adata in adatas.values():
+            adata.uns[config.ANNDATA_KEY]["use_dsc_weight"] = "balancing_weight"
+            del adata.obsm[f"X_{config.TMP_PREFIX}"]
 
     fit_SCGLUE.logger.info("Fine-tuning SCGLUE model...")
     finetune_fit_kws = fit_kws.copy()
     if "directory" in finetune_fit_kws:
-        finetune_fit_kws["directory"] = \
-            os.path.join(finetune_fit_kws["directory"], "fine-tune")
+        finetune_fit_kws["directory"] = os.path.join(
+            finetune_fit_kws["directory"], "fine-tune"
+        )
 
     finetune = model(adatas, sorted(graph.nodes), **init_kws)
     finetune.adopt_pretrained_model(pretrain)
     finetune.compile(**compile_kws)
-    fit_SCGLUE.logger.debug("Increasing random seed by 1 to prevent idential data order...")
+    fit_SCGLUE.logger.debug(
+        "Increasing random seed by 1 to prevent identical data order..."
+    )
     finetune.random_seed += 1
     finetune.fit(adatas, graph, **finetune_fit_kws)
     if "directory" in finetune_fit_kws:

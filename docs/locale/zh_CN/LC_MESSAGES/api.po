@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: scglue 0.2.3\n"
+"Project-Id-Version: scglue 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 14:24+0800\n"
+"POT-Creation-Date: 2025-03-27 15:14+0800\n"
 "Last-Translator: Pei-Wen Ji <jipw@mail.cbi.pku.edu.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Check whether certain dependencies are installed"
 msgstr ""
 
-#: ../../api/scglue.check.rst:25 ../../api/scglue.genomics.rst:38
+#: ../../api/scglue.check.rst:25 ../../api/scglue.genomics.rst:39
 #: ../../api/scglue.models.base.rst:17 ../../api/scglue.models.data.rst:17
 #: ../../api/scglue.models.glue.rst:17 ../../api/scglue.models.nn.rst:27
 #: ../../api/scglue.models.plugins.rst:17 ../../api/scglue.models.prob.rst:17
@@ -200,6 +200,7 @@ msgstr ""
 #: scglue.genomics.Bed.verify scglue.genomics.Bed.write_bed
 #: scglue.genomics.Gtf.read_gtf scglue.genomics.Gtf.rectify
 #: scglue.genomics.Gtf.to_bed scglue.genomics.Gtf.verify
+#: scglue.genomics.anchored_guidance_graph
 #: scglue.genomics.cis_regulatory_ranking scglue.genomics.dist_power_decay
 #: scglue.genomics.ens_trim_version scglue.genomics.get_chr_len_from_fai
 #: scglue.genomics.interval_dist scglue.genomics.read_ctx_grn
@@ -287,6 +288,7 @@ msgstr ""
 #: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
 #: scglue.models.scglue.SCGLUE scglue.models.scglue.SCGLUEModel
 #: scglue.models.scglue.SCGLUEModel.adopt_pretrained_model
+#: scglue.models.scglue.SCGLUEModel.classify_data
 #: scglue.models.scglue.SCGLUEModel.compile
 #: scglue.models.scglue.SCGLUEModel.decode_data
 #: scglue.models.scglue.SCGLUEModel.encode_data
@@ -361,7 +363,7 @@ msgstr ""
 #: ../../api/scglue.models.sc.GraphEncoder.rst:12
 #: ../../api/scglue.models.sc.IndDataDecoder.rst:12
 #: ../../api/scglue.models.sc.IndNBDataDecoder.rst:12
-#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:12
+#: ../../api/scglue.models.sc.IndNormalDataDecoder.rst:12
 #: ../../api/scglue.models.sc.IndZILNDataDecoder.rst:12
 #: ../../api/scglue.models.sc.IndZINBDataDecoder.rst:12
 #: ../../api/scglue.models.sc.IndZINDataDecoder.rst:12
@@ -436,6 +438,7 @@ msgstr ""
 #: scglue.genomics.Bed.write_bed scglue.genomics.Gtf.read_gtf
 #: scglue.genomics.Gtf.rectify scglue.genomics.Gtf.split_attribute
 #: scglue.genomics.Gtf.to_bed scglue.genomics.Gtf.verify
+#: scglue.genomics.anchored_guidance_graph
 #: scglue.genomics.cis_regulatory_ranking scglue.genomics.dist_power_decay
 #: scglue.genomics.ens_trim_version scglue.genomics.get_chr_len_from_fai
 #: scglue.genomics.interval_dist scglue.genomics.read_ctx_grn
@@ -546,6 +549,7 @@ msgstr ""
 #: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
 #: scglue.models.scglue.PairedSCGLUETrainer.format_data
 #: scglue.models.scglue.SCGLUEModel.adopt_pretrained_model
+#: scglue.models.scglue.SCGLUEModel.classify_data
 #: scglue.models.scglue.SCGLUEModel.compile
 #: scglue.models.scglue.SCGLUEModel.decode_data
 #: scglue.models.scglue.SCGLUEModel.encode_data
@@ -826,10 +830,11 @@ msgstr ""
 #: scglue.genomics.Bed.strand_specific_start_site
 #: scglue.genomics.Bed.to_bedtool scglue.genomics.Gtf.read_gtf
 #: scglue.genomics.Gtf.rectify scglue.genomics.Gtf.split_attribute
-#: scglue.genomics.Gtf.to_bed scglue.genomics.cis_regulatory_ranking
-#: scglue.genomics.dist_power_decay scglue.genomics.ens_trim_version
-#: scglue.genomics.get_chr_len_from_fai scglue.genomics.interval_dist
-#: scglue.genomics.read_ctx_grn scglue.genomics.regulatory_inference
+#: scglue.genomics.Gtf.to_bed scglue.genomics.anchored_guidance_graph
+#: scglue.genomics.cis_regulatory_ranking scglue.genomics.dist_power_decay
+#: scglue.genomics.ens_trim_version scglue.genomics.get_chr_len_from_fai
+#: scglue.genomics.interval_dist scglue.genomics.read_ctx_grn
+#: scglue.genomics.regulatory_inference
 #: scglue.genomics.rna_anchored_guidance_graph scglue.genomics.window_graph
 #: scglue.graph.collapse_multigraph scglue.graph.compose_multigraph
 #: scglue.graph.reachable_vertices scglue.metrics.avg_silhouette_width
@@ -879,6 +884,7 @@ msgstr ""
 #: scglue.models.scclue.SCCLUETrainer.train_step
 #: scglue.models.scclue.SCCLUETrainer.val_step
 #: scglue.models.scglue.PairedSCGLUETrainer.compute_losses
+#: scglue.models.scglue.SCGLUEModel.classify_data
 #: scglue.models.scglue.SCGLUEModel.decode_data
 #: scglue.models.scglue.SCGLUEModel.encode_data
 #: scglue.models.scglue.SCGLUEModel.encode_graph
@@ -980,6 +986,7 @@ msgstr ""
 
 #: of scglue.data.extract_rank_genes_groups:5 scglue.data.get_gene_annotation:4
 #: scglue.data.lsi:4 scglue.models.scclue.SCCLUEModel.encode_data:6
+#: scglue.models.scglue.SCGLUEModel.classify_data:6
 #: scglue.models.scglue.SCGLUEModel.encode_data:6
 msgid "Input dataset"
 msgstr ""
@@ -1006,6 +1013,7 @@ msgstr ""
 #: scglue.genomics.Bed.nucleotide_content:6 scglue.genomics.Bed.rectify:6
 #: scglue.genomics.Gtf.rectify:6 scglue.genomics.cis_regulatory_ranking:22
 #: scglue.models.dx.integration_consistency:13
+#: scglue.models.scglue.SCGLUEModel.classify_data:10
 #: scglue.utils.ConstrainedDataFrame.rectify:6
 msgid ":py:class:`~pandas.DataFrame`"
 msgstr ""
@@ -1217,7 +1225,7 @@ msgstr ""
 
 #: of scglue.data.transfer_labels:15
 msgid ""
-"New ``query.obs`` key added for the transfered labels, by default the "
+"New ``query.obs`` key added for the transferred labels, by default the "
 "same as ``field``."
 msgstr ""
 
@@ -1245,155 +1253,166 @@ msgstr ""
 msgid "scglue.genomics"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
+msgid ""
+":py:obj:`anchored_guidance_graph "
+"<scglue.genomics.anchored_guidance_graph>`"
+msgstr ""
+
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
+#: scglue.genomics.anchored_guidance_graph:1
+msgid "Build guidance graph anchored on one particular dataset"
+msgstr ""
+
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`cis_regulatory_ranking <scglue.genomics.cis_regulatory_ranking>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.cis_regulatory_ranking:1
 msgid "Generate cis-regulatory ranking between genes and transcription factors"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`dist_power_decay <scglue.genomics.dist_power_decay>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.dist_power_decay:1
 msgid ""
 "Distance-based power decay weight, computed as :math:`w = {\\left( \\frac"
 " {d + 1000} {1000} \\right)} ^ {-0.75}`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`ens_trim_version <scglue.genomics.ens_trim_version>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.ens_trim_version:1
 msgid "Trim version suffix from Ensembl ID"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`get_chr_len_from_fai <scglue.genomics.get_chr_len_from_fai>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.get_chr_len_from_fai:1
 msgid "Get chromosome length information from fasta index file"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`interval_dist <scglue.genomics.interval_dist>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.interval_dist:1
 msgid "Compute distance and relative position between two bed intervals"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`read_bed <scglue.genomics.read_bed>`"
 msgstr ""
 
 #: ../../api/scglue.genomics.Bed.rst:30:<autosummary>:1
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.Bed.read_bed:1
 msgid "Read BED file"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`read_ctx_grn <scglue.genomics.read_ctx_grn>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.read_ctx_grn:1
 msgid "Read pruned TF-target GRN as generated by ``pyscenic ctx``"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`read_gtf <scglue.genomics.read_gtf>`"
 msgstr ""
 
 #: ../../api/scglue.genomics.Gtf.rst:26:<autosummary>:1
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.Gtf.read_gtf:1
 msgid "Read GTF file"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`regulatory_inference <scglue.genomics.regulatory_inference>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.regulatory_inference:1
 msgid "Regulatory inference based on feature embeddings"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ""
 ":py:obj:`rna_anchored_guidance_graph "
 "<scglue.genomics.rna_anchored_guidance_graph>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.rna_anchored_guidance_graph:1
 msgid "Build guidance graph anchored on RNA genes"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ""
 ":py:obj:`rna_anchored_prior_graph "
 "<scglue.genomics.rna_anchored_prior_graph>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.rna_anchored_prior_graph:1
 msgid "Deprecated, please use :func:`rna_anchored_guidance_graph` instead"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`window_graph <scglue.genomics.window_graph>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.window_graph:1
 msgid ""
 "Construct a window graph between two sets of genomic features, where "
 "features pairs within a window size are connected."
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`write_links <scglue.genomics.write_links>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.write_links:1
 msgid "Export regulatory graph into a links file"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1
 msgid ":py:obj:`write_scenic_feather <scglue.genomics.write_scenic_feather>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:36:<autosummary>:1 of
+#: ../../api/scglue.genomics.rst:37:<autosummary>:1 of
 #: scglue.genomics.write_scenic_feather:1
 msgid "Write cis-regulatory ranking to a SCENIC-compatible feather file"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:45:<autosummary>:1
+#: ../../api/scglue.genomics.rst:46:<autosummary>:1
 msgid ":py:obj:`Bed <scglue.genomics.Bed>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:45:<autosummary>:1 of scglue.genomics.Bed:1
+#: ../../api/scglue.genomics.rst:46:<autosummary>:1 of scglue.genomics.Bed:1
 msgid "BED format data frame"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:45:<autosummary>:1
+#: ../../api/scglue.genomics.rst:46:<autosummary>:1
 msgid ":py:obj:`Gtf <scglue.genomics.Gtf>`"
 msgstr ""
 
-#: ../../api/scglue.genomics.rst:45:<autosummary>:1 of scglue.genomics.Gtf:1
+#: ../../api/scglue.genomics.rst:46:<autosummary>:1 of scglue.genomics.Gtf:1
 msgid "GTF format data frame"
 msgstr ""
 
@@ -1526,7 +1545,7 @@ msgstr ""
 #: ../../api/scglue.models.sc.GraphEncoder.rst:24
 #: ../../api/scglue.models.sc.IndDataDecoder.rst:24
 #: ../../api/scglue.models.sc.IndNBDataDecoder.rst:23
-#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:23
+#: ../../api/scglue.models.sc.IndNormalDataDecoder.rst:23
 #: ../../api/scglue.models.sc.IndZILNDataDecoder.rst:23
 #: ../../api/scglue.models.sc.IndZINBDataDecoder.rst:23
 #: ../../api/scglue.models.sc.IndZINDataDecoder.rst:23
@@ -1561,7 +1580,7 @@ msgstr ""
 #: ../../api/scglue.models.scglue.PairedSCGLUEModel.rst:24
 #: ../../api/scglue.models.scglue.PairedSCGLUETrainer.rst:25
 #: ../../api/scglue.models.scglue.SCGLUE.rst:23
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:33
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:34
 #: ../../api/scglue.models.scglue.SCGLUETrainer.rst:26
 #: ../../api/scglue.utils.ConfigManager.rst:23
 #: ../../api/scglue.utils.ConstrainedDataFrame.rst:25
@@ -1606,7 +1625,7 @@ msgstr ""
 #: of scglue.genomics.Bed.expand:16
 msgid ""
 "Starting position < 0 after expansion is always trimmed. Ending position "
-"exceeding chromosome length is trimed only if ``chr_len`` is specified."
+"exceeding chromosome length is trimmed only if ``chr_len`` is specified."
 msgstr ""
 
 #: ../../api/scglue.genomics.Bed.nucleotide_content.rst:2
@@ -1782,6 +1801,63 @@ msgstr ""
 
 #: ../../api/scglue.genomics.Gtf.verify.rst:2
 msgid "scglue.genomics.Gtf.verify"
+msgstr ""
+
+#: ../../api/scglue.genomics.anchored_guidance_graph.rst:2
+msgid "scglue.genomics.anchored\\_guidance\\_graph"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:3
+msgid "Anchor dataset"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:4
+#: scglue.genomics.rna_anchored_guidance_graph:5
+msgid "Other datasets"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:6
+msgid "Maximal extend distance beyond anchor genomic features"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:8
+#: scglue.genomics.rna_anchored_guidance_graph:14
+msgid ""
+"Distance-decreasing weight function for the extended regions (by default "
+":func:`dist_power_decay`)"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:11
+msgid ""
+"Sign of edges between anchor features and features in each ``*others`` "
+"dataset, must have the same length as ``*others``. Signs must be one of "
+"``{-1, 1}``. By default, all edges have positive signs of ``1``."
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:15
+#: scglue.genomics.rna_anchored_guidance_graph:21
+msgid ""
+"Whether to propagate highly variable genes to other datasets, datasets in"
+" ``*others`` would be modified in place."
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:18
+#: scglue.genomics.rna_anchored_guidance_graph:28
+#: scglue.genomics.rna_anchored_prior_graph:4 scglue.genomics.window_graph:24
+msgid ":py:class:`~networkx.MultiDiGraph`"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:19
+#: scglue.genomics.rna_anchored_guidance_graph:29
+msgid "*graph* -- Prior regulatory graph"
+msgstr ""
+
+#: of scglue.genomics.anchored_guidance_graph:23
+#: scglue.genomics.rna_anchored_guidance_graph:33
+msgid ""
+"In this function, features in the same dataset can only connect to anchor"
+" genes via the same edge sign. For more flexibility, please construct the"
+" guidance graph manually."
 msgstr ""
 
 #: ../../api/scglue.genomics.cis_regulatory_ranking.rst:2
@@ -1969,10 +2045,6 @@ msgstr ""
 msgid "Anchor RNA dataset"
 msgstr ""
 
-#: of scglue.genomics.rna_anchored_guidance_graph:5
-msgid "Other datasets"
-msgstr ""
-
 #: of scglue.genomics.rna_anchored_guidance_graph:7
 msgid ""
 "Defines the genomic region of genes, must be one of ``{\"gene_body\", "
@@ -1987,12 +2059,6 @@ msgstr ""
 msgid "Maximal extend distance beyond gene regions"
 msgstr ""
 
-#: of scglue.genomics.rna_anchored_guidance_graph:14
-msgid ""
-"Distance-decreasing weight function for the extended regions (by default "
-":func:`dist_power_decay`)"
-msgstr ""
-
 #: of scglue.genomics.rna_anchored_guidance_graph:17
 msgid ""
 "Sign of edges between RNA genes and features in each ``*others`` dataset,"
@@ -2000,31 +2066,9 @@ msgid ""
 "1}``. By default, all edges have positive signs of ``1``."
 msgstr ""
 
-#: of scglue.genomics.rna_anchored_guidance_graph:21
-msgid ""
-"Whether to propagate highly variable genes to other datasets, datasets in"
-" ``*others`` would be modified in place."
-msgstr ""
-
 #: of scglue.genomics.rna_anchored_guidance_graph:24
 #: scglue.genomics.rna_anchored_guidance_graph:26
 msgid "**CAUTION: DO NOT USE**, only for evaluation purpose"
-msgstr ""
-
-#: of scglue.genomics.rna_anchored_guidance_graph:28
-#: scglue.genomics.rna_anchored_prior_graph:4 scglue.genomics.window_graph:24
-msgid ":py:class:`~networkx.MultiDiGraph`"
-msgstr ""
-
-#: of scglue.genomics.rna_anchored_guidance_graph:29
-msgid "*graph* -- Prior regulatory graph"
-msgstr ""
-
-#: of scglue.genomics.rna_anchored_guidance_graph:33
-msgid ""
-"In this function, features in the same dataset can only connect to anchor"
-" genes via the same edge sign. For more flexibility, please construct the"
-" guidance graph manually."
 msgstr ""
 
 #: ../../api/scglue.genomics.rna_anchored_prior_graph.rst:2
@@ -2472,7 +2516,7 @@ msgid "scglue.metrics.neighbor\\_conservation"
 msgstr ""
 
 #: of scglue.metrics.neighbor_conservation:4
-msgid "Cooordinates after integration"
+msgid "Coordinates after integration"
 msgstr ""
 
 #: of scglue.metrics.neighbor_conservation:6
@@ -2686,7 +2730,7 @@ msgstr ""
 #: ../../api/scglue.models.base.Model.rst:26:<autosummary>:1
 #: ../../api/scglue.models.scclue.SCCLUEModel.rst:26:<autosummary>:1
 #: ../../api/scglue.models.scglue.PairedSCGLUEModel.rst:22:<autosummary>:1
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.base.Model.compile:1
 #: scglue.models.scclue.SCCLUEModel.compile:1
 #: scglue.models.scglue.PairedSCGLUEModel.compile:1
@@ -2727,7 +2771,7 @@ msgid ":py:obj:`upgrade <scglue.models.base.Model.upgrade>`"
 msgstr ""
 
 #: ../../api/scglue.models.base.Model.rst:26:<autosummary>:1
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.base.Model.upgrade:1
 #: scglue.models.scglue.SCGLUEModel.upgrade:1
 msgid "Upgrade the model if generated by older versions"
@@ -4490,7 +4534,7 @@ msgstr ""
 msgid "Input dimensionality"
 msgstr ""
 
-#: of scglue.models.nn.GraphAttent:5 scglue.models.sc.Classifier:7
+#: of scglue.models.nn.GraphAttent:6 scglue.models.sc.Classifier:7
 #: scglue.models.sc.DataDecoder:4 scglue.models.sc.DataEncoder:6
 #: scglue.models.sc.Discriminator:6 scglue.models.sc.GraphEncoder:6
 #: scglue.models.sc.IndDataDecoder:6 scglue.models.sc.NBDataDecoder:4
@@ -4501,7 +4545,7 @@ msgstr ""
 msgid "Output dimensionality"
 msgstr ""
 
-#: of scglue.models.nn.GraphAttent:7 scglue.models.scclue:4
+#: of scglue.models.nn.GraphAttent:8 scglue.models.scclue:4
 msgid "**EXPERIMENTAL**"
 msgstr ""
 
@@ -4923,11 +4967,11 @@ msgid "Negative binomial data decoder independent of feature latent"
 msgstr ""
 
 #: ../../api/scglue.models.sc.rst:42:<autosummary>:1
-msgid ":py:obj:`IndNormalDataDocoder <scglue.models.sc.IndNormalDataDocoder>`"
+msgid ":py:obj:`IndNormalDataDecoder <scglue.models.sc.IndNormalDataDecoder>`"
 msgstr ""
 
 #: ../../api/scglue.models.sc.rst:42:<autosummary>:1 of
-#: scglue.models.sc.IndNormalDataDocoder:1
+#: scglue.models.sc.IndNormalDataDecoder:1
 msgid "Normal data decoder independent of feature latent"
 msgstr ""
 
@@ -5310,11 +5354,11 @@ msgid ""
 ":py:class:`~scglue.models.sc.NBDataDecoder`"
 msgstr ""
 
-#: ../../api/scglue.models.sc.IndNormalDataDocoder.rst:2
-msgid "scglue.models.sc.IndNormalDataDocoder"
+#: ../../api/scglue.models.sc.IndNormalDataDecoder.rst:2
+msgid "scglue.models.sc.IndNormalDataDecoder"
 msgstr ""
 
-#: of scglue.models.sc.IndNormalDataDocoder:1
+#: of scglue.models.sc.IndNormalDataDecoder:1
 msgid ""
 "Bases: :py:class:`~scglue.models.sc.IndDataDecoder`, "
 ":py:class:`~scglue.models.sc.NormalDataDecoder`"
@@ -6078,11 +6122,13 @@ msgid "scglue.models.scclue.SCCLUEModel.encode\\_data"
 msgstr ""
 
 #: of scglue.models.scclue.SCCLUEModel.encode_data:4
+#: scglue.models.scglue.SCGLUEModel.classify_data:4
 #: scglue.models.scglue.SCGLUEModel.encode_data:4
 msgid "Modality key"
 msgstr ""
 
 #: of scglue.models.scclue.SCCLUEModel.encode_data:8
+#: scglue.models.scglue.SCGLUEModel.classify_data:8
 #: scglue.models.scglue.SCGLUEModel.decode_data:16
 #: scglue.models.scglue.SCGLUEModel.encode_data:8
 msgid "Size of minibatches"
@@ -6514,115 +6560,124 @@ msgstr ""
 msgid "scglue.models.scglue.SCGLUEModel"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ""
 ":py:obj:`adopt_pretrained_model "
 "<scglue.models.scglue.SCGLUEModel.adopt_pretrained_model>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.adopt_pretrained_model:1
 msgid "Adopt buffers and parameters from a pretrained model"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
+msgid ":py:obj:`classify_data <scglue.models.scglue.SCGLUEModel.classify_data>`"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
+#: scglue.models.scglue.SCGLUEModel.classify_data:1
+msgid "Obtain cell type classification"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`compile <scglue.models.scglue.SCGLUEModel.compile>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`decode_data <scglue.models.scglue.SCGLUEModel.decode_data>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.decode_data:1
 msgid "Decode data"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`encode_data <scglue.models.scglue.SCGLUEModel.encode_data>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.encode_data:1
 msgid "Compute data (cell) embedding"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`encode_graph <scglue.models.scglue.SCGLUEModel.encode_graph>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.encode_graph:1
 msgid "Compute graph (feature) embedding"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`fit <scglue.models.scglue.SCGLUEModel.fit>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.fit:1
 msgid "Fit model on given datasets"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`freeze_cells <scglue.models.scglue.SCGLUEModel.freeze_cells>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.freeze_cells:1
 msgid "Freeze cell embeddings"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`get_losses <scglue.models.scglue.SCGLUEModel.get_losses>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.get_losses:1
 msgid "Compute loss function values"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`unfreeze_cells <scglue.models.scglue.SCGLUEModel.unfreeze_cells>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1 of
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1 of
 #: scglue.models.scglue.SCGLUEModel.unfreeze_cells:1
 msgid "Unfreeze cell embeddings"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:31:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:32:<autosummary>:1
 msgid ":py:obj:`upgrade <scglue.models.scglue.SCGLUEModel.upgrade>`"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ""
 ":py:obj:`ALIGN_BURNIN_PRG "
 "<scglue.models.scglue.SCGLUEModel.ALIGN_BURNIN_PRG>`\\"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ":py:obj:`GRAPH_BATCHES <scglue.models.scglue.SCGLUEModel.GRAPH_BATCHES>`\\"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ""
 ":py:obj:`MAX_EPOCHS_PRG "
 "<scglue.models.scglue.SCGLUEModel.MAX_EPOCHS_PRG>`\\"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ":py:obj:`PATIENCE_PRG <scglue.models.scglue.SCGLUEModel.PATIENCE_PRG>`\\"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ""
 ":py:obj:`REDUCE_LR_PATIENCE_PRG "
 "<scglue.models.scglue.SCGLUEModel.REDUCE_LR_PATIENCE_PRG>`\\"
 msgstr ""
 
-#: ../../api/scglue.models.scglue.SCGLUEModel.rst:41:<autosummary>:1
+#: ../../api/scglue.models.scglue.SCGLUEModel.rst:42:<autosummary>:1
 msgid ":py:obj:`logger <scglue.models.scglue.SCGLUEModel.logger>`\\"
 msgstr ""
 
@@ -6636,6 +6691,16 @@ msgstr ""
 
 #: of scglue.models.scglue.SCGLUEModel.adopt_pretrained_model:6
 msgid "Only adopt a specific submodule (e.g., ``\"x2u\"``)"
+msgstr ""
+
+#: ../../api/scglue.models.scglue.SCGLUEModel.classify_data.rst:2
+msgid "scglue.models.scglue.SCGLUEModel.classify\\_data"
+msgstr ""
+
+#: of scglue.models.scglue.SCGLUEModel.classify_data:11
+msgid ""
+"*data_class* -- Cell type classification with shape :math:`n_{cell} "
+"\\times n_{classes}`"
 msgstr ""
 
 #: ../../api/scglue.models.scglue.SCGLUEModel.compile.rst:2
@@ -7734,3 +7799,25 @@ msgid ""
 "*output_lines* -- A list of output lines (only returned if ``stdout`` is "
 "PIPE and ``print_output`` is False)"
 msgstr ""
+
+#~ msgid ""
+#~ "New ``query.obs`` key added for the "
+#~ "transfered labels, by default the same"
+#~ " as ``field``."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Starting position < 0 after expansion"
+#~ " is always trimmed. Ending position "
+#~ "exceeding chromosome length is trimed "
+#~ "only if ``chr_len`` is specified."
+#~ msgstr ""
+
+#~ msgid "Cooordinates after integration"
+#~ msgstr ""
+
+#~ msgid ":py:obj:`IndNormalDataDocoder <scglue.models.sc.IndNormalDataDocoder>`"
+#~ msgstr ""
+
+#~ msgid "scglue.models.sc.IndNormalDataDocoder"
+#~ msgstr ""

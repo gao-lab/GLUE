@@ -20,7 +20,12 @@ import pandas as pd
 import scipy.sparse
 import torch
 from anndata import AnnData
-from anndata._core.sparse_dataset import SparseDataset
+
+try:
+    from anndata._core.sparse_dataset import SparseDataset
+except ImportError:  # Newer version of anndata
+    from anndata._core.sparse_dataset import \
+        BaseCompressedSparseDataset as SparseDataset
 
 from ..num import vertex_degrees
 from ..typehint import AnyArray, Array, RandomState
@@ -30,7 +35,8 @@ from .nn import get_default_numpy_dtype
 DATA_CONFIG = Mapping[str, Any]
 
 
-#---------------------------------- Datasets -----------------------------------
+# --------------------------------- Datasets -----------------------------------
+
 
 @logged
 class Dataset(torch.utils.data.Dataset):
@@ -167,7 +173,9 @@ class Dataset(torch.utils.data.Dataset):
             self_processes[pid].join()
             self.logger.debug("Joined background process: %d", pid)
             del self_processes[pid]
-        for pid in list(self_processes.keys()):  # If some background processes failed to exit gracefully
+        for pid in list(
+            self_processes.keys()
+        ):  # If some background processes failed to exit gracefully
             self_processes[pid].terminate()
             self_processes[pid].join()
             self.logger.debug("Terminated background process: %d", pid)
@@ -229,11 +237,12 @@ class ArrayDataset(Dataset):
 
     def __getitem__(self, index: int) -> List[torch.Tensor]:
         index = np.arange(
-            index * self.getitem_size,
-            min((index + 1) * self.getitem_size, self.size)
+            index * self.getitem_size, min((index + 1) * self.getitem_size, self.size)
         )
         return [
-            torch.as_tensor(a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]].toarray())
+            torch.as_tensor(
+                a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]].toarray()
+            )
             if scipy.sparse.issparse(a) or isinstance(a, SparseDataset)
             else torch.as_tensor(a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]])
             for i, a in enumerate(self.arrays)
@@ -247,7 +256,7 @@ class ArrayDataset(Dataset):
         self.shuffle_idx = shuffled
 
     def random_split(
-            self, fractions: List[float], random_state: RandomState = None
+        self, fractions: List[float], random_state: RandomState = None
     ) -> List["ArrayDataset"]:
         r"""
         Randomly split the dataset into multiple subdatasets according to
@@ -272,14 +281,15 @@ class ArrayDataset(Dataset):
         rs = get_rs(random_state)
         cum_frac = np.cumsum(fractions)
         subdatasets = [
-            ArrayDataset(
-                *self.arrays, getitem_size=self.getitem_size
-            ) for _ in fractions
+            ArrayDataset(*self.arrays, getitem_size=self.getitem_size)
+            for _ in fractions
         ]
         for j, view_idx in enumerate(self.view_idx):
             view_idx = rs.permutation(view_idx)
             split_pos = np.round(cum_frac * view_idx.size).astype(int)
-            split_idx = np.split(view_idx, split_pos[:-1])  # Last pos produces an extra empty split
+            split_idx = np.split(
+                view_idx, split_pos[:-1]
+            )  # Last pos produces an extra empty split
             for i, idx in enumerate(split_idx):
                 subdatasets[i].sizes[j] = len(idx)
                 subdatasets[i].view_idx[j] = idx
@@ -306,8 +316,11 @@ class AnnDataset(Dataset):
     """
 
     def __init__(
-            self, adatas: List[AnnData], data_configs: List[DATA_CONFIG],
-            mode: str = "train", getitem_size: int = 1
+        self,
+        adatas: List[AnnData],
+        data_configs: List[DATA_CONFIG],
+        mode: str = "train",
+        getitem_size: int = 1,
     ) -> None:
         super().__init__(getitem_size=getitem_size)
         if mode not in ("train", "eval"):
@@ -341,20 +354,23 @@ class AnnDataset(Dataset):
     def data_configs(self, data_configs: List[DATA_CONFIG]) -> None:
         if len(data_configs) != len(self.adatas):
             raise ValueError(
-                "Number of data configs must match "
-                "the number of datasets!"
+                "Number of data configs must match " "the number of datasets!"
             )
         self.data_idx, self.extracted_data = self._extract_data(data_configs)
-        self.view_idx = pd.concat(
-            [data_idx.to_series() for data_idx in self.data_idx]
-        ).drop_duplicates().to_numpy()
+        self.view_idx = (
+            pd.concat([data_idx.to_series() for data_idx in self.data_idx])
+            .drop_duplicates()
+            .to_numpy()
+        )
         self.size = self.view_idx.size
         self.shuffle_idx, self.shuffle_pmsk = self._get_idx_pmsk(self.view_idx)
         self._data_configs = data_configs
 
     def _get_idx_pmsk(
-            self, view_idx: np.ndarray, random_fill: bool = False,
-            random_state: RandomState = None
+        self,
+        view_idx: np.ndarray,
+        random_fill: bool = False,
+        random_state: RandomState = None,
     ) -> Tuple[np.ndarray, np.ndarray]:
         rs = get_rs(random_state) if random_fill else None
         shuffle_idx, shuffle_pmsk = [], []
@@ -363,8 +379,11 @@ class AnnDataset(Dataset):
             pmsk = idx >= 0
             n_true = pmsk.sum()
             n_false = pmsk.size - n_true
-            idx[~pmsk] = rs.choice(idx[pmsk], n_false, replace=True) \
-                if random_fill else idx[pmsk][np.mod(np.arange(n_false), n_true)]
+            idx[~pmsk] = (
+                rs.choice(idx[pmsk], n_false, replace=True)
+                if random_fill
+                else idx[pmsk][np.mod(np.arange(n_false), n_true)]
+            )
             shuffle_idx.append(idx)
             shuffle_pmsk.append(pmsk)
         return np.stack(shuffle_idx, axis=1), np.stack(shuffle_pmsk, axis=1)
@@ -374,8 +393,7 @@ class AnnDataset(Dataset):
 
     def __getitem__(self, index: int) -> List[torch.Tensor]:
         s = slice(
-            index * self.getitem_size,
-            min((index + 1) * self.getitem_size, self.size)
+            index * self.getitem_size, min((index + 1) * self.getitem_size, self.size)
         )
         shuffle_idx = self.shuffle_idx[s].T
         shuffle_pmsk = self.shuffle_pmsk[s]
@@ -393,26 +411,40 @@ class AnnDataset(Dataset):
             rank = scipy.stats.rankdata(idx, method="dense") - 1
             sorted_idx = np.empty(rank.max() + 1, dtype=int)
             sorted_idx[rank] = idx
-            arr = arr[sorted_idx.tolist()][rank.tolist()]  # Convert to sequantial access and back
+            arr = arr[sorted_idx.tolist()][
+                rank.tolist()
+            ]  # Convert to sequential access and back
         else:
             arr = arr[idx]
         return arr.toarray() if scipy.sparse.issparse(arr) else arr
 
-    def _extract_data(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
+    def _extract_data(
+        self, data_configs: List[DATA_CONFIG]
+    ) -> Tuple[
+        List[pd.Index],
+        Tuple[
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+        ],
     ]:
         if self.mode == "eval":
             return self._extract_data_eval(data_configs)
         return self._extract_data_train(data_configs)  # self.mode == "train"
 
-    def _extract_data_train(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
+    def _extract_data_train(
+        self, data_configs: List[DATA_CONFIG]
+    ) -> Tuple[
+        List[pd.Index],
+        Tuple[
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+        ],
     ]:
         xuid = [
             self._extract_xuid(adata, data_config)
@@ -440,11 +472,17 @@ class AnnDataset(Dataset):
         ]
         return xuid, (x, xrep, xbch, xlbl, xdwt)
 
-    def _extract_data_eval(self, data_configs: List[DATA_CONFIG]) -> Tuple[
-            List[pd.Index], Tuple[
-                List[AnyArray], List[AnyArray], List[AnyArray],
-                List[AnyArray], List[AnyArray]
-            ]
+    def _extract_data_eval(
+        self, data_configs: List[DATA_CONFIG]
+    ) -> Tuple[
+        List[pd.Index],
+        Tuple[
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+            List[AnyArray],
+        ],
     ]:
         default_dtype = get_default_numpy_dtype()
         xuid = [
@@ -457,16 +495,15 @@ class AnnDataset(Dataset):
         ]
         x = [
             np.empty((adata.shape[0], 0), dtype=default_dtype)
-            if xrep_.size else self._extract_x(adata, data_config)
+            if xrep_.size
+            else self._extract_x(adata, data_config)
             for adata, data_config, xrep_ in zip(self.adatas, data_configs, xrep)
         ]
         xbch = xlbl = [
-            np.empty((adata.shape[0], 0), dtype=int)
-            for adata in self.adatas
+            np.empty((adata.shape[0], 0), dtype=int) for adata in self.adatas
         ]
         xdwt = [
-            np.empty((adata.shape[0], 0), dtype=default_dtype)
-            for adata in self.adatas
+            np.empty((adata.shape[0], 0), dtype=default_dtype) for adata in self.adatas
         ]
         return xuid, (x, xrep, xbch, xlbl, xdwt)
 
@@ -573,7 +610,7 @@ class AnnDataset(Dataset):
         self.shuffle_idx, self.shuffle_pmsk = shuffled
 
     def random_split(
-            self, fractions: List[float], random_state: RandomState = None
+        self, fractions: List[float], random_state: RandomState = None
     ) -> List["AnnDataset"]:
         r"""
         Randomly split the dataset into multiple subdatasets according to
@@ -599,13 +636,17 @@ class AnnDataset(Dataset):
         cum_frac = np.cumsum(fractions)
         view_idx = rs.permutation(self.view_idx)
         split_pos = np.round(cum_frac * view_idx.size).astype(int)
-        split_idx = np.split(view_idx, split_pos[:-1])  # Last pos produces an extra empty split
+        split_idx = np.split(
+            view_idx, split_pos[:-1]
+        )  # Last pos produces an extra empty split
         subdatasets = []
         for idx in split_idx:
             sub = copy.copy(self)
             sub.view_idx = idx
             sub.size = idx.size
-            sub.shuffle_idx, sub.shuffle_pmsk = sub._get_idx_pmsk(idx)  # pylint: disable=protected-access
+            sub.shuffle_idx, sub.shuffle_pmsk = sub._get_idx_pmsk(
+                idx
+            )  # pylint: disable=protected-access
             subdatasets.append(sub)
         return subdatasets
 
@@ -637,17 +678,17 @@ class GraphDataset(Dataset):
     """
 
     def __init__(
-            self, graph: nx.Graph, vertices: pd.Index,
-            neg_samples: int = 1, weighted_sampling: bool = True,
-            deemphasize_loops: bool = True, getitem_size: int = 1
+        self,
+        graph: nx.Graph,
+        vertices: pd.Index,
+        neg_samples: int = 1,
+        weighted_sampling: bool = True,
+        deemphasize_loops: bool = True,
+        getitem_size: int = 1,
     ) -> None:
         super().__init__(getitem_size=getitem_size)
-        self.eidx, self.ewt, self.esgn = \
-            self.graph2triplet(graph, vertices)
-        self.eset = {
-            (i, j, s) for (i, j), s in
-            zip(self.eidx.T, self.esgn)
-        }
+        self.eidx, self.ewt, self.esgn = self.graph2triplet(graph, vertices)
+        self.eset = {(i, j, s) for (i, j), s in zip(self.eidx.T, self.esgn)}
 
         self.vnum = self.eidx.max() + 1
         if weighted_sampling:
@@ -678,7 +719,9 @@ class GraphDataset(Dataset):
         self.samp_esgn: Optional[np.ndarray] = None
 
     def graph2triplet(
-            self, graph: nx.Graph, vertices: pd.Index,
+        self,
+        graph: nx.Graph,
+        vertices: pd.Index,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         r"""
         Convert graph object to graph triplet
@@ -699,7 +742,9 @@ class GraphDataset(Dataset):
         esgn
             Sign of edges (:math:`n_{edges}`)
         """
-        graph = nx.MultiDiGraph(graph)  # Convert undirecitonal to bidirectional, while keeping multi-edges
+        graph = nx.MultiDiGraph(
+            graph
+        )  # Convert undirected to bi-directed, while keeping multi-edges
 
         default_dtype = get_default_numpy_dtype()
         i, j, w, s = [], [], [], []
@@ -708,10 +753,9 @@ class GraphDataset(Dataset):
             j.append(k[1])
             w.append(v["weight"])
             s.append(v["sign"])
-        eidx = np.stack([
-            vertices.get_indexer(i),
-            vertices.get_indexer(j)
-        ]).astype(np.int64)
+        eidx = np.stack([vertices.get_indexer(i), vertices.get_indexer(j)]).astype(
+            np.int64
+        )
         if eidx.min() < 0:
             raise ValueError("Missing vertices!")
         ewt = np.asarray(w).astype(default_dtype)
@@ -727,39 +771,36 @@ class GraphDataset(Dataset):
 
     def __getitem__(self, index: int) -> List[torch.Tensor]:
         s = slice(
-            index * self.getitem_size,
-            min((index + 1) * self.getitem_size, self.size)
+            index * self.getitem_size, min((index + 1) * self.getitem_size, self.size)
         )
         return [
             torch.as_tensor(self.samp_eidx[:, s]),
             torch.as_tensor(self.samp_ewt[s]),
-            torch.as_tensor(self.samp_esgn[s])
+            torch.as_tensor(self.samp_esgn[s]),
         ]
 
-    def propose_shuffle(
-            self, seed: int
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def propose_shuffle(self, seed: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         (pi, pj), pw, ps = self.eidx, self.ewt, self.esgn
         rs = get_rs(seed)
-        psamp = rs.choice(self.ewt.size, self.effective_enum, replace=True, p=self.eprob)
+        psamp = rs.choice(
+            self.ewt.size, self.effective_enum, replace=True, p=self.eprob
+        )
         pi_, pj_, pw_, ps_ = pi[psamp], pj[psamp], pw[psamp], ps[psamp]
         pw_ = np.ones_like(pw_)
         ni_ = np.tile(pi_, self.neg_samples)
         nw_ = np.zeros(pw_.size * self.neg_samples, dtype=pw_.dtype)
         ns_ = np.tile(ps_, self.neg_samples)
-        nj_ = rs.choice(self.vnum, pj_.size * self.neg_samples, replace=True, p=self.vprob)
+        nj_ = rs.choice(
+            self.vnum, pj_.size * self.neg_samples, replace=True, p=self.vprob
+        )
 
-        remain = np.where([
-            item in self.eset
-            for item in zip(ni_, nj_, ns_)
-        ])[0]
+        remain = np.where([item in self.eset for item in zip(ni_, nj_, ns_)])[0]
         while remain.size:  # NOTE: Potential infinite loop if graph too dense
             newnj = rs.choice(self.vnum, remain.size, replace=True, p=self.vprob)
             nj_[remain] = newnj
-            remain = remain[[
-                item in self.eset
-                for item in zip(ni_[remain], newnj, ns_[remain])
-            ]]
+            remain = remain[
+                [item in self.eset for item in zip(ni_[remain], newnj, ns_[remain])]
+            ]
         idx = np.stack([np.concatenate([pi_, ni_]), np.concatenate([pj_, nj_])])
         w = np.concatenate([pw_, nw_])
         s = np.concatenate([ps_, ns_])
@@ -767,12 +808,13 @@ class GraphDataset(Dataset):
         return idx[:, perm], w[perm], s[perm]
 
     def accept_shuffle(
-            self, shuffled: Tuple[np.ndarray, np.ndarray, np.ndarray]
+        self, shuffled: Tuple[np.ndarray, np.ndarray, np.ndarray]
     ) -> None:
         self.samp_eidx, self.samp_ewt, self.samp_esgn = shuffled
 
 
-#-------------------------------- Data loaders ---------------------------------
+# ------------------------------- Data loaders ---------------------------------
+
 
 class DataLoader(torch.utils.data.DataLoader):
 
@@ -783,9 +825,9 @@ class DataLoader(torch.utils.data.DataLoader):
 
     def __init__(self, dataset: Dataset, **kwargs) -> None:
         super().__init__(dataset, **kwargs)
-        self.collate_fn = self._collate_graph if isinstance(
-            dataset, GraphDataset
-        ) else self._collate
+        self.collate_fn = (
+            self._collate_graph if isinstance(dataset, GraphDataset) else self._collate
+        )
         self.shuffle = kwargs["shuffle"] if "shuffle" in kwargs else False
 
     def __iter__(self) -> "DataLoader":
@@ -821,8 +863,7 @@ class ParallelDataLoader:
     """
 
     def __init__(
-            self, *data_loaders: DataLoader,
-            cycle_flags: Optional[List[bool]] = None
+        self, *data_loaders: DataLoader, cycle_flags: Optional[List[bool]] = None
     ) -> None:
         cycle_flags = cycle_flags or [False] * len(data_loaders)
         if len(cycle_flags) != len(data_loaders):

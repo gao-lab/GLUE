@@ -14,8 +14,8 @@ from torch.nn.modules.batchnorm import _NormBase
 
 from ..utils import config, logged
 
+# ------------------------- Neural network modules -----------------------------
 
-#-------------------------- Neural network modules -----------------------------
 
 class GraphConv(torch.nn.Module):
 
@@ -24,8 +24,11 @@ class GraphConv(torch.nn.Module):
     """
 
     def forward(
-            self, input: torch.Tensor, eidx: torch.Tensor,
-            enorm: torch.Tensor, esgn: torch.Tensor
+        self,
+        input: torch.Tensor,
+        eidx: torch.Tensor,
+        enorm: torch.Tensor,
+        esgn: torch.Tensor,
     ) -> torch.Tensor:
         r"""
         Forward propagation
@@ -63,7 +66,7 @@ class GraphAttent(torch.nn.Module):  # pragma: no cover
     ----------
     in_features
         Input dimensionality
-    out_featres
+    out_features
         Output dimensionality
 
     Note
@@ -73,20 +76,31 @@ class GraphAttent(torch.nn.Module):  # pragma: no cover
 
     def __init__(self, in_features: int, out_features: int) -> None:
         super().__init__()
-        self.weight = torch.nn.ParameterDict({
-            "pos": torch.nn.Parameter(torch.Tensor(out_features, in_features)),
-            "neg": torch.nn.Parameter(torch.Tensor(out_features, in_features))
-        })
-        self.head = torch.nn.ParameterDict({
-            "pos": torch.nn.Parameter(torch.zeros(out_features * 2)),
-            "neg": torch.nn.Parameter(torch.zeros(out_features * 2))
-        })
-        torch.nn.init.kaiming_uniform_(self.weight["pos"], sqrt(5))  # Following torch.nn.Linear
-        torch.nn.init.kaiming_uniform_(self.weight["neg"], sqrt(5))  # Following torch.nn.Linear
+        self.weight = torch.nn.ParameterDict(
+            {
+                "pos": torch.nn.Parameter(torch.Tensor(out_features, in_features)),
+                "neg": torch.nn.Parameter(torch.Tensor(out_features, in_features)),
+            }
+        )
+        self.head = torch.nn.ParameterDict(
+            {
+                "pos": torch.nn.Parameter(torch.zeros(out_features * 2)),
+                "neg": torch.nn.Parameter(torch.zeros(out_features * 2)),
+            }
+        )
+        torch.nn.init.kaiming_uniform_(
+            self.weight["pos"], sqrt(5)
+        )  # Following torch.nn.Linear
+        torch.nn.init.kaiming_uniform_(
+            self.weight["neg"], sqrt(5)
+        )  # Following torch.nn.Linear
 
     def forward(
-            self, input: torch.Tensor, eidx: torch.Tensor,
-            ewt: torch.Tensor, esgn: torch.Tensor
+        self,
+        input: torch.Tensor,
+        eidx: torch.Tensor,
+        ewt: torch.Tensor,
+        esgn: torch.Tensor,
     ) -> torch.Tensor:
         r"""
         Forward propagation
@@ -116,7 +130,9 @@ class GraphAttent(torch.nn.Module):  # pragma: no cover
             alpha = F.leaky_relu(alpha, negative_slope=0.2).exp() * ewt[mask]
             normalizer = torch.zeros(ptr.shape[0], device=ptr.device)
             normalizer.scatter_add_(0, tidx, alpha)
-            alpha = alpha / normalizer[tidx]  # Only entries with non-zero denominators will be used
+            alpha = (
+                alpha / normalizer[tidx]
+            )  # Only entries with non-zero denominators will be used
             message = ptr[sidx] * alpha.unsqueeze(1)
             res = torch.zeros_like(ptr)
             tidx = tidx.unsqueeze(1).expand_as(message)
@@ -125,7 +141,8 @@ class GraphAttent(torch.nn.Module):  # pragma: no cover
         return res_dict["pos"] + res_dict["neg"]
 
 
-#----------------------------- Utility functions -------------------------------
+# ---------------------------- Utility functions -------------------------------
+
 
 def freeze_running_stats(m: torch.nn.Module) -> None:
     r"""
@@ -167,12 +184,17 @@ def autodevice() -> torch.device:
     used_device = -1
     if not config.CPU_ONLY:
         try:
+            if os.environ.get("CUDA_VISIBLE_DEVICES"):
+                return torch.device("cuda")
             pynvml.nvmlInit()
-            free_mems = np.array([
-                pynvml.nvmlDeviceGetMemoryInfo(
-                    pynvml.nvmlDeviceGetHandleByIndex(i)
-                ).free for i in range(pynvml.nvmlDeviceGetCount())
-            ])
+            free_mems = np.array(
+                [
+                    pynvml.nvmlDeviceGetMemoryInfo(
+                        pynvml.nvmlDeviceGetHandleByIndex(i)
+                    ).free
+                    for i in range(pynvml.nvmlDeviceGetCount())
+                ]
+            )
             if free_mems.size:
                 for item in config.MASKED_GPUS:
                     free_mems[item] = -1

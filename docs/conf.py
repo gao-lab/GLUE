@@ -5,13 +5,14 @@ Sphinx configuration
 import inspect
 
 import sphinx_autodoc_typehints
+
 import scglue
 
 project = scglue.name
 version = scglue.__version__
 release = scglue.__version__
 author = "Zhi-Jie Cao"
-copyright = "Gao Lab, 2022"
+copyright = "Gao Lab, 2025"
 
 locale_dirs = ["locale"]
 
@@ -81,7 +82,9 @@ qualname_overrides = {
 }
 
 fa_orig = sphinx_autodoc_typehints.format_annotation
-def format_annotation(annotation, config, fully_qualified=True):  # pylint: disable=unused-argument
+
+
+def format_annotation(annotation, config, fully_qualified=True):
     r"""
     Adapted from https://github.com/agronholm/sphinx-autodoc-typehints/issues/38#issuecomment-448517805
     """
@@ -91,4 +94,6 @@ def format_annotation(annotation, config, fully_qualified=True):  # pylint: disa
         if override is not None:
             return f':py:class:`~{override}`'
     return fa_orig(annotation, config)
+
+
 sphinx_autodoc_typehints.format_annotation = format_annotation

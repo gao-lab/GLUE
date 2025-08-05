@@ -1,9 +1,5 @@
 {
     "python.defaultInterpreterPath": "${workspaceRoot}/conda/bin/python",
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-        "--rcfile=.vscode/.pylintrc"
-    ],
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [
         "tests",
@@ -32,6 +28,7 @@
         "**/*.old/**": true
     },
     "files.exclude": {
+        "**/conda/**": true,
         "**/evaluation/results/raw/**": true,
         "**/.snakemake/**": true,
         "**/.slurm/**": true,
@@ -43,7 +40,11 @@
         "**/*.bak/**": true,
         "**/*.old/**": true
     },
-    "jupyter.jupyterServerType": "remote",
-    "esbonio.server.enabled": false,
-    "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnPaste": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
 }

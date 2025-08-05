@@ -12,7 +12,8 @@ from .typehint import Array
 EPS = 1e-7
 
 
-#------------------------------ Numeric functions ------------------------------
+# ----------------------------- Numeric functions ------------------------------
+
 
 def prod(x: Iterable) -> Any:
     r"""
@@ -34,6 +35,7 @@ def prod(x: Iterable) -> Any:
     """
     try:
         from math import prod  # pylint: disable=redefined-outer-name
+
         return prod(x)
     except ImportError:
         ans = 1
@@ -59,7 +61,8 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
     return 1 / (1 + np.exp(-x))
 
 
-#------------------------------ Arrays & Matrices ------------------------------
+# ----------------------------- Arrays & Matrices ------------------------------
+
 
 def densify(arr: Array) -> np.ndarray:
     r"""
@@ -82,9 +85,7 @@ def densify(arr: Array) -> np.ndarray:
     return np.asarray(arr)
 
 
-def col_var(
-        X: Array, Y: Optional[Array] = None, bias: bool = False
-) -> np.ndarray:
+def col_var(X: Array, Y: Optional[Array] = None, bias: bool = False) -> np.ndarray:
     r"""
     Column-wise variance (sparse friendly)
 
@@ -111,12 +112,10 @@ def col_var(
         if not scipy.sparse.issparse(X):
             X, Y = Y, X  # does not affect trace
         return (
-            np.asarray((X.multiply(Y)).mean(axis=0)) -
-            np.asarray(X.mean(axis=0)) * np.asarray(Y.mean(axis=0))
+            np.asarray((X.multiply(Y)).mean(axis=0))
+            - np.asarray(X.mean(axis=0)) * np.asarray(Y.mean(axis=0))
         ).ravel() * bias_scaling
-    return (
-        (X * Y).mean(axis=0) - X.mean(axis=0) * Y.mean(axis=0)
-    ) * bias_scaling
+    return ((X * Y).mean(axis=0) - X.mean(axis=0) * Y.mean(axis=0)) * bias_scaling
 
 
 def col_pcc(X: Array, Y: Array) -> np.ndarray:
@@ -155,21 +154,13 @@ def col_spr(X: Array, Y: Array) -> np.ndarray:
         Column-wise Spearman's rank correlations
     """
     X = densify(X)
-    X = np.array([
-        scipy.stats.rankdata(X[:, i])
-        for i in range(X.shape[1])
-    ]).T
+    X = np.array([scipy.stats.rankdata(X[:, i]) for i in range(X.shape[1])]).T
     Y = densify(Y)
-    Y = np.array([
-        scipy.stats.rankdata(Y[:, i])
-        for i in range(Y.shape[1])
-    ]).T
+    Y = np.array([scipy.stats.rankdata(Y[:, i]) for i in range(Y.shape[1])]).T
     return col_pcc(X, Y)
 
 
-def cov_mat(
-        X: Array, Y: Optional[Array] = None, bias: bool = False
-) -> np.ndarray:
+def cov_mat(X: Array, Y: Optional[Array] = None, bias: bool = False) -> np.ndarray:
     r"""
     Covariance matrix (sparse friendly)
 
@@ -188,22 +179,24 @@ def cov_mat(
         Covariance matrix, if only X is given.
         Cross-covariance matrix, if both X and Y are given.
     """
-    X_mean = X.mean(axis=0) if scipy.sparse.issparse(X) \
-        else X.mean(axis=0, keepdims=True)
+    X_mean = (
+        X.mean(axis=0) if scipy.sparse.issparse(X) else X.mean(axis=0, keepdims=True)
+    )
     if Y is None:
         Y, Y_mean = X, X_mean
     else:
         if X.shape[0] != Y.shape[0]:
             raise ValueError("X and Y should have the same number of rows!")
-        Y_mean = Y.mean(axis=0) if scipy.sparse.issparse(Y) \
+        Y_mean = (
+            Y.mean(axis=0)
+            if scipy.sparse.issparse(Y)
             else Y.mean(axis=0, keepdims=True)
+        )
     bias_scaling = 1 if bias else X.shape[0] / (X.shape[0] - 1)
     return np.asarray((X.T @ Y) / X.shape[0] - X_mean.T @ Y_mean) * bias_scaling
 
 
-def pcc_mat(
-        X: Array, Y: Optional[Array] = None
-) -> np.ndarray:
+def pcc_mat(X: Array, Y: Optional[Array] = None) -> np.ndarray:
     r"""
     Pearson's correlation coefficient (sparse friendly)
 
@@ -238,9 +231,7 @@ def pcc_mat(
     return pcc
 
 
-def spr_mat(
-        X: Array, Y: Optional[Array] = None
-) -> np.ndarray:
+def spr_mat(X: Array, Y: Optional[Array] = None) -> np.ndarray:
     r"""
     Spearman's rank correlation
 
@@ -259,16 +250,10 @@ def spr_mat(
         if both X and Y are given.
     """
     X = densify(X)
-    X = np.array([
-        scipy.stats.rankdata(X[:, i])
-        for i in range(X.shape[1])
-    ]).T
+    X = np.array([scipy.stats.rankdata(X[:, i]) for i in range(X.shape[1])]).T
     if Y is not None:
         Y = densify(Y)
-        Y = np.array([
-            scipy.stats.rankdata(Y[:, i])
-            for i in range(Y.shape[1])
-        ]).T
+        Y = np.array([scipy.stats.rankdata(Y[:, i]) for i in range(Y.shape[1])]).T
     return pcc_mat(X, Y)
 
 
@@ -313,8 +298,10 @@ def prob_or(probs: List[float]) -> float:
 
 
 def vertex_degrees(
-        eidx: np.ndarray, ewt: np.ndarray,
-        vnum: Optional[int] = None, direction: str = "both"
+    eidx: np.ndarray,
+    ewt: np.ndarray,
+    vnum: Optional[int] = None,
+    direction: str = "both",
 ) -> np.ndarray:
     r"""
     Compute vertex degrees
@@ -347,7 +334,7 @@ def vertex_degrees(
 
 
 def normalize_edges(
-        eidx: np.ndarray, ewt: np.ndarray, method: str = "keepvar"
+    eidx: np.ndarray, ewt: np.ndarray, method: str = "keepvar"
 ) -> np.ndarray:
     r"""
     Normalize graph edge weights
@@ -371,19 +358,17 @@ def normalize_edges(
     enorm = ewt
     if method in ("in", "keepvar", "sym"):
         in_degrees = vertex_degrees(eidx, ewt, direction="in")
-        in_normalizer = np.power(
-            in_degrees[eidx[1]],
-            -1 if method == "in" else -0.5
-        )
-        in_normalizer[~np.isfinite(in_normalizer)] = 0  # In case there are unconnected vertices
+        in_normalizer = np.power(in_degrees[eidx[1]], -1 if method == "in" else -0.5)
+        in_normalizer[
+            ~np.isfinite(in_normalizer)
+        ] = 0  # In case there are unconnected vertices
         enorm = enorm * in_normalizer
     if method in ("out", "sym"):
         out_degrees = vertex_degrees(eidx, ewt, direction="out")
-        out_normalizer = np.power(
-            out_degrees[eidx[0]],
-            -1 if method == "out" else -0.5
-        )
-        out_normalizer[~np.isfinite(out_normalizer)] = 0  # In case there are unconnected vertices
+        out_normalizer = np.power(out_degrees[eidx[0]], -1 if method == "out" else -0.5)
+        out_normalizer[
+            ~np.isfinite(out_normalizer)
+        ] = 0  # In case there are unconnected vertices
         enorm = enorm * out_normalizer
     return enorm
 

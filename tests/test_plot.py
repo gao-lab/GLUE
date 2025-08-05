@@ -6,8 +6,6 @@ Tests for the :mod:`scglue.plot` module
 
 import scglue
 
-from .fixtures import *
-
 
 def test_set_publication_params():
     scglue.plot.set_publication_params()

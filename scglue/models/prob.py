@@ -8,8 +8,8 @@ import torch.nn.functional as F
 
 from ..num import EPS
 
+# ------------------------------- Distributions --------------------------------
 
-#-------------------------------- Distributions --------------------------------
 
 class MSE(D.Distribution):
 
@@ -65,8 +65,7 @@ class ZIN(D.Normal):
     """
 
     def __init__(
-            self, zi_logits: torch.Tensor,
-            loc: torch.Tensor, scale: torch.Tensor
+        self, zi_logits: torch.Tensor, loc: torch.Tensor, scale: torch.Tensor
     ) -> None:
         super().__init__(loc, scale)
         self.zi_logits = zi_logits
@@ -99,8 +98,7 @@ class ZILN(D.LogNormal):
     """
 
     def __init__(
-            self, zi_logits: torch.Tensor,
-            loc: torch.Tensor, scale: torch.Tensor
+        self, zi_logits: torch.Tensor, loc: torch.Tensor, scale: torch.Tensor
     ) -> None:
         super().__init__(loc, scale)
         self.zi_logits = zi_logits
@@ -132,8 +130,10 @@ class ZINB(D.NegativeBinomial):
     """
 
     def __init__(
-            self, zi_logits: torch.Tensor,
-            total_count: torch.Tensor, logits: torch.Tensor = None
+        self,
+        zi_logits: torch.Tensor,
+        total_count: torch.Tensor,
+        logits: torch.Tensor = None,
     ) -> None:
         super().__init__(total_count, logits=logits)
         self.zi_logits = zi_logits
