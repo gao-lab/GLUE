@@ -15,8 +15,8 @@ from . import glue
 from .nn import GraphConv
 from .prob import ZILN, ZIN, ZINB
 
-# ------------------------- Network modules for GLUE ---------------------------
 
+#-------------------------- Network modules for GLUE ---------------------------
 
 class GraphEncoder(glue.GraphEncoder):
 
@@ -31,7 +31,9 @@ class GraphEncoder(glue.GraphEncoder):
         Output dimensionality
     """
 
-    def __init__(self, vnum: int, out_features: int) -> None:
+    def __init__(
+            self, vnum: int, out_features: int
+    ) -> None:
         super().__init__()
         self.vrepr = torch.nn.Parameter(torch.zeros(vnum, out_features))
         self.conv = GraphConv()
@@ -39,7 +41,7 @@ class GraphEncoder(glue.GraphEncoder):
         self.std_lin = torch.nn.Linear(out_features, out_features)
 
     def forward(
-        self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor
+            self, eidx: torch.Tensor, enorm: torch.Tensor, esgn: torch.Tensor
     ) -> D.Normal:
         ptr = self.conv(self.vrepr, eidx, enorm, esgn)
         loc = self.loc(ptr)
@@ -54,7 +56,7 @@ class GraphDecoder(glue.GraphDecoder):
     """
 
     def forward(
-        self, v: torch.Tensor, eidx: torch.Tensor, esgn: torch.Tensor
+            self, v: torch.Tensor, eidx: torch.Tensor, esgn: torch.Tensor
     ) -> D.Bernoulli:
         sidx, tidx = eidx  # Source index and target index
         logits = esgn * (v[sidx] * v[tidx]).sum(dim=1)
@@ -81,12 +83,9 @@ class DataEncoder(glue.DataEncoder):
     """
 
     def __init__(
-        self,
-        in_features: int,
-        out_features: int,
-        h_depth: int = 2,
-        h_dim: int = 256,
-        dropout: float = 0.2,
+            self, in_features: int, out_features: int,
+            h_depth: int = 2, h_dim: int = 256,
+            dropout: float = 0.2
     ) -> None:
         super().__init__()
         self.h_depth = h_depth
@@ -118,7 +117,9 @@ class DataEncoder(glue.DataEncoder):
         raise NotImplementedError  # pragma: no cover
 
     @abstractmethod
-    def normalize(self, x: torch.Tensor, l: Optional[torch.Tensor]) -> torch.Tensor:
+    def normalize(
+            self, x: torch.Tensor, l: Optional[torch.Tensor]
+    ) -> torch.Tensor:
         r"""
         Normalize data
 
@@ -137,7 +138,8 @@ class DataEncoder(glue.DataEncoder):
         raise NotImplementedError  # pragma: no cover
 
     def forward(  # pylint: disable=arguments-differ
-        self, x: torch.Tensor, xrep: torch.Tensor, lazy_normalizer: bool = True
+            self, x: torch.Tensor, xrep: torch.Tensor,
+            lazy_normalizer: bool = True
     ) -> Tuple[D.Normal, Optional[torch.Tensor]]:
         r"""
         Encode data to sample latent distribution
@@ -203,7 +205,9 @@ class VanillaDataEncoder(DataEncoder):
     def compute_l(self, x: torch.Tensor) -> Optional[torch.Tensor]:
         return None
 
-    def normalize(self, x: torch.Tensor, l: Optional[torch.Tensor]) -> torch.Tensor:
+    def normalize(
+            self, x: torch.Tensor, l: Optional[torch.Tensor]
+    ) -> torch.Tensor:
         return x
 
 
@@ -231,7 +235,9 @@ class NBDataEncoder(DataEncoder):
     def compute_l(self, x: torch.Tensor) -> torch.Tensor:
         return x.sum(dim=1, keepdim=True)
 
-    def normalize(self, x: torch.Tensor, l: torch.Tensor) -> torch.Tensor:
+    def normalize(
+            self, x: torch.Tensor, l: torch.Tensor
+    ) -> torch.Tensor:
         return (x * (self.TOTAL_COUNT / l)).log1p()
 
 
@@ -248,18 +254,13 @@ class DataDecoder(glue.DataDecoder):
         Number of batches
     """
 
-    def __init__(
-        self, out_features: int, n_batches: int = 1
-    ) -> None:  # pylint: disable=unused-argument
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:  # pylint: disable=unused-argument
         super().__init__()
 
     @abstractmethod
     def forward(  # pylint: disable=arguments-differ
-        self,
-        u: torch.Tensor,
-        v: torch.Tensor,
-        b: torch.Tensor,
-        l: Optional[torch.Tensor],
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> D.Normal:
         r"""
         Decode data from sample and feature latent
@@ -303,11 +304,8 @@ class NormalDataDecoder(DataDecoder):
         self.std_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-        self,
-        u: torch.Tensor,
-        v: torch.Tensor,
-        b: torch.Tensor,
-        l: Optional[torch.Tensor],
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> D.Normal:
         scale = F.softplus(self.scale_lin[b])
         loc = scale * (u @ v.t()) + self.bias[b]
@@ -333,11 +331,8 @@ class ZINDataDecoder(NormalDataDecoder):
         self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-        self,
-        u: torch.Tensor,
-        v: torch.Tensor,
-        b: torch.Tensor,
-        l: Optional[torch.Tensor],
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> ZIN:
         scale = F.softplus(self.scale_lin[b])
         loc = scale * (u @ v.t()) + self.bias[b]
@@ -366,11 +361,8 @@ class ZILNDataDecoder(DataDecoder):
         self.std_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-        self,
-        u: torch.Tensor,
-        v: torch.Tensor,
-        b: torch.Tensor,
-        l: Optional[torch.Tensor],
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> ZILN:
         scale = F.softplus(self.scale_lin[b])
         loc = scale * (u @ v.t()) + self.bias[b]
@@ -398,14 +390,18 @@ class NBDataDecoder(DataDecoder):
         self.log_theta = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-        self, u: torch.Tensor, v: torch.Tensor, b: torch.Tensor, l: torch.Tensor
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: torch.Tensor
     ) -> D.NegativeBinomial:
         scale = F.softplus(self.scale_lin[b])
         logit_mu = scale * (u @ v.t()) + self.bias[b]
         mu = F.softmax(logit_mu, dim=1) * l
         log_theta = self.log_theta[b]
-        return D.NegativeBinomial(log_theta.exp(), logits=(mu + EPS).log() - log_theta)
-   
+        return D.NegativeBinomial(
+            log_theta.exp(),
+            logits=(mu + EPS).log() - log_theta
+        )
+    
 
 class NBMixtureDataDecoder(DataDecoder):
 
@@ -470,11 +466,8 @@ class ZINBDataDecoder(NBDataDecoder):
         self.zi_logits = torch.nn.Parameter(torch.zeros(n_batches, out_features))
 
     def forward(
-        self,
-        u: torch.Tensor,
-        v: torch.Tensor,
-        b: torch.Tensor,
-        l: Optional[torch.Tensor],
+            self, u: torch.Tensor, v: torch.Tensor,
+            b: torch.Tensor, l: Optional[torch.Tensor]
     ) -> ZINB:
         scale = F.softplus(self.scale_lin[b])
         logit_mu = scale * (u @ v.t()) + self.bias[b]
@@ -483,7 +476,7 @@ class ZINBDataDecoder(NBDataDecoder):
         return ZINB(
             self.zi_logits[b].expand_as(mu),
             log_theta.exp(),
-            logits=(mu + EPS).log() - log_theta,
+            logits=(mu + EPS).log() - log_theta
         )
 
 
@@ -507,13 +500,9 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
     """
 
     def __init__(
-        self,
-        in_features: int,
-        out_features: int,
-        n_batches: int = 0,
-        h_depth: int = 2,
-        h_dim: Optional[int] = 256,
-        dropout: float = 0.2,
+            self, in_features: int, out_features: int, n_batches: int = 0,
+            h_depth: int = 2, h_dim: Optional[int] = 256,
+            dropout: float = 0.2
     ) -> None:
         self.n_batches = n_batches
         od = collections.OrderedDict()
@@ -526,9 +515,7 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
         od["pred"] = torch.nn.Linear(ptr_dim, out_features)
         super().__init__(od)
 
-    def forward(
-        self, x: torch.Tensor, b: torch.Tensor
-    ) -> torch.Tensor:  # pylint: disable=arguments-differ
+    def forward(self, x: torch.Tensor, b: torch.Tensor) -> torch.Tensor:  # pylint: disable=arguments-differ
         if self.n_batches:
             b_one_hot = F.one_hot(b, num_classes=self.n_batches)
             x = torch.cat([x, b_one_hot], dim=1)
@@ -562,7 +549,9 @@ class Prior(glue.Prior):
         Standard deviation of the normal distribution
     """
 
-    def __init__(self, loc: float = 0.0, std: float = 1.0) -> None:
+    def __init__(
+            self, loc: float = 0.0, std: float = 1.0
+    ) -> None:
         super().__init__()
         loc = torch.as_tensor(loc, dtype=torch.get_default_dtype())
         std = torch.as_tensor(std, dtype=torch.get_default_dtype())
@@ -573,8 +562,7 @@ class Prior(glue.Prior):
         return D.Normal(self.loc, self.std)
 
 
-# ------------------- Network modules for independent GLUE ---------------------
-
+#-------------------- Network modules for independent GLUE ---------------------
 
 class IndDataDecoder(DataDecoder):
 
@@ -592,13 +580,14 @@ class IndDataDecoder(DataDecoder):
     """
 
     def __init__(  # pylint: disable=unused-argument
-        self, in_features: int, out_features: int, n_batches: int = 1
+            self, in_features: int, out_features: int, n_batches: int = 1
     ) -> None:
         super().__init__(out_features, n_batches=n_batches)
         self.v = torch.nn.Parameter(torch.zeros(out_features, in_features))
 
     def forward(  # pylint: disable=arguments-differ
-        self, u: torch.Tensor, b: torch.Tensor, l: Optional[torch.Tensor]
+            self, u: torch.Tensor, b: torch.Tensor,
+            l: Optional[torch.Tensor]
     ) -> D.Distribution:
         r"""
         Decode data from sample latent
@@ -620,7 +609,7 @@ class IndDataDecoder(DataDecoder):
         return super().forward(u, self.v, b, l)
 
 
-class IndNormalDataDecoder(IndDataDecoder, NormalDataDecoder):
+class IndNormalDataDocoder(IndDataDecoder, NormalDataDecoder):
     r"""
     Normal data decoder independent of feature latent
     """
