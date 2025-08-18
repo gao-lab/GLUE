@@ -12,8 +12,9 @@ from anndata import AnnData
 try:
     from anndata._core.sparse_dataset import SparseDataset
 except ImportError:  # Newer version of anndata
-    from anndata._core.sparse_dataset import \
-        BaseCompressedSparseDataset as SparseDataset
+    from anndata._core.sparse_dataset import (
+        BaseCompressedSparseDataset as SparseDataset,
+    )
 
 from ..data import count_prep, metacell_corr
 from ..utils import config, logged
@@ -103,7 +104,7 @@ def integration_consistency(
         corr = corr.edge_subgraph(
             e for e in corr.edges if e[0] != e[1]
         )  # Exclude self-loops
-        edgelist = nx.to_pandas_edgelist(corr)
+        edgelist = nx.to_pandas_edgelist(corr).dropna(subset="corr")
         n_metas.append(n_meta)
         consistencies.append(
             (edgelist["sign"] * edgelist["weight"] * edgelist["corr"]).sum()

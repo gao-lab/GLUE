@@ -55,13 +55,15 @@ register_prob_model("ZIN", sc.VanillaDataEncoder, sc.ZINDataDecoder)
 register_prob_model("ZILN", sc.VanillaDataEncoder, sc.ZILNDataDecoder)
 register_prob_model("NB", sc.NBDataEncoder, sc.NBDataDecoder)
 register_prob_model("ZINB", sc.NBDataEncoder, sc.ZINBDataDecoder)
+register_prob_model("Beta", sc.VanillaDataEncoder, sc.BetaDataDecoder)
+register_prob_model("BetaBinomial", sc.VanillaDataEncoder, sc.BetaBinomialDataDecoder)
+register_prob_model("Bernoulli", sc.VanillaDataEncoder, sc.BernoulliDataDecoder)
 
 
 # ---------------------------- Network definition ------------------------------
 
 
 class SCGLUE(GLUE):
-
     r"""
     GLUE network for single-cell multi-omics data integration
 
@@ -101,7 +103,6 @@ class SCGLUE(GLUE):
 
 
 class IndSCGLUE(SCGLUE):
-
     r"""
     GLUE network where cell and feature in different modalities are independent
 
@@ -156,7 +157,6 @@ DataTensors = Tuple[
 
 @logged
 class SCGLUETrainer(GLUETrainer):
-
     r"""
     Trainer for :class:`SCGLUE`
 
@@ -174,6 +174,8 @@ class SCGLUETrainer(GLUETrainer):
         Adversarial alignment weight
     lam_sup
         Cell type supervision weight
+    dsc_steps
+        Number of discriminator steps per encoder-decoder step
     normalize_u
         Whether to L2 normalize cell embeddings before decoder
     modality_weight
@@ -196,6 +198,7 @@ class SCGLUETrainer(GLUETrainer):
         lam_graph: float = None,
         lam_align: float = None,
         lam_sup: float = None,
+        dsc_steps: int = None,
         normalize_u: bool = None,
         modality_weight: Mapping[str, float] = None,
         optim: str = None,
@@ -208,6 +211,7 @@ class SCGLUETrainer(GLUETrainer):
             lam_kl=lam_kl,
             lam_graph=lam_graph,
             lam_align=lam_align,
+            dsc_steps=dsc_steps,
             modality_weight=modality_weight,
             optim=optim,
             lr=lr,
@@ -337,7 +341,7 @@ class SCGLUETrainer(GLUETrainer):
         x_nll = {
             k: -net.u2x[k](usamp[k], vsamp[getattr(net, f"{k}_idx")], xbch[k], l[k])
             .log_prob(x[k])
-            .mean()
+            .nanmean()
             for k in net.keys
         }
         x_kl = {
@@ -381,10 +385,11 @@ class SCGLUETrainer(GLUETrainer):
             self.net.x2u.apply(freeze_running_stats)
             self.net.du.apply(freeze_running_stats)
         else:  # Discriminator step
-            losses = self.compute_losses(data, epoch, dsc_only=True)
-            self.net.zero_grad(set_to_none=True)
-            losses["dsc_loss"].backward()  # Already scaled by lam_align
-            self.dsc_optim.step()
+            for _ in range(self.dsc_steps):
+                losses = self.compute_losses(data, epoch, dsc_only=True)
+                self.net.zero_grad(set_to_none=True)
+                losses["dsc_loss"].backward()  # Already scaled by lam_align
+                self.dsc_optim.step()
 
         # Generator step
         losses = self.compute_losses(data, epoch)
@@ -424,7 +429,6 @@ PairedDataTensors = Tuple[
 
 @logged
 class PairedSCGLUETrainer(SCGLUETrainer):
-
     r"""
     Paired trainer for :class:`SCGLUE`
 
@@ -448,6 +452,8 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         Real cross-prediction weight
     lam_cos
         Cosine similarity weight
+    dsc_steps
+        Number of discriminator steps per encoder-decoder step
     normalize_u
         Whether to L2 normalize cell embeddings before decoder
     modality_weight
@@ -471,6 +477,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
         lam_joint_cross: float = None,
         lam_real_cross: float = None,
         lam_cos: float = None,
+        dsc_steps: int = None,
         normalize_u: bool = None,
         modality_weight: Mapping[str, float] = None,
         optim: str = None,
@@ -484,6 +491,7 @@ class PairedSCGLUETrainer(SCGLUETrainer):
             lam_graph=lam_graph,
             lam_align=lam_align,
             lam_sup=lam_sup,
+            dsc_steps=dsc_steps,
             normalize_u=normalize_u,
             modality_weight=modality_weight,
             optim=optim,
@@ -697,7 +705,6 @@ class PairedSCGLUETrainer(SCGLUETrainer):
 
 @logged
 class SCGLUEModel(Model):
-
     r"""
     GLUE model for single-cell multi-omics data integration
 
@@ -715,6 +722,8 @@ class SCGLUEModel(Model):
         Hidden layer dimensionality for encoder and discriminator
     dropout
         Dropout rate
+    disc_norm
+        Whether to perform normalization at discriminator input
     shared_batches
         Whether the same batches are shared across modalities
     random_seed
@@ -725,12 +734,18 @@ class SCGLUEModel(Model):
     TRAINER_TYPE = SCGLUETrainer
 
     GRAPH_BATCHES: int = 32  # Number of graph batches in each graph epoch
-    ALIGN_BURNIN_PRG: float = 8.0  # Effective optimization progress of align_burnin (learning rate * iterations)
-    MAX_EPOCHS_PRG: float = 48.0  # Effective optimization progress of max_epochs (learning rate * iterations)
+    ALIGN_BURNIN_PRG: float = (
+        8.0  # Effective optimization progress of align_burnin (learning rate * iterations)
+    )
+    MAX_EPOCHS_PRG: float = (
+        48.0  # Effective optimization progress of max_epochs (learning rate * iterations)
+    )
     PATIENCE_PRG: float = (
         4.0  # Effective optimization progress of patience (learning rate * iterations)
     )
-    REDUCE_LR_PATIENCE_PRG: float = 2.0  # Effective optimization progress of reduce_lr_patience (learning rate * iterations)
+    REDUCE_LR_PATIENCE_PRG: float = (
+        2.0  # Effective optimization progress of reduce_lr_patience (learning rate * iterations)
+    )
 
     def __init__(
         self,
@@ -740,6 +755,7 @@ class SCGLUEModel(Model):
         h_depth: int = 2,
         h_dim: int = 256,
         dropout: float = 0.2,
+        disc_norm: bool = False,
         shared_batches: bool = False,
         random_seed: int = 0,
     ) -> None:
@@ -809,6 +825,7 @@ class SCGLUEModel(Model):
             h_depth=h_depth,
             h_dim=h_dim,
             dropout=dropout,
+            norm=disc_norm,
         )
         prior = sc.Prior()
         super().__init__(
@@ -875,6 +892,7 @@ class SCGLUEModel(Model):
         lam_graph: float = 0.02,
         lam_align: float = 0.05,
         lam_sup: float = 0.02,
+        dsc_steps: int = 1,
         normalize_u: bool = False,
         modality_weight: Optional[Mapping[str, float]] = None,
         lr: float = 2e-3,
@@ -895,6 +913,8 @@ class SCGLUEModel(Model):
             Adversarial alignment weight
         lam_sup
             Cell type supervision weight
+        dsc_steps
+            Number of discriminator steps per encoder-decoder step
         normalize_u
             Whether to L2 normalize cell embeddings before decoder
         modality_weight
@@ -912,6 +932,7 @@ class SCGLUEModel(Model):
             lam_graph=lam_graph,
             lam_align=lam_align,
             lam_sup=lam_sup,
+            dsc_steps=dsc_steps,
             normalize_u=normalize_u,
             modality_weight=modality_weight,
             optim="RMSprop",
@@ -1349,7 +1370,6 @@ class SCGLUEModel(Model):
 
 @logged
 class PairedSCGLUEModel(SCGLUEModel):
-
     r"""
     GLUE model for partially-paired single-cell multi-omics data integration
 
@@ -1385,6 +1405,7 @@ class PairedSCGLUEModel(SCGLUEModel):
         lam_joint_cross: float = 0.02,
         lam_real_cross: float = 0.02,
         lam_cos: float = 0.02,
+        dsc_steps: int = 1,
         normalize_u: bool = False,
         modality_weight: Optional[Mapping[str, float]] = None,
         lr: float = 2e-3,
@@ -1411,6 +1432,8 @@ class PairedSCGLUEModel(SCGLUEModel):
             Real cross-prediction weight
         lam_cos
             Cosine similarity weight
+        dsc_steps
+            Number of discriminator steps per encoder-decoder step
         normalize_u
             Whether to L2 normalize cell embeddings before decoder
         modality_weight
@@ -1427,6 +1450,7 @@ class PairedSCGLUEModel(SCGLUEModel):
             lam_joint_cross=lam_joint_cross,
             lam_real_cross=lam_real_cross,
             lam_cos=lam_cos,
+            dsc_steps=dsc_steps,
             normalize_u=normalize_u,
             modality_weight=modality_weight,
             lr=lr,

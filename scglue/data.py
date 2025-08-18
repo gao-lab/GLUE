@@ -16,21 +16,19 @@ import scanpy as sc
 import scipy.sparse
 import scipy.stats
 import sklearn.cluster
-import sklearn.decomposition
-import sklearn.feature_extraction.text
 import sklearn.linear_model
 import sklearn.neighbors
 import sklearn.preprocessing
 import sklearn.utils.extmath
 from anndata import AnnData
 from networkx.algorithms.bipartite import biadjacency_matrix
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import MultiLabelBinarizer, normalize
 from sparse import COO
 from tqdm.auto import tqdm
 
 from . import genomics, num
 from .typehint import Kws
-from .utils import logged
+from .utils import config, logged
 
 
 def count_prep(adata: AnnData) -> None:
@@ -153,6 +151,8 @@ def aggregate_obs(
     obs_agg: Optional[Mapping[str, str]] = None,
     obsm_agg: Optional[Mapping[str, str]] = None,
     layers_agg: Optional[Mapping[str, str]] = None,
+    separator: str = ",",
+    nan_sparse: bool = False,
 ) -> AnnData:
     r"""
     Aggregate obs in a given dataset by certain categories
@@ -181,6 +181,10 @@ def aggregate_obs(
         Aggregation methods for ``adata.layers``, indexed by layer keys,
         must be one of ``{"sum", "mean"}``. Fields not specified will be
         discarded.
+    separator
+        Separator between multiple values in the groupby column
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
 
     Returns
     -------
@@ -191,22 +195,34 @@ def aggregate_obs(
     obsm_agg = obsm_agg or {}
     layers_agg = layers_agg or {}
 
-    by = adata.obs[by]
-    agg_idx = (
-        pd.Index(by.cat.categories)
-        if pd.api.types.is_categorical_dtype(by)
-        else pd.Index(np.unique(by))
-    )
-    agg_sum = scipy.sparse.coo_matrix(
-        (np.ones(adata.shape[0]), (agg_idx.get_indexer(by), np.arange(adata.shape[0])))
-    ).tocsr()
-    agg_mean = agg_sum.multiply(1 / agg_sum.sum(axis=1))
+    by = adata.obs[by].str.split(separator).map(frozenset)
+    na = by.isna()
+    by.loc[na] = [[]] * na.sum()
+    agg_idx = by.explode().dropna().unique()
+    agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
+    agg_sum = agg_sum.T
 
-    agg_method = {
-        "sum": lambda x: agg_sum @ x,
-        "mean": lambda x: agg_mean @ x,
-        "majority": lambda x: pd.crosstab(by, x).idxmax(axis=1).loc[agg_idx].to_numpy(),
-    }
+    def _sum(x):
+        return agg_sum @ x
+
+    def _mean(x):
+        if scipy.sparse.issparse(x) and nan_sparse:
+            mask = x.copy()
+            mask.data = np.ones_like(mask.data)
+            S = (agg_sum @ x).toarray()
+            C = (agg_sum @ mask).tocoo()
+            C.eliminate_zeros()
+            row, col, data = C.row, C.col, C.data
+            return scipy.sparse.csr_matrix(
+                (S[row, col] / data, (row, col)), shape=C.shape
+            )
+        return agg_sum.multiply(1 / agg_sum.sum(axis=1)) @ x
+
+    def _majority(x):
+        df = pd.DataFrame({"by": by, "x": x}).explode("by")
+        return pd.crosstab(df["by"], df["x"]).idxmax(axis=1).loc[agg_idx].to_numpy()
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
 
     X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
     obs = pd.DataFrame(
@@ -225,7 +241,106 @@ def aggregate_obs(
         obsm=obsm,
         varm=adata.varm,
         layers=layers,
-        dtype=None if X is None else X.dtype,
+        uns=adata.uns,
+    )
+
+
+def aggregate_var(
+    adata: AnnData,
+    by: str,
+    X_agg: Optional[str] = "sum",
+    var_agg: Optional[Mapping[str, str]] = None,
+    varm_agg: Optional[Mapping[str, str]] = None,
+    layers_agg: Optional[Mapping[str, str]] = None,
+    separator: str = ",",
+    nan_sparse: bool = False,
+) -> AnnData:
+    r"""
+    Aggregate var in a given dataset by certain categories
+
+    Parameters
+    ----------
+    adata
+        Dataset to be aggregated
+    by
+        Specify a column in ``adata.var`` used for aggregation,
+        must be discrete.
+    X_agg
+        Aggregation function for ``adata.X``, must be one of
+        ``{"sum", "mean", ``None``}``. Setting to ``None`` discards
+        the ``adata.X`` matrix.
+    var_agg
+        Aggregation methods for ``adata.var``, indexed by var columns,
+        must be one of ``{"sum", "mean", "majority"}``, where ``"sum"``
+        and ``"mean"`` are for continuous data, and ``"majority"`` is for
+        discrete data. Fields not specified will be discarded.
+    varm_agg
+        Aggregation methods for ``adata.varm``, indexed by varm keys,
+        must be one of ``{"sum", "mean"}``. Fields not specified will be
+        discarded.
+    layers_agg
+        Aggregation methods for ``adata.layers``, indexed by layer keys,
+        must be one of ``{"sum", "mean"}``. Fields not specified will be
+        discarded.
+    separator
+        Separator between multiple values in the groupby column
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
+
+    Returns
+    -------
+    aggregated
+        Aggregated dataset
+    """
+    var_agg = var_agg or {}
+    varm_agg = varm_agg or {}
+    layers_agg = layers_agg or {}
+
+    by = adata.var[by].str.split(separator)
+    na = by.isna()
+    by.loc[na] = [[]] * na.sum()
+    agg_idx = by.explode().dropna().unique()
+    agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
+
+    def _sum(x):
+        return x @ agg_sum
+
+    def _mean(x):
+        if scipy.sparse.issparse(x) and nan_sparse:
+            mask = x.copy()
+            mask.data = np.ones_like(mask.data)
+            S = (x @ agg_sum).toarray()
+            C = (mask @ agg_sum).tocoo()
+            C.eliminate_zeros()
+            row, col, data = C.row, C.col, C.data
+            return scipy.sparse.csr_matrix(
+                (S[row, col] / data, (row, col)), shape=C.shape
+            )
+        return x @ agg_sum.multiply(1 / agg_sum.sum(axis=0))
+
+    def _majority(x):
+        pd.crosstab(by, x).idxmax(axis=1).loc[agg_idx].to_numpy(),
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
+
+    X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
+    var = pd.DataFrame(
+        {k: agg_method[v](adata.var[k]) for k, v in var_agg.items()},
+        index=agg_idx.astype(str),
+    )
+    varm = {k: agg_method[v](adata.varm[k]) for k, v in varm_agg.items()}
+    layers = {k: agg_method[v](adata.layers[k]) for k, v in layers_agg.items()}
+    for c in var:
+        if pd.api.types.is_categorical_dtype(adata.var[c]):
+            var[c] = pd.Categorical(var[c], categories=adata.var[c].cat.categories)
+    return AnnData(
+        X=X,
+        obs=adata.obs,
+        var=var,
+        obsm=adata.obsm,
+        varm=varm,
+        layers=layers,
+        uns=adata.uns,
     )
 
 
@@ -407,6 +522,10 @@ def bedmap2anndata(bedmap: os.PathLike, var_col: int = 3, obs_col: int = 6) -> A
         var=pd.DataFrame(index=var_names),
         dtype=X.dtype,
     )
+
+
+def merge_mc_cov(adata: AnnData, mc_layer: str, cov_layer: str, merge_layer: str):
+    adata.layers[merge_layer] = adata.layers[mc_layer] + 1j * adata.layers[cov_layer]
 
 
 @logged
@@ -594,6 +713,7 @@ def get_metacells(
             obsm=adata.obsm,
             varm=adata.varm,
             layers=adata.layers,
+            uns=adata.uns,
             dtype=None if adata.X is None else adata.X.dtype,
         )
         for i, adata in enumerate(adatas)
@@ -618,6 +738,7 @@ def get_metacells(
         )
         kmeans = sklearn.cluster.KMeans(n_clusters=n_meta, random_state=seed)
         combined.obs["metacell"] = kmeans.fit_predict(combined.obsm[use_rep])
+    combined.obs["metacell"] = combined.obs["metacell"].astype(str)
     for adata in adatas:
         adata.obs["metacell"] = combined[adata.obs_names].obs["metacell"]
 
@@ -654,21 +775,26 @@ def _metacell_corr(
     for adata, prep_fn in zip(adatas, prep_fns):
         if prep_fn:
             prep_fn(adata)
+    for adata in adatas:
+        adata.X = num.densify(
+            adata.X, nan_sparse=adata.uns[config.ANNDATA_KEY]["nan_sparse"]
+        )
     adata = ad.concat(adatas, axis=1)
     edgelist = nx.to_pandas_edgelist(skeleton)
     source = adata.var_names.get_indexer(edgelist["source"])
     target = adata.var_names.get_indexer(edgelist["target"])
-    X = num.densify(adata.X.T)
+    X = adata.X.T
     if method == "spr":
-        X = np.array([scipy.stats.rankdata(x) for x in X])
+        X = scipy.stats.rankdata(X, axis=1, nan_policy="omit")
     elif method != "pcc":
         raise ValueError(f"Unrecognized method: {method}!")
-    mean = X.mean(axis=1)
-    meansq = np.square(X).mean(axis=1)
+    mean = np.nanmean(X, axis=1)
+    meansq = np.nanmean(np.square(X), axis=1)
     std = np.sqrt(meansq - np.square(mean))
+    std[std == 0] = np.nan
     edgelist["corr"] = np.array(
         [
-            ((X[s] * X[t]).mean() - mean[s] * mean[t]) / (std[s] * std[t])
+            (np.nanmean(X[s] * X[t]) - mean[s] * mean[t]) / (std[s] * std[t])
             for s, t in zip(source, target)
         ]
     )
@@ -716,11 +842,12 @@ def metacell_corr(
     ----
     All aggregation, preprocessing and correlation apply to ``adata.X``.
     """
-    adatas = get_metacells(
-        *adatas,
-        **kwargs,
-        agg_kws=[dict(X_agg=agg_fn) for agg_fn in agg_fns] if agg_fns else None,
-    )
+    agg_kws = [
+        {"nan_sparse": adata.uns[config.ANNDATA_KEY]["nan_sparse"]} for adata in adatas
+    ]
+    for k, fn in zip(agg_kws, agg_fns or []):
+        k["X_agg"] = fn
+    adatas = get_metacells(*adatas, **kwargs, agg_kws=agg_kws)
     metacell_corr.logger.info(
         "Computing correlation on %d common metacells...", adatas[0].shape[0]
     )

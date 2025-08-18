@@ -64,7 +64,7 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
 # ----------------------------- Arrays & Matrices ------------------------------
 
 
-def densify(arr: Array) -> np.ndarray:
+def densify(arr: Array, nan_sparse: bool = False) -> np.ndarray:
     r"""
     Convert a matrix to dense regardless of original type.
 
@@ -72,6 +72,8 @@ def densify(arr: Array) -> np.ndarray:
     ----------
     arr
         Input array (either sparse or dense)
+    nan_sparse
+        Whether missing entries indicate nan
 
     Returns
     -------
@@ -79,6 +81,11 @@ def densify(arr: Array) -> np.ndarray:
         Densified array
     """
     if scipy.sparse.issparse(arr):
+        if nan_sparse:
+            arr = arr.tocoo()
+            dense = np.full(arr.shape, np.nan, dtype=arr.dtype)
+            dense[arr.row, arr.col] = arr.data
+            return dense
         return arr.toarray()
     if isinstance(arr, np.ndarray):
         return arr
@@ -359,16 +366,16 @@ def normalize_edges(
     if method in ("in", "keepvar", "sym"):
         in_degrees = vertex_degrees(eidx, ewt, direction="in")
         in_normalizer = np.power(in_degrees[eidx[1]], -1 if method == "in" else -0.5)
-        in_normalizer[
-            ~np.isfinite(in_normalizer)
-        ] = 0  # In case there are unconnected vertices
+        in_normalizer[~np.isfinite(in_normalizer)] = (
+            0  # In case there are unconnected vertices
+        )
         enorm = enorm * in_normalizer
     if method in ("out", "sym"):
         out_degrees = vertex_degrees(eidx, ewt, direction="out")
         out_normalizer = np.power(out_degrees[eidx[0]], -1 if method == "out" else -0.5)
-        out_normalizer[
-            ~np.isfinite(out_normalizer)
-        ] = 0  # In case there are unconnected vertices
+        out_normalizer[~np.isfinite(out_normalizer)] = (
+            0  # In case there are unconnected vertices
+        )
         enorm = enorm * out_normalizer
     return enorm
 

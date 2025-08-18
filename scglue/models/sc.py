@@ -13,13 +13,12 @@ import torch.nn.functional as F
 from ..num import EPS
 from . import glue
 from .nn import GraphConv
-from .prob import ZILN, ZIN, ZINB
+from .prob import ZILN, ZIN, ZINB, Bernoulli, Beta, BetaBinomial
 
 # ------------------------- Network modules for GLUE ---------------------------
 
 
 class GraphEncoder(glue.GraphEncoder):
-
     r"""
     Graph encoder
 
@@ -48,7 +47,6 @@ class GraphEncoder(glue.GraphEncoder):
 
 
 class GraphDecoder(glue.GraphDecoder):
-
     r"""
     Graph decoder
     """
@@ -62,7 +60,6 @@ class GraphDecoder(glue.GraphDecoder):
 
 
 class DataEncoder(glue.DataEncoder):
-
     r"""
     Abstract data encoder
 
@@ -182,7 +179,6 @@ class DataEncoder(glue.DataEncoder):
 
 
 class VanillaDataEncoder(DataEncoder):
-
     r"""
     Vanilla data encoder
 
@@ -208,7 +204,6 @@ class VanillaDataEncoder(DataEncoder):
 
 
 class NBDataEncoder(DataEncoder):
-
     r"""
     Data encoder for negative binomial data
 
@@ -236,7 +231,6 @@ class NBDataEncoder(DataEncoder):
 
 
 class DataDecoder(glue.DataDecoder):
-
     r"""
     Abstract data decoder
 
@@ -284,7 +278,6 @@ class DataDecoder(glue.DataDecoder):
 
 
 class NormalDataDecoder(DataDecoder):
-
     r"""
     Normal data decoder
 
@@ -316,7 +309,6 @@ class NormalDataDecoder(DataDecoder):
 
 
 class ZINDataDecoder(NormalDataDecoder):
-
     r"""
     Zero-inflated normal data decoder
 
@@ -346,7 +338,6 @@ class ZINDataDecoder(NormalDataDecoder):
 
 
 class ZILNDataDecoder(DataDecoder):
-
     r"""
     Zero-inflated log-normal data decoder
 
@@ -379,7 +370,6 @@ class ZILNDataDecoder(DataDecoder):
 
 
 class NBDataDecoder(DataDecoder):
-
     r"""
     Negative binomial data decoder
 
@@ -408,7 +398,6 @@ class NBDataDecoder(DataDecoder):
 
 
 class ZINBDataDecoder(NBDataDecoder):
-
     r"""
     Zero-inflated negative binomial data decoder
 
@@ -442,8 +431,102 @@ class ZINBDataDecoder(NBDataDecoder):
         )
 
 
-class Discriminator(torch.nn.Sequential, glue.Discriminator):
+class BetaDataDecoder(DataDecoder):
+    r"""
+    Beta data decoder
 
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    MAX_SIZE: float = 1000.0
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.size_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+
+    def forward(
+        self,
+        u: torch.Tensor,
+        v: torch.Tensor,
+        b: torch.Tensor,
+        l: Optional[torch.Tensor],
+    ) -> Beta:
+        scale = F.softplus(self.scale_lin[b])
+        size = F.softplus(self.size_lin[b]).clamp(max=self.MAX_SIZE)
+        logit_mu = scale * (u @ v.t()) + self.bias[b]
+        return Beta(logit_mu, size)
+
+
+class BetaBinomialDataDecoder(DataDecoder):
+    r"""
+    Beta binomial data decoder
+
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    MAX_SIZE: float = 1000.0
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.size_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+
+    def forward(
+        self,
+        u: torch.Tensor,
+        v: torch.Tensor,
+        b: torch.Tensor,
+        l: Optional[torch.Tensor],
+    ) -> Beta:
+        scale = F.softplus(self.scale_lin[b])
+        size = F.softplus(self.size_lin[b]).clamp(max=self.MAX_SIZE)
+        logit_mu = scale * (u @ v.t()) + self.bias[b]
+        return BetaBinomial(logit_mu, size)
+
+
+class BernoulliDataDecoder(DataDecoder):
+    r"""
+    Bernoulli data decoder
+
+    Parameters
+    ----------
+    out_features
+        Output dimensionality
+    n_batches
+        Number of batches
+    """
+
+    def __init__(self, out_features: int, n_batches: int = 1) -> None:
+        super().__init__(out_features, n_batches=n_batches)
+        self.scale_lin = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+        self.bias = torch.nn.Parameter(torch.zeros(n_batches, out_features))
+
+    def forward(
+        self,
+        u: torch.Tensor,
+        v: torch.Tensor,
+        b: torch.Tensor,
+        l: Optional[torch.Tensor],
+    ) -> D.Bernoulli:
+        scale = F.softplus(self.scale_lin[b])
+        logits = scale * (u @ v.t()) + self.bias[b]
+        return Bernoulli(logits)
+
+
+class Discriminator(torch.nn.Sequential, glue.Discriminator):
     r"""
     Modality discriminator
 
@@ -469,8 +552,10 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
         h_depth: int = 2,
         h_dim: Optional[int] = 256,
         dropout: float = 0.2,
+        norm: bool = False,
     ) -> None:
         self.n_batches = n_batches
+        self.norm = norm
         od = collections.OrderedDict()
         ptr_dim = in_features + self.n_batches
         for layer in range(h_depth):
@@ -484,6 +569,8 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
     def forward(
         self, x: torch.Tensor, b: torch.Tensor
     ) -> torch.Tensor:  # pylint: disable=arguments-differ
+        if self.norm:
+            x = (x - x.mean(dim=0)) / (x.std(dim=0) + EPS)
         if self.n_batches:
             b_one_hot = F.one_hot(b, num_classes=self.n_batches)
             x = torch.cat([x, b_one_hot], dim=1)
@@ -491,7 +578,6 @@ class Discriminator(torch.nn.Sequential, glue.Discriminator):
 
 
 class Classifier(torch.nn.Linear):
-
     r"""
     Linear label classifier
 
@@ -505,7 +591,6 @@ class Classifier(torch.nn.Linear):
 
 
 class Prior(glue.Prior):
-
     r"""
     Prior distribution
 
@@ -532,7 +617,6 @@ class Prior(glue.Prior):
 
 
 class IndDataDecoder(DataDecoder):
-
     r"""
     Data decoder mixin that makes decoding independent of feature latent
 

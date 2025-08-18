@@ -11,7 +11,7 @@ except ModuleNotFoundError:
         return get_distribution(name).version
 
 
-from . import data, genomics, graph, models, num, plot
+from . import data, genomics, graph, lsi, models, num, plot
 from .utils import config, log
 
 name = "scglue"

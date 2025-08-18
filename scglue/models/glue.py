@@ -23,7 +23,6 @@ from .plugins import EarlyStopping, LRScheduler, Tensorboard
 
 
 class GraphEncoder(torch.nn.Module):
-
     r"""
     Abstract graph encoder
     """
@@ -54,7 +53,6 @@ class GraphEncoder(torch.nn.Module):
 
 
 class GraphDecoder(torch.nn.Module):
-
     r"""
     Abstract graph decoder
     """
@@ -85,7 +83,6 @@ class GraphDecoder(torch.nn.Module):
 
 
 class DataEncoder(torch.nn.Module):
-
     r"""
     Abstract data encoder
     """
@@ -109,7 +106,6 @@ class DataEncoder(torch.nn.Module):
 
 
 class DataDecoder(torch.nn.Module):
-
     r"""
     Abstract data decoder
     """
@@ -135,7 +131,6 @@ class DataDecoder(torch.nn.Module):
 
 
 class Discriminator(torch.nn.Module):
-
     r"""
     Abstract modality discriminator
     """
@@ -159,7 +154,6 @@ class Discriminator(torch.nn.Module):
 
 
 class Prior(torch.nn.Module):
-
     r"""
     Abstract prior distribution
     """
@@ -181,7 +175,6 @@ class Prior(torch.nn.Module):
 
 
 class GLUE(torch.nn.Module):
-
     r"""
     Base class for GLUE (Graph-Linked Unified Embedding) network
 
@@ -263,7 +256,6 @@ DataTensors = Tuple[
 
 @logged
 class GLUETrainer(Trainer):
-
     r"""
     Trainer for :class:`GLUE`
 
@@ -277,6 +269,8 @@ class GLUETrainer(Trainer):
         Graph weight
     lam_align
         Adversarial alignment weight
+    dsc_steps
+        Number of discriminator steps per encoder-decoder step
     modality_weight
         Relative modality weight (indexed by modality name)
     optim
@@ -294,6 +288,7 @@ class GLUETrainer(Trainer):
         lam_kl: float = None,
         lam_graph: float = None,
         lam_align: float = None,
+        dsc_steps: int = None,
         modality_weight: Mapping[str, float] = None,
         optim: str = None,
         lr: float = None,
@@ -304,6 +299,7 @@ class GLUETrainer(Trainer):
             "lam_kl",
             "lam_graph",
             "lam_align",
+            "dsc_steps",
             "modality_weight",
             "optim",
             "lr",
@@ -323,6 +319,7 @@ class GLUETrainer(Trainer):
         self.lam_kl = lam_kl
         self.lam_graph = lam_graph
         self.lam_align = lam_align
+        self.dsc_steps = dsc_steps
         if min(modality_weight.values()) < 0:
             raise ValueError("Modality weight must be non-negative!")
         normalizer = sum(modality_weight.values()) / len(modality_weight)
@@ -345,9 +342,9 @@ class GLUETrainer(Trainer):
 
         self.align_burnin: Optional[int] = None
         self.eidx: Optional[torch.Tensor] = None  # Full graph used by the graph encoder
-        self.enorm: Optional[
-            torch.Tensor
-        ] = None  # Full graph used by the graph encoder
+        self.enorm: Optional[torch.Tensor] = (
+            None  # Full graph used by the graph encoder
+        )
         self.esgn: Optional[torch.Tensor] = None  # Full graph used by the graph encoder
 
     def compute_losses(
@@ -464,10 +461,11 @@ class GLUETrainer(Trainer):
         epoch = engine.state.epoch
 
         # Discriminator step
-        losses = self.compute_losses(data, epoch, dsc_only=True)
-        self.net.zero_grad(set_to_none=True)
-        losses["dsc_loss"].backward()  # Already scaled by lam_align
-        self.dsc_optim.step()
+        for _ in range(self.dsc_steps):
+            losses = self.compute_losses(data, epoch, dsc_only=True)
+            self.net.zero_grad(set_to_none=True)
+            losses["dsc_loss"].backward()  # Already scaled by lam_align
+            self.dsc_optim.step()
 
         # Generator step
         losses = self.compute_losses(data, epoch)
