@@ -264,7 +264,27 @@ def spr_mat(X: Array, Y: Optional[Array] = None) -> np.ndarray:
     return pcc_mat(X, Y)
 
 
-def tfidf(X: Array) -> Array:
+def tfidf(X: Array, flavor: str = "seurat", **kwargs) -> Array:
+    r"""
+    TF-IDF normalization
+
+    Parameters
+    ----------
+    X
+        Input matrix
+    flavor
+        Flavor of TF-IDF normalization, should be one of {"seurat", "allcools"}
+    kwargs
+        Additional keyword arguments are passed to each respective implementation
+    """
+    if flavor == "seurat":
+        return tfidf_seurat(X, **kwargs)
+    if flavor == "allcools":
+        return tfidf_allcools(X, **kwargs)
+    raise ValueError("Unrecognized flavor!")
+
+
+def tfidf_seurat(X: Array) -> Array:
     r"""
     TF-IDF normalization (following the Seurat v3 approach)
 
@@ -285,6 +305,58 @@ def tfidf(X: Array) -> Array:
     else:
         tf = X / X.sum(axis=1, keepdims=True)
         return tf * idf
+
+
+def tfidf_allcools(data, scale_factor=100000, idf=None):
+    r"""
+    TF-IDF normalization (following the AllCools approach)
+
+    Parameters
+    ----------
+    data
+        Input matrix
+    scale_factor
+        Normalization factor for TF
+    idf
+        Inverse document frequency
+
+    Returns
+    -------
+    X_tfidf
+        TF-IDF normalized matrix
+    X_idf
+        IDF for future reference
+    """
+    sparse_input = scipy.sparse.issparse(data)
+
+    if idf is None:
+        # add small value in case down sample creates empty feature
+        _col_sum = data.sum(axis=0)
+        if sparse_input:
+            col_sum = _col_sum.A1.astype(np.float32) + 0.00001
+        else:
+            col_sum = _col_sum.ravel().astype(np.float32) + 0.00001
+        idf = np.log(1 + data.shape[0] / col_sum).astype(np.float32)
+    else:
+        idf = idf.astype(np.float32)
+
+    _row_sum = data.sum(axis=1)
+    if sparse_input:
+        row_sum = _row_sum.A1.astype(np.float32) + 0.00001
+    else:
+        row_sum = _row_sum.ravel().astype(np.float32) + 0.00001
+
+    tf = data.astype(np.float32)
+
+    if sparse_input:
+        tf.data = tf.data / np.repeat(row_sum, tf.getnnz(axis=1))
+        tf.data = np.log1p(np.multiply(tf.data, scale_factor, dtype="float32"))
+        tf = tf.multiply(idf).tocsr()
+    else:
+        tf = tf / row_sum[:, np.newaxis]
+        tf = np.log1p(np.multiply(tf, scale_factor, dtype="float32"))
+        tf = tf * idf
+    return tf, idf
 
 
 def prob_or(probs: List[float]) -> float:

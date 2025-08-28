@@ -4,6 +4,7 @@ that are not covered in :mod:`scanpy`.
 """
 
 import os
+import time
 from collections import defaultdict
 from itertools import chain
 from typing import Callable, List, Mapping, Optional
@@ -22,7 +23,9 @@ import sklearn.preprocessing
 import sklearn.utils.extmath
 from anndata import AnnData
 from networkx.algorithms.bipartite import biadjacency_matrix
+from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import MultiLabelBinarizer, normalize
+from sklearn.utils.validation import check_is_fitted
 from sparse import COO
 from tqdm.auto import tqdm
 
@@ -43,6 +46,53 @@ def count_prep(adata: AnnData) -> None:
     """
     sc.pp.normalize_total(adata)
     sc.pp.log1p(adata)
+
+
+@logged
+def calc_hypo_score(
+    adata: AnnData, mc_layer: str = "mc", cov_layer: str = "cov", chunk_size: int = 1000
+) -> None:
+    r"""
+    Calculates the hypo-methylation score as X based on methylated counts and
+    total coverage stored in separate layers
+
+    Parameters
+    ----------
+    adata
+        Input AnnData object
+    mc_layer
+        Layer storing methylated counts
+    cov_layer
+        Layer storing total coverage
+    chunk_size
+        Number of cells to include per chunk
+    """
+    if adata.X is not None:
+        calc_hypo_score.logger.warning("Current X will be overwritten!")
+
+    calc_hypo_score.logger.info("Ensuring CSR format...")
+    mc = adata.layers[mc_layer].tocsr()
+    cov = adata.layers[cov_layer].tocsr()
+
+    calc_hypo_score.logger.info("Computing denominator...")
+    denom = cov.astype(np.float32)
+    denom.data = 1 / denom.data
+
+    calc_hypo_score.logger.info("Normalizing in chunks...")
+    chunks = []
+    for start in tqdm(range(0, denom.shape[0], chunk_size)):
+        end = start + chunk_size
+        chunk = denom[start:end].multiply(mc[start:end].toarray())
+        chunk_max = chunk.data.max()
+        if chunk_max > 1:
+            if chunk_max > 1.001:  # Unlikely rounding error
+                calc_hypo_score.logger.warning(f"Clipping mc > cov at {start}:{end}")
+            chunk.data = chunk.data.clip(0, 1)
+        chunk.data = 1 - chunk.data
+        chunks.append(chunk)
+
+    calc_hypo_score.logger.info("Stacking chunks...")
+    adata.X = scipy.sparse.vstack(chunks).tocsr()
 
 
 def lsi(
@@ -80,6 +130,129 @@ def lsi(
     X_lsi -= X_lsi.mean(axis=1, keepdims=True)
     X_lsi /= X_lsi.std(axis=1, ddof=1, keepdims=True)
     adata.obsm["X_lsi"] = X_lsi
+
+
+class AllCoolsLSI:
+    def __init__(
+        self,
+        scale_factor=100000,
+        n_components=100,
+        algorithm="arpack",
+        random_state=0,
+        n_iter=5,
+        idf=None,
+        model=None,
+    ):
+        self.scale_factor = scale_factor
+        if idf is not None:
+            self.idf = idf.copy()
+        else:
+            self.idf = None
+        if model is not None:
+            self.model = model
+        else:
+            self.model = TruncatedSVD(
+                n_components=n_components,
+                n_iter=n_iter,
+                algorithm=algorithm,
+                random_state=random_state,
+            )
+        self.random_state = random_state
+        self.fitted = False
+
+    def _downsample_data(self, data, downsample):
+        np.random.seed(self.random_state)
+        if downsample is not None and downsample < data.shape[0]:
+            use_row_idx = np.sort(
+                np.random.choice(np.arange(0, data.shape[0]), downsample, replace=False)
+            )
+            data = scipy.sparse.csr_matrix(data[use_row_idx, :])
+        return data
+
+    @staticmethod
+    def _get_data(data):
+        if isinstance(data, AnnData):
+            data = data.X
+        return data
+
+    def fit(self, data, downsample=None, verbose=False):
+        data = self._get_data(data)
+        data = self._downsample_data(data, downsample)
+        if verbose:
+            print("start tf idf")
+            start = time.time()
+        tf, idf = num.tfidf(data, flavor="allcools", scale_factor=self.scale_factor)
+        if self.idf is not None:
+            idf = self.idf.copy()
+        if verbose:
+            print("finish tf idf", time.time() - start)
+            start = time.time()
+        self.idf = idf.copy()
+        n_rows, n_cols = tf.shape
+        self.model.n_components = min(n_rows - 1, n_cols - 1, self.model.n_components)
+        self.model.fit(tf)
+        if verbose:
+            print("finish svd", time.time() - start)
+        self.fitted = True
+        return self
+
+    def fit_transform(
+        self, data, downsample=None, obsm_name="X_lsi", verbose=False, normalize=True
+    ):
+        _data = self._get_data(data)
+        _data = self._downsample_data(_data, downsample)
+        start = time.time()
+        if verbose:
+            print("start tf idf")
+        tf, idf = num.tfidf(_data, flavor="allcools", scale_factor=self.scale_factor)
+        if self.idf is not None:
+            idf = self.idf.copy()
+        if verbose:
+            print("finish tf idf", time.time() - start)
+            start = time.time()
+        self.idf = idf.copy()
+        n_rows, n_cols = tf.shape
+        self.model.n_components = min(n_rows - 1, n_cols - 1, self.model.n_components)
+        tf_reduce = self.model.fit_transform(tf)
+        self.fitted = True
+        if normalize:
+            tf_reduce = tf_reduce / self.model.singular_values_
+        if verbose:
+            print("finish svd", time.time() - start)
+        if isinstance(data, AnnData):
+            data.obsm[obsm_name] = tf_reduce
+        else:
+            return tf_reduce
+
+    def transform(
+        self, data, chunk_size=50000, obsm_name="X_lsi", verbose=False, normalize=True
+    ):
+        _data = self._get_data(data)
+
+        check_is_fitted(self.model)
+        tf_reduce = []
+        if verbose:
+            chunks = tqdm(np.arange(0, _data.shape[0], chunk_size))
+        else:
+            chunks = np.arange(0, _data.shape[0], chunk_size)
+        for chunk_start in chunks:
+            tf, _ = num.tfidf(
+                _data[chunk_start : (chunk_start + chunk_size)],
+                flavor="allcools",
+                scale_factor=self.scale_factor,
+                idf=self.idf,
+            )
+            tf_reduce.append(self.model.transform(tf))
+
+        tf_reduce = np.concatenate(tf_reduce, axis=0)
+
+        if normalize:
+            tf_reduce = tf_reduce / self.model.singular_values_
+
+        if isinstance(data, AnnData):
+            data.obsm[obsm_name] = tf_reduce
+        else:
+            return tf_reduce
 
 
 @logged
