@@ -1016,7 +1016,14 @@ def metacell_corr(
     All aggregation, preprocessing and correlation apply to ``adata.X``.
     """
     agg_kws = [
-        {"nan_sparse": adata.uns[config.ANNDATA_KEY]["nan_sparse"]} for adata in adatas
+        {
+            "nan_sparse": (
+                adata.uns[config.ANNDATA_KEY]["nan_sparse"]
+                if config.ANNDATA_KEY in adata.uns
+                else False
+            )
+        }
+        for adata in adatas
     ]
     for k, fn in zip(agg_kws, agg_fns or []):
         k["X_agg"] = fn
