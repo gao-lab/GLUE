@@ -1,19 +1,22 @@
 Release notes
 =============
 
-v0.3.3
+v0.4.0
 ------
 
 Bug fixes:
 
 - Fixed compatibility with latest version of `anndata <https://github.com/scverse/anndata>`__.
 - Fixed trainers when "use_cell_type" is used, see this `PR <https://github.com/gao-lab/GLUE/pull/86>`__.
+- Allowed `CUDA_VISIBLE_DEVICES` to override `autodevice`.
 
 New features:
 
 - A general anchored guidance graph construction function `anchored_guidance_graph <api/scglue.genomics.anchored_guidance_graph.rst>`__.
 - Add function `classify_data <api/scglue.models.scglue.SCGLUEModel.classify_data.rst>`__ to retrieve the cell type classification from compatible models.
-
+- Add support for CITE-seq data via NBMixture, see this `PR <https://github.com/gao-lab/GLUE/pull/114>`__.
+- Add preliminary support for region-based ATAC-Methyl integration.
+- Added `skip_balance` option for `fit_SCGLUE``.
 
 v0.3.2
 ------
