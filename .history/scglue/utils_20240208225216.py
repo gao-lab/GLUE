@@ -2,8 +2,8 @@ r"""
 Miscellaneous utilities
 """
 
-import logging
 import os
+import logging
 import signal
 import subprocess
 import sys
@@ -25,15 +25,12 @@ from .typehint import RandomState, T
 AUTO = "AUTO"  # Flag for using automatically determined hyperparameters
 
 
-# ----------------------------- Global containers ------------------------------
+#------------------------------ Global containers ------------------------------
 
-processes: Mapping[int, Mapping[int, Process]] = defaultdict(
-    dict
-)  # id -> pid -> process
+processes: Mapping[int, Mapping[int, Process]] = defaultdict(dict)  # id -> pid -> process
 
 
-# ------------------------------- Meta classes ---------------------------------
-
+#-------------------------------- Meta classes ---------------------------------
 
 class SingletonMeta(type):
 
@@ -49,15 +46,16 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
-# -------------------------------- Log manager ---------------------------------
-
+#--------------------------------- Log manager ---------------------------------
 
 class _CriticalFilter(logging.Filter):
+
     def filter(self, record: logging.LogRecord) -> bool:
         return record.levelno >= logging.WARNING
 
 
 class _NonCriticalFilter(logging.Filter):
+
     def filter(self, record: logging.LogRecord) -> bool:
         return record.levelno < logging.WARNING
 
@@ -73,8 +71,10 @@ class LogManager(metaclass=SingletonMeta):
         self._log_file = None
         self._console_log_level = logging.INFO
         self._file_log_level = logging.DEBUG
-        self._file_fmt = "%(asctime)s.%(msecs)03d [%(levelname)s] %(name)s: %(message)s"
-        self._console_fmt = "[%(levelname)s] %(name)s: %(message)s"
+        self._file_fmt = \
+            "%(asctime)s.%(msecs)03d [%(levelname)s] %(name)s: %(message)s"
+        self._console_fmt = \
+            "[%(levelname)s] %(name)s: %(message)s"
         self._date_fmt = "%Y-%m-%d %H:%M:%S"
 
     @property
@@ -101,9 +101,8 @@ class LogManager(metaclass=SingletonMeta):
     def _create_file_handler(self) -> logging.FileHandler:
         file_handler = logging.FileHandler(self.log_file)
         file_handler.setLevel(self.file_log_level)
-        file_handler.setFormatter(
-            logging.Formatter(fmt=self._file_fmt, datefmt=self._date_fmt)
-        )
+        file_handler.setFormatter(logging.Formatter(
+            fmt=self._file_fmt, datefmt=self._date_fmt))
         return file_handler
 
     def _create_console_handler(self, critical: bool) -> logging.StreamHandler:
@@ -162,9 +161,7 @@ class LogManager(metaclass=SingletonMeta):
         self._console_log_level = log_level
         for logger in self._loggers.values():
             for handler in logger.handlers:
-                if (
-                    type(handler) is logging.StreamHandler
-                ):  # pylint: disable=unidiomatic-typecheck
+                if type(handler) is logging.StreamHandler:  # pylint: disable=unidiomatic-typecheck
                     handler.setLevel(self.console_log_level)
 
 
@@ -179,8 +176,7 @@ def logged(obj: T) -> T:
     return obj
 
 
-# --------------------------- Configuration Manager ----------------------------
-
+#---------------------------- Configuration Manager ----------------------------
 
 @logged
 class ConfigManager(metaclass=SingletonMeta):
@@ -247,7 +243,7 @@ class ConfigManager(metaclass=SingletonMeta):
             self.logger.warning(
                 "It is recommended to set `DATALOADER_NUM_WORKERS` to 0 "
                 "when using CPU_ONLY mode. Otherwise, deadlocks may happen "
-                "occasionally."
+                "occationally."
             )
 
     @property
@@ -262,7 +258,7 @@ class ConfigManager(metaclass=SingletonMeta):
         operation, the results are not completely reproducible even when
         ``CUDNN_MODE`` is set to ``"repeatability"``, if GPU is used as
         computation device. Exact repeatability can only be achieved on CPU.
-        The situation might change with new releases of :mod:`torch`.
+        The situtation might change with new releases of :mod:`torch`.
         """
         return self._CUDNN_MODE
 
@@ -287,12 +283,11 @@ class ConfigManager(metaclass=SingletonMeta):
     def MASKED_GPUS(self, masked_gpus: List[int]) -> None:
         if masked_gpus:
             import pynvml
-
             pynvml.nvmlInit()
             device_count = pynvml.nvmlDeviceGetCount()
             for item in masked_gpus:
                 if item >= device_count:
-                    raise ValueError(f'GPU device "{item}" is non-existent!')
+                    raise ValueError(f"GPU device \"{item}\" is non-existent!")
         self._MASKED_GPUS = masked_gpus
 
     @property
@@ -328,9 +323,7 @@ class ConfigManager(metaclass=SingletonMeta):
         return self._FORCE_TERMINATE_WORKER_PATIENCE
 
     @FORCE_TERMINATE_WORKER_PATIENCE.setter
-    def FORCE_TERMINATE_WORKER_PATIENCE(
-        self, force_terminate_worker_patience: int
-    ) -> None:
+    def FORCE_TERMINATE_WORKER_PATIENCE(self, force_terminate_worker_patience: int) -> None:
         self._FORCE_TERMINATE_WORKER_PATIENCE = force_terminate_worker_patience
 
     @property
@@ -458,8 +451,7 @@ class ConfigManager(metaclass=SingletonMeta):
 config = ConfigManager()
 
 
-# --------------------------- Interruption handling ----------------------------
-
+#---------------------------- Interruption handling ----------------------------
 
 @logged
 class DelayedKeyboardInterrupt:  # pragma: no cover
@@ -489,8 +481,7 @@ class DelayedKeyboardInterrupt:  # pragma: no cover
             self.old_handler(*self.signal_received)
 
 
-# -------------------------- Constrained data frame ----------------------------
-
+#--------------------------- Constrained data frame ----------------------------
 
 @logged
 class ConstrainedDataFrame(pd.DataFrame):
@@ -564,8 +555,7 @@ class ConstrainedDataFrame(pd.DataFrame):
         return repr(self.df)
 
 
-# -------------------------- Other utility functions ---------------------------
-
+#--------------------------- Other utility functions ---------------------------
 
 def get_chained_attr(x: Any, attr: str) -> Any:
     r"""
@@ -613,13 +603,10 @@ def get_rs(x: RandomState = None) -> np.random.RandomState:
 
 @logged
 def run_command(
-    command: str,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT,
-    log_command: bool = True,
-    print_output: bool = True,
-    err_message: Optional[Mapping[int, str]] = None,
-    **kwargs,
+        command: str,
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        log_command: bool = True, print_output: bool = True,
+        err_message: Optional[Mapping[int, str]] = None, **kwargs
 ) -> Optional[List[str]]:
     r"""
     Run an external command and get realtime output
@@ -652,9 +639,8 @@ def run_command(
     if log_command:
         run_command.logger.info("Executing external command: %s", command)
     executable = command.split(" ")[0]
-    with subprocess.Popen(
-        command, stdout=stdout, stderr=stderr, shell=True, **kwargs
-    ) as p:
+    with subprocess.Popen(command, stdout=stdout, stderr=stderr,
+                          shell=True, **kwargs) as p:
         if stdout == subprocess.PIPE:
             prompt = f"{executable} ({p.pid}): "
             output_lines = []
@@ -685,7 +671,49 @@ def run_command(
             err_message = " " + err_message["__default__"]
         else:
             err_message = ""
-        raise RuntimeError(f"{executable} exited with error code: {ret}.{err_message}")
+        raise RuntimeError(
+            f"{executable} exited with error code: {ret}.{err_message}")
     if stdout == subprocess.PIPE and not print_output:
         return output_lines
 
+
+def clr(adata:AnnData, inplace= True, axis= 0):
+    """
+    Apply the centered log ratio (CLR) transformation
+    to normalize counts in adata.X.
+
+    Args:
+        data: AnnData object with protein expression counts.
+        inplace: Whether to update adata.X inplace.
+        axis: Axis across which CLR is performed.
+    """
+
+    if axis not in [0, 1]:
+        raise ValueError("Invalid value for `axis` provided. Admissible options are `0` and `1`.")
+
+    if not inplace:
+        adata = adata.copy()
+
+    if issparse(adata.X) and axis == 0 and not isinstance(adata.X, csc_matrix):
+        warn("adata.X is sparse but not in CSC format. Converting to CSC.")
+        x = csc_matrix(adata.X)
+    elif issparse(adata.X) and axis == 1 and not isinstance(adata.X, csr_matrix):
+        warn("adata.X is sparse but not in CSR format. Converting to CSR.")
+        x = csr_matrix(adata.X)
+    else:
+        x = adata.X
+
+    if issparse(x):
+        x.data /= np.repeat(
+            np.exp(np.log1p(x).sum(axis=axis).A / x.shape[axis]), x.getnnz(axis=axis)
+        )
+        np.log1p(x.data, out=x.data)
+    else:
+        np.log1p(
+            x / np.exp(np.log1p(x).sum(axis=axis, keepdims=True) / x.shape[axis]),
+            out=x,
+        )
+
+    adata.X = x
+
+    return None if inplace else adata
