@@ -88,6 +88,7 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
         rna_pp,
         rna_prob,
         use_highly_variable=True,
+        use_rep="X_pca",
         use_batch="batch",
         use_obs_names=True,
     )
@@ -95,6 +96,7 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
         atac_pp,
         atac_prob,
         use_highly_variable=True,
+        use_rep="X_lsi",
         use_batch="batch",
         use_obs_names=True,
     )
@@ -126,6 +128,7 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
         rna_pp,
         rna_prob,
         use_highly_variable=True,
+        use_rep="X_pca",
         use_batch="batch",
         use_obs_names=True,
     )
@@ -133,6 +136,7 @@ def test_adopt(rna_pp, atac_pp, tmp_path, rna_prob, atac_prob):
         atac_pp,
         atac_prob,
         use_highly_variable=True,
+        use_rep="X_lsi",
         use_batch="batch",
         use_obs_names=True,
     )

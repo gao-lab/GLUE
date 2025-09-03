@@ -31,7 +31,7 @@ from tqdm.auto import tqdm
 
 from . import genomics, num
 from .typehint import Kws
-from .utils import config, logged
+from .utils import logged
 
 
 def count_prep(adata: AnnData) -> None:
@@ -949,9 +949,7 @@ def _metacell_corr(
         if prep_fn:
             prep_fn(adata)
     for adata in adatas:
-        adata.X = num.densify(
-            adata.X, nan_sparse=adata.uns[config.ANNDATA_KEY]["nan_sparse"]
-        )
+        adata.X = num.densify(adata.X)
     adata = ad.concat(adatas, axis=1)
     edgelist = nx.to_pandas_edgelist(skeleton)
     source = adata.var_names.get_indexer(edgelist["source"])
@@ -982,6 +980,7 @@ def metacell_corr(
     skeleton: nx.Graph = None,
     method: str = "spr",
     agg_fns: Optional[List[str]] = None,
+    nan_sparse: Optional[List[bool]] = None,
     prep_fns: Optional[List[Optional[Callable[[AnnData], None]]]] = None,
     **kwargs,
 ) -> nx.Graph:
@@ -1015,18 +1014,11 @@ def metacell_corr(
     ----
     All aggregation, preprocessing and correlation apply to ``adata.X``.
     """
-    agg_kws = [
-        {
-            "nan_sparse": (
-                adata.uns[config.ANNDATA_KEY]["nan_sparse"]
-                if config.ANNDATA_KEY in adata.uns
-                else False
-            )
-        }
-        for adata in adatas
-    ]
+    agg_kws = [{} for _ in adatas]
     for k, fn in zip(agg_kws, agg_fns or []):
-        k["X_agg"] = fn
+        k.update(X_agg=fn)
+    for k, nan in zip(agg_kws, nan_sparse or []):
+        k.update(nan_sparse=nan)
     adatas = get_metacells(*adatas, **kwargs, agg_kws=agg_kws)
     metacell_corr.logger.info(
         "Computing correlation on %d common metacells...", adatas[0].shape[0]
