@@ -4,6 +4,7 @@ Neural network modules, datasets & data loaders, and other utilities
 
 import functools
 import os
+import re
 from math import sqrt
 
 import numpy as np
@@ -18,7 +19,6 @@ from ..utils import config, logged
 
 
 class GraphConv(torch.nn.Module):
-
     r"""
     Graph convolution (propagation only)
     """
@@ -58,7 +58,6 @@ class GraphConv(torch.nn.Module):
 
 
 class GraphAttent(torch.nn.Module):  # pragma: no cover
-
     r"""
     Graph attention
 
@@ -157,7 +156,7 @@ def freeze_running_stats(m: torch.nn.Module) -> None:
         m.eval()
 
 
-def get_default_numpy_dtype() -> type:
+def get_default_numpy_dtype(complex: bool = False) -> type:
     r"""
     Get numpy dtype matching that of the pytorch default dtype
 
@@ -166,7 +165,16 @@ def get_default_numpy_dtype() -> type:
     dtype
         Default numpy dtype
     """
-    return getattr(np, str(torch.get_default_dtype()).replace("torch.", ""))
+    m = re.match(r"([^\.]+)\.([A-Za-z]+)(\d+)", str(torch.get_default_dtype()))
+    _, dtype, bits = m.groups()
+    if complex:
+        dtype = "complex"
+        bits = int(bits) * 2
+    return getattr(np, f"{dtype}{bits}")
+
+
+def zero_nan_grad(grad: torch.Tensor):
+    return grad.nan_to_num()
 
 
 @logged

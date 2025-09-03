@@ -24,8 +24,9 @@ from anndata import AnnData
 try:
     from anndata._core.sparse_dataset import SparseDataset
 except ImportError:  # Newer version of anndata
-    from anndata._core.sparse_dataset import \
-        BaseCompressedSparseDataset as SparseDataset
+    from anndata._core.sparse_dataset import (
+        BaseCompressedSparseDataset as SparseDataset,
+    )
 
 from ..num import vertex_degrees
 from ..typehint import AnyArray, Array, RandomState
@@ -40,7 +41,6 @@ DATA_CONFIG = Mapping[str, Any]
 
 @logged
 class Dataset(torch.utils.data.Dataset):
-
     r"""
     Abstract dataset interface extending that of :class:`torch.utils.data.Dataset`
 
@@ -189,7 +189,6 @@ class Dataset(torch.utils.data.Dataset):
 
 @logged
 class ArrayDataset(Dataset):
-
     r"""
     Array dataset for :class:`numpy.ndarray` and :class:`scipy.sparse.spmatrix`
     objects. Different arrays are considered as unpaired, and thus do not need
@@ -240,11 +239,15 @@ class ArrayDataset(Dataset):
             index * self.getitem_size, min((index + 1) * self.getitem_size, self.size)
         )
         return [
-            torch.as_tensor(
-                a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]].toarray()
+            (
+                torch.as_tensor(
+                    a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]].toarray()
+                )
+                if scipy.sparse.issparse(a) or isinstance(a, SparseDataset)
+                else torch.as_tensor(
+                    a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]]
+                )
             )
-            if scipy.sparse.issparse(a) or isinstance(a, SparseDataset)
-            else torch.as_tensor(a[self.shuffle_idx[i][np.mod(index, self.sizes[i])]])
             for i, a in enumerate(self.arrays)
         ]
 
@@ -299,7 +302,6 @@ class ArrayDataset(Dataset):
 
 @logged
 class AnnDataset(Dataset):
-
     r"""
     Dataset for :class:`anndata.AnnData` objects with partial pairing support.
 
@@ -364,6 +366,7 @@ class AnnDataset(Dataset):
         )
         self.size = self.view_idx.size
         self.shuffle_idx, self.shuffle_pmsk = self._get_idx_pmsk(self.view_idx)
+        self.nan_sparse = [data_config["nan_sparse"] for data_config in data_configs]
         self._data_configs = data_configs
 
     def _get_idx_pmsk(
@@ -398,15 +401,17 @@ class AnnDataset(Dataset):
         shuffle_idx = self.shuffle_idx[s].T
         shuffle_pmsk = self.shuffle_pmsk[s]
         items = [
-            torch.as_tensor(self._index_array(data, idx))
+            torch.as_tensor(self._index_array(data, idx, nan_sparse))
             for extracted_data in self.extracted_data
-            for idx, data in zip(shuffle_idx, extracted_data)
+            for idx, data, nan_sparse in zip(
+                shuffle_idx, extracted_data, self.nan_sparse
+            )
         ]
         items.append(torch.as_tensor(shuffle_pmsk))
         return items
 
     @staticmethod
-    def _index_array(arr: AnyArray, idx: np.ndarray) -> np.ndarray:
+    def _index_array(arr: AnyArray, idx: np.ndarray, nan_sparse: bool) -> np.ndarray:
         if isinstance(arr, (h5py.Dataset, SparseDataset)):
             rank = scipy.stats.rankdata(idx, method="dense") - 1
             sorted_idx = np.empty(rank.max() + 1, dtype=int)
@@ -416,11 +421,21 @@ class AnnDataset(Dataset):
             ]  # Convert to sequential access and back
         else:
             arr = arr[idx]
-        return arr.toarray() if scipy.sparse.issparse(arr) else arr
+        if scipy.sparse.issparse(arr):
+            if nan_sparse:  # E.g., NaN for uncovered methyl
+                arr = arr.tocoo()
+                dense = np.full(
+                    arr.shape,
+                    np.nan + 1j * np.nan if np.iscomplexobj(arr) else np.nan,
+                    dtype=arr.dtype,
+                )
+                dense[arr.row, arr.col] = arr.data
+                arr = dense
+            else:
+                arr = arr.toarray()
+        return arr
 
-    def _extract_data(
-        self, data_configs: List[DATA_CONFIG]
-    ) -> Tuple[
+    def _extract_data(self, data_configs: List[DATA_CONFIG]) -> Tuple[
         List[pd.Index],
         Tuple[
             List[AnyArray],
@@ -434,9 +449,7 @@ class AnnDataset(Dataset):
             return self._extract_data_eval(data_configs)
         return self._extract_data_train(data_configs)  # self.mode == "train"
 
-    def _extract_data_train(
-        self, data_configs: List[DATA_CONFIG]
-    ) -> Tuple[
+    def _extract_data_train(self, data_configs: List[DATA_CONFIG]) -> Tuple[
         List[pd.Index],
         Tuple[
             List[AnyArray],
@@ -472,9 +485,7 @@ class AnnDataset(Dataset):
         ]
         return xuid, (x, xrep, xbch, xlbl, xdwt)
 
-    def _extract_data_eval(
-        self, data_configs: List[DATA_CONFIG]
-    ) -> Tuple[
+    def _extract_data_eval(self, data_configs: List[DATA_CONFIG]) -> Tuple[
         List[pd.Index],
         Tuple[
             List[AnyArray],
@@ -494,9 +505,11 @@ class AnnDataset(Dataset):
             for adata, data_config in zip(self.adatas, data_configs)
         ]
         x = [
-            np.empty((adata.shape[0], 0), dtype=default_dtype)
-            if xrep_.size
-            else self._extract_x(adata, data_config)
+            (
+                np.empty((adata.shape[0], 0), dtype=default_dtype)
+                if xrep_.size
+                else self._extract_x(adata, data_config)
+            )
             for adata, data_config, xrep_ in zip(self.adatas, data_configs, xrep)
         ]
         xbch = xlbl = [
@@ -508,7 +521,6 @@ class AnnDataset(Dataset):
         return xuid, (x, xrep, xbch, xlbl, xdwt)
 
     def _extract_x(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        default_dtype = get_default_numpy_dtype()
         features = data_config["features"]
         use_layer = data_config["use_layer"]
         if not np.array_equal(adata.var_names, features):
@@ -522,6 +534,7 @@ class AnnDataset(Dataset):
             x = adata.layers[use_layer]
         else:
             x = adata.X
+        default_dtype = get_default_numpy_dtype(np.iscomplexobj(x))
         if x.dtype.type is not default_dtype:
             if isinstance(x, (h5py.Dataset, SparseDataset)):
                 raise RuntimeError(
@@ -653,7 +666,6 @@ class AnnDataset(Dataset):
 
 @logged
 class GraphDataset(Dataset):
-
     r"""
     Dataset for graphs with support for negative sampling
 
@@ -817,7 +829,6 @@ class GraphDataset(Dataset):
 
 
 class DataLoader(torch.utils.data.DataLoader):
-
     r"""
     Custom data loader that manually shuffles the internal dataset before each
     round of iteration (see :class:`torch.utils.data.DataLoader` for usage)
@@ -849,7 +860,6 @@ class DataLoader(torch.utils.data.DataLoader):
 
 
 class ParallelDataLoader:
-
     r"""
     Parallel data loader
 

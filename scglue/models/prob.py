@@ -5,14 +5,15 @@ Probability distributions
 import torch
 import torch.distributions as D
 import torch.nn.functional as F
+from pyro.distributions import BetaBinomial as BetaBinomialDistribution
 
 from ..num import EPS
+from .nn import zero_nan_grad
 
 # ------------------------------- Distributions --------------------------------
 
 
 class MSE(D.Distribution):
-
     r"""
     A "sham" distribution that outputs negative MSE on ``log_prob``
 
@@ -35,7 +36,6 @@ class MSE(D.Distribution):
 
 
 class RMSE(MSE):
-
     r"""
     A "sham" distribution that outputs negative RMSE on ``log_prob``
 
@@ -50,7 +50,6 @@ class RMSE(MSE):
 
 
 class ZIN(D.Normal):
-
     r"""
     Zero-inflated normal distribution with subsetting support
 
@@ -67,7 +66,13 @@ class ZIN(D.Normal):
     def __init__(
         self, zi_logits: torch.Tensor, loc: torch.Tensor, scale: torch.Tensor
     ) -> None:
-        super().__init__(loc, scale)
+        if zi_logits.requires_grad:
+            zi_logits.register_hook(zero_nan_grad)
+        if loc.requires_grad:
+            loc.register_hook(zero_nan_grad)
+        if scale.requires_grad:
+            scale.register_hook(zero_nan_grad)
+        super().__init__(loc, scale, validate_args=False)
         self.zi_logits = zi_logits
 
     def log_prob(self, value: torch.Tensor) -> torch.Tensor:
@@ -83,7 +88,6 @@ class ZIN(D.Normal):
 
 
 class ZILN(D.LogNormal):
-
     r"""
     Zero-inflated log-normal distribution with subsetting support
 
@@ -115,7 +119,6 @@ class ZILN(D.LogNormal):
 
 
 class ZINB(D.NegativeBinomial):
-
     r"""
     Zero-inflated negative binomial distribution
 
@@ -149,3 +152,56 @@ class ZINB(D.NegativeBinomial):
         zi_log_prob[~z_mask] = raw_log_prob[~z_mask] - F.softplus(nz_zi_logits)
         return zi_log_prob
 
+
+class Beta(D.Beta):
+    r"""
+    Stable beta distribution parameterized by mean and concentration
+
+    Parameters
+    ----------
+    logit_mu
+        Logit of mean of the beta distribution
+    size
+        Concentration of the beta distribution
+    """
+
+    def __init__(self, logit_mu: torch.Tensor, size: torch.Tensor) -> None:
+        if logit_mu.requires_grad:
+            logit_mu.register_hook(zero_nan_grad)
+        if size.requires_grad:
+            size.register_hook(zero_nan_grad)
+        mu = logit_mu.sigmoid()
+        super().__init__(mu * size + EPS, (1 - mu) * size + EPS, validate_args=False)
+
+    def log_prob(self, value: torch.Tensor) -> torch.Tensor:
+        return super().log_prob(value.clamp(EPS, 1 - EPS))
+
+
+class BetaBinomial(D.Beta):
+    r"""
+    Stable beta-binomial distribution parameterized by mean and concentration
+
+    Parameters
+    ----------
+    logit_mu
+        Logit of mean of the beta distribution
+    size
+        Concentration of the beta distribution
+    """
+
+    def __init__(self, logit_mu: torch.Tensor, size: torch.Tensor) -> None:
+        mu = logit_mu.sigmoid()
+        super().__init__(mu * size + EPS, (1 - mu) * size + EPS)
+
+    def log_prob(self, value: torch.Tensor) -> torch.Tensor:
+        return BetaBinomialDistribution(
+            self.concentration1, self.concentration0, total_count=value.imag
+        ).log_prob(value.real)
+
+
+class Bernoulli(D.Bernoulli):
+
+    def __init__(self, logits: torch.Tensor) -> None:
+        if logits.requires_grad:
+            logits.register_hook(zero_nan_grad)
+        super().__init__(logits=logits, validate_args=False)

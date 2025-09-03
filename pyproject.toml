@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "scglue"
-version = "0.3.3"
+version = "0.4.0"
 description = "Graph-linked unified embedding for unpaired single-cell multi-omics data integration"
 readme = "README.md"
 requires-python = ">=3.6"
@@ -48,6 +48,7 @@ dependencies = [
     "pynvml>=8.0.1",
     "torch>=1.8",
     "pytorch-ignite>=0.4.1",
+    "pyro-ppl>=1.0",
     "tensorboardX>=1.4",
     "anndata>=0.7",
     "scanpy>=1.5",

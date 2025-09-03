@@ -33,6 +33,7 @@ def configure_dataset(
     use_cell_type: Optional[str] = None,
     use_dsc_weight: Optional[str] = None,
     use_obs_names: bool = False,
+    nan_sparse: bool = False,
 ) -> None:
     r"""
     Configure dataset for model training
@@ -43,7 +44,7 @@ def configure_dataset(
         Dataset to be configured
     prob_model
         Probabilistic generative model used by the decoder,
-        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB"}``.
+        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB", "Beta"}``.
     use_highly_variable
         Whether to use highly variable features
     use_layer
@@ -60,6 +61,8 @@ def configure_dataset(
     use_obs_names
         Whether to use ``obs_names`` to mark paired cells across
         different datasets
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
 
     Note
     -----
@@ -132,6 +135,7 @@ def configure_dataset(
     else:
         data_config["use_dsc_weight"] = None
     data_config["use_obs_names"] = use_obs_names
+    data_config["nan_sparse"] = nan_sparse
     adata.uns[config.ANNDATA_KEY] = data_config
 
 

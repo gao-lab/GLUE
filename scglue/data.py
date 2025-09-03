@@ -4,6 +4,7 @@ that are not covered in :mod:`scanpy`.
 """
 
 import os
+import time
 from collections import defaultdict
 from itertools import chain
 from typing import Callable, List, Mapping, Optional
@@ -16,15 +17,15 @@ import scanpy as sc
 import scipy.sparse
 import scipy.stats
 import sklearn.cluster
-import sklearn.decomposition
-import sklearn.feature_extraction.text
 import sklearn.linear_model
 import sklearn.neighbors
 import sklearn.preprocessing
 import sklearn.utils.extmath
 from anndata import AnnData
 from networkx.algorithms.bipartite import biadjacency_matrix
-from sklearn.preprocessing import normalize
+from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import MultiLabelBinarizer, normalize
+from sklearn.utils.validation import check_is_fitted
 from sparse import COO
 from tqdm.auto import tqdm
 
@@ -45,6 +46,53 @@ def count_prep(adata: AnnData) -> None:
     """
     sc.pp.normalize_total(adata)
     sc.pp.log1p(adata)
+
+
+@logged
+def calc_hypo_score(
+    adata: AnnData, mc_layer: str = "mc", cov_layer: str = "cov", chunk_size: int = 1000
+) -> None:
+    r"""
+    Calculates the hypo-methylation score as X based on methylated counts and
+    total coverage stored in separate layers
+
+    Parameters
+    ----------
+    adata
+        Input AnnData object
+    mc_layer
+        Layer storing methylated counts
+    cov_layer
+        Layer storing total coverage
+    chunk_size
+        Number of cells to include per chunk
+    """
+    if adata.X is not None:
+        calc_hypo_score.logger.warning("Current X will be overwritten!")
+
+    calc_hypo_score.logger.info("Ensuring CSR format...")
+    mc = adata.layers[mc_layer].tocsr()
+    cov = adata.layers[cov_layer].tocsr()
+
+    calc_hypo_score.logger.info("Computing denominator...")
+    denom = cov.astype(np.float32)
+    denom.data = 1 / denom.data
+
+    calc_hypo_score.logger.info("Normalizing in chunks...")
+    chunks = []
+    for start in tqdm(range(0, denom.shape[0], chunk_size)):
+        end = start + chunk_size
+        chunk = denom[start:end].multiply(mc[start:end].toarray())
+        chunk_max = chunk.data.max()
+        if chunk_max > 1:
+            if chunk_max > 1.001:  # Unlikely rounding error
+                calc_hypo_score.logger.warning(f"Clipping mc > cov at {start}:{end}")
+            chunk.data = chunk.data.clip(0, 1)
+        chunk.data = 1 - chunk.data
+        chunks.append(chunk)
+
+    calc_hypo_score.logger.info("Stacking chunks...")
+    adata.X = scipy.sparse.vstack(chunks).tocsr()
 
 
 def lsi(
@@ -82,6 +130,129 @@ def lsi(
     X_lsi -= X_lsi.mean(axis=1, keepdims=True)
     X_lsi /= X_lsi.std(axis=1, ddof=1, keepdims=True)
     adata.obsm["X_lsi"] = X_lsi
+
+
+class AllCoolsLSI:
+    def __init__(
+        self,
+        scale_factor=100000,
+        n_components=100,
+        algorithm="arpack",
+        random_state=0,
+        n_iter=5,
+        idf=None,
+        model=None,
+    ):
+        self.scale_factor = scale_factor
+        if idf is not None:
+            self.idf = idf.copy()
+        else:
+            self.idf = None
+        if model is not None:
+            self.model = model
+        else:
+            self.model = TruncatedSVD(
+                n_components=n_components,
+                n_iter=n_iter,
+                algorithm=algorithm,
+                random_state=random_state,
+            )
+        self.random_state = random_state
+        self.fitted = False
+
+    def _downsample_data(self, data, downsample):
+        np.random.seed(self.random_state)
+        if downsample is not None and downsample < data.shape[0]:
+            use_row_idx = np.sort(
+                np.random.choice(np.arange(0, data.shape[0]), downsample, replace=False)
+            )
+            data = scipy.sparse.csr_matrix(data[use_row_idx, :])
+        return data
+
+    @staticmethod
+    def _get_data(data):
+        if isinstance(data, AnnData):
+            data = data.X
+        return data
+
+    def fit(self, data, downsample=None, verbose=False):
+        data = self._get_data(data)
+        data = self._downsample_data(data, downsample)
+        if verbose:
+            print("start tf idf")
+            start = time.time()
+        tf, idf = num.tfidf(data, flavor="allcools", scale_factor=self.scale_factor)
+        if self.idf is not None:
+            idf = self.idf.copy()
+        if verbose:
+            print("finish tf idf", time.time() - start)
+            start = time.time()
+        self.idf = idf.copy()
+        n_rows, n_cols = tf.shape
+        self.model.n_components = min(n_rows - 1, n_cols - 1, self.model.n_components)
+        self.model.fit(tf)
+        if verbose:
+            print("finish svd", time.time() - start)
+        self.fitted = True
+        return self
+
+    def fit_transform(
+        self, data, downsample=None, obsm_name="X_lsi", verbose=False, normalize=True
+    ):
+        _data = self._get_data(data)
+        _data = self._downsample_data(_data, downsample)
+        start = time.time()
+        if verbose:
+            print("start tf idf")
+        tf, idf = num.tfidf(_data, flavor="allcools", scale_factor=self.scale_factor)
+        if self.idf is not None:
+            idf = self.idf.copy()
+        if verbose:
+            print("finish tf idf", time.time() - start)
+            start = time.time()
+        self.idf = idf.copy()
+        n_rows, n_cols = tf.shape
+        self.model.n_components = min(n_rows - 1, n_cols - 1, self.model.n_components)
+        tf_reduce = self.model.fit_transform(tf)
+        self.fitted = True
+        if normalize:
+            tf_reduce = tf_reduce / self.model.singular_values_
+        if verbose:
+            print("finish svd", time.time() - start)
+        if isinstance(data, AnnData):
+            data.obsm[obsm_name] = tf_reduce
+        else:
+            return tf_reduce
+
+    def transform(
+        self, data, chunk_size=50000, obsm_name="X_lsi", verbose=False, normalize=True
+    ):
+        _data = self._get_data(data)
+
+        check_is_fitted(self.model)
+        tf_reduce = []
+        if verbose:
+            chunks = tqdm(np.arange(0, _data.shape[0], chunk_size))
+        else:
+            chunks = np.arange(0, _data.shape[0], chunk_size)
+        for chunk_start in chunks:
+            tf, _ = num.tfidf(
+                _data[chunk_start : (chunk_start + chunk_size)],
+                flavor="allcools",
+                scale_factor=self.scale_factor,
+                idf=self.idf,
+            )
+            tf_reduce.append(self.model.transform(tf))
+
+        tf_reduce = np.concatenate(tf_reduce, axis=0)
+
+        if normalize:
+            tf_reduce = tf_reduce / self.model.singular_values_
+
+        if isinstance(data, AnnData):
+            data.obsm[obsm_name] = tf_reduce
+        else:
+            return tf_reduce
 
 
 @logged
@@ -153,6 +324,8 @@ def aggregate_obs(
     obs_agg: Optional[Mapping[str, str]] = None,
     obsm_agg: Optional[Mapping[str, str]] = None,
     layers_agg: Optional[Mapping[str, str]] = None,
+    separator: str = ",",
+    nan_sparse: bool = False,
 ) -> AnnData:
     r"""
     Aggregate obs in a given dataset by certain categories
@@ -181,6 +354,10 @@ def aggregate_obs(
         Aggregation methods for ``adata.layers``, indexed by layer keys,
         must be one of ``{"sum", "mean"}``. Fields not specified will be
         discarded.
+    separator
+        Separator between multiple values in the groupby column
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
 
     Returns
     -------
@@ -191,22 +368,34 @@ def aggregate_obs(
     obsm_agg = obsm_agg or {}
     layers_agg = layers_agg or {}
 
-    by = adata.obs[by]
-    agg_idx = (
-        pd.Index(by.cat.categories)
-        if pd.api.types.is_categorical_dtype(by)
-        else pd.Index(np.unique(by))
-    )
-    agg_sum = scipy.sparse.coo_matrix(
-        (np.ones(adata.shape[0]), (agg_idx.get_indexer(by), np.arange(adata.shape[0])))
-    ).tocsr()
-    agg_mean = agg_sum.multiply(1 / agg_sum.sum(axis=1))
+    by = adata.obs[by].str.split(separator).map(frozenset)
+    na = by.isna()
+    by.loc[na] = [[]] * na.sum()
+    agg_idx = by.explode().dropna().unique()
+    agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
+    agg_sum = agg_sum.T
 
-    agg_method = {
-        "sum": lambda x: agg_sum @ x,
-        "mean": lambda x: agg_mean @ x,
-        "majority": lambda x: pd.crosstab(by, x).idxmax(axis=1).loc[agg_idx].to_numpy(),
-    }
+    def _sum(x):
+        return agg_sum @ x
+
+    def _mean(x):
+        if scipy.sparse.issparse(x) and nan_sparse:
+            mask = x.copy()
+            mask.data = np.ones_like(mask.data)
+            S = (agg_sum @ x).toarray()
+            C = (agg_sum @ mask).tocoo()
+            C.eliminate_zeros()
+            row, col, data = C.row, C.col, C.data
+            return scipy.sparse.csr_matrix(
+                (S[row, col] / data, (row, col)), shape=C.shape
+            )
+        return agg_sum.multiply(1 / agg_sum.sum(axis=1)) @ x
+
+    def _majority(x):
+        df = pd.DataFrame({"by": by, "x": x}).explode("by")
+        return pd.crosstab(df["by"], df["x"]).idxmax(axis=1).loc[agg_idx].to_numpy()
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
 
     X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
     obs = pd.DataFrame(
@@ -225,7 +414,106 @@ def aggregate_obs(
         obsm=obsm,
         varm=adata.varm,
         layers=layers,
-        dtype=None if X is None else X.dtype,
+        uns=adata.uns,
+    )
+
+
+def aggregate_var(
+    adata: AnnData,
+    by: str,
+    X_agg: Optional[str] = "sum",
+    var_agg: Optional[Mapping[str, str]] = None,
+    varm_agg: Optional[Mapping[str, str]] = None,
+    layers_agg: Optional[Mapping[str, str]] = None,
+    separator: str = ",",
+    nan_sparse: bool = False,
+) -> AnnData:
+    r"""
+    Aggregate var in a given dataset by certain categories
+
+    Parameters
+    ----------
+    adata
+        Dataset to be aggregated
+    by
+        Specify a column in ``adata.var`` used for aggregation,
+        must be discrete.
+    X_agg
+        Aggregation function for ``adata.X``, must be one of
+        ``{"sum", "mean", ``None``}``. Setting to ``None`` discards
+        the ``adata.X`` matrix.
+    var_agg
+        Aggregation methods for ``adata.var``, indexed by var columns,
+        must be one of ``{"sum", "mean", "majority"}``, where ``"sum"``
+        and ``"mean"`` are for continuous data, and ``"majority"`` is for
+        discrete data. Fields not specified will be discarded.
+    varm_agg
+        Aggregation methods for ``adata.varm``, indexed by varm keys,
+        must be one of ``{"sum", "mean"}``. Fields not specified will be
+        discarded.
+    layers_agg
+        Aggregation methods for ``adata.layers``, indexed by layer keys,
+        must be one of ``{"sum", "mean"}``. Fields not specified will be
+        discarded.
+    separator
+        Separator between multiple values in the groupby column
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
+
+    Returns
+    -------
+    aggregated
+        Aggregated dataset
+    """
+    var_agg = var_agg or {}
+    varm_agg = varm_agg or {}
+    layers_agg = layers_agg or {}
+
+    by = adata.var[by].str.split(separator)
+    na = by.isna()
+    by.loc[na] = [[]] * na.sum()
+    agg_idx = by.explode().dropna().unique()
+    agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
+
+    def _sum(x):
+        return x @ agg_sum
+
+    def _mean(x):
+        if scipy.sparse.issparse(x) and nan_sparse:
+            mask = x.copy()
+            mask.data = np.ones_like(mask.data)
+            S = (x @ agg_sum).toarray()
+            C = (mask @ agg_sum).tocoo()
+            C.eliminate_zeros()
+            row, col, data = C.row, C.col, C.data
+            return scipy.sparse.csr_matrix(
+                (S[row, col] / data, (row, col)), shape=C.shape
+            )
+        return x @ agg_sum.multiply(1 / agg_sum.sum(axis=0))
+
+    def _majority(x):
+        pd.crosstab(by, x).idxmax(axis=1).loc[agg_idx].to_numpy(),
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
+
+    X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
+    var = pd.DataFrame(
+        {k: agg_method[v](adata.var[k]) for k, v in var_agg.items()},
+        index=agg_idx.astype(str),
+    )
+    varm = {k: agg_method[v](adata.varm[k]) for k, v in varm_agg.items()}
+    layers = {k: agg_method[v](adata.layers[k]) for k, v in layers_agg.items()}
+    for c in var:
+        if pd.api.types.is_categorical_dtype(adata.var[c]):
+            var[c] = pd.Categorical(var[c], categories=adata.var[c].cat.categories)
+    return AnnData(
+        X=X,
+        obs=adata.obs,
+        var=var,
+        obsm=adata.obsm,
+        varm=varm,
+        layers=layers,
+        uns=adata.uns,
     )
 
 
@@ -407,6 +695,10 @@ def bedmap2anndata(bedmap: os.PathLike, var_col: int = 3, obs_col: int = 6) -> A
         var=pd.DataFrame(index=var_names),
         dtype=X.dtype,
     )
+
+
+def merge_mc_cov(adata: AnnData, mc_layer: str, cov_layer: str, merge_layer: str):
+    adata.layers[merge_layer] = adata.layers[mc_layer] + 1j * adata.layers[cov_layer]
 
 
 @logged
@@ -594,6 +886,7 @@ def get_metacells(
             obsm=adata.obsm,
             varm=adata.varm,
             layers=adata.layers,
+            uns=adata.uns,
             dtype=None if adata.X is None else adata.X.dtype,
         )
         for i, adata in enumerate(adatas)
@@ -618,6 +911,7 @@ def get_metacells(
         )
         kmeans = sklearn.cluster.KMeans(n_clusters=n_meta, random_state=seed)
         combined.obs["metacell"] = kmeans.fit_predict(combined.obsm[use_rep])
+    combined.obs["metacell"] = combined.obs["metacell"].astype(str)
     for adata in adatas:
         adata.obs["metacell"] = combined[adata.obs_names].obs["metacell"]
 
@@ -654,21 +948,24 @@ def _metacell_corr(
     for adata, prep_fn in zip(adatas, prep_fns):
         if prep_fn:
             prep_fn(adata)
+    for adata in adatas:
+        adata.X = num.densify(adata.X)
     adata = ad.concat(adatas, axis=1)
     edgelist = nx.to_pandas_edgelist(skeleton)
     source = adata.var_names.get_indexer(edgelist["source"])
     target = adata.var_names.get_indexer(edgelist["target"])
-    X = num.densify(adata.X.T)
+    X = adata.X.T
     if method == "spr":
-        X = np.array([scipy.stats.rankdata(x) for x in X])
+        X = scipy.stats.rankdata(X, axis=1, nan_policy="omit")
     elif method != "pcc":
         raise ValueError(f"Unrecognized method: {method}!")
-    mean = X.mean(axis=1)
-    meansq = np.square(X).mean(axis=1)
+    mean = np.nanmean(X, axis=1)
+    meansq = np.nanmean(np.square(X), axis=1)
     std = np.sqrt(meansq - np.square(mean))
+    std[std == 0] = np.nan
     edgelist["corr"] = np.array(
         [
-            ((X[s] * X[t]).mean() - mean[s] * mean[t]) / (std[s] * std[t])
+            (np.nanmean(X[s] * X[t]) - mean[s] * mean[t]) / (std[s] * std[t])
             for s, t in zip(source, target)
         ]
     )
@@ -683,6 +980,7 @@ def metacell_corr(
     skeleton: nx.Graph = None,
     method: str = "spr",
     agg_fns: Optional[List[str]] = None,
+    nan_sparse: Optional[List[bool]] = None,
     prep_fns: Optional[List[Optional[Callable[[AnnData], None]]]] = None,
     **kwargs,
 ) -> nx.Graph:
@@ -716,11 +1014,12 @@ def metacell_corr(
     ----
     All aggregation, preprocessing and correlation apply to ``adata.X``.
     """
-    adatas = get_metacells(
-        *adatas,
-        **kwargs,
-        agg_kws=[dict(X_agg=agg_fn) for agg_fn in agg_fns] if agg_fns else None,
-    )
+    agg_kws = [{} for _ in adatas]
+    for k, fn in zip(agg_kws, agg_fns or []):
+        k.update(X_agg=fn)
+    for k, nan in zip(agg_kws, nan_sparse or []):
+        k.update(nan_sparse=nan)
+    adatas = get_metacells(*adatas, **kwargs, agg_kws=agg_kws)
     metacell_corr.logger.info(
         "Computing correlation on %d common metacells...", adatas[0].shape[0]
     )
