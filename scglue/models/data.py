@@ -356,7 +356,7 @@ class AnnDataset(Dataset):
     def data_configs(self, data_configs: List[DATA_CONFIG]) -> None:
         if len(data_configs) != len(self.adatas):
             raise ValueError(
-                "Number of data configs must match " "the number of datasets!"
+                "Number of data configs must match the number of datasets!"
             )
         self.data_idx, self.extracted_data = self._extract_data(data_configs)
         self.view_idx = (

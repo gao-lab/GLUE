@@ -12,8 +12,9 @@ import scipy.sparse
 try:
     from anndata._core.sparse_dataset import SparseDataset
 except ImportError:  # Newer version of anndata
-    from anndata._core.sparse_dataset import \
-        BaseCompressedSparseDataset as SparseDataset
+    from anndata._core.sparse_dataset import (
+        BaseCompressedSparseDataset as SparseDataset,
+    )
 
 Array = Union[np.ndarray, scipy.sparse.spmatrix]
 BackedArray = Union[h5py.Dataset, SparseDataset]

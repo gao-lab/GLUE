@@ -15,7 +15,6 @@ from .utils import config, run_command
 
 
 class Checker:
-
     r"""
     Checks availability and version of a dependency
 
@@ -47,7 +46,6 @@ class Checker:
 
 
 class ModuleChecker(Checker):
-
     r"""
     Checks availability and version of a Python module dependency
 
@@ -91,7 +89,6 @@ class ModuleChecker(Checker):
 
 
 class CmdChecker(Checker):
-
     r"""
     Checks availability and version of a command line dependency
 

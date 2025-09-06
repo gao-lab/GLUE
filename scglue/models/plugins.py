@@ -21,7 +21,6 @@ COMPLETED = ignite.engine.Events.COMPLETED
 
 
 class Tensorboard(TrainingPlugin):
-
     r"""
     Training logging via tensorboard
     """
@@ -63,7 +62,6 @@ class Tensorboard(TrainingPlugin):
 
 @logged
 class EarlyStopping(TrainingPlugin):
-
     r"""
     Early stop model training when loss no longer decreases
 
@@ -174,7 +172,6 @@ class EarlyStopping(TrainingPlugin):
 
 @logged
 class LRScheduler(TrainingPlugin):
-
     r"""
     Reduce learning rate on loss plateau
 
@@ -204,8 +201,7 @@ class LRScheduler(TrainingPlugin):
         if patience is None:
             raise ValueError("`patience` must be specified!")
         self.schedulers = [
-            ReduceLROnPlateau(optim, patience=patience)
-            for optim in optims
+            ReduceLROnPlateau(optim, patience=patience) for optim in optims
         ]
         self.burnin = burnin
 

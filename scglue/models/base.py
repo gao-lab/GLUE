@@ -23,7 +23,6 @@ COMPLETED = ignite.engine.Events.COMPLETED
 
 @logged
 class Trainer:
-
     r"""
     Abstract trainer class
 
@@ -261,7 +260,6 @@ class Trainer:
 
 @logged
 class Model:
-
     r"""
     Abstract model class
 
@@ -392,7 +390,6 @@ class Model:
 
 @logged
 class TrainingPlugin:
-
     r"""
     Plugin used to extend the training process with certain functions
     """

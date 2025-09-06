@@ -167,7 +167,7 @@ def roc(
     pred: np.ndarray,
     max_points: int = 500,
     ax: Optional[ma.Axes] = None,
-    **kwargs
+    **kwargs,
 ) -> ma.Axes:
     r"""
     Plot an ROC curve
@@ -208,7 +208,7 @@ def prc(
     pred: np.ndarray,
     max_points: int = 500,
     ax: Optional[ma.Axes] = None,
-    **kwargs
+    **kwargs,
 ) -> ma.Axes:
     r"""
     Plot a precision-recall curve

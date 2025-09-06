@@ -31,7 +31,6 @@ from .utils import ConstrainedDataFrame, get_rs, logged
 
 
 class Bed(ConstrainedDataFrame):
-
     r"""
     BED format data frame
     """
@@ -271,7 +270,6 @@ class Bed(ConstrainedDataFrame):
 
 
 class Gtf(ConstrainedDataFrame):  # gffutils is too slow
-
     r"""
     GTF format data frame
     """
@@ -1096,11 +1094,11 @@ def ens_trim_version(x: str) -> str:
     """
     return re.sub(r"\.[0-9_-]+$", "", x)
 
-# Function for DIY guidance graph
-def generate_prot_guidance_graph(rna: AnnData, 
-                                 prot: AnnData, 
-                                 protein_gene_match: Mapping[str, str]):
 
+# Function for DIY guidance graph
+def generate_prot_guidance_graph(
+    rna: AnnData, prot: AnnData, protein_gene_match: Mapping[str, str]
+):
     r"""
     Generate the guidance graph based on CITE-seq datasets.
 
@@ -1118,16 +1116,15 @@ def generate_prot_guidance_graph(rna: AnnData,
     guidance
         The guidance map between proteins and genes.
     """
-    guidance =nx.MultiDiGraph()
+    guidance = nx.MultiDiGraph()
     for k, v in protein_gene_match.items():
-        guidance.add_edge(k, v, weight=1.0, sign=1,  type="rev")
-        guidance.add_edge(v, k, weight=1.0, sign=1,  type="fwd")
+        guidance.add_edge(k, v, weight=1.0, sign=1, type="rev")
+        guidance.add_edge(v, k, weight=1.0, sign=1, type="fwd")
 
     for item in rna.var_names:
         guidance.add_edge(item, item, weight=1.0, sign=1, type="loop")
     for item in prot.var_names:
         guidance.add_edge(item, item, weight=1.0, sign=1, type="loop")
-
 
     return guidance
 

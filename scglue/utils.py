@@ -10,14 +10,10 @@ import sys
 from collections import defaultdict
 from multiprocessing import Process
 from typing import Any, List, Mapping, Optional
-from warnings import warn
 
-from scipy.sparse import issparse, csc_matrix, csr_matrix
-from anndata import AnnData
 import numpy as np
 import pandas as pd
 import torch
-import networkx as nx
 from pybedtools.helpers import set_bedtools_path
 
 from .typehint import RandomState, T
@@ -36,7 +32,6 @@ processes: Mapping[int, Mapping[int, Process]] = defaultdict(
 
 
 class SingletonMeta(type):
-
     r"""
     Ensure singletons via a meta class
     """
@@ -63,7 +58,6 @@ class _NonCriticalFilter(logging.Filter):
 
 
 class LogManager(metaclass=SingletonMeta):
-
     r"""
     Manage loggers used in the package
     """
@@ -184,7 +178,6 @@ def logged(obj: T) -> T:
 
 @logged
 class ConfigManager(metaclass=SingletonMeta):
-
     r"""
     Global configurations
     """
@@ -463,7 +456,6 @@ config = ConfigManager()
 
 @logged
 class DelayedKeyboardInterrupt:  # pragma: no cover
-
     r"""
     Shield a code block from keyboard interruptions, delaying handling
     till the block is finished (adapted from
@@ -494,7 +486,6 @@ class DelayedKeyboardInterrupt:  # pragma: no cover
 
 @logged
 class ConstrainedDataFrame(pd.DataFrame):
-
     r"""
     Data frame with certain format constraints
 
@@ -688,4 +679,3 @@ def run_command(
         raise RuntimeError(f"{executable} exited with error code: {ret}.{err_message}")
     if stdout == subprocess.PIPE and not print_output:
         return output_lines
-

@@ -25,6 +25,7 @@ def native_return(func):
         if isinstance(ret, np.generic):
             ret = ret.item()
         return ret
+
     return wrapped
 
 
@@ -172,7 +173,7 @@ def seurat_alignment_score(
     neighbor_frac: float = 0.01,
     n_repeats: int = 4,
     random_state: RandomState = None,
-    **kwargs
+    **kwargs,
 ) -> float:
     r"""
     Seurat alignment score
@@ -272,7 +273,7 @@ def neighbor_conservation(
     y: np.ndarray,
     batch: np.ndarray,
     neighbor_frac: float = 0.01,
-    **kwargs
+    **kwargs,
 ) -> float:
     r"""
     Neighbor conservation score
