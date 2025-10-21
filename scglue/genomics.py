@@ -9,6 +9,8 @@ from ast import literal_eval
 from functools import reduce
 from itertools import chain, product
 from operator import add
+from subprocess import DEVNULL, run
+from tempfile import TemporaryDirectory
 from typing import Any, Callable, List, Mapping, Optional, Union
 
 import networkx as nx
@@ -1059,6 +1061,132 @@ def read_ctx_grn(file: os.PathLike) -> nx.DiGraph:
     for tf in df.index:
         grn.nodes[tf]["target"] = "TF"
     return grn
+
+
+def build_tf_target_network(
+    rna: AnnData,
+    atac: AnnData,
+    gene2peak: nx.Graph,
+    genes: List[str],
+    peaks: List[str],
+    tfs: List[str],
+    motif_bed: Bed,
+) -> nx.Graph:
+    r"""
+    Build TF-target regulatory network using SCENIC approach
+
+    Parameters
+    ----------
+    rna
+        RNA AnnData
+    atac
+        ATAC AnnData
+    gene2peak
+        Gene to peak graph
+    genes
+        List of genes
+    peaks
+        List of peaks
+    tfs
+        List of transcription factors
+    motif_bed
+        Motif BED
+
+    Returns
+    -------
+    grn
+        TF-target regulatory network
+    """
+    with TemporaryDirectory() as tmpdir:
+        rna[:, np.union1d(genes, tfs)].write_loom(f"{tmpdir}/rna.loom")
+        np.savetxt(f"{tmpdir}/tfs.txt", tfs, fmt="%s")
+        run(
+            [
+                "pyscenic",
+                "grn",
+                f"{tmpdir}/rna.loom",
+                f"{tmpdir}/tfs.txt",
+                "-o",
+                f"{tmpdir}/draft_grn.csv",
+                "--seed",
+                "0",
+                "--num_workers",
+                "20",
+                "--cell_id_attribute",
+                "cells",
+                "--gene_attribute",
+                "genes",
+            ]
+        )
+        peak_bed = Bed(atac.var.loc[peaks])
+        peak2tf = window_graph(peak_bed, motif_bed, 0, right_sorted=True)
+        peak2tf = peak2tf.edge_subgraph(e for e in peak2tf.edges if e[1] in tfs)
+        gene2tf_rank_glue = cis_regulatory_ranking(
+            gene2peak,
+            peak2tf,
+            genes,
+            peaks,
+            tfs,
+            region_lens=atac.var.loc[peaks, "chromEnd"]
+            - atac.var.loc[peaks, "chromStart"],
+            random_state=0,
+        )
+        flank_bed = (
+            Bed(rna.var.loc[genes]).strand_specific_start_site().expand(500, 500)
+        )
+        flank2tf = window_graph(flank_bed, motif_bed, 0, right_sorted=True)
+
+        gene2flank = nx.Graph([(g, g) for g in genes])
+        gene2tf_rank_supp = cis_regulatory_ranking(
+            gene2flank, flank2tf, genes, genes, tfs, n_samples=0
+        )
+        gene2tf_rank_glue.columns = gene2tf_rank_glue.columns + "_glue"
+        gene2tf_rank_supp.columns = gene2tf_rank_supp.columns + "_supp"
+        write_scenic_feather(
+            gene2tf_rank_glue, f"{tmpdir}/glue.genes_vs_tracks.rankings.feather"
+        )
+        write_scenic_feather(
+            gene2tf_rank_supp, f"{tmpdir}/supp.genes_vs_tracks.rankings.feather"
+        )
+        pd.concat(
+            [
+                pd.DataFrame({"#motif_id": tfs + "_glue", "gene_name": tfs}),
+                pd.DataFrame({"#motif_id": tfs + "_supp", "gene_name": tfs}),
+            ]
+        ).assign(
+            motif_similarity_qvalue=0.0,
+            orthologous_identity=1.0,
+            description="placeholder",
+        ).to_csv(
+            f"{tmpdir}/ctx_annotation.tsv", sep="\t", index=False
+        )
+        run(
+            [
+                "pyscenic",
+                "ctx",
+                f"{tmpdir}/draft_grn.csv",
+                f"{tmpdir}/glue.genes_vs_tracks.rankings.feather",
+                f"{tmpdir}/supp.genes_vs_tracks.rankings.feather",
+                "--annotations_fname",
+                f"{tmpdir}/ctx_annotation.tsv",
+                "--expression_mtx_fname",
+                f"{tmpdir}/rna.loom",
+                "--output",
+                f"{tmpdir}/pruned_grn.csv",
+                "--rank_threshold",
+                "500",
+                "--min_genes",
+                "1",
+                "--num_workers",
+                "20",
+                "--cell_id_attribute",
+                "cells",
+                "--gene_attribute",
+                "genes",
+            ],
+            stderr=DEVNULL,
+        )
+        return read_ctx_grn(f"{tmpdir}/pruned_grn.csv")
 
 
 def get_chr_len_from_fai(fai: os.PathLike) -> Mapping[str, int]:
