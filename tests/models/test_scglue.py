@@ -341,7 +341,7 @@ def test_abnormal(rna_pp, atac_pp, guidance, tmp_path, model):
     atac_pp_cp.X = atac_pp_cp.X.astype(np.float64)
     atac_pp_cp.write_h5ad(tmp_path / "atac_pp_cp.h5ad")
     atac_pp_cp = anndata.read_h5ad(tmp_path / "atac_pp_cp.h5ad", backed="r")
-    with pytest.raises(RuntimeError):
+    with pytest.raises(AttributeError):
         glue.fit({"rna": rna_pp, "atac": atac_pp_cp}, guidance, directory=tmp_path)
 
     with pytest.raises(ValueError):

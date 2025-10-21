@@ -18,6 +18,7 @@ import torch.distributions as D
 import torch.nn.functional as F
 from anndata import AnnData
 
+from ..data import get_dataset_config
 from ..graph import check_graph
 from ..num import normalize_edges
 from ..utils import AUTO, config, get_chained_attr, logged
@@ -768,12 +769,7 @@ class SCGLUEModel(Model):
         v2g = sc.GraphDecoder()
         self.modalities, idx, x2u, u2x, all_ct = {}, {}, {}, {}, set()
         for k, adata in adatas.items():
-            if config.ANNDATA_KEY not in adata.uns:
-                raise ValueError(
-                    f"The '{k}' dataset has not been configured. "
-                    f"Please call `configure_dataset` first!"
-                )
-            data_config = copy.deepcopy(adata.uns[config.ANNDATA_KEY])
+            data_config = copy.deepcopy(get_dataset_config(adata))
             if data_config["rep_dim"] and data_config["rep_dim"] < latent_dim:
                 self.logger.warning(
                     "It is recommended that `use_rep` dimensionality "
@@ -1027,12 +1023,14 @@ class SCGLUEModel(Model):
                 ceil(self.PATIENCE_PRG / self.trainer.lr / batch_per_epoch),
                 ceil(self.PATIENCE_PRG),
             )
+            patience = min(patience, 30)
             self.logger.info("Setting `patience` = %d", patience)
         if reduce_lr_patience == AUTO:
             reduce_lr_patience = max(
                 ceil(self.REDUCE_LR_PATIENCE_PRG / self.trainer.lr / batch_per_epoch),
                 ceil(self.REDUCE_LR_PATIENCE_PRG),
             )
+            reduce_lr_patience = min(reduce_lr_patience, 15)
             self.logger.info("Setting `reduce_lr_patience` = %d", reduce_lr_patience)
 
         if self.trainer.freeze_u:

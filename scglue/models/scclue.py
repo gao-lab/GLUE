@@ -23,6 +23,7 @@ import torch.distributions as D
 import torch.nn.functional as F
 from anndata import AnnData
 
+from ..data import get_dataset_config
 from ..num import EPS
 from ..utils import config, get_chained_attr, logged
 from .base import Model, Trainer, TrainingPlugin
@@ -40,7 +41,6 @@ AUTO = -1  # Flag for using automatically determined hyperparameters
 
 @logged
 class Transferrable(torch.nn.Module):
-
     r"""
     Mixin class for transferrable weights
     """
@@ -67,7 +67,6 @@ class Transferrable(torch.nn.Module):
 
 @logged
 class BatchedTransferrable(Transferrable):
-
     r"""
     Mixin class for transferrable weights containing expandable batch-specific
     weights at the end of second dimension
@@ -504,7 +503,6 @@ class Discriminator(torch.nn.Sequential, BatchedTransferrable):
 
 
 class Classifier(torch.nn.Linear, Transferrable):
-
     r"""
     Linear label classifier
 
@@ -791,7 +789,7 @@ class SCCLUETrainer(Trainer):
                 k: -net.u2x[k](
                     usamp_mean_split[i, m],
                     xbch[k][m],
-                    None if l[k] is None else l[k][m, i]
+                    None if l[k] is None else l[k][m, i],
                     # FIXME: This is directly using target modality estimated l.
                     # We are supposed to use source modality estimated l as well.
                     # Maybe take an average like in usamp? But l does not have
@@ -1043,12 +1041,7 @@ class SCCLUEModel(Model):
 
         self.modalities, x2u, u2x, all_ct = {}, {}, {}, set()
         for k, adata in adatas.items():
-            if config.ANNDATA_KEY not in adata.uns:
-                raise ValueError(
-                    f"The '{k}' dataset has not been configured. "
-                    f"Please call `configure_dataset` first!"
-                )
-            data_config = copy.deepcopy(adata.uns[config.ANNDATA_KEY])
+            data_config = copy.deepcopy(get_dataset_config(adata))
             if data_config["rep_dim"] and data_config["rep_dim"] < latent_dim:
                 self.logger.warning(
                     "It is recommended that `use_rep` dimensionality "
@@ -1110,9 +1103,11 @@ class SCCLUEModel(Model):
             u2x,
             du,
             prior,
-            u2c=None
-            if all_ct.empty
-            else Classifier(latent_dim * len(self.modalities), all_ct.size),
+            u2c=(
+                None
+                if all_ct.empty
+                else Classifier(latent_dim * len(self.modalities), all_ct.size)
+            ),
         )
 
     def adopt_pretrained_model(self, source: "SCCLUEModel") -> None:

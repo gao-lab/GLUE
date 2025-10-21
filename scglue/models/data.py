@@ -13,6 +13,7 @@ import uuid
 from math import ceil
 from typing import Any, List, Mapping, Optional, Tuple
 
+import dask.array as da
 import h5py
 import networkx as nx
 import numpy as np
@@ -20,6 +21,7 @@ import pandas as pd
 import scipy.sparse
 import torch
 from anndata import AnnData
+from anndata.experimental.multi_files._anncollection import AnnCollection
 
 try:
     from anndata._core.sparse_dataset import SparseDataset
@@ -350,7 +352,10 @@ class AnnDataset(Dataset):
         self.sizes = [adata.shape[0] for adata in adatas]
         if min(self.sizes) == 0:
             raise ValueError("Empty dataset is not allowed!")
-        self._adatas = adatas
+        self._adatas = [
+            adata[adata.obs_names] if isinstance(adata, AnnCollection) else adata
+            for adata in adatas
+        ]  # Make AnnCollectionView if is AnnCollection
 
     @data_configs.setter
     def data_configs(self, data_configs: List[DATA_CONFIG]) -> None:
@@ -413,12 +418,13 @@ class AnnDataset(Dataset):
     @staticmethod
     def _index_array(arr: AnyArray, idx: np.ndarray, nan_sparse: bool) -> np.ndarray:
         if isinstance(arr, (h5py.Dataset, SparseDataset)):
+            # Convert to sequential access and back
             rank = scipy.stats.rankdata(idx, method="dense") - 1
             sorted_idx = np.empty(rank.max() + 1, dtype=int)
             sorted_idx[rank] = idx
-            arr = arr[sorted_idx.tolist()][
-                rank.tolist()
-            ]  # Convert to sequential access and back
+            arr = arr[sorted_idx.tolist()][rank.tolist()]
+        elif isinstance(arr, da.Array):
+            arr = arr[idx].compute()
         else:
             arr = arr[idx]
         if scipy.sparse.issparse(arr):
@@ -521,10 +527,7 @@ class AnnDataset(Dataset):
         return xuid, (x, xrep, xbch, xlbl, xdwt)
 
     def _extract_x(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:
-        features = data_config["features"]
         use_layer = data_config["use_layer"]
-        if not np.array_equal(adata.var_names, features):
-            adata = adata[:, features]  # This will load all data to memory if backed
         if use_layer:
             if use_layer not in adata.layers:
                 raise ValueError(
@@ -535,15 +538,15 @@ class AnnDataset(Dataset):
         else:
             x = adata.X
         default_dtype = get_default_numpy_dtype(np.iscomplexobj(x))
-        if x.dtype.type is not default_dtype:
-            if isinstance(x, (h5py.Dataset, SparseDataset)):
-                raise RuntimeError(
-                    f"User is responsible for ensuring a {default_dtype} dtype "
-                    f"when using backed data!"
-                )
-            x = x.astype(default_dtype)
         if scipy.sparse.issparse(x):
             x = x.tocsr()
+        if x.dtype.type is not default_dtype:
+            x = x.astype(default_dtype)
+
+        features = data_config["features"]
+        if not np.array_equal(adata.var_names, features):
+            feature_indexer = adata.var_names.get_indexer(features)
+            x = x[:, feature_indexer]  # This will load all data to memory if backed
         return x
 
     def _extract_xrep(self, adata: AnnData, data_config: DATA_CONFIG) -> AnyArray:

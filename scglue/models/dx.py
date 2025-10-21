@@ -16,8 +16,8 @@ except ImportError:  # Newer version of anndata
         BaseCompressedSparseDataset as SparseDataset,
     )
 
-from ..data import count_prep, metacell_corr
-from ..utils import config, logged
+from ..data import count_prep, get_dataset_config, metacell_corr
+from ..utils import logged
 from .scglue import SCGLUEModel
 
 
@@ -67,7 +67,7 @@ def integration_consistency(
         adata.obsm["X_glue"] = model.encode_data(k, adata)
 
     for k, adata in adatas.items():
-        use_layer = adata.uns[config.ANNDATA_KEY]["use_layer"]
+        use_layer = get_dataset_config(adata)["use_layer"]
         if use_layer:
             logger.info('Using layer "%s" for modality "%s"', use_layer, k)
             adata.X = adata.layers[use_layer]
@@ -75,7 +75,7 @@ def integration_consistency(
     if "agg_fns" not in kwargs:
         agg_fns = []
         for k, adata in adatas.items():
-            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
+            if get_dataset_config(adata)["prob_model"] in ("NB", "ZINB"):
                 logger.info('Selecting aggregation "sum" for modality "%s"', k)
                 agg_fns.append("sum")
             else:
@@ -86,7 +86,7 @@ def integration_consistency(
     if "prep_fns" not in kwargs:
         prep_fns = []
         for k, adata in adatas.items():
-            if adata.uns[config.ANNDATA_KEY]["prob_model"] in ("NB", "ZINB"):
+            if get_dataset_config(adata)["prob_model"] in ("NB", "ZINB"):
                 logger.info('Selecting log-norm preprocessing for modality "%s"', k)
                 prep_fns.append(count_prep)
             else:

@@ -10,6 +10,7 @@ from itertools import chain
 from typing import Callable, List, Mapping, Optional
 
 import anndata as ad
+import dask.array as da
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -22,6 +23,10 @@ import sklearn.neighbors
 import sklearn.preprocessing
 import sklearn.utils.extmath
 from anndata import AnnData
+from anndata.experimental.multi_files._anncollection import (
+    AnnCollection,
+    AnnCollectionView,
+)
 from networkx.algorithms.bipartite import biadjacency_matrix
 from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import MultiLabelBinarizer, normalize
@@ -31,7 +36,141 @@ from tqdm.auto import tqdm
 
 from . import genomics, num
 from .typehint import Kws
-from .utils import logged
+from .utils import config, logged
+
+
+@logged
+def configure_dataset(
+    adata: AnnData,
+    prob_model: str,
+    use_highly_variable: bool = True,
+    use_layer: Optional[str] = None,
+    use_rep: Optional[str] = None,
+    use_batch: Optional[str] = None,
+    use_cell_type: Optional[str] = None,
+    use_dsc_weight: Optional[str] = None,
+    use_obs_names: bool = False,
+    nan_sparse: bool = False,
+) -> None:
+    r"""
+    Configure dataset for model training
+
+    Parameters
+    ----------
+    adata
+        Dataset to be configured
+    prob_model
+        Probabilistic generative model used by the decoder,
+        must be one of ``{"Normal", "ZIN", "ZILN", "NB", "ZINB", "Beta"}``.
+    use_highly_variable
+        Whether to use highly variable features
+    use_layer
+        Data layer to use (key in ``adata.layers``)
+    use_rep
+        Data representation to use as the first encoder transformation
+        (key in ``adata.obsm``)
+    use_batch
+        Data batch to use (key in ``adata.obs``)
+    use_cell_type
+        Data cell type to use (key in ``adata.obs``)
+    use_dsc_weight
+        Discriminator sample weight to use (key in ``adata.obs``)
+    use_obs_names
+        Whether to use ``obs_names`` to mark paired cells across
+        different datasets
+    nan_sparse
+        Whether missing entries in sparse matrix indicate nan
+
+    Note
+    -----
+    The ``use_rep`` option applies to encoder inputs, but not the decoders,
+    which are always fitted on data in the original space.
+    """
+    if isinstance(adata, AnnCollection):
+        adata = adata[adata.obs_names]  # Make view
+    if isinstance(adata, AnnCollectionView):
+        var = adata.adatas[0].var
+        uns = adata.adatas[0].uns
+    else:
+        var = adata.var
+        uns = adata.uns
+    obs = adata.obs
+    obsm = adata.obsm
+    layers = adata.layers
+    var_names = adata.var_names
+
+    if config.ANNDATA_KEY in uns:
+        configure_dataset.logger.warning(
+            "`configure_dataset` has already been called. "
+            "Previous configuration will be overwritten!"
+        )
+    data_config = {}
+    data_config["prob_model"] = prob_model
+    if use_highly_variable:
+        if "highly_variable" not in var:
+            raise ValueError("Please mark highly variable features first!")
+        data_config["use_highly_variable"] = True
+        data_config["features"] = var.query("highly_variable").index.to_numpy().tolist()
+    else:
+        data_config["use_highly_variable"] = False
+        data_config["features"] = var_names.to_numpy().tolist()
+    if use_layer:
+        if use_layer not in layers:
+            raise ValueError("Invalid `use_layer`!")
+        data_config["use_layer"] = use_layer
+    else:
+        data_config["use_layer"] = None
+    if use_rep:
+        if use_rep not in obsm:
+            raise ValueError("Invalid `use_rep`!")
+        data_config["use_rep"] = use_rep
+        data_config["rep_dim"] = obsm[use_rep].shape[1]
+    else:
+        data_config["use_rep"] = None
+        data_config["rep_dim"] = None
+    if use_batch:
+        if use_batch not in obs:
+            raise ValueError("Invalid `use_batch`!")
+        data_config["use_batch"] = use_batch
+        data_config["batches"] = (
+            pd.Index(obs[use_batch]).dropna().drop_duplicates().sort_values().to_numpy()
+        )  # AnnData does not support saving pd.Index in uns
+    else:
+        data_config["use_batch"] = None
+        data_config["batches"] = None
+    if use_cell_type:
+        if use_cell_type not in obs:
+            raise ValueError("Invalid `use_cell_type`!")
+        data_config["use_cell_type"] = use_cell_type
+        data_config["cell_types"] = (
+            pd.Index(obs[use_cell_type])
+            .dropna()
+            .drop_duplicates()
+            .sort_values()
+            .to_numpy()
+        )  # AnnData does not support saving pd.Index in uns
+    else:
+        data_config["use_cell_type"] = None
+        data_config["cell_types"] = None
+    if use_dsc_weight:
+        if use_dsc_weight not in obs:
+            raise ValueError("Invalid `use_dsc_weight`!")
+        data_config["use_dsc_weight"] = use_dsc_weight
+    else:
+        data_config["use_dsc_weight"] = None
+    data_config["use_obs_names"] = use_obs_names
+    data_config["nan_sparse"] = nan_sparse
+    uns[config.ANNDATA_KEY] = data_config
+
+
+def get_dataset_config(adata: AnnData) -> Mapping:
+    if isinstance(adata, (AnnCollection, AnnCollectionView)):
+        uns = adata.adatas[0].uns
+    else:
+        uns = adata.uns
+    if config.ANNDATA_KEY not in uns:
+        raise ValueError("Please call `configure_dataset` first!")
+    return uns[config.ANNDATA_KEY]
 
 
 def count_prep(adata: AnnData) -> None:
@@ -319,7 +458,7 @@ def get_gene_annotation(
 
 def aggregate_obs(
     adata: AnnData,
-    by: str,
+    by: str | pd.Series,
     X_agg: Optional[str] = "sum",
     obs_agg: Optional[Mapping[str, str]] = None,
     obsm_agg: Optional[Mapping[str, str]] = None,
@@ -335,8 +474,8 @@ def aggregate_obs(
     adata
         Dataset to be aggregated
     by
-        Specify a column in ``adata.obs`` used for aggregation,
-        must be discrete.
+        Specify a column in ``adata.obs`` (must be discrete) or an external
+        cell category annotation used for aggregation.
     X_agg
         Aggregation function for ``adata.X``, must be one of
         ``{"sum", "mean", ``None``}``. Setting to ``None`` discards
@@ -368,28 +507,59 @@ def aggregate_obs(
     obsm_agg = obsm_agg or {}
     layers_agg = layers_agg or {}
 
-    by = adata.obs[by].str.split(separator).map(frozenset)
+    if isinstance(by, str):
+        by = adata.obs[by]
+    elif not isinstance(by, pd.Series):
+        raise ValueError("`by` must be a column name or a pandas Series!")
+    by = by.str.split(separator).map(frozenset)
     na = by.isna()
     by.loc[na] = [[]] * na.sum()
     agg_idx = by.explode().dropna().unique()
     agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
     agg_sum = agg_sum.T
 
+    def _matmul_blocks(a_blocks, x_blocks):
+        out = None
+        for a, x in zip(a_blocks, x_blocks):
+            prod = a @ x
+            out = prod if out is None else (out + prod)
+        return out.tocsr()
+
+    def _matmul(a, x):
+        if isinstance(x, da.Array):
+            x = x.rechunk({1: 10000})  # Reasonable column chunk size
+            a = da.from_array(a, chunks=(a.shape[0], x.chunks[0]), asarray=False)
+            meta = scipy.sparse.csr_matrix(
+                (0, 0), dtype=np.result_type(a.dtype, x.dtype)
+            )
+            return da.blockwise(
+                _matmul_blocks,
+                "ik",
+                a,
+                "ij",
+                x,
+                "jk",
+                dtype=meta.dtype,
+                meta=meta,
+                concatenate=False,
+            )
+        return a @ x
+
     def _sum(x):
-        return agg_sum @ x
+        return _matmul(agg_sum, x)
 
     def _mean(x):
         if scipy.sparse.issparse(x) and nan_sparse:
             mask = x.copy()
             mask.data = np.ones_like(mask.data)
-            S = (agg_sum @ x).toarray()
-            C = (agg_sum @ mask).tocoo()
+            S = _matmul(agg_sum, x).toarray()
+            C = _matmul(agg_sum, mask).tocoo()
             C.eliminate_zeros()
             row, col, data = C.row, C.col, C.data
             return scipy.sparse.csr_matrix(
                 (S[row, col] / data, (row, col)), shape=C.shape
             )
-        return agg_sum.multiply(1 / agg_sum.sum(axis=1)) @ x
+        return _matmul(agg_sum.multiply(1 / agg_sum.sum(axis=1)), x)
 
     def _majority(x):
         df = pd.DataFrame({"by": by, "x": x}).explode("by")
@@ -407,15 +577,16 @@ def aggregate_obs(
     for c in obs:
         if pd.api.types.is_categorical_dtype(adata.obs[c]):
             obs[c] = pd.Categorical(obs[c], categories=adata.obs[c].cat.categories)
-    return AnnData(
-        X=X,
-        obs=obs,
-        var=adata.var,
-        obsm=obsm,
-        varm=adata.varm,
-        layers=layers,
-        uns=adata.uns,
-    )
+
+    if isinstance(adata, (AnnCollection, AnnCollectionView)):
+        var = adata.adatas[0].var
+        varm = adata.adatas[0].varm
+        uns = adata.adatas[0].uns
+    else:
+        var = adata.var
+        varm = adata.varm
+        uns = adata.uns
+    return AnnData(X=X, obs=obs, var=var, obsm=obsm, varm=varm, layers=layers, uns=uns)
 
 
 def aggregate_var(
@@ -878,22 +1049,9 @@ def get_metacells(
         raise ValueError("Missing required argument `use_rep`!")
     if n_meta is None:
         raise ValueError("Missing required argument `n_meta`!")
-    adatas = [
-        AnnData(
-            X=adata.X,
-            obs=adata.obs.set_index(adata.obs_names + f"-{i}"),
-            var=adata.var,
-            obsm=adata.obsm,
-            varm=adata.varm,
-            layers=adata.layers,
-            uns=adata.uns,
-            dtype=None if adata.X is None else adata.X.dtype,
-        )
-        for i, adata in enumerate(adatas)
-    ]  # Avoid unwanted updates to the input objects
 
     get_metacells.logger.info("Clustering metacells...")
-    combined = ad.concat(adatas)
+    combined = ad.concat(adatas) if len(adatas) > 1 else adatas[0]
     try:
         import faiss
 
@@ -901,7 +1059,7 @@ def get_metacells(
             combined.obsm[use_rep].shape[1], n_meta, gpu=False, seed=seed
         )
         kmeans.train(combined.obsm[use_rep])
-        _, combined.obs["metacell"] = kmeans.index.search(combined.obsm[use_rep], 1)
+        _, metacell = kmeans.index.search(combined.obsm[use_rep], 1)
     except ImportError:
         get_metacells.logger.warning(
             "`faiss` is not installed, using `sklearn` instead... "
@@ -910,17 +1068,16 @@ def get_metacells(
             "https://github.com/facebookresearch/faiss/blob/main/INSTALL.md"
         )
         kmeans = sklearn.cluster.KMeans(n_clusters=n_meta, random_state=seed)
-        combined.obs["metacell"] = kmeans.fit_predict(combined.obsm[use_rep])
-    combined.obs["metacell"] = combined.obs["metacell"].astype(str)
-    for adata in adatas:
-        adata.obs["metacell"] = combined[adata.obs_names].obs["metacell"]
+        metacell = kmeans.fit_predict(combined.obsm[use_rep])
+    metacell = pd.Series(metacell.ravel(), index=combined.obs_names).astype(str)
 
     get_metacells.logger.info("Aggregating metacells...")
     agg_kws = agg_kws or [{}] * len(adatas)
     if not len(agg_kws) == len(adatas):
         raise ValueError("Length of `agg_kws` must match the number of datasets!")
     adatas = [
-        aggregate_obs(adata, "metacell", **kws) for adata, kws in zip(adatas, agg_kws)
+        aggregate_obs(adata, metacell.loc[adata.obs_names], **kws)
+        for adata, kws in zip(adatas, agg_kws)
     ]
     if common:
         common_metacells = list(
