@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "scglue"
-version = "0.5.0"
+version = "0.5.1"
 description = "Graph-linked unified embedding for unpaired single-cell multi-omics data integration"
 readme = "README.md"
 requires-python = ">=3.6"
@@ -39,6 +39,7 @@ dependencies = [
     "pandas>=1.1",
     "matplotlib>=3.1.2",
     "seaborn>=0.9",
+    "dask",
     "dill>=0.2.3",
     "tqdm>=4.27",
     "scikit-learn>=0.21.2",
