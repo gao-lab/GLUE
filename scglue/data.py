@@ -669,8 +669,13 @@ def aggregate_var(
     agg_idx = by.explode().dropna().unique()
     agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
 
+    def _matmul(x, a):
+        if x.ndim == 1:
+            return a.T @ x
+        return x @ a
+
     def _sum(x):
-        return x @ agg_sum
+        return _matmul(x, agg_sum)
 
     def _mean(x):
         if scipy.sparse.issparse(x) and nan_sparse:
@@ -683,7 +688,7 @@ def aggregate_var(
             return scipy.sparse.csr_matrix(
                 (S[row, col] / data, (row, col)), shape=C.shape
             )
-        return x @ agg_sum.multiply(1 / agg_sum.sum(axis=0))
+        return _matmul(x, agg_sum.multiply(1 / agg_sum.sum(axis=0)))
 
     def _majority(x):
         df = pd.DataFrame({"by": by, "x": x}).explode("by")
