@@ -464,6 +464,7 @@ def aggregate_obs(
     obsm_agg: Optional[Mapping[str, str]] = None,
     layers_agg: Optional[Mapping[str, str]] = None,
     separator: str = ",",
+    majority_cutoff: float = 0.6,
     nan_sparse: bool = False,
 ) -> AnnData:
     r"""
@@ -482,9 +483,10 @@ def aggregate_obs(
         the ``adata.X`` matrix.
     obs_agg
         Aggregation methods for ``adata.obs``, indexed by obs columns,
-        must be one of ``{"sum", "mean", "majority"}``, where ``"sum"``
-        and ``"mean"`` are for continuous data, and ``"majority"`` is for
-        discrete data. Fields not specified will be discarded.
+        must be one of ``{"sum", "mean", "majority", "join"}``, where ``"sum"``
+        and ``"mean"`` are for continuous data, and ``"majority"`` and
+        ``"join"`` are for discrete data.
+        Fields not specified will be discarded.
     obsm_agg
         Aggregation methods for ``adata.obsm``, indexed by obsm keys,
         must be one of ``{"sum", "mean"}``. Fields not specified will be
@@ -494,7 +496,10 @@ def aggregate_obs(
         must be one of ``{"sum", "mean"}``. Fields not specified will be
         discarded.
     separator
-        Separator between multiple values in the groupby column
+        Separator between multiple values in the groupby column and for the
+        join operation
+    majority_cutoff
+        Minimum proportion for the top category to be taken as the majority
     nan_sparse
         Whether missing entries in sparse matrix indicate nan
 
@@ -563,9 +568,22 @@ def aggregate_obs(
 
     def _majority(x):
         df = pd.DataFrame({"by": by, "x": x}).explode("by")
-        return pd.crosstab(df["by"], df["x"]).idxmax(axis=1).loc[agg_idx].to_numpy()
+        tab = pd.crosstab(df["by"], df["x"])
+        prop = tab.div(tab.sum(axis=1), axis=0)
+        top = prop.idxmax(axis=1)
+        top[prop.max(axis=1) < majority_cutoff] = np.nan
+        return top.loc[agg_idx].to_numpy()
 
-    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
+    def _join(x):
+        joined = (
+            pd.DataFrame({"by": by, "x": x})
+            .explode("by")
+            .groupby("by")["x"]
+            .agg(lambda x: separator.join(x.astype(str)))
+        )
+        return joined.loc[agg_idx].to_numpy()
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority, "join": _join}
 
     X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
     obs = pd.DataFrame(
@@ -597,6 +615,7 @@ def aggregate_var(
     varm_agg: Optional[Mapping[str, str]] = None,
     layers_agg: Optional[Mapping[str, str]] = None,
     separator: str = ",",
+    majority_cutoff: float = 0.6,
     nan_sparse: bool = False,
 ) -> AnnData:
     r"""
@@ -615,9 +634,10 @@ def aggregate_var(
         the ``adata.X`` matrix.
     var_agg
         Aggregation methods for ``adata.var``, indexed by var columns,
-        must be one of ``{"sum", "mean", "majority"}``, where ``"sum"``
-        and ``"mean"`` are for continuous data, and ``"majority"`` is for
-        discrete data. Fields not specified will be discarded.
+        must be one of ``{"sum", "mean", "majority", "join"}``, where ``"sum"``
+        and ``"mean"`` are for continuous data, and ``"majority"`` and
+        ``"join"`` are for discrete data.
+        Fields not specified will be discarded.
     varm_agg
         Aggregation methods for ``adata.varm``, indexed by varm keys,
         must be one of ``{"sum", "mean"}``. Fields not specified will be
@@ -627,7 +647,10 @@ def aggregate_var(
         must be one of ``{"sum", "mean"}``. Fields not specified will be
         discarded.
     separator
-        Separator between multiple values in the groupby column
+        Separator between multiple values in the groupby column and for the
+        join operation
+    majority_cutoff
+        Minimum proportion for the top category to be taken as the majority
     nan_sparse
         Whether missing entries in sparse matrix indicate nan
 
@@ -663,9 +686,23 @@ def aggregate_var(
         return x @ agg_sum.multiply(1 / agg_sum.sum(axis=0))
 
     def _majority(x):
-        pd.crosstab(by, x).idxmax(axis=1).loc[agg_idx].to_numpy(),
+        df = pd.DataFrame({"by": by, "x": x}).explode("by")
+        tab = pd.crosstab(df["by"], df["x"])
+        prop = tab.div(tab.sum(axis=1), axis=0)
+        top = prop.idxmax(axis=1)
+        top[prop.max(axis=1) < majority_cutoff] = np.nan
+        return top.loc[agg_idx].to_numpy()
 
-    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority}
+    def _join(x):
+        joined = (
+            pd.DataFrame({"by": by, "x": x})
+            .explode("by")
+            .groupby("by")["x"]
+            .agg(lambda x: separator.join(x.astype(str)))
+        )
+        return joined.loc[agg_idx].to_numpy()
+
+    agg_method = {"sum": _sum, "mean": _mean, "majority": _majority, "join": _join}
 
     X = agg_method[X_agg](adata.X) if X_agg and adata.X is not None else None
     var = pd.DataFrame(
@@ -677,6 +714,7 @@ def aggregate_var(
     for c in var:
         if pd.api.types.is_categorical_dtype(adata.var[c]):
             var[c] = pd.Categorical(var[c], categories=adata.var[c].cat.categories)
+
     return AnnData(
         X=X,
         obs=adata.obs,
