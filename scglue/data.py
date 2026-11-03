@@ -188,11 +188,11 @@ def count_prep(adata: AnnData) -> None:
 
 
 @logged
-def calc_hypo_score(
+def calc_hypo_ratio(
     adata: AnnData, mc_layer: str = "mc", cov_layer: str = "cov", chunk_size: int = 1000
 ) -> None:
     r"""
-    Calculates the hypo-methylation score as X based on methylated counts and
+    Calculates the hypo-methylation ratio as X based on methylated counts and
     total coverage stored in separate layers
 
     Parameters
@@ -207,17 +207,17 @@ def calc_hypo_score(
         Number of cells to include per chunk
     """
     if adata.X is not None:
-        calc_hypo_score.logger.warning("Current X will be overwritten!")
+        calc_hypo_ratio.logger.warning("Current X will be overwritten!")
 
-    calc_hypo_score.logger.info("Ensuring CSR format...")
+    calc_hypo_ratio.logger.info("Ensuring CSR format...")
     mc = adata.layers[mc_layer].tocsr()
     cov = adata.layers[cov_layer].tocsr()
 
-    calc_hypo_score.logger.info("Computing denominator...")
+    calc_hypo_ratio.logger.info("Computing denominator...")
     denom = cov.astype(np.float32)
     denom.data = 1 / denom.data
 
-    calc_hypo_score.logger.info("Normalizing in chunks...")
+    calc_hypo_ratio.logger.info("Normalizing in chunks...")
     chunks = []
     for start in tqdm(range(0, denom.shape[0], chunk_size)):
         end = start + chunk_size
@@ -225,12 +225,12 @@ def calc_hypo_score(
         chunk_max = chunk.data.max()
         if chunk_max > 1:
             if chunk_max > 1.001:  # Unlikely rounding error
-                calc_hypo_score.logger.warning(f"Clipping mc > cov at {start}:{end}")
+                calc_hypo_ratio.logger.warning(f"Clipping mc > cov at {start}:{end}")
             chunk.data = chunk.data.clip(0, 1)
         chunk.data = 1 - chunk.data
         chunks.append(chunk)
 
-    calc_hypo_score.logger.info("Stacking chunks...")
+    calc_hypo_ratio.logger.info("Stacking chunks...")
     adata.X = scipy.sparse.vstack(chunks).tocsr()
 
 
@@ -516,9 +516,10 @@ def aggregate_obs(
         by = adata.obs[by]
     elif not isinstance(by, pd.Series):
         raise ValueError("`by` must be a column name or a pandas Series!")
-    by = by.str.split(separator).map(frozenset)
+    by = by.str.split(separator)
     na = by.isna()
     by.loc[na] = [[]] * na.sum()
+    by = by.map(frozenset)
     agg_idx = by.explode().dropna().unique()
     agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
     agg_sum = agg_sum.T
@@ -572,7 +573,7 @@ def aggregate_obs(
         prop = tab.div(tab.sum(axis=1), axis=0)
         top = prop.idxmax(axis=1)
         top[prop.max(axis=1) < majority_cutoff] = np.nan
-        return top.loc[agg_idx].to_numpy()
+        return top.reindex(agg_idx).to_numpy()
 
     def _join(x):
         joined = (
@@ -581,7 +582,7 @@ def aggregate_obs(
             .groupby("by")["x"]
             .agg(lambda x: separator.join(x.astype(str)))
         )
-        return joined.loc[agg_idx].to_numpy()
+        return joined.reindex(agg_idx).to_numpy()
 
     agg_method = {"sum": _sum, "mean": _mean, "majority": _majority, "join": _join}
 
@@ -666,6 +667,7 @@ def aggregate_var(
     by = adata.var[by].str.split(separator)
     na = by.isna()
     by.loc[na] = [[]] * na.sum()
+    by = by.map(frozenset)
     agg_idx = by.explode().dropna().unique()
     agg_sum = MultiLabelBinarizer(classes=agg_idx, sparse_output=True).fit_transform(by)
 
@@ -696,7 +698,7 @@ def aggregate_var(
         prop = tab.div(tab.sum(axis=1), axis=0)
         top = prop.idxmax(axis=1)
         top[prop.max(axis=1) < majority_cutoff] = np.nan
-        return top.loc[agg_idx].to_numpy()
+        return top.reindex(agg_idx).to_numpy()
 
     def _join(x):
         joined = (
@@ -705,7 +707,7 @@ def aggregate_var(
             .groupby("by")["x"]
             .agg(lambda x: separator.join(x.astype(str)))
         )
-        return joined.loc[agg_idx].to_numpy()
+        return joined.reindex(agg_idx).to_numpy()
 
     agg_method = {"sum": _sum, "mean": _mean, "majority": _majority, "join": _join}
 
