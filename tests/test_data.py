@@ -86,6 +86,19 @@ def test_estimate_balancing_weight(rna_pp, atac_pp):
     )  # NOTE: Smoke test
 
 
+def test_get_metacells(rna_pp, atac_pp):
+    atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
+    rna_agg, atac_agg = scglue.data.get_metacells(
+        rna_pp, atac_pp, use_rep="X_pca", n_meta=5, common=False
+    )
+    for adata, agg in [(rna_pp, rna_agg), (atac_pp, atac_agg)]:
+        assert set(adata.obs["metacell"]) == set(agg.obs_names)
+        for metacell, cells in adata.obs.groupby("metacell").groups.items():
+            cmp_arrays(
+                agg[metacell].X.sum(axis=0), adata[cells].X.sum(axis=0), squeeze=True
+            )
+
+
 def test_metacell_corr(rna_pp, atac_pp, guidance):
     atac_pp.obsm["X_pca"] = atac_pp.obsm["X_lsi"]
     with pytest.raises(ValueError):

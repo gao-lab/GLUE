@@ -1092,6 +1092,10 @@ def get_metacells(
     with the dataset itself.
     When multiple datasets are provided, the metacells are clustered
     jointly with all datasets.
+
+    The metacell assignment of each cell is stored as ``obs["metacell"]``
+    in the input datasets, which matches ``obs_names`` of the returned
+    metacells.
     """
     if use_rep is None:
         raise ValueError("Missing required argument `use_rep`!")
@@ -1117,15 +1121,18 @@ def get_metacells(
         )
         kmeans = sklearn.cluster.KMeans(n_clusters=n_meta, random_state=seed)
         metacell = kmeans.fit_predict(combined.obsm[use_rep])
-    metacell = pd.Series(metacell.ravel(), index=combined.obs_names).astype(str)
+    # Split by position, as paired datasets share obs_names
+    metacell = metacell.ravel().astype(str)
+    sizes = [adata.n_obs for adata in adatas]
+    for adata, item in zip(adatas, np.split(metacell, np.cumsum(sizes)[:-1])):
+        adata.obs["metacell"] = item
 
     get_metacells.logger.info("Aggregating metacells...")
     agg_kws = agg_kws or [{}] * len(adatas)
     if not len(agg_kws) == len(adatas):
         raise ValueError("Length of `agg_kws` must match the number of datasets!")
     adatas = [
-        aggregate_obs(adata, metacell.loc[adata.obs_names], **kws)
-        for adata, kws in zip(adatas, agg_kws)
+        aggregate_obs(adata, "metacell", **kws) for adata, kws in zip(adatas, agg_kws)
     ]
     if common:
         common_metacells = list(
