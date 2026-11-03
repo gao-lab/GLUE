@@ -954,6 +954,9 @@ def estimate_balancing_weight(
     (where :math:`K` is the average number of clusters per dataset,
     and :math:`n` is the number of datasets), a sparse implementation
     was used, so the scalability regarding dataset number should be good.
+
+    Leiden clustering requires the optional ``leidenalg`` package,
+    which can be installed via ``pip install scglue[leiden]``.
     """
     if use_batch:  # Recurse per batch
         estimate_balancing_weight.logger.info("Splitting batches...")

@@ -94,6 +94,9 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     ----
     Follows the definition in `OpenProblems NeurIPS 2021 competition
     <https://openproblems.bio/neurips_docs/about_tasks/task3_joint_embedding/>`__
+
+    Leiden clustering requires the optional ``leidenalg`` package,
+    which can be installed via ``pip install scglue[leiden]``.
     """
     x = AnnData(X=x, dtype=x.dtype)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X")
