@@ -1,6 +1,43 @@
 Release notes
 =============
 
+v0.5.2
+------
+
+Breaking changes:
+
+- ``leidenalg`` is no longer installed by default. It is required by `estimate_balancing_weight <api/scglue.data.estimate_balancing_weight.rst>`__
+  (called by `fit_SCGLUE <api/scglue.models.fit_SCGLUE.rst>`__ unless ``skip_balance=True``) and
+  `normalized_mutual_info <api/scglue.metrics.normalized_mutual_info.rst>`__,
+  and can be installed via ``pip install scglue[leiden]``.
+- Renamed ``calc_hypo_score`` to `calc_hypo_ratio <api/scglue.data.calc_hypo_ratio.rst>`__.
+- The ``"majority"`` aggregation in `aggregate_obs <api/scglue.data.aggregate_obs.rst>`__ and
+  `aggregate_var <api/scglue.data.aggregate_var.rst>`__ now returns NaN when the top category accounts for less than
+  ``majority_cutoff`` (default 0.6) of a group. Set ``majority_cutoff=0`` to restore the previous behavior.
+- `get_metacells <api/scglue.data.get_metacells.rst>`__ now writes metacell assignments to ``obs["metacell"]`` of the input datasets.
+
+New features:
+
+- Added support for `AnnCollection <https://anndata.readthedocs.io/en/latest/generated/anndata.experimental.AnnCollection.html>`__
+  in `configure_dataset <api/scglue.data.configure_dataset.rst>`__ and model training.
+- Added support for dask arrays in model training and `aggregate_obs <api/scglue.data.aggregate_obs.rst>`__.
+- Added a ``"join"`` aggregation method for discrete columns and a ``majority_cutoff`` option in
+  `aggregate_obs <api/scglue.data.aggregate_obs.rst>`__ and `aggregate_var <api/scglue.data.aggregate_var.rst>`__.
+- `get_metacells <api/scglue.data.get_metacells.rst>`__ now records the metacell each cell belongs to
+  (Resolves `#138 <https://github.com/gao-lab/GLUE/issues/138>`__).
+
+Enhancements:
+
+- Moved `configure_dataset <api/scglue.data.configure_dataset.rst>`__ to ``scglue.data``.
+  It remains accessible as ``scglue.models.configure_dataset``.
+
+Bug fixes:
+
+- Fixed compatibility with recent versions of ``anndata`` and ``pandas``, including pandas 3
+  (Resolves `#140 <https://github.com/gao-lab/GLUE/issues/140>`__).
+- Fixed `aggregate_obs <api/scglue.data.aggregate_obs.rst>`__ failing when the ``by`` column contains missing values.
+- Fixed ``"majority"`` aggregation failing when all values in a group are missing.
+
 v0.4.0
 ------
 
