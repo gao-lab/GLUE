@@ -1283,7 +1283,6 @@ class SCCLUEModel(Model):
             X=X,
             obs=adata.obs,
             var=pd.DataFrame(index=self.modalities[target_key]["features"]),
-            dtype=X.dtype,
         )
 
     def __repr__(self) -> str:

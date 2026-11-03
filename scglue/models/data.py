@@ -419,9 +419,7 @@ class AnnDataset(Dataset):
     def _index_array(arr: AnyArray, idx: np.ndarray, nan_sparse: bool) -> np.ndarray:
         if isinstance(arr, (h5py.Dataset, SparseDataset)):
             # Convert to sequential access and back
-            rank = scipy.stats.rankdata(idx, method="dense") - 1
-            sorted_idx = np.empty(rank.max() + 1, dtype=int)
-            sorted_idx[rank] = idx
+            sorted_idx, rank = np.unique(idx, return_inverse=True)
             arr = arr[sorted_idx.tolist()][rank.tolist()]
         elif isinstance(arr, da.Array):
             arr = arr[idx].compute()

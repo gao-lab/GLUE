@@ -205,9 +205,7 @@ def rna(mat):
     var = pd.DataFrame(index=["A", "B", "C"])
     arange = np.expand_dims(np.arange(mat.shape[0]), 1).repeat(mat.shape[1], axis=1)
     obs.index.name, var.index.name = "cells", "genes"
-    return anndata.AnnData(
-        X=X, obs=obs, var=var, layers={"arange": arange}, dtype=X.dtype
-    )
+    return anndata.AnnData(X=X, obs=obs, var=var, layers={"arange": arange})
 
 
 @pytest.fixture
@@ -235,7 +233,7 @@ def atac(spmat, bed_file):
     arange = np.expand_dims(np.arange(spmat.shape[0]), 1).repeat(spmat.shape[1], axis=1)
     obs.index.name, var.index.name = "cells", "peaks"
     return anndata.AnnData(
-        X=X, obs=obs, var=var, layers={"arange": arange}, dtype=np.float32
+        X=X.astype(np.float32), obs=obs, var=var, layers={"arange": arange}
     )
 
 

@@ -59,7 +59,6 @@ def integration_consistency(
             obsm=adata.obsm.copy(),
             layers=adata.layers,
             uns=adata.uns,
-            dtype=adata.X.dtype,
         )
         for k, adata in adatas.items()
     }  # Avoid unwanted updates to the input objects

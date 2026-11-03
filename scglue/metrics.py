@@ -6,7 +6,6 @@ from functools import wraps
 from typing import Tuple
 
 import numpy as np
-import pandas as pd
 import scanpy as sc
 import scipy.spatial
 import sklearn.metrics
@@ -98,7 +97,7 @@ def normalized_mutual_info(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     Leiden clustering requires the optional ``leidenalg`` package,
     which can be installed via ``pip install scglue[leiden]``.
     """
-    x = AnnData(X=x, dtype=x.dtype)
+    x = AnnData(X=x)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X")
     nmi_list = []
     for res in (np.arange(20) + 1) / 10:
@@ -158,13 +157,13 @@ def graph_connectivity(x: np.ndarray, y: np.ndarray, **kwargs) -> float:
     conn
         Graph connectivity
     """
-    x = AnnData(X=x, dtype=x.dtype)
+    x = AnnData(X=x)
     sc.pp.neighbors(x, n_pcs=0, use_rep="X", **kwargs)
     conns = []
     for y_ in np.unique(y):
         x_ = x[y == y_]
         _, c = connected_components(x_.obsp["connectivities"], connection="strong")
-        counts = pd.value_counts(c)
+        counts = np.bincount(c)
         conns.append(counts.max() / counts.sum())
     return np.mean(conns)
 

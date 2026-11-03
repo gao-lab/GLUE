@@ -40,7 +40,7 @@ def test_bed(bed_file, fasta_file, fai_file):
     with pytest.raises(ValueError):
         bed.write_bed(bed_file, ncols=2)
     bed = bed.df
-    columns = bed.columns.to_numpy()
+    columns = bed.columns.to_numpy().copy()
     columns[0] = "xxx"
     bed.columns = columns
     with pytest.raises(ValueError):
@@ -56,7 +56,7 @@ def test_gtf(gtf_file):
     with pytest.raises(ValueError):
         _ = gtf.iloc[:, :2]
     gtf = gtf.df
-    columns = gtf.columns.to_numpy()
+    columns = gtf.columns.to_numpy().copy()
     columns[0] = "xxx"
     gtf.columns = columns
     with pytest.raises(ValueError):

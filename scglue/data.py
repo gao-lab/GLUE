@@ -909,7 +909,6 @@ def bedmap2anndata(bedmap: os.PathLike, var_col: int = 3, obs_col: int = 6) -> A
         X=X,
         obs=pd.DataFrame(index=obs_names),
         var=pd.DataFrame(index=var_names),
-        dtype=X.dtype,
     )
 
 
