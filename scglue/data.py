@@ -1047,7 +1047,7 @@ def estimate_balancing_weight(
         )
         balancing = pd.Series(balancing, index=leiden.obs_names)
         balancing = balancing.loc[adata_.obs["leiden"]].to_numpy()
-        balancing /= balancing.sum() / balancing.size
+        balancing = balancing / (balancing.sum() / balancing.size)
         adata.obs[key_added] = balancing
 
 
